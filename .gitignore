@@ -1,0 +1,17 @@
+# CL
+*.fasl
+backend/data/
+backend/pdfs/
+
+# Node / Next
+node_modules/
+.next/
+out/
+.env
+.env.local
+.DS_Store
+
+# Editors
+.vscode/
+.idea/
+*.swp
