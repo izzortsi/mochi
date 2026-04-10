@@ -17,6 +17,18 @@ cleanup() {
 }
 trap cleanup INT TERM
 
+# Abort early if either port is already in use.
+port_in_use() {
+  ss -tln 2>/dev/null | grep -q ":$1 " || ss -tln6 2>/dev/null | grep -q ":$1 "
+}
+for port in $BACKEND_PORT $WEB_PORT; do
+  if port_in_use $port; then
+    echo "[start] ERROR: port $port is already in use. Stop the other process first:"
+    echo "  ss -tlnp | grep :$port"
+    exit 1
+  fi
+done
+
 echo "[start] Starting CL backend on port $BACKEND_PORT..."
 cd "$DIR/backend"
 sbcl --load run.lisp &

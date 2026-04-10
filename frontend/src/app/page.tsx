@@ -24,16 +24,18 @@ export default function Dashboard() {
   const [days, setDays] = useState<StudyDay[]>([]);
   const [progress, setProgress] = useState<UserProgress | null>(null);
   const [showReset, setShowReset] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const refresh = () => {
-    api.fetchDays().then(setDays).catch(() => {});
-    api.fetchProgress().then(setProgress).catch(() => {});
+    api.fetchDays().then(setDays).catch(e => setError(`fetchDays: ${e}`));
+    api.fetchProgress().then(setProgress).catch(e => setError(`fetchProgress: ${e}`));
   };
 
   useEffect(refresh, []);
 
   const doReset = async () => { await api.reset(); setShowReset(false); refresh(); };
 
+  if (error) return <div className="text-phase3">error: {error}</div>;
   if (!days.length || !progress) return <div className="opacity-50">loading…</div>;
 
   const totalTasks = days.reduce((a, d) => a + countTasks(d), 0);
