@@ -1,0 +1,91 @@
+;;; package.lisp — package declarations for study-plan backend.
+
+(defpackage #:study-plan.term
+  (:use #:cl)
+  (:export #:make-atom-term #:make-var-term #:make-app-term
+           #:atom-term-p #:var-term-p #:app-term-p
+           #:atom-term-value #:var-term-name
+           #:app-term-head #:app-term-args
+           #:term-equal #:parse-sexp #:write-sexp))
+
+(defpackage #:study-plan.models
+  (:use #:cl)
+  (:export ;; StudyDay
+           #:study-day #:make-study-day
+           #:study-day-id #:study-day-phase #:study-day-phase-title
+           #:study-day-title #:study-day-icon #:study-day-summary
+           #:study-day-key-insight #:study-day-tasks
+           ;; TaskGroup
+           #:task-group #:make-task-group
+           #:task-group-tier #:task-group-label #:task-group-items
+           ;; TaskItem
+           #:task-item #:make-task-item
+           #:task-item-text #:task-item-detail
+           ;; UserProgress
+           #:user-progress #:make-user-progress
+           #:user-progress-completed-tasks #:user-progress-xp
+           #:user-progress-streak #:user-progress-best-streak
+           #:user-progress-last-completed #:user-progress-day-tiers
+           ;; TaskOverride
+           #:task-override #:make-task-override
+           #:task-override-text #:task-override-detail
+           ;; GeneratedTask
+           #:generated-task #:make-generated-task
+           #:generated-task-id #:generated-task-day-id
+           #:generated-task-tier #:generated-task-source-task-index
+           #:generated-task-text #:generated-task-detail
+           #:generated-task-created-at
+           ;; Attempt
+           #:attempt #:make-attempt
+           #:attempt-day-id #:attempt-tier #:attempt-task-index
+           #:attempt-text #:attempt-verdict #:attempt-comment
+           #:attempt-timestamp
+           ;; ChatMessage
+           #:chat-message #:make-chat-message
+           #:chat-message-role #:chat-message-content
+           #:chat-message-tool-name #:chat-message-timestamp
+           ;; Root
+           #:study-root #:make-study-root
+           #:study-root-progress #:study-root-overrides
+           #:study-root-generated #:study-root-attempts
+           #:study-root-chat-logs))
+
+(defpackage #:study-plan.gamification
+  (:use #:cl #:study-plan.models)
+  (:export #:base-xp #:streak-multiplier #:effective-xp
+           #:compute-highest-tier #:update-streak-after-gold
+           #:task-key))
+
+(defpackage #:study-plan.storage
+  (:use #:cl #:study-plan.models #:study-plan.gamification)
+  (:export #:*prevalence-system* #:init-storage #:shutdown-storage
+           #:current-progress #:current-root
+           ;; Transactions
+           #:tx-complete-task #:tx-uncomplete-task
+           #:tx-reset-progress #:tx-overlay-task
+           #:tx-append-generated-task #:tx-append-attempt
+           #:tx-append-chat-message
+           ;; Reads
+           #:get-overrides #:get-generated-for-day
+           #:get-chat-for-day))
+
+(defpackage #:study-plan.seed-data
+  (:use #:cl #:study-plan.models)
+  (:export #:*study-days* #:merge-overrides))
+
+(defpackage #:study-plan.api
+  (:use #:cl #:hunchentoot #:study-plan.models
+        #:study-plan.storage #:study-plan.seed-data
+        #:study-plan.gamification)
+  (:export #:define-study-routes))
+
+(defpackage #:study-plan.protocol
+  (:use #:cl #:study-plan.term #:study-plan.models
+        #:study-plan.storage #:study-plan.seed-data
+        #:study-plan.gamification)
+  (:export #:handle-ws-message #:dispatch-tool
+           #:make-ok-response #:make-err-response))
+
+(defpackage #:study-plan.server
+  (:use #:cl)
+  (:export #:start-server #:stop-server #:*acceptor*))
