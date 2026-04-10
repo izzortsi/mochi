@@ -1,6 +1,6 @@
 ;;; cl/src/term.lisp
 ;;; Core term types, parser, writer, equality, size, and substitution.
-(in-package #:lisp-agent.term)
+(in-package #:study-plan.term)
 
 ;;;---------------------------------------------------------------------------
 ;;; Structs
