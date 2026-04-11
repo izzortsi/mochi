@@ -120,3 +120,15 @@
         #:study-plan.ontology.store)
   (:export #:run-initial-migration #:migration-needed-p
            #:*v1-concept-dictionary* #:*v1-prereqs* #:*v1-tags*))
+
+(defpackage #:study-plan.course-api
+  (:use #:cl)
+  (:export #:register-course-routes))
+
+(defpackage #:study-plan.concept-api
+  (:use #:cl)
+  (:export #:register-concept-routes))
+
+(defpackage #:study-plan.import-api
+  (:use #:cl)
+  (:export #:register-import-routes))
