@@ -88,7 +88,7 @@ export function StudyChat({ dayId, onProgressChanged }: Props) {
             role: "tool", content: resp, toolName: call.name,
             timestamp: new Date().toISOString(),
           }]);
-          if (call.name === "mark-task-complete" || call.name === "overlay-task") {
+          if (call.name === "mark-task-complete") {
             onProgressChanged();
           }
         } catch (e) {
