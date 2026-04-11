@@ -9,6 +9,7 @@ import { ProgressRing } from "@/components/ProgressRing";
 import { ResetModal } from "@/components/ResetModal";
 import { NextUpPanel } from "@/components/NextUpPanel";
 import { ConceptMapPanel } from "@/components/ConceptMapPanel";
+import { AddCardModal } from "@/components/AddCardModal";
 
 function countCompletedInDay(day: DayView, completed: Record<string, boolean>): number {
   let n = 0;
@@ -22,6 +23,7 @@ export default function CourseDashboard() {
   const [course, setCourse] = useState<Course | null>(null);
   const [progress, setProgress] = useState<UserProgress | null>(null);
   const [showReset, setShowReset] = useState(false);
+  const [showAddCard, setShowAddCard] = useState(false);
 
   const refresh = useCallback(() => {
     ontology.fetchCourse(courseId).then(setCourse).catch(() => setCourse(null));
@@ -50,7 +52,8 @@ export default function CourseDashboard() {
           <div className="text-sm opacity-50">{course.title}</div>
           <div className="font-mono">{completedCount} / {totalTasks} cards</div>
         </div>
-        <button className="ml-auto text-xs opacity-50 hover:opacity-100" onClick={() => setShowReset(true)}>Reset</button>
+        <button className="ml-auto text-xs opacity-50 hover:opacity-100" onClick={() => setShowAddCard(true)}>+ add card</button>
+        <button className="text-xs opacity-50 hover:opacity-100" onClick={() => setShowReset(true)}>Reset</button>
       </div>
 
       <NextUpPanel courseId={courseId} days={course.days} />
@@ -81,6 +84,15 @@ export default function CourseDashboard() {
       })}
 
       <ConceptMapPanel courseId={courseId} />
+
+      {showAddCard && (
+        <AddCardModal
+          courseId={courseId}
+          days={course.days.map(d => ({ id: d.id, title: d.title }))}
+          onClose={() => setShowAddCard(false)}
+          onSaved={() => { setShowAddCard(false); refresh(); }}
+        />
+      )}
 
       {showReset && <ResetModal onConfirm={doReset} onCancel={() => setShowReset(false)} />}
     </div>
