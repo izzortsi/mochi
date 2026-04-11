@@ -77,7 +77,12 @@
   (:use #:cl #:hunchentoot #:study-plan.models
         #:study-plan.storage #:study-plan.seed-data
         #:study-plan.gamification)
-  (:export #:define-study-routes))
+  (:export #:register-progress-routes
+           #:with-options
+           #:json-response
+           #:set-cors-headers
+           #:read-request-json
+           #:today-iso))
 
 (defpackage #:study-plan.protocol
   (:use #:cl #:study-plan.term #:study-plan.models

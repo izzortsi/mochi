@@ -40,6 +40,14 @@
 (defclass study-acceptor (hunchensocket:websocket-acceptor hunchentoot:easy-acceptor)
   ())
 
+(defun define-study-routes ()
+  (setf hunchentoot:*dispatch-table*
+        (append
+         (study-plan.api:register-progress-routes)
+         (study-plan.course-api:register-course-routes)
+         (study-plan.concept-api:register-concept-routes)
+         (study-plan.import-api:register-import-routes))))
+
 (defun start-server (&key (port 4000) (data-dir "./data/"))
   (when *acceptor*
     (error "Server already running. Call stop-server first."))
@@ -52,7 +60,7 @@
     (format t "~&[study-plan] migrated v1 seed into ontology store~%")
     (study-plan.storage:tx-rekey-for-migration)
     (format t "~&[study-plan] rekeyed cl-prevalence progress to card-uid form~%"))
-  (study-plan.api:define-study-routes)
+  (define-study-routes)
   (setf *acceptor*
         (make-instance 'study-acceptor :port port))
   (hunchentoot:start *acceptor*)
