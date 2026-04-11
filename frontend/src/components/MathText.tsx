@@ -37,6 +37,7 @@ function renderSegment(seg: Segment, idx: number): React.ReactElement {
   const html = katex.renderToString(seg.value, {
     throwOnError: false,
     displayMode: seg.type === "display",
+    output: "html",
   });
   return <span key={idx} dangerouslySetInnerHTML={{ __html: html }} />;
 }
