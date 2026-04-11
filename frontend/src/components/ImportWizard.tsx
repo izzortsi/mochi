@@ -78,7 +78,33 @@ export function ImportWizard() {
   const [parsedExtend, setParsedExtend] = useState<ParsedExtension | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState<ConnectionStatus>("disconnected");
+  const [uploading, setUploading] = useState(false);
+  const [parseElapsed, setParseElapsed] = useState(0);
   const wsRef = useRef<WsClient | null>(null);
+
+  useEffect(() => {
+    if (step !== "parsing") { setParseElapsed(0); return; }
+    const t = setInterval(() => setParseElapsed(e => e + 1), 1000);
+    return () => clearInterval(t);
+  }, [step]);
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setError(null);
+    try {
+      const { filename: uploaded } = await ontology.uploadPdf(file);
+      const list = await ontology.listPdfs();
+      setFiles(list?.files ?? []);
+      setFilename(uploaded);
+    } catch (err) {
+      setError(String(err));
+    } finally {
+      setUploading(false);
+      if (e.target) e.target.value = "";
+    }
+  };
 
   useEffect(() => {
     ontology.listPdfs().then(r => setFiles(r?.files ?? [])).catch(e => setError(String(e)));
@@ -109,18 +135,25 @@ export function ImportWizard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      if (!res.ok) throw new Error(`parse: ${res.status}`);
+      if (!res.ok) {
+        const errBody = await res.text();
+        throw new Error(`parse: ${res.status} ${errBody.slice(0, 300)}`);
+      }
       const envelope = await res.json() as { choices: { message: { content: string } }[] };
       const content = envelope.choices[0]?.message?.content ?? "";
       const clean = content.replace(/^```(?:json)?\s*/, "").replace(/```\s*$/, "");
-      if (mode === "new") {
-        const p = JSON.parse(clean) as ParsedCourse;
-        setParsedNew(p);
-        setParsedExtend(null);
-      } else {
-        const p = JSON.parse(clean) as ParsedExtension;
-        setParsedExtend(p);
-        setParsedNew(null);
+      try {
+        if (mode === "new") {
+          const p = JSON.parse(clean) as ParsedCourse;
+          setParsedNew(p);
+          setParsedExtend(null);
+        } else {
+          const p = JSON.parse(clean) as ParsedExtension;
+          setParsedExtend(p);
+          setParsedNew(null);
+        }
+      } catch (parseErr) {
+        throw new Error(`LLM returned non-JSON response:\n${content.slice(0, 300)}`);
       }
       setStep("review");
     } catch (e) {
@@ -271,6 +304,20 @@ export function ImportWizard() {
             </select>
           </label>
 
+          <div>
+            <span className="text-sm opacity-70">Or upload a new PDF</span>
+            <div className="mt-1 flex items-center gap-2">
+              <input
+                type="file"
+                accept="application/pdf"
+                onChange={handleUpload}
+                disabled={uploading}
+                className="text-sm file:mr-2 file:px-2 file:py-1 file:rounded file:border file:border-[#2a2a3f] file:bg-[#1a1a2a] file:text-[#f5f0e8] hover:file:bg-[#2a2a3f] file:cursor-pointer"
+              />
+              {uploading && <span className="text-xs opacity-60">uploading…</span>}
+            </div>
+          </div>
+
           {mode === "new" && (
             <label className="block">
               <span className="text-sm opacity-70">Course title</span>
@@ -309,7 +356,9 @@ export function ImportWizard() {
         </div>
       )}
 
-      {step === "parsing" && <div className="opacity-60">extracting pdf text + calling llm…</div>}
+      {step === "parsing" && (
+        <div className="opacity-60">extracting pdf text + calling llm… ({parseElapsed}s)</div>
+      )}
 
       {step === "review" && parsedNew && (
         <ReviewTree parsed={parsedNew} onCommit={commit} />
