@@ -89,3 +89,34 @@
 (defpackage #:study-plan.server
   (:use #:cl)
   (:export #:start-server #:stop-server #:*acceptor*))
+
+(defpackage #:study-plan.ontology.store
+  (:use #:cl #:study-plan.term)
+  (:export #:*ontology-store* #:*ontology-journal-path*
+           #:init-ontology-store #:shutdown-ontology-store
+           #:reset-ontology-store
+           #:append-fact #:store-size
+           #:facts-with-head #:facts-matching
+           #:fact-arg #:fact-head))
+
+(defpackage #:study-plan.ontology
+  (:use #:cl #:study-plan.term #:study-plan.ontology.store)
+  (:export #:create-course #:create-phase #:create-day #:create-card
+           #:create-concept #:tag-card #:add-prereq
+           #:list-courses #:list-concepts #:list-phases-for-course
+           #:list-days-for-course #:list-cards-for-day #:list-cards-for-course
+           #:tags-for-card #:prereqs-for-concept
+           #:course-by-id #:day-by-id #:card-by-uid #:concept-by-id
+           #:card-uid-for))
+
+(defpackage #:study-plan.ontology.query
+  (:use #:cl #:study-plan.term #:study-plan.ontology.store #:study-plan.ontology)
+  (:export #:concept-mastery #:next-up
+           #:concepts-touched-by-course #:edges-for-course
+           #:card-count-for-concept))
+
+(defpackage #:study-plan.migration
+  (:use #:cl #:study-plan.models #:study-plan.ontology
+        #:study-plan.ontology.store)
+  (:export #:run-initial-migration #:migration-needed-p
+           #:*v1-concept-dictionary* #:*v1-prereqs* #:*v1-tags*))
