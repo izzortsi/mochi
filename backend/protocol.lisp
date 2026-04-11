@@ -110,7 +110,7 @@
   (let* ((day-id (to-int (arg args "day-id")))
          (tier (arg args "tier"))
          (idx (to-int (arg args "task-index"))))
-    (tx-complete-task day-id tier idx (today-iso))
+    (tx-complete-task 1 day-id tier idx (today-iso))
     (format nil "(ok (xp ~D))"
             (user-progress-xp (current-progress)))))
 
@@ -132,23 +132,24 @@
     "(ok)"))
 
 (defun tool-append-generated-task (args)
-  (let ((id (arg args "id"))
-        (day-id (to-int (arg args "day-id")))
-        (tier (arg args "tier"))
-        (source-idx (to-int (arg args "source-task-index")))
-        (text (arg args "text"))
-        (detail (arg args "detail")))
-    (tx-append-generated-task id day-id tier source-idx text detail (today-iso))
+  (let* ((id (arg args "id"))
+         (day-id (to-int (arg args "day-id")))
+         (tier (arg args "tier"))
+         (source-idx (to-int (arg args "source-task-index")))
+         (source-card-uid (format nil "c1-d~D-~A-~D" day-id tier source-idx))
+         (text (arg args "text"))
+         (detail (arg args "detail")))
+    (tx-append-generated-task id source-card-uid tier text detail (today-iso))
     "(ok)"))
 
 (defun tool-grade-attempt (args)
-  (let ((day-id (to-int (arg args "day-id")))
-        (tier (arg args "tier"))
-        (idx (to-int (arg args "task-index")))
-        (text (arg args "text"))
-        (verdict (arg args "verdict"))
-        (comment (arg args "comment")))
-    (tx-append-attempt day-id tier idx text verdict comment
+  (let* ((day-id (to-int (arg args "day-id")))
+         (tier (arg args "tier"))
+         (idx (to-int (arg args "task-index")))
+         (card-uid (format nil "c1-d~D-~A-~D" day-id tier idx))
+         (verdict (arg args "verdict"))
+         (comment (arg args "comment")))
+    (tx-append-attempt card-uid verdict comment
                        (local-time:format-timestring nil (local-time:now)))
     "(ok)"))
 

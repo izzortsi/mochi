@@ -15,7 +15,7 @@
 
 (test tx-complete-task-awards-xp
   (reset-test-storage)
-  (study-plan.storage:tx-complete-task 1 "bronze" 0 "2026-04-10")
+  (study-plan.storage:tx-complete-task 1 1 "bronze" 0 "2026-04-10")
   (let ((p (study-plan.storage:current-progress)))
     (is (= 10 (study-plan.models:user-progress-xp p)))
     (is (gethash "c1-d1-bronze-0"
@@ -23,14 +23,14 @@
 
 (test tx-complete-task-idempotent
   (reset-test-storage)
-  (study-plan.storage:tx-complete-task 1 "bronze" 0 "2026-04-10")
-  (study-plan.storage:tx-complete-task 1 "bronze" 0 "2026-04-10")
+  (study-plan.storage:tx-complete-task 1 1 "bronze" 0 "2026-04-10")
+  (study-plan.storage:tx-complete-task 1 1 "bronze" 0 "2026-04-10")
   (is (= 10 (study-plan.models:user-progress-xp (study-plan.storage:current-progress)))))
 
 (test tx-uncomplete-task-preserves-xp
   (reset-test-storage)
-  (study-plan.storage:tx-complete-task 1 "bronze" 0 "2026-04-10")
-  (study-plan.storage:tx-uncomplete-task 1 "bronze" 0)
+  (study-plan.storage:tx-complete-task 1 1 "bronze" 0 "2026-04-10")
+  (study-plan.storage:tx-uncomplete-task 1 1 "bronze" 0)
   (let ((p (study-plan.storage:current-progress)))
     (is (= 10 (study-plan.models:user-progress-xp p)))
     (is (null (gethash "c1-d1-bronze-0"
@@ -38,7 +38,7 @@
 
 (test tx-reset-progress-zeroes
   (reset-test-storage)
-  (study-plan.storage:tx-complete-task 1 "bronze" 0 "2026-04-10")
+  (study-plan.storage:tx-complete-task 1 1 "bronze" 0 "2026-04-10")
   (study-plan.storage:tx-reset-progress)
   (let ((p (study-plan.storage:current-progress)))
     (is (= 0 (study-plan.models:user-progress-xp p)))
@@ -57,8 +57,7 @@
 
 (test tx-append-attempt-logs
   (reset-test-storage)
-  (study-plan.storage:tx-append-attempt 1 "bronze" 0
-                                        "my attempt"
+  (study-plan.storage:tx-append-attempt "c1-d1-bronze-0"
                                         "correct"
                                         "looks good"
                                         "2026-04-10T12:00:00Z")

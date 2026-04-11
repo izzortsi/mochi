@@ -74,9 +74,8 @@
 
 (defun generated-task-alist (gt)
   `((:id . ,(generated-task-id gt))
-    (:day-id . ,(generated-task-day-id gt))
+    (:source-card-uid . ,(generated-task-source-card-uid gt))
     (:tier . ,(generated-task-tier gt))
-    (:source-task-index . ,(generated-task-source-task-index gt))
     (:text . ,(generated-task-text gt))
     (:detail . ,(generated-task-detail gt))
     (:created-at . ,(generated-task-created-at gt))))
@@ -138,14 +137,14 @@
   (with-options ()
     (let ((body (read-request-json)))
       (multiple-value-bind (day-id tier task-index) (extract-task-args body)
-        (tx-complete-task day-id tier task-index (today-iso))
+        (tx-complete-task 1 day-id tier task-index (today-iso))
         (json-response (progress-alist (current-progress)))))))
 
 (defun handle-post-uncomplete ()
   (with-options ()
     (let ((body (read-request-json)))
       (multiple-value-bind (day-id tier task-index) (extract-task-args body)
-        (tx-uncomplete-task day-id tier task-index)
+        (tx-uncomplete-task 1 day-id tier task-index)
         (json-response (progress-alist (current-progress)))))))
 
 (defun handle-post-reset ()

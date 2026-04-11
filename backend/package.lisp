@@ -31,8 +31,8 @@
            #:task-override-text #:task-override-detail
            ;; GeneratedTask
            #:generated-task #:make-generated-task
-           #:generated-task-id #:generated-task-day-id
-           #:generated-task-tier #:generated-task-source-task-index
+           #:generated-task-id #:generated-task-source-card-uid
+           #:generated-task-tier
            #:generated-task-text #:generated-task-detail
            #:generated-task-created-at
            ;; Attempt

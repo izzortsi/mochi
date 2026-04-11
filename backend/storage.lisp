@@ -38,7 +38,12 @@
 
 (defun get-generated-for-day (day-id)
   (remove-if-not
-   (lambda (gt) (= (generated-task-day-id gt) day-id))
+   (lambda (gt)
+     (let ((uid (generated-task-source-card-uid gt)))
+       (and (> (length uid) 0)
+            (let ((prefix (format nil "c1-d~D-" day-id)))
+              (and (>= (length uid) (length prefix))
+                   (string= prefix (subseq uid 0 (length prefix))))))))
    (study-root-generated (current-root))))
 
 (defun get-chat-for-day (day-id)
@@ -49,35 +54,42 @@
 ;;; These must be `defun`s at the top level so cl-prevalence can replay them.
 ;;;---------------------------------------------------------------------------
 
-(defun %complete-task (system day-id tier task-index today-iso)
+(defun %complete-task (system course-id day-id tier task-index today-iso)
   (let* ((root (cl-prevalence:get-root-object system :study))
          (p (study-root-progress root))
-         (key (task-key 1 day-id tier task-index)))
-    (unless (gethash key (user-progress-completed-tasks p))
-      (setf (gethash key (user-progress-completed-tasks p)) t)
+         (uid (task-key course-id day-id tier task-index)))
+    (unless (gethash uid (user-progress-completed-tasks p))
+      (setf (gethash uid (user-progress-completed-tasks p)) t)
       (incf (user-progress-xp p)
             (effective-xp tier (user-progress-streak p)))
-      (let* ((day (find day-id study-plan.seed-data:*study-days*
-                        :key #'study-day-id))
-             (new-tier (when day
-                         (compute-highest-tier 1 day
-                                               (user-progress-completed-tasks p)))))
-        (when day
-          (setf (gethash (day-tier-key 1 day-id) (user-progress-day-tiers p)) new-tier)
-          (when (string= new-tier "gold")
-            (update-streak-after-gold p today-iso)))))))
+      ;; Day tier recomputation uses seed-data only for the v1 course.
+      ;; After migration this path is unused — kept for compatibility
+      ;; until Phase C replaces it with ontology-driven computation.
+      (when (= course-id 1)
+        (let* ((day (find day-id study-plan.seed-data:*study-days*
+                          :key #'study-day-id))
+               (new-tier (when day
+                           (compute-highest-tier course-id day
+                                                 (user-progress-completed-tasks p)))))
+          (when day
+            (setf (gethash (day-tier-key course-id day-id)
+                           (user-progress-day-tiers p)) new-tier)
+            (when (string= new-tier "gold")
+              (update-streak-after-gold p today-iso))))))))
 
-(defun %uncomplete-task (system day-id tier task-index)
+(defun %uncomplete-task (system course-id day-id tier task-index)
   (let* ((root (cl-prevalence:get-root-object system :study))
          (p (study-root-progress root))
-         (key (task-key 1 day-id tier task-index)))
-    (remhash key (user-progress-completed-tasks p))
-    (let ((day (find day-id study-plan.seed-data:*study-days*
-                     :key #'study-day-id)))
-      (when day
-        (setf (gethash (day-tier-key 1 day-id) (user-progress-day-tiers p))
-              (compute-highest-tier 1 day
-                                    (user-progress-completed-tasks p)))))))
+         (uid (task-key course-id day-id tier task-index)))
+    (remhash uid (user-progress-completed-tasks p))
+    (when (= course-id 1)
+      (let ((day (find day-id study-plan.seed-data:*study-days*
+                       :key #'study-day-id)))
+        (when day
+          (setf (gethash (day-tier-key course-id day-id)
+                         (user-progress-day-tiers p))
+                (compute-highest-tier course-id day
+                                      (user-progress-completed-tasks p))))))))
 
 (defun %reset-progress (system)
   (let ((root (cl-prevalence:get-root-object system :study)))
@@ -89,23 +101,22 @@
     (setf (gethash key (study-root-overrides root))
           (make-task-override :text text :detail detail))))
 
-(defun %append-generated-task (system id day-id tier source-task-index text detail created-at)
+(defun %append-generated-task (system id source-card-uid tier text detail created-at)
   (let ((root (cl-prevalence:get-root-object system :study)))
     (push (make-generated-task :id id
-                               :day-id day-id
+                               :source-card-uid source-card-uid
                                :tier tier
-                               :source-task-index source-task-index
                                :text text
                                :detail detail
                                :created-at created-at)
           (study-root-generated root))))
 
-(defun %append-attempt (system day-id tier task-index text verdict comment timestamp)
+(defun %append-attempt (system card-uid verdict comment timestamp)
   (let ((root (cl-prevalence:get-root-object system :study)))
-    (push (make-attempt :day-id day-id
-                        :tier tier
-                        :task-index task-index
-                        :text text
+    (push (make-attempt :day-id 0                ; legacy field, unused
+                        :tier ""
+                        :task-index 0
+                        :text card-uid           ; overloaded: holds card-uid
                         :verdict verdict
                         :comment comment
                         :timestamp timestamp)
@@ -124,13 +135,13 @@
 ;;; Public wrappers — caller-facing API. Use *prevalence-system* implicitly.
 ;;;---------------------------------------------------------------------------
 
-(defun tx-complete-task (day-id tier task-index today-iso)
+(defun tx-complete-task (course-id day-id tier task-index today-iso)
   (cl-prevalence:execute-transaction
-   (%complete-task *prevalence-system* day-id tier task-index today-iso)))
+   (%complete-task *prevalence-system* course-id day-id tier task-index today-iso)))
 
-(defun tx-uncomplete-task (day-id tier task-index)
+(defun tx-uncomplete-task (course-id day-id tier task-index)
   (cl-prevalence:execute-transaction
-   (%uncomplete-task *prevalence-system* day-id tier task-index)))
+   (%uncomplete-task *prevalence-system* course-id day-id tier task-index)))
 
 (defun tx-reset-progress ()
   (cl-prevalence:execute-transaction
@@ -140,13 +151,13 @@
   (cl-prevalence:execute-transaction
    (%overlay-task *prevalence-system* day-id tier task-index text detail)))
 
-(defun tx-append-generated-task (id day-id tier source-task-index text detail created-at)
+(defun tx-append-generated-task (id source-card-uid tier text detail created-at)
   (cl-prevalence:execute-transaction
-   (%append-generated-task *prevalence-system* id day-id tier source-task-index text detail created-at)))
+   (%append-generated-task *prevalence-system* id source-card-uid tier text detail created-at)))
 
-(defun tx-append-attempt (day-id tier task-index text verdict comment timestamp)
+(defun tx-append-attempt (card-uid verdict comment timestamp)
   (cl-prevalence:execute-transaction
-   (%append-attempt *prevalence-system* day-id tier task-index text verdict comment timestamp)))
+   (%append-attempt *prevalence-system* card-uid verdict comment timestamp)))
 
 (defun tx-append-chat-message (day-id role content tool-name timestamp)
   (cl-prevalence:execute-transaction

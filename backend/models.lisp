@@ -48,9 +48,8 @@
 
 (defstruct generated-task
   (id "" :type string)
-  (day-id 0 :type integer)
+  (source-card-uid "" :type string)
   (tier "" :type string)
-  (source-task-index 0 :type integer)
   (text "" :type string)
   (detail "" :type string)
   (created-at "" :type string))
