@@ -62,7 +62,7 @@
            #:current-progress #:current-root
            ;; Transactions
            #:tx-complete-task #:tx-uncomplete-task
-           #:tx-reset-progress
+           #:tx-reset-progress #:tx-rekey-for-migration
            #:tx-append-generated-task #:tx-append-attempt
            #:tx-append-chat-message
            ;; Reads

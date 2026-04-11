@@ -46,6 +46,12 @@
   (setf *ws-resource* (make-instance 'ws-resource))
   (pushnew 'ws-dispatcher hunchensocket:*websocket-dispatch-table*)
   (study-plan.storage:init-storage data-dir)
+  (study-plan.ontology.store:init-ontology-store
+   (merge-pathnames "ontology.journal" (pathname data-dir)))
+  (when (study-plan.migration:run-initial-migration)
+    (format t "~&[study-plan] migrated v1 seed into ontology store~%")
+    (study-plan.storage:tx-rekey-for-migration)
+    (format t "~&[study-plan] rekeyed cl-prevalence progress to card-uid form~%"))
   (study-plan.api:define-study-routes)
   (setf *acceptor*
         (make-instance 'study-acceptor :port port))
@@ -60,4 +66,5 @@
     (setf *acceptor* nil))
   (setf hunchensocket:*websocket-dispatch-table*
         (remove 'ws-dispatcher hunchensocket:*websocket-dispatch-table*))
+  (study-plan.ontology.store:shutdown-ontology-store)
   (study-plan.storage:shutdown-storage))

@@ -126,6 +126,35 @@
           (append (gethash day-id (study-root-chat-logs root)) (list msg)))))
 
 ;;;---------------------------------------------------------------------------
+;;; One-shot migration rekey. v1 keys looked like "1-bronze-0" (day-tier-idx);
+;;; rewrite to "c1-d1-bronze-0" card-uid form. day-tiers keys were integer
+;;; day-ids; rewrite to "1.<day>" strings.
+;;;---------------------------------------------------------------------------
+
+(defun %rekey-for-migration (system)
+  (let* ((root (cl-prevalence:get-root-object system :study))
+         (p (study-root-progress root))
+         (old-completed (user-progress-completed-tasks p))
+         (new-completed (make-hash-table :test 'equal))
+         (old-day-tiers (user-progress-day-tiers p))
+         (new-day-tiers (make-hash-table :test 'equal)))
+    (maphash
+     (lambda (k v)
+       (let ((parts (cl-ppcre:split "-" k)))
+         (if (= (length parts) 3)
+             (setf (gethash (format nil "c1-d~A-~A-~A"
+                                    (first parts) (second parts) (third parts))
+                            new-completed) v)
+             (setf (gethash k new-completed) v))))
+     old-completed)
+    (maphash
+     (lambda (k v)
+       (setf (gethash (format nil "1.~A" k) new-day-tiers) v))
+     old-day-tiers)
+    (setf (user-progress-completed-tasks p) new-completed
+          (user-progress-day-tiers p) new-day-tiers)))
+
+;;;---------------------------------------------------------------------------
 ;;; Public wrappers — caller-facing API. Use *prevalence-system* implicitly.
 ;;;---------------------------------------------------------------------------
 
@@ -140,6 +169,10 @@
 (defun tx-reset-progress ()
   (cl-prevalence:execute-transaction
    (%reset-progress *prevalence-system*)))
+
+(defun tx-rekey-for-migration ()
+  (cl-prevalence:execute-transaction
+   (%rekey-for-migration *prevalence-system*)))
 
 (defun tx-append-generated-task (id source-card-uid tier text detail created-at)
   (cl-prevalence:execute-transaction
