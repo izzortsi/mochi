@@ -15,4 +15,18 @@ export const ontology = {
   fetchConcept: (conceptId: ConceptId) =>
     getJson<ConceptPageData>(`/api/concept?id=${encodeURIComponent(conceptId)}`),
   listPdfs: () => getJson<{ files: string[] }>("/api/pdfs"),
+  uploadPdf: async (file: File): Promise<{ filename: string }> => {
+    const buf = await file.arrayBuffer();
+    const res = await fetch(`/api/pdfs/upload?name=${encodeURIComponent(file.name)}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/octet-stream" },
+      body: buf,
+    });
+    if (!res.ok) {
+      const body = await res.text();
+      throw new Error(`upload ${file.name}: ${res.status} ${body}`);
+    }
+    const json = await res.json() as { files: string };
+    return { filename: json.files };
+  },
 };
