@@ -18,7 +18,7 @@
   (study-plan.storage:tx-complete-task 1 "bronze" 0 "2026-04-10")
   (let ((p (study-plan.storage:current-progress)))
     (is (= 10 (study-plan.models:user-progress-xp p)))
-    (is (gethash "1-bronze-0"
+    (is (gethash "c1-d1-bronze-0"
                  (study-plan.models:user-progress-completed-tasks p)))))
 
 (test tx-complete-task-idempotent
@@ -33,7 +33,7 @@
   (study-plan.storage:tx-uncomplete-task 1 "bronze" 0)
   (let ((p (study-plan.storage:current-progress)))
     (is (= 10 (study-plan.models:user-progress-xp p)))
-    (is (null (gethash "1-bronze-0"
+    (is (null (gethash "c1-d1-bronze-0"
                        (study-plan.models:user-progress-completed-tasks p))))))
 
 (test tx-reset-progress-zeroes
@@ -51,7 +51,7 @@
   (study-plan.storage:tx-overlay-task 3 "bronze" 0
                                       "Real problem text"
                                       "Real solution")
-  (let ((ov (gethash "3-bronze-0" (study-plan.storage:get-overrides))))
+  (let ((ov (gethash "c1-d3-bronze-0" (study-plan.storage:get-overrides))))
     (is (not (null ov)))
     (is (equal "Real problem text" (study-plan.models:task-override-text ov)))))
 

@@ -56,37 +56,37 @@
 (test compute-highest-tier-none
   (let ((day (make-test-day))
         (completed (make-hash-table :test 'equal)))
-    (is (equal "none" (study-plan.gamification:compute-highest-tier day completed)))))
+    (is (equal "none" (study-plan.gamification:compute-highest-tier 1 day completed)))))
 
 (test compute-highest-tier-bronze-partial
   (let ((day (make-test-day))
         (completed (make-hash-table :test 'equal)))
-    (setf (gethash "1-bronze-0" completed) t)
-    (is (equal "none" (study-plan.gamification:compute-highest-tier day completed)))))
+    (setf (gethash "c1-d1-bronze-0" completed) t)
+    (is (equal "none" (study-plan.gamification:compute-highest-tier 1 day completed)))))
 
 (test compute-highest-tier-bronze-complete
   (let ((day (make-test-day))
         (completed (make-hash-table :test 'equal)))
-    (setf (gethash "1-bronze-0" completed) t)
-    (setf (gethash "1-bronze-1" completed) t)
-    (is (equal "bronze" (study-plan.gamification:compute-highest-tier day completed)))))
+    (setf (gethash "c1-d1-bronze-0" completed) t)
+    (setf (gethash "c1-d1-bronze-1" completed) t)
+    (is (equal "bronze" (study-plan.gamification:compute-highest-tier 1 day completed)))))
 
 (test compute-highest-tier-silver
   (let ((day (make-test-day))
         (completed (make-hash-table :test 'equal)))
-    (setf (gethash "1-bronze-0" completed) t)
-    (setf (gethash "1-bronze-1" completed) t)
-    (setf (gethash "1-silver-0" completed) t)
-    (is (equal "silver" (study-plan.gamification:compute-highest-tier day completed)))))
+    (setf (gethash "c1-d1-bronze-0" completed) t)
+    (setf (gethash "c1-d1-bronze-1" completed) t)
+    (setf (gethash "c1-d1-silver-0" completed) t)
+    (is (equal "silver" (study-plan.gamification:compute-highest-tier 1 day completed)))))
 
 (test compute-highest-tier-gold
   (let ((day (make-test-day))
         (completed (make-hash-table :test 'equal)))
-    (setf (gethash "1-bronze-0" completed) t)
-    (setf (gethash "1-bronze-1" completed) t)
-    (setf (gethash "1-silver-0" completed) t)
-    (setf (gethash "1-gold-0" completed) t)
-    (is (equal "gold" (study-plan.gamification:compute-highest-tier day completed)))))
+    (setf (gethash "c1-d1-bronze-0" completed) t)
+    (setf (gethash "c1-d1-bronze-1" completed) t)
+    (setf (gethash "c1-d1-silver-0" completed) t)
+    (setf (gethash "c1-d1-gold-0" completed) t)
+    (is (equal "gold" (study-plan.gamification:compute-highest-tier 1 day completed)))))
 
 ;;;---------------------------------------------------------------------------
 ;;; update-streak-after-gold

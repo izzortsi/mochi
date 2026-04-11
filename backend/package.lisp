@@ -54,7 +54,7 @@
   (:use #:cl #:study-plan.models)
   (:export #:base-xp #:streak-multiplier #:effective-xp
            #:compute-highest-tier #:update-streak-after-gold
-           #:task-key))
+           #:task-key #:day-tier-key))
 
 (defpackage #:study-plan.storage
   (:use #:cl #:study-plan.models #:study-plan.gamification)

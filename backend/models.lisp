@@ -33,12 +33,14 @@
 ;;;---------------------------------------------------------------------------
 
 (defstruct user-progress
+  ;; Keys are card-uid strings, e.g. "c1-d1-bronze-0".
   (completed-tasks (make-hash-table :test 'equal) :type hash-table)
   (xp 0 :type integer)
   (streak 0 :type integer)
   (best-streak 0 :type integer)
   (last-completed nil)         ; string (ISO date) or nil
-  (day-tiers (make-hash-table :test 'eql) :type hash-table))
+  ;; Keys are "<course-id>.<day-id>" strings, e.g. "1.3".
+  (day-tiers (make-hash-table :test 'equal) :type hash-table))
 
 (defstruct task-override
   (text "" :type string)

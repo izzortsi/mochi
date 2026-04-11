@@ -16,27 +16,29 @@
 (defun effective-xp (tier streak)
   (* (base-xp tier) (streak-multiplier streak)))
 
-(defun task-key (day-id tier task-index)
-  "Canonical key for completedTasks and overrides hash-tables."
-  (format nil "~D-~A-~D" day-id tier task-index))
+(defun task-key (course-id day-id tier task-index)
+  "Canonical card-uid. Matches study-plan.ontology:card-uid-for."
+  (format nil "c~D-d~D-~A-~D" course-id day-id tier task-index))
 
-(defun all-items-complete-p (day tier completed-tasks)
-  "True iff every TaskItem in this tier group for this day is in completed-tasks."
-  (let ((group (find tier (study-day-tasks day)
-                     :key #'task-group-tier :test #'string=)))
-    (when group
-      (loop for i from 0 below (length (task-group-items group))
-            always (gethash (task-key (study-day-id day) tier i) completed-tasks)))))
+(defun day-tier-key (course-id day-id)
+  (format nil "~D.~D" course-id day-id))
 
-(defun compute-highest-tier (day completed-tasks)
+(defun compute-highest-tier (course-id day completed-tasks)
   "Cumulative tier: gold requires bronze+silver+gold all complete, etc."
-  (let ((bronze (all-items-complete-p day "bronze" completed-tasks))
-        (silver (all-items-complete-p day "silver" completed-tasks))
-        (gold   (all-items-complete-p day "gold"   completed-tasks)))
-    (cond ((and bronze silver gold) "gold")
-          ((and bronze silver)      "silver")
-          (bronze                   "bronze")
-          (t                        "none"))))
+  (flet ((done (tier)
+           (let ((group (find tier (study-day-tasks day)
+                              :key #'task-group-tier :test #'string=)))
+             (when group
+               (loop for i from 0 below (length (task-group-items group))
+                     always (gethash (task-key course-id
+                                               (study-day-id day)
+                                               tier i)
+                                     completed-tasks))))))
+    (let ((b (done "bronze")) (s (done "silver")) (g (done "gold")))
+      (cond ((and b s g) "gold")
+            ((and b s) "silver")
+            (b "bronze")
+            (t "none")))))
 
 ;;;---------------------------------------------------------------------------
 ;;; Streak math. Dates are ISO "YYYY-MM-DD" strings.

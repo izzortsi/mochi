@@ -52,7 +52,7 @@
 (defun %complete-task (system day-id tier task-index today-iso)
   (let* ((root (cl-prevalence:get-root-object system :study))
          (p (study-root-progress root))
-         (key (task-key day-id tier task-index)))
+         (key (task-key 1 day-id tier task-index)))
     (unless (gethash key (user-progress-completed-tasks p))
       (setf (gethash key (user-progress-completed-tasks p)) t)
       (incf (user-progress-xp p)
@@ -60,23 +60,23 @@
       (let* ((day (find day-id study-plan.seed-data:*study-days*
                         :key #'study-day-id))
              (new-tier (when day
-                         (compute-highest-tier day
+                         (compute-highest-tier 1 day
                                                (user-progress-completed-tasks p)))))
         (when day
-          (setf (gethash day-id (user-progress-day-tiers p)) new-tier)
+          (setf (gethash (day-tier-key 1 day-id) (user-progress-day-tiers p)) new-tier)
           (when (string= new-tier "gold")
             (update-streak-after-gold p today-iso)))))))
 
 (defun %uncomplete-task (system day-id tier task-index)
   (let* ((root (cl-prevalence:get-root-object system :study))
          (p (study-root-progress root))
-         (key (task-key day-id tier task-index)))
+         (key (task-key 1 day-id tier task-index)))
     (remhash key (user-progress-completed-tasks p))
     (let ((day (find day-id study-plan.seed-data:*study-days*
                      :key #'study-day-id)))
       (when day
-        (setf (gethash day-id (user-progress-day-tiers p))
-              (compute-highest-tier day
+        (setf (gethash (day-tier-key 1 day-id) (user-progress-day-tiers p))
+              (compute-highest-tier 1 day
                                     (user-progress-completed-tasks p)))))))
 
 (defun %reset-progress (system)
@@ -85,7 +85,7 @@
 
 (defun %overlay-task (system day-id tier task-index text detail)
   (let* ((root (cl-prevalence:get-root-object system :study))
-         (key (task-key day-id tier task-index)))
+         (key (task-key 1 day-id tier task-index)))
     (setf (gethash key (study-root-overrides root))
           (make-task-override :text text :detail detail))))
 
