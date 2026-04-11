@@ -5,12 +5,48 @@ import { loadConfig, isConfigured } from "@/lib/settings";
 import { runLlmTurn } from "@/lib/llm";
 import { validateAndEncode, type ToolName } from "@/lib/tools";
 import { WsClient } from "@/lib/ws";
-import type { ChatMessage, ConnectionStatus } from "@/lib/types";
+import type { ChatMessage, ConnectionStatus, Course, DayView, UserProgress } from "@/lib/types";
 import { MathText } from "./MathText";
 
-interface Props { courseId: number; dayId: number; onProgressChanged: () => void; }
+function buildPageContext(course: Course, day: DayView, progress: UserProgress): string {
+  const completed = progress.completedTasks ?? {};
+  const tiers: Array<"bronze" | "silver" | "gold"> = ["bronze", "silver", "gold"];
 
-export function StudyChat({ dayId, onProgressChanged }: Props) {
+  const lines: string[] = [];
+  lines.push("# CURRENT PAGE");
+  lines.push(`Course ${course.id}: ${course.title}`);
+  lines.push(`Day ${day.id}: ${day.title}`);
+  if (day.keyInsight) lines.push(`Key insight: ${day.keyInsight}`);
+  lines.push("");
+  lines.push("Cards on this day:");
+
+  for (const tier of tiers) {
+    const cards = day.cards.filter(c => c.tier === tier);
+    for (const c of cards) {
+      const done = completed[c.cardUid] ? "✓ completed" : "○ not completed";
+      lines.push("");
+      lines.push(`${tier.toUpperCase()} (card-uid: ${c.cardUid}) [${done}]`);
+      lines.push(`  Text: ${c.text}`);
+      lines.push(`  Solution (internal — don't reveal unless asked): ${c.detail}`);
+      if (c.concepts.length > 0) lines.push(`  Concepts: ${c.concepts.join(", ")}`);
+    }
+  }
+
+  lines.push("");
+  lines.push(`Overall course progress: ${progress.xp} XP, streak ${progress.streak}.`);
+  return lines.join("\n");
+}
+
+interface Props {
+  courseId: number;
+  dayId: number;
+  course: Course;
+  day: DayView;
+  progress: UserProgress;
+  onProgressChanged: () => void;
+}
+
+export function StudyChat({ course, day, progress, onProgressChanged }: Props) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -70,7 +106,8 @@ export function StudyChat({ dayId, onProgressChanged }: Props) {
     setBusy(true);
 
     try {
-      const result = await runLlmTurn(config, messages, userMsg.content);
+      const context = buildPageContext(course, day, progress);
+      const result = await runLlmTurn(config, messages, userMsg.content, context);
       const assistantMsg: ChatMessage = {
         role: "assistant", content: result.text || "(calling tool)",
         toolName: null, timestamp: new Date().toISOString(),
