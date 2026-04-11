@@ -122,15 +122,6 @@
             (user-progress-streak p)
             (user-progress-best-streak p))))
 
-(defun tool-overlay-task (args)
-  (let ((day-id (to-int (arg args "day-id")))
-        (tier (arg args "tier"))
-        (idx (to-int (arg args "task-index")))
-        (text (arg args "text"))
-        (detail (arg args "detail")))
-    (tx-overlay-task day-id tier idx text detail)
-    "(ok)"))
-
 (defun tool-append-generated-task (args)
   (let* ((id (arg args "id"))
          (day-id (to-int (arg args "day-id")))
@@ -181,7 +172,6 @@
     ("fetch-task" . tool-fetch-task)
     ("mark-task-complete" . tool-mark-task-complete)
     ("get-progress" . tool-get-progress)
-    ("overlay-task" . tool-overlay-task)
     ("append-generated-task" . tool-append-generated-task)
     ("grade-attempt" . tool-grade-attempt)
     ("append-chat" . tool-append-chat)

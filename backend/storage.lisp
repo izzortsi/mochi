@@ -95,12 +95,6 @@
   (let ((root (cl-prevalence:get-root-object system :study)))
     (setf (study-root-progress root) (make-user-progress))))
 
-(defun %overlay-task (system day-id tier task-index text detail)
-  (let* ((root (cl-prevalence:get-root-object system :study))
-         (key (task-key 1 day-id tier task-index)))
-    (setf (gethash key (study-root-overrides root))
-          (make-task-override :text text :detail detail))))
-
 (defun %append-generated-task (system id source-card-uid tier text detail created-at)
   (let ((root (cl-prevalence:get-root-object system :study)))
     (push (make-generated-task :id id
@@ -146,10 +140,6 @@
 (defun tx-reset-progress ()
   (cl-prevalence:execute-transaction
    (%reset-progress *prevalence-system*)))
-
-(defun tx-overlay-task (day-id tier task-index text detail)
-  (cl-prevalence:execute-transaction
-   (%overlay-task *prevalence-system* day-id tier task-index text detail)))
 
 (defun tx-append-generated-task (id source-card-uid tier text detail created-at)
   (cl-prevalence:execute-transaction

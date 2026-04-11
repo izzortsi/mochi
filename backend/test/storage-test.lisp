@@ -46,15 +46,6 @@
     (is (zerop (hash-table-count
                 (study-plan.models:user-progress-completed-tasks p))))))
 
-(test tx-overlay-task
-  (reset-test-storage)
-  (study-plan.storage:tx-overlay-task 3 "bronze" 0
-                                      "Real problem text"
-                                      "Real solution")
-  (let ((ov (gethash "c1-d3-bronze-0" (study-plan.storage:get-overrides))))
-    (is (not (null ov)))
-    (is (equal "Real problem text" (study-plan.models:task-override-text ov)))))
-
 (test tx-append-attempt-logs
   (reset-test-storage)
   (study-plan.storage:tx-append-attempt "c1-d1-bronze-0"
