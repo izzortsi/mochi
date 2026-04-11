@@ -38,11 +38,12 @@ export default function CourseDashboard() {
 
   const completed = progress.completedTasks ?? {};
   const dayTiers = progress.dayTiers ?? {};
-  const totalTasks = course.days.reduce((a, d) => a + d.cards.length, 0);
-  const completedCount = course.days.reduce((a, d) => a + countCompletedInDay(d, completed), 0);
+  const days = (course.days ?? []).map(d => ({ ...d, cards: d.cards ?? [] }));
+  const totalTasks = days.reduce((a, d) => a + d.cards.length, 0);
+  const completedCount = days.reduce((a, d) => a + countCompletedInDay(d, completed), 0);
   const pct = totalTasks === 0 ? 0 : (completedCount / totalTasks) * 100;
 
-  const phasesShown = Array.from(new Set(course.days.map(d => d.phase))).sort((a, b) => a - b);
+  const phasesShown = Array.from(new Set(days.map(d => d.phase))).sort((a, b) => a - b);
 
   return (
     <div>
@@ -56,11 +57,11 @@ export default function CourseDashboard() {
         <button className="text-xs opacity-50 hover:opacity-100" onClick={() => setShowReset(true)}>Reset</button>
       </div>
 
-      <NextUpPanel courseId={courseId} days={course.days} />
+      <NextUpPanel courseId={courseId} days={days} />
 
       {phasesShown.map(phaseNum => {
-        const phaseDays = course.days.filter(d => d.phase === phaseNum);
-        const phaseTitle = (course.phases.find(p => p[0] === phaseNum)?.[1]) ?? `Phase ${phaseNum}`;
+        const phaseDays = days.filter(d => d.phase === phaseNum);
+        const phaseTitle = ((course.phases ?? []).find(p => p[0] === phaseNum)?.[1]) ?? `Phase ${phaseNum}`;
         return (
           <section key={phaseNum} className="mb-8">
             <h2 className="font-display text-lg mb-3 opacity-70">Phase {phaseNum} — {phaseTitle}</h2>
@@ -88,7 +89,7 @@ export default function CourseDashboard() {
       {showAddCard && (
         <AddCardModal
           courseId={courseId}
-          days={course.days.map(d => ({ id: d.id, title: d.title }))}
+          days={days.map(d => ({ id: d.id, title: d.title }))}
           onClose={() => setShowAddCard(false)}
           onSaved={() => { setShowAddCard(false); refresh(); }}
         />

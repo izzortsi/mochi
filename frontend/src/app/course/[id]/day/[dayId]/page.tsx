@@ -41,8 +41,9 @@ export default function DayDetail() {
   if (!course || !day || !progress) return <div className="opacity-50">loading…</div>;
 
   const completed = progress.completedTasks ?? {};
-  const cardsByTier: Record<Tier, typeof day.cards> = { bronze: [], silver: [], gold: [] };
-  for (const c of day.cards) cardsByTier[c.tier].push(c);
+  const dayCards = day.cards ?? [];
+  const cardsByTier: Record<Tier, typeof dayCards> = { bronze: [], silver: [], gold: [] };
+  for (const c of dayCards) cardsByTier[c.tier].push(c);
 
   const maxDay = Math.max(...course.days.map(d => d.id));
   const minDay = Math.min(...course.days.map(d => d.id));

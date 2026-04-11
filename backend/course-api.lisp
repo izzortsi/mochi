@@ -37,6 +37,11 @@
      (mapcar #'course-alist
              (study-plan.ontology.store:facts-with-head "course")))))
 
+(defun json-array (items)
+  "Coerce to a vector so cl-json emits a JSON array even when empty.
+   A plain NIL list would otherwise encode as `null`."
+  (coerce (or items nil) 'vector))
+
 (defun day-alist (day-fact)
   `((:id . ,(parse-integer (study-plan.ontology.store:fact-arg day-fact 1)))
     (:phase . ,(parse-integer (study-plan.ontology.store:fact-arg day-fact 2)))
@@ -51,8 +56,8 @@
     (:task-index . ,(parse-integer (study-plan.ontology.store:fact-arg card-fact 4)))
     (:text . ,(study-plan.ontology.store:fact-arg card-fact 5))
     (:detail . ,(study-plan.ontology.store:fact-arg card-fact 6))
-    (:concepts . ,(study-plan.ontology:tags-for-card
-                   (study-plan.ontology.store:fact-arg card-fact 0)))))
+    (:concepts . ,(json-array (study-plan.ontology:tags-for-card
+                                (study-plan.ontology.store:fact-arg card-fact 0))))))
 
 (defun handle-get-course ()
   (study-plan.api:with-options ()
@@ -69,15 +74,17 @@
             `((:id . ,id)
               (:title . ,(study-plan.ontology.store:fact-arg course 1))
               (:slug . ,(study-plan.ontology.store:fact-arg course 2))
-              (:phases . ,(study-plan.ontology:list-phases-for-course id))
-              (:days . ,(mapcar
-                         (lambda (d)
-                           (let* ((dfields (day-alist d))
-                                  (did (cdr (assoc :id dfields))))
-                             (append dfields
-                                     `((:cards . ,(mapcar #'card-alist
-                                                          (study-plan.ontology:list-cards-for-day id did)))))))
-                         days))))))))))
+              (:phases . ,(json-array (study-plan.ontology:list-phases-for-course id)))
+              (:days . ,(json-array
+                         (mapcar
+                          (lambda (d)
+                            (let* ((dfields (day-alist d))
+                                   (did (cdr (assoc :id dfields))))
+                              (append dfields
+                                      `((:cards . ,(json-array
+                                                    (mapcar #'card-alist
+                                                            (study-plan.ontology:list-cards-for-day id did))))))))
+                          days)))))))))))
 
 (defun handle-get-concept-map ()
   (study-plan.api:with-options ()
