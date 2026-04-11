@@ -8,7 +8,7 @@ import { WsClient } from "@/lib/ws";
 import type { ChatMessage, ConnectionStatus } from "@/lib/types";
 import { MathText } from "./MathText";
 
-interface Props { dayId: number; onProgressChanged: () => void; }
+interface Props { courseId: number; dayId: number; onProgressChanged: () => void; }
 
 export function StudyChat({ dayId, onProgressChanged }: Props) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);

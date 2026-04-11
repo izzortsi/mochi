@@ -2,10 +2,11 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { TierBadge } from "./TierBadge";
-import type { StudyDay, DayTier } from "@/lib/types";
+import type { DayView, DayTier } from "@/lib/types";
 
 interface Props {
-  day: StudyDay;
+  courseId: number;
+  day: DayView;
   tier: DayTier;
   completedCount: number;
   totalCount: number;
@@ -15,11 +16,11 @@ const PHASE_ACCENT: Record<number, string> = {
   1: "#6366f1", 2: "#8b5cf6", 3: "#ec4899", 4: "#f59e0b",
 };
 
-export function DayCard({ day, tier, completedCount, totalCount }: Props) {
+export function DayCard({ courseId, day, tier, completedCount, totalCount }: Props) {
   const pct = totalCount === 0 ? 0 : (completedCount / totalCount) * 100;
   const accent = PHASE_ACCENT[day.phase] ?? "#6366f1";
   return (
-    <Link href={`/day/${day.id}`}>
+    <Link href={`/course/${courseId}/day/${day.id}`}>
       <motion.article
         className="rounded-xl border border-[#1a1a2a] bg-[#121222] p-4 hover:border-[#2a2a3f] transition-colors cursor-pointer h-full"
         initial={{ opacity: 0, y: 8 }}
@@ -30,7 +31,7 @@ export function DayCard({ day, tier, completedCount, totalCount }: Props) {
           <TierBadge tier={tier} />
         </div>
         <div className="text-xs opacity-50 uppercase tracking-wider" style={{ color: accent }}>
-          Day {day.id} · {day.phaseTitle}
+          Day {day.id}
         </div>
         <h3 className="font-display text-lg mt-1 mb-2">{day.title}</h3>
         <p className="text-sm opacity-70 line-clamp-2">{day.summary}</p>
