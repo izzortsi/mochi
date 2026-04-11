@@ -1,26 +1,51 @@
 export type Tier = "bronze" | "silver" | "gold";
 export type DayTier = Tier | "none";
+export type CardUid = string;
+export type ConceptId = string;
+export type MasteryState = "not-started" | "learning" | "mastered";
 
 export interface TaskItem {
   text: string;
   detail: string;
 }
 
-export interface TaskGroup {
+export interface CardView {
+  cardUid: CardUid;
   tier: Tier;
-  label: string;
-  items: TaskItem[];
+  taskIndex: number;
+  text: string;
+  detail: string;
+  concepts: ConceptId[];
 }
 
-export interface StudyDay {
+export interface DayView {
   id: number;
   phase: number;
-  phaseTitle: string;
   title: string;
   icon: string;
   summary: string;
   keyInsight: string;
-  tasks: TaskGroup[];
+  cards: CardView[];
+}
+
+export type Phase = [number, string];
+
+export interface CourseSummary {
+  id: number;
+  title: string;
+  slug: string;
+  dayCount: number;
+  totalCards: number;
+  completedCards: number;
+  completionPct: number;
+}
+
+export interface Course {
+  id: number;
+  title: string;
+  slug: string;
+  phases: Phase[];
+  days: DayView[];
 }
 
 export interface UserProgress {
@@ -28,18 +53,39 @@ export interface UserProgress {
   streak: number;
   bestStreak: number;
   lastCompleted: string | null;
-  completedTasks: Record<string, boolean>;
-  dayTiers: Record<string, DayTier>;
+  completedTasks: Record<CardUid, boolean> | null;
+  dayTiers: Record<string, DayTier> | null;
 }
 
-export interface GeneratedTask {
-  id: string;
-  dayId: number;
-  tier: Tier;
-  sourceTaskIndex: number;
-  text: string;
-  detail: string;
-  createdAt: string;
+export interface ConceptNode {
+  id: ConceptId;
+  label: string;
+  mastery: MasteryState;
+  cardCount: number;
+}
+
+export interface ConceptEdge {
+  from: ConceptId;
+  to: ConceptId;
+}
+
+export interface ConceptMapData {
+  nodes: ConceptNode[];
+  edges: ConceptEdge[];
+}
+
+export interface NextUpItem {
+  cardUid: CardUid;
+}
+
+export interface ConceptPageData {
+  conceptId: ConceptId;
+  label: string;
+  mastery: MasteryState;
+  byCourse: Array<{
+    courseId: number;
+    cards: Array<{ cardUid: CardUid; text: string }>;
+  }>;
 }
 
 export type ChatRole = "user" | "assistant" | "tool";
