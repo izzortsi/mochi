@@ -32,10 +32,16 @@
   (format nil "~S" fact))
 
 (defun write-fact-to-journal (fact)
+  "Write FACT as a single-line readable s-expression. *print-readably* t
+   forces newlines inside strings to be escaped as \\n, so each fact always
+   occupies exactly one journal line and survives replay."
   (when *ontology-journal-stream*
-    (let ((*print-readably* nil)
-          (*print-escape* t))
-      (format *ontology-journal-stream* "~S~%" fact)
+    (let ((*print-readably* t)
+          (*print-escape* t)
+          (*print-pretty* nil)
+          (*print-right-margin* most-positive-fixnum))
+      (prin1 fact *ontology-journal-stream*)
+      (terpri *ontology-journal-stream*)
       (finish-output *ontology-journal-stream*))))
 
 (defun reset-ontology-store ()
