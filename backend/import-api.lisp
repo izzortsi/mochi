@@ -50,31 +50,105 @@ Return a single JSON object with this exact shape:
 }
 Return ONLY the JSON, no prose, no markdown fences.")
 
+(defun ingestion-extend-system-prompt ()
+  "System prompt for extending an existing course with new material."
+  "You are extending an existing study course with new material. You will be shown:
+- The current course structure (phases, days, existing concepts)
+- A new piece of source material
+
+Your job: propose BOTH new days AND cards to insert into existing days where appropriate.
+
+Rules:
+- New day-ids must start at max-existing-day-id + 1 and increment from there.
+- Prefer existing concept-ids when the meaning matches. Only mint new concepts for genuinely new vocabulary.
+- When proposing a card for an EXISTING day, specify the target day-id and tier. Do not specify task-index — the system assigns it.
+- New phases only if the material clearly belongs to a topic none of the existing phases cover.
+- Return ONLY this JSON shape, no prose, no markdown fences:
+
+{
+  \"newPhases\": [{\"num\": 5, \"title\": \"...\"}],
+  \"newDays\": [{\"id\": 8, \"phase\": 5, \"title\": \"...\", \"icon\": \"*\",
+               \"summary\": \"...\", \"keyInsight\": \"...\",
+               \"cards\": [{\"tier\": \"bronze|silver|gold\",
+                          \"text\": \"...\", \"detail\": \"...\",
+                          \"concepts\": [\"concept-id\", ...]}]}],
+  \"insertedCards\": [{\"dayId\": 3, \"tier\": \"silver\",
+                     \"text\": \"...\", \"detail\": \"...\",
+                     \"concepts\": [\"concept-id\", ...]}],
+  \"newConcepts\": [{\"id\": \"kebab-case\", \"label\": \"display\"}],
+  \"newPrereqs\": [[\"concept-id\", \"prereq-id\"]]
+}")
+
+(defun build-extend-context (course-id)
+  "Return a human-readable context string describing the current state of the
+   given course — phases, days, and existing concepts — for the LLM."
+  (let* ((course (study-plan.ontology:course-by-id course-id))
+         (phases (study-plan.ontology:list-phases-for-course course-id))
+         (days (study-plan.ontology:list-days-for-course course-id))
+         (concepts (study-plan.ontology:list-concepts))
+         (max-day-id (if days
+                         (reduce #'max days
+                                 :key (lambda (d) (parse-integer
+                                                   (study-plan.ontology.store:fact-arg d 1))))
+                         0)))
+    (with-output-to-string (out)
+      (when course
+        (format out "~&Current course: ~A~%" (study-plan.ontology.store:fact-arg course 1)))
+      (format out "~&Max existing day-id: ~D~%" max-day-id)
+      (format out "~&~%Existing phases:~%")
+      (dolist (p phases)
+        (format out "  ~D. ~A~%" (first p) (second p)))
+      (format out "~&~%Existing days:~%")
+      (dolist (d days)
+        (format out "  Day ~A (phase ~A): ~A~%"
+                (study-plan.ontology.store:fact-arg d 1)
+                (study-plan.ontology.store:fact-arg d 2)
+                (study-plan.ontology.store:fact-arg d 3)))
+      (format out "~&~%Existing concepts:~%")
+      (dolist (c concepts)
+        (format out "  ~A (~A)~%" (first c) (second c))))))
+
 (defun handle-post-import-parse ()
   (study-plan.api:with-options ()
     (let* ((body (study-plan.api:read-request-json))
            (api-key (cdr (assoc :api--key body)))
            (text (cdr (assoc :text body)))
            (title (cdr (assoc :title body)))
-           (model (or (cdr (assoc :model body)) "GLM-4.7-Flash")))
+           (model (or (cdr (assoc :model body)) "GLM-4.7-Flash"))
+           (mode (or (cdr (assoc :mode body)) "new"))
+           (target-raw (cdr (assoc :target--course--id body)))
+           (target-id (when target-raw
+                        (if (stringp target-raw)
+                            (parse-integer target-raw :junk-allowed t)
+                            target-raw))))
       (cond
         ((or (null api-key) (null text))
          (setf (hunchentoot:return-code*) 400)
          (study-plan.api:json-response `((:error . "missing api-key or text"))))
+        ((and (equal mode "extend") (null target-id))
+         (setf (hunchentoot:return-code*) 400)
+         (study-plan.api:json-response `((:error . "extend mode requires target-course-id"))))
         (t
          (handler-case
-             (let ((response (dex:post "https://api.z.ai/api/coding/paas/v4/chat/completions"
-                                       :headers `(("Content-Type" . "application/json")
-                                                  ("Authorization" . ,(format nil "Bearer ~A" api-key)))
-                                       :content (cl-json:encode-json-to-string
-                                                 `((:model . ,model)
-                                                   (:temperature . 0.2)
-                                                   (:messages .
-                                                    (((:role . "system")
-                                                      (:content . ,(ingestion-system-prompt)))
-                                                     ((:role . "user")
-                                                      (:content . ,(format nil "Title: ~A~%~%Content:~%~A"
-                                                                           title text))))))))))
+             (let* ((system-prompt (if (equal mode "extend")
+                                       (ingestion-extend-system-prompt)
+                                       (ingestion-system-prompt)))
+                    (user-content (if (equal mode "extend")
+                                      (format nil "~A~%~%Content:~%~A"
+                                              (build-extend-context target-id)
+                                              text)
+                                      (format nil "Title: ~A~%~%Content:~%~A" title text)))
+                    (response (dex:post "https://api.z.ai/api/coding/paas/v4/chat/completions"
+                                        :headers `(("Content-Type" . "application/json")
+                                                   ("Authorization" . ,(format nil "Bearer ~A" api-key)))
+                                        :content (cl-json:encode-json-to-string
+                                                  `((:model . ,model)
+                                                    (:temperature . 0.2)
+                                                    (:messages .
+                                                     (((:role . "system")
+                                                       (:content . ,system-prompt))
+                                                      ((:role . "user")
+                                                       (:content . ,user-content)))))))))
                (study-plan.api:set-cors-headers)
                (setf (hunchentoot:content-type*) "application/json")
                response)
