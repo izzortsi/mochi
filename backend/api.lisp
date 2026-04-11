@@ -20,6 +20,15 @@
   (let ((cl-json:*lisp-identifier-name-to-json* #'string-downcase))
     (cl-json:encode-json-to-string obj)))
 
+(defun json-alist-response (alist)
+  "Force cl-json to encode ALIST as a JSON object (not an array).
+   Use this when the top-level alist has list-valued entries that would
+   otherwise trip cl-json's type-guessing heuristic."
+  (set-cors-headers)
+  (setf (hunchentoot:content-type*) "application/json")
+  (let ((cl-json:*lisp-identifier-name-to-json* #'string-downcase))
+    (cl-json:encode-json-alist-to-string alist)))
+
 (defun read-request-json ()
   (let ((body (hunchentoot:raw-post-data :force-text t)))
     (when body

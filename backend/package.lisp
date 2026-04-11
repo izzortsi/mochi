@@ -80,6 +80,7 @@
   (:export #:register-progress-routes
            #:with-options
            #:json-response
+           #:json-alist-response
            #:set-cors-headers
            #:read-request-json
            #:today-iso))

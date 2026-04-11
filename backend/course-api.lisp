@@ -99,7 +99,7 @@
                         concepts))
                 (edges (mapcar (lambda (e) `((:from . ,(first e)) (:to . ,(second e))))
                                (study-plan.ontology.query:edges-for-course id))))
-           (study-plan.api:json-response
+           (study-plan.api:json-alist-response
             `((:nodes . ,nodes) (:edges . ,edges)))))))))
 
 (defun handle-get-concept-map-all ()
@@ -117,7 +117,7 @@
                      `((:from . ,(study-plan.ontology.store:fact-arg f 0))
                        (:to . ,(study-plan.ontology.store:fact-arg f 1))))
                    (study-plan.ontology.store:facts-with-head "prereq"))))
-      (study-plan.api:json-response `((:nodes . ,nodes) (:edges . ,edges))))))
+      (study-plan.api:json-alist-response `((:nodes . ,nodes) (:edges . ,edges))))))
 
 (defun handle-get-next-up ()
   (study-plan.api:with-options ()
@@ -128,7 +128,7 @@
          (setf (hunchentoot:return-code*) 400)
          (study-plan.api:json-response `((:error . "missing course-id"))))
         (t
-         (study-plan.api:json-response
+         (study-plan.api:json-alist-response
           `((:next-up . ,(mapcar (lambda (uid) `((:card-uid . ,uid)))
                                  (study-plan.ontology.query:next-up id))))))))))
 
