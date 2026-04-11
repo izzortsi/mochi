@@ -4,6 +4,54 @@
 
 (defvar *pdfs-dir* "./pdfs/")
 
+(defvar *max-upload-bytes* (* 32 1024 1024)
+  "Hard ceiling on uploaded PDF size (32 MB).")
+
+(defun sanitize-upload-name (raw)
+  "Return a sanitized filename, or NIL if rejected."
+  (when (and raw (> (length raw) 0))
+    (let ((stripped (string-trim '(#\Space #\Tab #\Newline) raw)))
+      (cond
+        ((search "/" stripped) nil)
+        ((search "\\" stripped) nil)
+        ((search ".." stripped) nil)
+        ((find #\Null stripped) nil)
+        ((not (and (>= (length stripped) 4)
+                   (string-equal ".pdf"
+                                 (subseq stripped (- (length stripped) 4)))))
+         nil)
+        (t (substitute #\_ #\Space stripped))))))
+
+(defun handle-post-pdf-upload ()
+  (study-plan.api:with-options ()
+    (let* ((raw-name (hunchentoot:get-parameter "name"))
+           (clean-name (sanitize-upload-name raw-name))
+           (bytes (hunchentoot:raw-post-data :force-binary t)))
+      (cond
+        ((null clean-name)
+         (setf (hunchentoot:return-code*) 400)
+         (study-plan.api:json-alist-response
+          `((:error . "invalid or missing name (must be *.pdf with no path chars)"))))
+        ((or (null bytes) (zerop (length bytes)))
+         (setf (hunchentoot:return-code*) 400)
+         (study-plan.api:json-alist-response
+          `((:error . "empty body"))))
+        ((> (length bytes) *max-upload-bytes*)
+         (setf (hunchentoot:return-code*) 413)
+         (study-plan.api:json-alist-response
+          `((:error . "file too large"))))
+        (t
+         (ensure-directories-exist *pdfs-dir*)
+         (let ((path (merge-pathnames clean-name (pathname *pdfs-dir*))))
+           (with-open-file (out path
+                                :direction :output
+                                :element-type '(unsigned-byte 8)
+                                :if-exists :supersede
+                                :if-does-not-exist :create)
+             (write-sequence bytes out))
+           (study-plan.api:json-alist-response
+            `((:files . ,clean-name)))))))))
+
 (defun list-pdf-files ()
   (when (probe-file (pathname *pdfs-dir*))
     (directory (merge-pathnames "*.*" (pathname *pdfs-dir*)))))
@@ -159,5 +207,6 @@ Rules:
 (defun register-import-routes ()
   (list
    (hunchentoot:create-regex-dispatcher "^/api/pdfs$" 'handle-get-pdfs-list)
+   (hunchentoot:create-regex-dispatcher "^/api/pdfs/upload$" 'handle-post-pdf-upload)
    (hunchentoot:create-regex-dispatcher "^/api/pdfs/.+" 'handle-get-pdf-file)
    (hunchentoot:create-regex-dispatcher "^/api/import/parse$" 'handle-post-import-parse)))
