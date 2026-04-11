@@ -100,7 +100,14 @@ export default function DayDetail() {
         >next <ChevronRight className="w-4 h-4" /></button>
       </div>
 
-      <StudyChat courseId={courseId} dayId={dayId} onProgressChanged={refresh} />
+      <StudyChat
+        courseId={courseId}
+        dayId={dayId}
+        course={course}
+        day={day}
+        progress={progress}
+        onProgressChanged={refresh}
+      />
     </div>
   );
 }
