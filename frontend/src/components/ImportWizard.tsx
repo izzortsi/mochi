@@ -81,7 +81,7 @@ export function ImportWizard() {
   const wsRef = useRef<WsClient | null>(null);
 
   useEffect(() => {
-    ontology.listPdfs().then(r => setFiles(r.files)).catch(e => setError(String(e)));
+    ontology.listPdfs().then(r => setFiles(r?.files ?? [])).catch(e => setError(String(e)));
     ontology.listCourses().then(setCourses).catch(() => setCourses([]));
     const client = new WsClient("ws://localhost:4000/ws", () => {}, setStatus);
     client.connect();

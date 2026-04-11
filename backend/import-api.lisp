@@ -10,7 +10,7 @@
 
 (defun handle-get-pdfs-list ()
   (study-plan.api:with-options ()
-    (study-plan.api:json-response
+    (study-plan.api:json-alist-response
      `((:files . ,(mapcar #'file-namestring (list-pdf-files)))))))
 
 (defun handle-get-pdf-file ()
