@@ -2,7 +2,8 @@
 __pycache__/
 *.pyc
 .venv/
-backend/data/
+backend/data/*
+!backend/data/ocr/
 backend/pdfs/
 
 # Node / Next
