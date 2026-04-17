@@ -44,7 +44,11 @@ done
 
 echo "[start] Starting frontend on port $WEB_PORT..."
 cd "$DIR/frontend"
-npx next dev -p $WEB_PORT &
+if [ ! -d node_modules ]; then
+  echo "[start] Installing frontend deps..."
+  npm install
+fi
+PORT=$WEB_PORT npm run dev &
 WEB_PID=$!
 
 echo ""
