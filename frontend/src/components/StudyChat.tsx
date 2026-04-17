@@ -57,12 +57,13 @@ export function StudyChat({ course, day, progress, onProgressChanged }: Props) {
   useEffect(() => {
     const ws = new WsClient(
       "ws://localhost:4000/ws",
-      (raw) => {
-        // Expect "(ok "<request-id>" ...)" or "(err "<request-id>" ...)"
-        const m = /^\((?:ok|err) "([^"]+)"/.exec(raw);
-        if (m) {
-          const resolver = pendingRef.current.get(m[1]);
-          if (resolver) { resolver(raw); pendingRef.current.delete(m[1]); }
+      (msg) => {
+        if (msg.requestId) {
+          const resolver = pendingRef.current.get(msg.requestId);
+          if (resolver) {
+            resolver(JSON.stringify(msg.ok ? msg.result : { error: msg.error }));
+            pendingRef.current.delete(msg.requestId);
+          }
         }
       },
       setStatus,

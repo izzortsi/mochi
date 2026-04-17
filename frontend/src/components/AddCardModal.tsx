@@ -15,21 +15,16 @@ interface Props {
 
 interface Chip { id: string; label: string; isNew: boolean; }
 
-function kebab(key: string): string {
+function toKebab(key: string): string {
   return key.replace(/[A-Z]/g, c => `-${c.toLowerCase()}`);
 }
-function quote(s: string): string {
-  return `"${s.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
-}
-function encodeValue(v: unknown): string {
-  if (typeof v === "string") return quote(v);
-  if (typeof v === "number") return String(v);
-  if (v === null) return "nil";
-  return quote(String(v));
-}
-function buildFrame(name: string, args: Record<string, unknown>, requestId: string): string {
-  const pairs = Object.entries(args).map(([k, v]) => `(${kebab(k)} ${encodeValue(v)})`);
-  return `(call ${quote(name)} (${pairs.join(" ")}) ${quote(requestId)})`;
+
+function kebabKeys(obj: Record<string, unknown>): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(obj)) {
+    out[toKebab(k)] = v;
+  }
+  return out;
 }
 
 export function AddCardModal({ courseId, days, onClose, onSaved }: Props) {
@@ -87,7 +82,7 @@ export function AddCardModal({ courseId, days, onClose, onSaved }: Props) {
       const call = (name: string, args: Record<string, unknown>): Promise<void> =>
         new Promise((resolve) => {
           const requestId = Math.random().toString(36).slice(2, 10);
-          ws.send(buildFrame(name, args, requestId));
+          ws.send(JSON.stringify({ call: name, args: kebabKeys(args), requestId }));
           setTimeout(resolve, 60);
         });
 

@@ -16,6 +16,7 @@ export interface CardView {
   text: string;
   detail: string;
   concepts: ConceptId[];
+  notes: string[];
 }
 
 export interface DayView {
@@ -97,9 +98,40 @@ export interface ChatMessage {
   timestamp: string;
 }
 
+export interface NoteSummary {
+  id: string;
+  title: string;
+  domain: string;
+  tags: string[];
+  related: string[];
+  source: string;
+}
+
+export interface NoteDetail {
+  id: string;
+  title: string;
+  domain: string;
+  tags: string[];
+  content: string;
+  related: { id: string; title: string; domain: string }[];
+  source: string;
+}
+
+export interface NotesGraphNode {
+  id: string;
+  label: string;
+  domain: string;
+  tags: string[];
+}
+
+export interface NotesGraphData {
+  nodes: NotesGraphNode[];
+  edges: { from: string; to: string }[];
+}
+
 export type ConnectionStatus = "connecting" | "connected" | "disconnected";
 
-export type LlmProvider = "zai";
+export type LlmProvider = "zai" | "anthropic-oauth";
 
 export interface LlmConfig {
   provider: LlmProvider;

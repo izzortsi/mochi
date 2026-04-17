@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Plus } from "lucide-react";
+import { api } from "@/lib/api";
 import { ontology } from "@/lib/ontology";
 import type { CourseSummary } from "@/lib/types";
 import { CourseCard } from "@/components/CourseCard";
@@ -10,12 +11,18 @@ export default function CourseListPage() {
   const [courses, setCourses] = useState<CourseSummary[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const refresh = useCallback(() => {
     ontology.listCourses().then(setCourses).catch(e => setError(String(e)));
   }, []);
 
+  useEffect(refresh, [refresh]);
+
+  const handleDeleteCourse = async (courseId: number) => {
+    await api.deleteCourse(courseId);
+    refresh();
+  };
+
   if (error) return <div className="text-phase3">error: {error}</div>;
-  if (!courses.length) return <div className="opacity-50">no courses yet. click &quot;+ import&quot; to add one.</div>;
 
   return (
     <div>
@@ -25,8 +32,9 @@ export default function CourseListPage() {
           <Plus className="w-4 h-4" /> import
         </Link>
       </div>
+      {!courses.length && <div className="opacity-50">no courses yet. click &quot;+ import&quot; to add one.</div>}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {courses.map(c => <CourseCard key={c.id} course={c} />)}
+        {courses.map(c => <CourseCard key={c.id} course={c} onDelete={handleDeleteCourse} />)}
       </div>
     </div>
   );

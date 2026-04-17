@@ -1,0 +1,98 @@
+"use client";
+import { useEffect, useState } from "react";
+import { ontology } from "@/lib/ontology";
+import type { NotesGraphData, NoteSummary } from "@/lib/types";
+import { NotesGraph } from "@/components/NotesGraph";
+
+function truncate(s: string, len = 120): string {
+  const flat = s.replace(/\n+/g, " ").replace(/\$\$?/g, "").trim();
+  return flat.length > len ? flat.slice(0, len).trim() + "…" : flat;
+}
+
+type Tab = "graph" | "list";
+
+export default function NotesPage() {
+  const [graphData, setGraphData] = useState<NotesGraphData | null>(null);
+  const [notes, setNotes] = useState<NoteSummary[]>([]);
+  const [domains, setDomains] = useState<string[]>([]);
+  const [filter, setFilter] = useState("");
+  const [tab, setTab] = useState<Tab>("graph");
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    Promise.all([
+      ontology.fetchNotesGraph().catch(() => null),
+      ontology.listNotes().catch(() => []),
+      ontology.listDomains().then(r => r.domains).catch(() => []),
+    ]).then(([g, n, d]) => {
+      if (!g && !n.length) setError("No notes found. Import a PDF to generate notes alongside your course.");
+      setGraphData(g);
+      setNotes(n);
+      setDomains(d);
+    });
+  }, []);
+
+  const filtered = filter
+    ? notes.filter(n => n.domain === filter)
+    : notes;
+
+  if (error && !graphData) return <div className="opacity-50">{error}</div>;
+
+  return (
+    <div>
+      <h1 className="font-display text-3xl mb-2">Knowledge Base</h1>
+      <p className="text-sm opacity-60 mb-4">Atomic notes extracted from your courses. Click a node to read.</p>
+
+      <div className="flex items-center gap-3 mb-4">
+        <div className="flex rounded-lg border border-[#2a2a3f] overflow-hidden">
+          <button
+            className={`px-3 py-1.5 text-sm ${tab === "graph" ? "bg-[#2a2a3f]" : "hover:bg-[#1a1a2a]"}`}
+            onClick={() => setTab("graph")}
+          >Graph</button>
+          <button
+            className={`px-3 py-1.5 text-sm ${tab === "list" ? "bg-[#2a2a3f]" : "hover:bg-[#1a1a2a]"}`}
+            onClick={() => setTab("list")}
+          >List</button>
+        </div>
+        <select
+          value={filter}
+          onChange={e => setFilter(e.target.value)}
+          className="bg-[#121222] border border-[#2a2a3f] rounded px-2 py-1 text-sm"
+        >
+          <option value="">All domains</option>
+          {domains.map(d => <option key={d} value={d}>{d}</option>)}
+        </select>
+        <span className="text-xs opacity-50">{filtered.length} notes</span>
+      </div>
+
+      {tab === "graph" && graphData && graphData.nodes.length > 0 && (
+        <NotesGraph data={graphData} cacheKey="global" height={560} />
+      )}
+      {tab === "graph" && graphData && graphData.nodes.length === 0 && (
+        <div className="opacity-50">No notes yet. Import a PDF to generate notes.</div>
+      )}
+
+      {tab === "list" && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {filtered.map(n => (
+            <a
+              key={n.id}
+              href={`/notes/${encodeURIComponent(n.id)}`}
+              className="block p-4 rounded-xl border border-[#2a2a3f] bg-[#121222] hover:border-[#3a3a4f] transition-colors"
+            >
+              <div className="font-display text-base mb-1">{n.title}</div>
+              {n.domain && <div className="text-xs opacity-50 mb-2">{n.domain}</div>}
+              {n.tags.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                  {n.tags.map(t => (
+                    <span key={t} className="text-xs px-1.5 py-0.5 rounded bg-[#1a1a2a] opacity-60">{t}</span>
+                  ))}
+                </div>
+              )}
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

@@ -77,12 +77,15 @@ export function ConceptMap({ data, cacheKey, height = 480 }: { data: ConceptMapD
   const dragState = useRef<{ dragging: boolean; nodeId: string | null; panStart: { x: number; y: number } | null }>({
     dragging: false, nodeId: null, panStart: null,
   });
+  const didDragRef = useRef(false);
 
   const onMouseDownNode = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
+    didDragRef.current = false;
     dragState.current = { dragging: true, nodeId: id, panStart: null };
   };
   const onMouseDownBg = (e: React.MouseEvent) => {
+    didDragRef.current = false;
     dragState.current = { dragging: true, nodeId: null, panStart: { x: e.clientX - transform.x, y: e.clientY - transform.y } };
   };
   const onMouseMove = (e: React.MouseEvent) => {
@@ -94,8 +97,11 @@ export function ConceptMap({ data, cacheKey, height = 480 }: { data: ConceptMapD
       const n = nodesRef.current.find(n => n.id === dragState.current.nodeId);
       if (n) { n.fx = sx; n.fy = sy; }
       simRef.current?.alpha(0.3).restart();
+      didDragRef.current = true;
     } else if (dragState.current.panStart) {
-      setTransform(t => ({ ...t, x: e.clientX - dragState.current.panStart!.x, y: e.clientY - dragState.current.panStart!.y }));
+      const start = dragState.current.panStart;
+      setTransform(t => ({ ...t, x: e.clientX - start.x, y: e.clientY - start.y }));
+      didDragRef.current = true;
     }
   };
   const onMouseUp = () => {
@@ -137,7 +143,7 @@ export function ConceptMap({ data, cacheKey, height = 480 }: { data: ConceptMapD
             key={n.id}
             transform={`translate(${n.x ?? 0}, ${n.y ?? 0})`}
             onMouseDown={(e) => onMouseDownNode(e, n.id)}
-            onClick={() => router.push(`/concept/${encodeURIComponent(n.id)}`)}
+            onClick={() => { if (!didDragRef.current) router.push(`/concept/${encodeURIComponent(n.id)}`); }}
             style={{ cursor: "pointer" }}
           >
             <circle r={12 + n.cardCount * 2} fill={MASTERY_FILL[n.mastery]} stroke="#0f0f1a" strokeWidth={2} />

@@ -34,6 +34,11 @@ export default function CourseDashboard() {
 
   const doReset = async () => { await api.reset(); setShowReset(false); refresh(); };
 
+  const handleDeleteDay = async (dayId: number) => {
+    await api.deleteDay(courseId, dayId);
+    refresh();
+  };
+
   if (!course || !progress) return <div className="opacity-50">loading…</div>;
 
   const completed = progress.completedTasks ?? {};
@@ -76,6 +81,7 @@ export default function CourseDashboard() {
                     tier={tier}
                     completedCount={countCompletedInDay(day, completed)}
                     totalCount={day.cards.length}
+                    onDelete={handleDeleteDay}
                   />
                 );
               })}

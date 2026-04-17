@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"from app.services import pet_art; print\\('pet_art OK'\\)\")",
+      "Bash(python -c \"from app.routers import pet; print\\('pet router OK'\\)\")",
+      "Bash(python -c ':*)",
+      "Bash(python:*)"
+    ]
+  }
+}

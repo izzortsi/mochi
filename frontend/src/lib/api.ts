@@ -37,12 +37,28 @@ async function postJson<T>(path: string, body: object): Promise<T> {
   return camelizeKeys<T>(await res.json());
 }
 
+async function deleteJson<T>(path: string, body: object): Promise<T> {
+  const res = await fetch(path, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`${path}: ${res.status}`);
+  return camelizeKeys<T>(await res.json());
+}
+
 export const api = {
   fetchProgress: () => getJson<UserProgress>("/api/progress"),
   complete: (cardUid: CardUid) =>
     postJson<UserProgress>("/api/progress/complete", { "card-uid": cardUid }),
   uncomplete: (cardUid: CardUid) =>
     postJson<UserProgress>("/api/progress/uncomplete", { "card-uid": cardUid }),
+  deleteCard: (cardUid: CardUid) =>
+    deleteJson<{ ok: boolean }>("/api/card", { "card-uid": cardUid }),
+  deleteCourse: (courseId: number) =>
+    deleteJson<{ ok: boolean }>("/api/course", { "course-id": courseId }),
+  deleteDay: (courseId: number, dayId: number) =>
+    deleteJson<{ ok: boolean }>("/api/day", { "course-id": courseId, "day-id": dayId }),
   reset: () => postJson<UserProgress>("/api/progress/reset", {}),
 };
 

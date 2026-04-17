@@ -1,5 +1,7 @@
-# CL
-*.fasl
+# Python
+__pycache__/
+*.pyc
+.venv/
 backend/data/
 backend/pdfs/
 

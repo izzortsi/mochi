@@ -88,17 +88,18 @@ export async function runLlmTurn(
     { role: "user", content: userMessage },
   ];
 
-  const res = await fetch(`${config.baseUrl}/chat/completions`, {
+  const body: Record<string, unknown> = {
+    provider: config.provider,
+    model: config.model,
+    messages,
+    temperature: 0.3,
+  };
+  if (config.provider === "zai") body["api-key"] = config.apiKey;
+
+  const res = await fetch("/api/llm/chat", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${config.apiKey}`,
-    },
-    body: JSON.stringify({
-      model: config.model,
-      messages,
-      temperature: 0.3,
-    }),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
   });
 
   if (!res.ok) {

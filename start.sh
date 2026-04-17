@@ -1,5 +1,5 @@
 #!/bin/bash
-# Start study-plan: CL backend + Next.js frontend.
+# Start study-plan: Python backend + Next.js frontend.
 # Usage: ./start.sh [backend-port] [web-port]
 
 BACKEND_PORT=${1:-4000}
@@ -17,7 +17,6 @@ cleanup() {
 }
 trap cleanup INT TERM
 
-# Abort early if either port is already in use.
 port_in_use() {
   ss -tln 2>/dev/null | grep -q ":$1 " || ss -tln6 2>/dev/null | grep -q ":$1 "
 }
@@ -29,9 +28,9 @@ for port in $BACKEND_PORT $WEB_PORT; do
   fi
 done
 
-echo "[start] Starting CL backend on port $BACKEND_PORT..."
+echo "[start] Starting Python backend on port $BACKEND_PORT..."
 cd "$DIR/backend"
-sbcl --load run.lisp &
+uv run uvicorn app.main:app --host 0.0.0.0 --port $BACKEND_PORT &
 BACKEND_PID=$!
 
 echo "[start] Waiting for backend..."

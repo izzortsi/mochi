@@ -38,6 +38,11 @@ export default function DayDetail() {
     refresh();
   };
 
+  const handleDelete = async (cardUid: CardUid) => {
+    await api.deleteCard(cardUid);
+    refresh();
+  };
+
   if (!course || !day || !progress) return <div className="opacity-50">loading…</div>;
 
   const completed = progress.completedTasks ?? {};
@@ -80,8 +85,10 @@ export default function DayDetail() {
                 text={card.text}
                 detail={card.detail}
                 concepts={card.concepts}
+                notes={card.notes ?? []}
                 completed={!!completed[card.cardUid]}
                 onToggle={(next) => toggle(card.cardUid, !next)}
+                onDelete={handleDelete}
               />
             ))}
           </div>

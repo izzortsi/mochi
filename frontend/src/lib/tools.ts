@@ -1,7 +1,5 @@
 import { z } from "zod";
-import { writeSexp } from "./sexp";
 
-// Tutoring tools
 export const fetchCardSchema = z.object({ cardUid: z.string() });
 export const markTaskCompleteSchema = z.object({ cardUid: z.string() });
 export const gradeAttemptSchema = z.object({
@@ -25,7 +23,6 @@ export const appendChatSchema = z.object({
 export const getChatSchema = z.object({ courseId: z.number() });
 export const getProgressSchema = z.object({});
 
-// Ingestion / ontology tools
 export const listCoursesSchema = z.object({});
 export const listConceptsSchema = z.object({});
 export const createCourseSchema = z.object({ title: z.string(), slug: z.string() });
@@ -45,14 +42,17 @@ export const createCardSchema = z.object({
 });
 export const createConceptSchema = z.object({ conceptId: z.string(), label: z.string() });
 export const tagCardSchema = z.object({ cardUid: z.string(), conceptId: z.string() });
-export const addPrereqSchema = z.object({ conceptId: z.string(), prereq: z.string() });
+export const deleteCardSchema = z.object({ cardUid: z.string() });
+export const deleteCourseSchema = z.object({ courseId: z.number() });
+export const deleteDaySchema = z.object({ courseId: z.number(), dayId: z.number() });export const addPrereqSchema = z.object({ conceptId: z.string(), prereq: z.string() });
 export const queryConceptCardsSchema = z.object({ conceptId: z.string() });
 export const conceptMasterySchema = z.object({ conceptId: z.string() });
 export const nextUpSchema = z.object({ courseId: z.number() });
 
 export type ToolName =
   | "list-courses" | "list-concepts"
-  | "create-course" | "create-phase" | "create-day" | "create-card"
+  | "create-course" | "create-phase" | "create-day" | "create-card" | "delete-card"
+  | "delete-course" | "delete-day"
   | "create-concept" | "tag-card" | "add-prereq"
   | "query-concept-cards" | "concept-mastery" | "next-up"
   | "fetch-card" | "mark-task-complete" | "grade-attempt"
@@ -65,6 +65,9 @@ export const toolSchemas: Record<ToolName, z.ZodTypeAny> = {
   "create-phase": createPhaseSchema,
   "create-day": createDaySchema,
   "create-card": createCardSchema,
+  "delete-card": deleteCardSchema,
+  "delete-course": deleteCourseSchema,
+  "delete-day": deleteDaySchema,
   "create-concept": createConceptSchema,
   "tag-card": tagCardSchema,
   "add-prereq": addPrereqSchema,
@@ -80,25 +83,20 @@ export const toolSchemas: Record<ToolName, z.ZodTypeAny> = {
   "get-progress": getProgressSchema,
 };
 
-function kebab(key: string): string {
+function toKebab(key: string): string {
   return key.replace(/[A-Z]/g, c => `-${c.toLowerCase()}`);
 }
 
-function quote(s: string): string {
-  return `"${s.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
-}
-
-function encodeValue(v: unknown): string {
-  if (typeof v === "string") return quote(v);
-  if (typeof v === "number") return String(v);
-  if (typeof v === "boolean") return v ? "true" : "false";
-  if (v === null) return "nil";
-  return quote(String(v));
+function kebabKeys(obj: Record<string, unknown>): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(obj)) {
+    out[toKebab(k)] = v;
+  }
+  return out;
 }
 
 export function encodeToolCall(name: ToolName, args: object, requestId: string): string {
-  const pairs = Object.entries(args).map(([k, v]) => `(${kebab(k)} ${encodeValue(v)})`);
-  return `(call ${quote(name)} (${pairs.join(" ")}) ${quote(requestId)})`;
+  return JSON.stringify({ call: name, args: kebabKeys(args as Record<string, unknown>), requestId });
 }
 
 export interface ValidatedCall { ok: true; frame: string; args: object; requestId: string; }
@@ -117,5 +115,3 @@ export function validateAndEncode(name: ToolName, rawArgs: unknown): ValidatedCa
     requestId,
   };
 }
-
-export { writeSexp };

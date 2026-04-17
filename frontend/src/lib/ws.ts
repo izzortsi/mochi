@@ -1,9 +1,5 @@
-// web/src/ws.ts
-import { parseSexp, type SExp } from "./sexp";
-import type { ConnectionStatus } from "./types";
-
-export type MessageHandler = (raw: string, parsed: SExp) => void;
-export type StatusHandler = (status: ConnectionStatus) => void;
+export type MessageHandler = (msg: { ok: boolean; result?: unknown; error?: string; requestId: string }) => void;
+export type StatusHandler = (status: "connecting" | "connected" | "disconnected") => void;
 
 export class WsClient {
   private ws: WebSocket | null = null;
@@ -31,12 +27,11 @@ export class WsClient {
     };
 
     this.ws.onmessage = (ev) => {
-      const raw = ev.data as string;
       try {
-        const parsed = parseSexp(raw);
-        this.onMessage(raw, parsed);
+        const msg = JSON.parse(ev.data as string);
+        this.onMessage(msg);
       } catch {
-        this.onMessage(raw, raw);
+        this.onMessage({ ok: false, error: String(ev.data), requestId: "" });
       }
     };
 
