@@ -1,0 +1,399 @@
+[
+  {
+    "id": "newtons-equations",
+    "title": "Newton's Equations as ODEs",
+    "domain": "Classical Mechanics",
+    "tags": [
+      "ODEs",
+      "Physics",
+      "Newton's Law"
+    ],
+    "content": "In classical mechanics, the motion of a particle $x: \\mathbb{R} \\to \\mathbb{R}^3$ is governed by Newton's second law:\n$$m\\ddot{x}(t) = F(x(t))$$\nwhere $m$ is mass and $F: \\mathbb{R}^3 \\to \\mathbb{R}^3$ is the force field. This is a second-order differential equation. \n\nFor constant gravity near Earth's surface, $F(x) = -mg\\mathbf{e}_3$, and the exact solution is $x(t) = x(0) + v(0)t - \\frac{g}{2}t^2\\mathbf{e}_3$. The full fate of the particle is determined by initial position and velocity.",
+    "related": [
+      "first-order-systems"
+    ],
+    "source": ""
+  },
+  {
+    "id": "first-order-systems",
+    "title": "First-Order Systems",
+    "domain": "Differential Equations",
+    "tags": [
+      "ODEs",
+      "Systems of ODEs"
+    ],
+    "content": "A higher-order ODE $x^{(k)} = f(t, x, x^{(1)}, \\dots, x^{(k-1)})$ can always be transformed into a first-order system by introducing new variables for the derivatives. Let $y = (x, x^{(1)}, \\dots, x^{(k-1)})$. The new system is:\n$$\\dot{y}_1 = y_2, \\quad \\dots, \\quad \\dot{y}_{k-1} = y_k, \\quad \\dot{y}_k = f(t, y)$$\nFurthermore, a non-autonomous system can be made autonomous by adding the independent variable $t$ as a dependent variable $z_1$ with $\\dot{z}_1 = 1$.",
+    "related": [
+      "newtons-equations",
+      "classification-of-odes"
+    ],
+    "source": ""
+  },
+  {
+    "id": "classification-of-odes",
+    "title": "Classification of Differential Equations",
+    "domain": "Differential Equations",
+    "tags": [
+      "ODEs",
+      "Classification"
+    ],
+    "content": "ODEs are classified by several properties:\n- **Order**: The highest derivative $k$ appearing in the equation.\n- **Linearity**: An ODE is linear if the dependent variable and its derivatives appear linearly. A $k$-th order linear system is of the form $x_i^{(k)} = g_i(t) + \\sum f_{i,j,l}(t)x_l^{(j)}$. It is homogeneous if $g_i(t) \\equiv 0$.\n- **Autonomy**: An ODE is autonomous if the independent variable $t$ does not explicitly appear in the equation.",
+    "related": [
+      "first-order-systems"
+    ],
+    "source": ""
+  },
+  {
+    "id": "autonomous-equations",
+    "title": "First-Order Autonomous Equations",
+    "domain": "Differential Equations",
+    "tags": [
+      "ODEs",
+      "Separation of Variables",
+      "Autonomous"
+    ],
+    "content": "For a first-order autonomous equation $\\dot{x} = f(x)$ with initial condition $x(0) = x_0$:\n1. If $f(x_0) = 0$, then $x(t) = x_0$ is a trivial stationary solution.\n2. If $f(x_0) \\neq 0$, we can separate variables and integrate:\n$$F(x(t)) = t, \\quad \\text{where} \\quad F(x) = \\int_{x_0}^x \\frac{dy}{f(y)}$$\nThe solution $x(t) = F^{-1}(t)$ is unique as long as $1/f(y)$ is not integrable near $x_0$. If $\\int_{x_0}^{x_0+\\epsilon} \\frac{dy}{f(y)} < \\infty$, multiple solutions exist.",
+    "related": [
+      "classification-of-odes",
+      "qualitative-analysis-autonomous"
+    ],
+    "source": ""
+  },
+  {
+    "id": "linear-first-order-ode",
+    "title": "Linear First-Order ODE",
+    "domain": "Differential Equations",
+    "tags": [
+      "ODEs",
+      "Linear Equations"
+    ],
+    "content": "The general solution to the inhomogeneous linear first-order ODE $\\dot{x} = a(t)x + g(t)$ is given by:\n$$\\phi(t) = x_0 A(t, t_0) + \\int_{t_0}^t A(t, s)g(s) ds$$\nwhere $A(t,s) = e^{\\int_s^t a(r)dr}$ is the integrating factor. For the homogeneous equation $\\dot{x} = a(t)x$, the solution simplifies to $\\phi(t) = x_0 A(t, t_0)$.",
+    "related": [
+      "solvable-transformations"
+    ],
+    "source": ""
+  },
+  {
+    "id": "solvable-transformations",
+    "title": "Solvable First-Order Transformations",
+    "domain": "Differential Equations",
+    "tags": [
+      "ODEs",
+      "Bernoulli",
+      "Riccati"
+    ],
+    "content": "Several non-linear ODEs can be solved via transformation into linear or separable forms:\n- **Homogeneous**: $\\dot{x} = f(x/t)$. Use substitution $y = x/t$ to get a separable equation for $y$.\n- **Bernoulli**: $\\dot{x} = f(t)x + g(t)x^n$. Use substitution $y = x^{1-n}$ to get a linear equation for $y$.\n- **Riccati**: $\\dot{x} = f(t)x + g(t)x^2 + h(t)$. If a particular solution $x_p$ is known, use $y = \\frac{1}{x - x_p(t)}$ to get a linear equation.",
+    "related": [
+      "linear-first-order-ode"
+    ],
+    "source": ""
+  },
+  {
+    "id": "qualitative-analysis-autonomous",
+    "title": "Qualitative Analysis",
+    "domain": "Differential Equations",
+    "tags": [
+      "ODEs",
+      "Qualitative Analysis"
+    ],
+    "content": "For an autonomous equation $\\dot{x} = f(x)$, the sign of $f(x)$ dictates the direction of the solution without needing an explicit formula.\n\n**Lemma**: If $f(x_0) \\neq 0$, the solution $x(t)$ converges to the first zero left ($f(x_0) < 0$) or right ($f(x_0) > 0$) of $x_0$. If no zero exists, it converges to $\\pm\\infty$. This allows determining long-term behavior based purely on the graph of $f$.",
+    "related": [
+      "autonomous-equations",
+      "super-sub-solutions"
+    ],
+    "source": ""
+  },
+  {
+    "id": "super-sub-solutions",
+    "title": "Super and Sub Solutions",
+    "domain": "Differential Equations",
+    "tags": [
+      "ODEs",
+      "Qualitative Analysis",
+      "Bounding"
+    ],
+    "content": "For an ODE $\\dot{x} = f(t, x)$, differentiable functions $x_+(t)$ and $x_-(t)$ are super and sub solutions if they satisfy:\n$$\\dot{x}_+(t) > f(t, x_+(t)), \\quad \\dot{x}_-(t) < f(t, x_-(t))$$\n**Theorem**: If $x_+(t_0) \\ge x(t_0)$, then $x_+(t) \\ge x(t)$ for all $t \\ge t_0$. \n\nThese functions act as barriers. If a solution enters the region between a sub and super solution, it is trapped there. This is useful for proving solutions converge to specific curves or diverge to infinity.",
+    "related": [
+      "qualitative-analysis-autonomous"
+    ],
+    "source": ""
+  },
+  {
+    "id": "poincare-map",
+    "title": "Poincaré Map",
+    "domain": "Dynamical Systems",
+    "tags": [
+      "ODEs",
+      "Periodic Systems",
+      "Poincaré Map"
+    ],
+    "content": "For a periodic system $\\dot{x} = f(t, x)$ with period 1, the Poincaré map $P(x) = \\phi(1, x)$ tracks where an initial condition $x$ ends up after exactly one period.\n\n- A solution is periodic if and only if $x_0$ is a fixed point of $P$, i.e., $P(x_0) = x_0$.\n- If $f$ is such that solutions are unique (e.g., locally Lipschitz), solutions cannot cross. Thus, $P(x)$ is strictly increasing, meaning if $x_1 < x_2$, then $P(x_1) < P(x_2)$.",
+    "related": [
+      "qualitative-analysis-autonomous"
+    ],
+    "source": ""
+  },
+  {
+    "id": "operador-linear",
+    "title": "Operadores Lineares",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "transformação",
+      "espaço vetorial"
+    ],
+    "content": "Uma transformação linear de um espaço vetorial $V$ em si mesmo, $f : V \\rightarrow V$, é chamada de operador linear sobre $V$. As propriedades gerais das transformações lineares e de suas matrizes retangulares são válidas, porém operadores lineares se destacam por possuírem matrizes quadradas correspondentes. Possuem propriedades particulares estudadas em detalhe, comuns em aplicações na Geometria Analítica para $\\mathbb{R}^2$ e $\\mathbb{R}^3$.",
+    "related": [
+      "operador-inversivel",
+      "operador-ortogonal"
+    ],
+    "source": ""
+  },
+  {
+    "id": "operador-inversivel",
+    "title": "Operadores Inversíveis",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "inversa",
+      "determinante"
+    ],
+    "content": "Se um operador linear $f: V \\rightarrow V$ puder ter sua correspondência invertida por outro operador $g$ de tal forma que $g(f(v)) = v$, dizemos que $g$ é o operador inverso de $f$, indicado por $f^{-1}$. O operador $f$ é inversível se $f \\circ f^{-1} = f^{-1} \\circ f = I$. Se $f$ é linear inversível, $f^{-1}$ também é linear. A matriz $B$ de $f^{-1}$ na base canônica é a inversa da matriz $T$ de $f$ ($B = T^{-1}$). Consequentemente, $f$ é inversível se, e somente se, $\\det T \\neq 0$.",
+    "related": [
+      "operador-linear",
+      "matriz-semelhante"
+    ],
+    "source": ""
+  },
+  {
+    "id": "matriz-semelhante",
+    "title": "Matrizes Semelhantes",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "mudança de base",
+      "semelhança"
+    ],
+    "content": "Se $f: V \\rightarrow V$ é um operador linear representado pelas matrizes $T_A$ e $T_B$ nas bases $A$ e $B$ respectivamente, elas estão ligadas pela relação $$T_B = Q^{-1} T_A Q$$ onde $Q$ é a matriz de mudança de base de $B$ para $A$. Tais matrizes são chamadas de matrizes semelhantes. Elas definem o mesmo operador linear em bases diferentes. Uma propriedade importante é que matrizes semelhantes possuem o mesmo determinante: $\\det T_B = \\det T_A$.",
+    "related": [
+      "operador-inversivel",
+      "operador-linear"
+    ],
+    "source": ""
+  },
+  {
+    "id": "operador-ortogonal",
+    "title": "Operadores Ortogonais",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "norma",
+      "produto interno"
+    ],
+    "content": "Um operador linear $f: V \\rightarrow V$ num espaço euclidiano é ortogonal se preserva o módulo de cada vetor, isto é, $|f(v)| = |v|$. Todo operador ortogonal preserva o produto interno dos vetores: $f(\\mu) \\cdot f(v) = \\mu \\cdot v$. Consequentemente, preserva o ângulo entre vetores. Sua matriz $A$ numa base ortonormal satisfaz $A^t = A^{-1}$ e seu determinante é sempre $\\det A = \\pm 1$. Logo, todo operador ortogonal é inversível.",
+    "related": [
+      "matriz-ortogonal",
+      "operador-simetrico"
+    ],
+    "source": ""
+  },
+  {
+    "id": "matriz-ortogonal",
+    "title": "Matrizes Ortogonais",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "ortonormal",
+      "colunas"
+    ],
+    "content": "Uma matriz $A$ que representa um operador ortogonal numa base ortonormal é chamada de matriz ortogonal. Ela satisfaz a condição $A^t = A^{-1}$, ou equivalentemente, $A^t A = I$. As colunas (e linhas) de uma matriz ortogonal formam um conjunto de vetores ortonormais. O produto de duas matrizes ortogonais resulta em outra matriz ortogonal.",
+    "related": [
+      "operador-ortogonal"
+    ],
+    "source": ""
+  },
+  {
+    "id": "operador-simetrico",
+    "title": "Operadores Simétricos",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "simetria",
+      "transposta"
+    ],
+    "content": "Um operador linear $f: V \\rightarrow V$ é simétrico se a matriz $A$ que o representa numa base ortonormal é simétrica, ou seja, $A = A^t$. A principal propriedade dos operadores simétricos é que para quaisquer vetores $\\mu, v \\in V$:\n$$f(\\mu) \\cdot v = \\mu \\cdot f(v)$$\nIsto é facilmente demonstrado usando a notação matricial do produto interno e o fato de que $A^t = A$.",
+    "related": [
+      "operador-ortogonal",
+      "operador-linear"
+    ],
+    "source": ""
+  },
+  {
+    "id": "autovalores-nota",
+    "title": "Cálculo de Autovalores e Autovetores",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "autovalor",
+      "autovetor",
+      "sistemas lineares"
+    ],
+    "content": "Os **autovalores** de um operador linear representado pela matriz $A$ são os escalares $\\lambda$ que satisfazem a equação característica $\\det(A - \\lambda I) = 0$. O vetor não nulo $\\vec{v}$ correspondente, que resolve $A\\vec{v} = \\lambda\\vec{v}$, é o **autovetor**.",
+    "related": [
+      "diagonalizacao-nota"
+    ],
+    "source": ""
+  },
+  {
+    "id": "diagonalizacao-nota",
+    "title": "Diagonalização de Matrizes",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "diagonalizacao",
+      "matriz-semelhante"
+    ],
+    "content": "Uma matriz $A$ é **diagonalizável** se for semelhante a uma matriz diagonal, ie., existe uma matriz invertível $P$ formada pelos autovetores tal que $P^{-1}AP = D$, onde $D$ contém os autovalores na diagonal principal. Uma matriz é diagonalizável se, e somente se, a multiplicidade algébrica de cada autovalor é igual à sua multiplicidade geométrica.",
+    "related": [
+      "autovalores-nota"
+    ],
+    "source": ""
+  },
+  {
+    "id": "mudanca-base-nota",
+    "title": "Mudança de Base e Coordenadas",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "mudanca de base",
+      "coordenadas"
+    ],
+    "content": "As coordenadas de um vetor $\\vec{u}$ em uma nova base $B = \\{\\vec{v}_1, \\vec{v}_2, ...\\}$ são os escalares $c_1, c_2, ...$ tais que $\\vec{u} = c_1\\vec{v}_1 + c_2\\vec{v}_2 + ...$. Se a base for **ortonormal**, o cálculo é simplificado para $c_i = \\langle \\vec{u}, \\vec{v}_i \\rangle$.",
+    "related": [
+      "autovalores-nota"
+    ],
+    "source": ""
+  },
+  {
+    "id": "derivada-nota",
+    "title": "Regras de Derivação",
+    "domain": "Cálculo",
+    "tags": [
+      "derivada",
+      "regra da cadeia"
+    ],
+    "content": "A **regra do produto** estabelece que $(fg)' = f'g + fg'$. Já a **regra da cadeia** para funções compostas estabelece que a derivada de $f(x(t))$ em relação a $t$ é $f'(x(t)) \\cdot x'(t)$.",
+    "related": [
+      "integral-nota"
+    ],
+    "source": ""
+  },
+  {
+    "id": "integral-nota",
+    "title": "Técnicas de Integração",
+    "domain": "Cálculo",
+    "tags": [
+      "integral indefinida",
+      "substituição"
+    ],
+    "content": "A **integral indefinida** representa a família de antiderivadas de uma função $f(x)$, denotada por $\\int f(x)dx = F(x) + C$. O método de **substituição** é ideal para composições, fazendo $u = g(x)$ e $du = g'(x)dx$ para simplificar $\\int f(g(x))g'(x)dx$ para $\\int f(u)du$.",
+    "related": [
+      "derivada-nota"
+    ],
+    "source": ""
+  },
+  {
+    "id": "autovalores",
+    "title": "Autovalores",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "matrizes",
+      "autovalores"
+    ],
+    "content": "Os **autovalores** de uma matriz quadrada $A$ são os escalares $\\lambda$ que satisfazem a equação característica:\n\n$$\\det(A - \\lambda I) = 0$$\n\nPara matrizes triangulares (superiores ou inferiores), os autovalores correspondem diretamente aos elementos da diagonal principal.",
+    "related": [
+      "autovetores",
+      "diagonalizacao"
+    ],
+    "source": ""
+  },
+  {
+    "id": "autovetores",
+    "title": "Autovetores",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "matrizes",
+      "autovetores"
+    ],
+    "content": "Os **autovetores** associados a um autovalor $\\lambda$ são os vetores não nulos $\\vec{v}$ que satisfazem a equação:\n\n$$(A - \\lambda I)\\vec{v} = \\vec{0}$$\n\nEles formam um subespaço vetorial conhecido como autoespaço associado a $\\lambda$.",
+    "related": [
+      "autovalores",
+      "diagonalizacao"
+    ],
+    "source": ""
+  },
+  {
+    "id": "diagonalizacao",
+    "title": "Diagonalização de Matrizes",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "matrizes",
+      "diagonalizacao"
+    ],
+    "content": "Uma matriz $A$ é **diagonalizável** se for semelhante a uma matriz diagonal, ou seja, existe uma matriz invertível $P$ tal que $P^{-1}AP = D$. Isso só é possível se a multiplicidade geométrica de cada autovalor for igual à sua multiplicidade algébrica. Matrizes com $n$ autovalores distintos em um espaço de dimensão $n$ são sempre diagonalizáveis.",
+    "related": [
+      "autovalores",
+      "autovetores"
+    ],
+    "source": ""
+  },
+  {
+    "id": "base-ortonormal",
+    "title": "Bases Ortonormais",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "espacos-vetoriais",
+      "bases"
+    ],
+    "content": "Uma base é **ortonormal** se seus vetores são mutuamente ortogonais e possuem norma (comprimento) igual a 1. Para encontrar as coordenadas $(c_1, c_2, \\dots, c_n)$ de um vetor $\\vec{u}$ em relação a uma base ortonormal $B = \\{\\vec{v}_1, \\dots, \\vec{v}_n\\}$, basta calcular os produtos internos:\n\n$$c_i = \\langle \\vec{u}, \\vec{v}_i \\rangle$$",
+    "related": [
+      "autovetores"
+    ],
+    "source": ""
+  },
+  {
+    "id": "regra-da-cadeia",
+    "title": "Regra da Cadeia",
+    "domain": "Cálculo Diferencial",
+    "tags": [
+      "derivacao",
+      "regra-da-cadeia"
+    ],
+    "content": "A **regra da cadeia** é utilizada para derivar funções compostas. Se temos uma função $f(x(t))$, a sua derivada em relação a $t$ é dada por:\n\n$$\\frac{df}{dt} = \\frac{df}{dx} \\cdot \\frac{dx}{dt}$$\n\nEsta regra é extensivamente usada em diferenciação implícita e em diversas aplicações físicas.",
+    "related": [
+      "derivadas"
+    ],
+    "source": ""
+  },
+  {
+    "id": "integracao-por-partes",
+    "title": "Integração por Partes",
+    "domain": "Cálculo Integral",
+    "tags": [
+      "integracao",
+      "por-partes"
+    ],
+    "content": "A **integração por partes** é um método baseado na regra do produto para derivadas. A fórmula padrão é dada por:\n\n$$\\int u \\, dv = uv - \\int v \\, du$$\n\nÉ particularmente útil para integrar produtos de funções de naturezas diferentes, como funções polinomiais e exponenciais, ou polinomiais e trigonométricas.",
+    "related": [
+      "metodo-substituicao",
+      "derivadas"
+    ],
+    "source": ""
+  },
+  {
+    "id": "metodo-substituicao",
+    "title": "Método de Substituição",
+    "domain": "Cálculo Integral",
+    "tags": [
+      "integracao",
+      "substituicao"
+    ],
+    "content": "O **método da substituição** (ou mudança de variável) simplifica a integração invertendo a lógica da regra da cadeia. Se o integrando contém uma função composta e a sua derivada (ajustada por uma constante), podemos usar $u = g(x)$, de modo que $du = g'(x)dx$, reescrevendo a integral de forma mais simples:\n\n$$\\int f(g(x))g'(x)dx = \\int f(u)du$$",
+    "related": [
+      "integracao-por-partes",
+      "regra-da-cadeia"
+    ],
+    "source": ""
+  }
+]

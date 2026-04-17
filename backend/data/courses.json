@@ -1,0 +1,993 @@
+[
+  {
+    "id": 1,
+    "title": "Ordinary Differential Equations",
+    "slug": "ordinary-differential-equations",
+    "phases": [
+      {
+        "num": 1,
+        "title": "Foundations of ODEs"
+      },
+      {
+        "num": 2,
+        "title": "Solving First-Order Equations"
+      },
+      {
+        "num": 3,
+        "title": "Qualitative Analysis"
+      }
+    ],
+    "days": [
+      {
+        "id": 1,
+        "phase": 1,
+        "title": "Newton's Equations",
+        "icon": "🍎",
+        "summary": "Introduction to differential equations via Newton's second law in classical mechanics.",
+        "key_insight": "Newton's second law $m\\ddot{x}(t) = F(x(t))$ is a second-order ODE, which can always be transformed into a first-order system by introducing velocity $v(t)$ as a dependent variable.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Transform the falling stone equation $\\ddot{r} = -g$ into a first-order system.",
+            "detail": "Let $v = \\dot{r}$. The system becomes $\\dot{r} = v$ and $\\dot{v} = -g$.",
+            "concepts": [
+              "first-order-system"
+            ],
+            "notes": [
+              "first-order-systems"
+            ]
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Compute the time it takes for a stone to hit the surface if dropped from height $h$ using the approximate model $\\ddot{r} = -g$.",
+            "detail": "Integrating $\\dot{v} = -g$ gives $v(t) = -gt$. Integrating $\\dot{r} = -gt$ gives $r(t) = h - \\frac{1}{2}gt^2$. Setting $r(t)=0$ yields $t = \\sqrt{2h/g}$.",
+            "concepts": [
+              "newtons-equations"
+            ],
+            "notes": [
+              "newtons-equations"
+            ]
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Comparing the exact model $\\ddot{r} = -\\frac{\\gamma M}{(R+r)^2}$ to the approximate model $\\ddot{r} = -g$, does the stone take longer or shorter to hit the surface in the exact model?",
+            "detail": "The exact force $-\\frac{\\gamma M}{(R+r)^2}$ is weaker than the approximate force $-\\frac{\\gamma M}{R^2}$ for $r>0$. Less acceleration means it takes longer.",
+            "concepts": [
+              "newtons-equations"
+            ],
+            "notes": [
+              "newtons-equations"
+            ]
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "phase": 1,
+        "title": "Classification of Differential Equations",
+        "icon": "🏷️",
+        "summary": "Classifying ODEs by order, linearity, and autonomy, and reducing them to standard forms.",
+        "key_insight": "Any system of ODEs can be reduced to an autonomous first-order system by adding variables for higher derivatives and the independent variable $t$.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Classify the equation $y'(x) + y(x) = 0$.",
+            "detail": "It is a first-order, linear, homogeneous, autonomous ordinary differential equation.",
+            "concepts": [
+              "ode-classification"
+            ],
+            "notes": [
+              "classification-of-odes"
+            ]
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Transform the second-order equation $\\ddot{x} + t\\sin(\\dot{x}) = x$ into a first-order system.",
+            "detail": "Let $y_1 = x$ and $y_2 = \\dot{x}$. The system is $\\dot{y}_1 = y_2$ and $\\dot{y}_2 = y_1 - t\\sin(y_2)$.",
+            "concepts": [
+              "first-order-system"
+            ],
+            "notes": [
+              "first-order-systems"
+            ]
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "How can you transform a non-autonomous first-order system into an autonomous one?",
+            "detail": "Add the independent variable $t$ as a new dependent variable $z_1$ with $\\dot{z}_1 = 1$. The new system depends only on the state vector $z = (t, y)$.",
+            "concepts": [
+              "first-order-system",
+              "autonomous-equation"
+            ],
+            "notes": [
+              "first-order-systems",
+              "classification-of-odes"
+            ]
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "phase": 2,
+        "title": "First-Order Autonomous Equations",
+        "icon": "➗",
+        "summary": "Solving $\\dot{x} = f(x)$ using separation of variables.",
+        "key_insight": "If $f(x_0) \\neq 0$, the solution to $\\dot{x} = f(x)$ is found by inverting $F(x) = \\int_{x_0}^x \\frac{dy}{f(y)} = t$. If $f(x_0)=0$, the solution is stationary, but uniqueness might fail if $1/f$ is integrable near $x_0$.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Solve $\\dot{x} = x^3$ for $x(0) = x_0 > 0$.",
+            "detail": "Separating variables: $\\int \\frac{dx}{x^3} = \\int dt \\implies -\\frac{1}{2x^2} = t + C$. Using $x(0)=x_0$, we get $x(t) = \\frac{x_0}{\\sqrt{1 - 2x_0^2 t}}$. The solution blows up as $t \\to 1/(2x_0^2)$.",
+            "concepts": [
+              "autonomous-equation"
+            ],
+            "notes": [
+              "autonomous-equations"
+            ]
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Solve $\\dot{x} = x(1-x)$ for $0 < x_0 < 1$.",
+            "detail": "Separating variables: $\\int \\frac{dx}{x(1-x)} = \\int (\\frac{1}{x} + \\frac{1}{1-x})dx = \\log|\\frac{x}{1-x}| = t + C$. Solving for $x$ gives $x(t) = \\frac{x_0 e^t}{1 - x_0 + x_0 e^t}$.",
+            "concepts": [
+              "autonomous-equation"
+            ],
+            "notes": [
+              "autonomous-equations"
+            ]
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Why does the initial value problem $\\dot{x} = \\sqrt{|x|}, x(0)=0$ have non-unique solutions?",
+            "detail": "Because the integral $\\int_0^\\epsilon \\frac{dx}{\\sqrt{x}}$ is finite, there exists a non-trivial solution $\\phi(t) = t^2/4$ for $t>0$ that can be patched with the trivial solution $x(t)=0$.",
+            "concepts": [
+              "autonomous-equation"
+            ],
+            "notes": [
+              "autonomous-equations"
+            ]
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "phase": 2,
+        "title": "Finding Explicit Solutions",
+        "icon": "🔄",
+        "summary": "Solving linear equations and using transformations for Bernoulli and Riccati equations.",
+        "key_insight": "The linear ODE $\\dot{x} = a(t)x + g(t)$ has an explicit solution using the integrating factor $A(t,s) = e^{\\int_s^t a(r)dr}$. Nonlinear equations like Bernoulli and Riccati can be linearized by clever substitutions.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "What is the general solution to the homogeneous linear equation $\\dot{x} = a(t)x$?",
+            "detail": "The solution is $\\phi(t) = x_0 e^{\\int_{t_0}^t a(s)ds}$.",
+            "concepts": [
+              "linear-ode"
+            ],
+            "notes": [
+              "linear-first-order-ode"
+            ]
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "What substitution transforms the Bernoulli equation $\\dot{x} = f(t)x + g(t)x^n$ into a linear equation?",
+            "detail": "The substitution $y = x^{1-n}$ transforms it into the linear equation $\\dot{y} = (1-n)f(t)y + (1-n)g(t)$.",
+            "concepts": [
+              "bernoulli-equation"
+            ],
+            "notes": [
+              "solvable-transformations"
+            ]
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "How do you solve a Riccati equation $\\dot{x} = f(t)x + g(t)x^2 + h(t)$ if a particular solution $x_p(t)$ is known?",
+            "detail": "Use the substitution $y = \\frac{1}{x - x_p(t)}$. This transforms the Riccati equation into a linear equation for $y$.",
+            "concepts": [
+              "riccati-equation"
+            ],
+            "notes": [
+              "solvable-transformations"
+            ]
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "phase": 3,
+        "title": "Qualitative Analysis of First-Order Equations",
+        "icon": "📈",
+        "summary": "Analyzing solution behavior without finding explicit formulas using signs and bounding functions.",
+        "key_insight": "For $\\dot{x} = f(x)$, the sign of $f$ dictates solution direction. For general equations, super and sub solutions can bound the actual solutions, determining limits and blow-up times.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "For the autonomous equation $\\dot{x} = f(x)$, what happens to a solution starting at $x_0$ if $f(x_0) > 0$?",
+            "detail": "The solution will increase and converge to the first zero of $f$ to the right of $x_0$. If there is no such zero, it converges to $+\\infty$.",
+            "concepts": [
+              "qualitative-analysis"
+            ],
+            "notes": [
+              "qualitative-analysis-autonomous"
+            ]
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Define a super solution $x_+(t)$ for the equation $\\dot{x} = f(t,x)$.",
+            "detail": "A differentiable function $x_+(t)$ is a super solution if it satisfies $\\dot{x}_+(t) > f(t, x_+(t))$ on the interval of interest.",
+            "concepts": [
+              "super-sub-solutions"
+            ],
+            "notes": [
+              "super-sub-solutions"
+            ]
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "For $\\dot{x} = x^2 - t^2$, argue that solutions starting sufficiently large will blow up in finite time.",
+            "detail": "The curve $y_-(t) = \\sqrt{2+t^2}$ is a sub solution. Above it, $\\dot{x} > 2$, so solutions grow at least linearly. Eventually, $x(t)^2$ dominates, making $\\dot{x} > \\epsilon x^2$, which blows up in finite time.",
+            "concepts": [
+              "super-sub-solutions",
+              "qualitative-analysis"
+            ],
+            "notes": [
+              "super-sub-solutions"
+            ]
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "phase": 3,
+        "title": "Periodic Equations and Poincaré Maps",
+        "icon": "🔁",
+        "summary": "Analyzing periodic systems using the Poincaré map to find periodic solutions.",
+        "key_insight": "The Poincaré map $P(x) = \\phi(1,x)$ tracks a solution over one period. Fixed points of the Poincaré map correspond exactly to periodic solutions of the differential equation.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "What does a fixed point $x_0$ of the Poincaré map $P(x)$ imply?",
+            "detail": "If $P(x_0) = x_0$, then the solution starting at $x_0$ at $t=0$ will return to $x_0$ at $t=1$, meaning it is a periodic solution with period 1.",
+            "concepts": [
+              "poincare-map"
+            ],
+            "notes": [
+              "poincare-map"
+            ]
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "For the logistic model with periodic harvesting, is the Poincaré map $P(x)$ increasing or decreasing?",
+            "detail": "Since solutions of an ODE cannot cross each other, the Poincaré map must be strictly increasing.",
+            "concepts": [
+              "poincare-map"
+            ],
+            "notes": [
+              "poincare-map"
+            ]
+          }
+        ]
+      }
+    ],
+    "concepts": [
+      {
+        "id": "newtons-equations",
+        "label": "Newton's Equations"
+      },
+      {
+        "id": "first-order-system",
+        "label": "First-Order System"
+      },
+      {
+        "id": "ode-classification",
+        "label": "Classification of ODEs"
+      },
+      {
+        "id": "autonomous-equation",
+        "label": "Autonomous Equation"
+      },
+      {
+        "id": "linear-ode",
+        "label": "Linear ODE"
+      },
+      {
+        "id": "bernoulli-equation",
+        "label": "Bernoulli Equation"
+      },
+      {
+        "id": "riccati-equation",
+        "label": "Riccati Equation"
+      },
+      {
+        "id": "qualitative-analysis",
+        "label": "Qualitative Analysis"
+      },
+      {
+        "id": "super-sub-solutions",
+        "label": "Super and Sub Solutions"
+      },
+      {
+        "id": "poincare-map",
+        "label": "Poincaré Map"
+      }
+    ],
+    "prereqs": [
+      [
+        "first-order-system",
+        "newtons-equations"
+      ],
+      [
+        "autonomous-equation",
+        "first-order-system"
+      ],
+      [
+        "ode-classification",
+        "first-order-system"
+      ],
+      [
+        "qualitative-analysis",
+        "autonomous-equation"
+      ],
+      [
+        "poincare-map",
+        "qualitative-analysis"
+      ]
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Operadores Lineares",
+    "slug": "operadores-lineares",
+    "phases": [
+      {
+        "num": 1,
+        "title": "Estudo de Operadores Lineares"
+      },
+      {
+        "num": 2,
+        "title": "Pré-requisitos para Equações Diferenciais"
+      }
+    ],
+    "days": [
+      {
+        "id": 1,
+        "phase": 1,
+        "title": "Inversibilidade e Mudança de Base",
+        "icon": "↹",
+        "summary": "Compreensão de operadores inversíveis, suas propriedades matriciais e a relação entre matrizes semelhantes em diferentes bases.",
+        "key_insight": "$f$ é inversível se, e somente se, $\\det T \\neq 0$. Matrizes de um mesmo operador em bases diferentes são semelhantes ($T_B = Q^{-1} T_A Q$) e possuem o mesmo determinante.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Dado o operador linear $f: \\mathbb{R}^2 \\rightarrow \\mathbb{R}^2$ definido por $f(x, y) = (4x - 3y, -2x + 2y)$, mostre que ele é inversível e determine $f^{-1}(x, y)$.",
+            "detail": "A matriz canônica é $T = \\begin{bmatrix} 4 & -3 \\\\ -2 & 2 \\end{bmatrix}$. Como $\\det T = 8 - 6 = 2 \\neq 0$, $f$ é inversível. A matriz inversa é $T^{-1} = \\begin{bmatrix} 1 & 3/2 \\\\ 1 & 2 \\end{bmatrix}$. Logo, a regra para $f^{-1}$ é $f^{-1}(x, y) = (x + \\frac{3}{2}y, x + 2y)$.",
+            "concepts": [
+              "operador-inversivel"
+            ],
+            "notes": [
+              "operador-inversivel"
+            ]
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Sejam $f: \\mathbb{R}^2 \\rightarrow \\mathbb{R}^2$, as bases $A = \\{(3, 4), (5, 7)\\}$ e $B = \\{(1, 1), (-1, 1)\\}$, e $T_A = \\begin{bmatrix} -2 & 4 \\\\ 2 & -1 \\end{bmatrix}$. Calcule $T_B$.",
+            "detail": "Representamos as bases como matrizes: $M_A = \\begin{bmatrix} 3 & 5 \\\\ 4 & 7 \\end{bmatrix}$ e $M_B = \\begin{bmatrix} 1 & -1 \\\\ 1 & 1 \\end{bmatrix}$. A matriz de mudança de $B$ para $A$ é $Q = M_A^{-1}M_B = \\begin{bmatrix} 2 & -12 \\\\ -1 & 7 \\end{bmatrix}$. Assim, $T_B = Q^{-1} T_A Q = \\begin{bmatrix} 2 & -4 \\\\ 1 & -5 \\end{bmatrix}$. Note que $\\det T_A = \\det T_B = -6$.",
+            "concepts": [
+              "matriz-semelhante"
+            ],
+            "notes": [
+              "matriz-semelhante"
+            ]
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "phase": 1,
+        "title": "Ortogonalidade e Simetria",
+        "icon": "⟳",
+        "summary": "Análise de operadores ortogonais (preservam normas e ângulos) e operadores simétricos, focando nas propriedades de suas matrizes.",
+        "key_insight": "A matriz de um operador ortogonal satisfaz $A^t = A^{-1}$ e $\\det A = \\pm 1$. A de um operador simétrico satisfaz $A = A^t$ e preserva o produto interno misto $f(\\mu) \\cdot v = \\mu \\cdot f(v)$.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Mostre que o operador $f(x, y) = (\\frac{4}{5}x - \\frac{3}{5}y, \\frac{3}{5}x + \\frac{4}{5}y)$ no $\\mathbb{R}^2$ é ortogonal.",
+            "detail": "Calculando o módulo de $f(x,y)$ temos $|f(x,y)|^2 = (\\frac{4}{5}x - \\frac{3}{5}y)^2 + (\\frac{3}{5}x + \\frac{4}{5}y)^2$. Desenvolvendo, os termos cruzados cancelam-se, resultando em $\\frac{16}{25}x^2 + \\frac{9}{25}y^2 + \\frac{9}{25}x^2 + \\frac{16}{25}y^2 = x^2 + y^2$. Logo, $|f(x,y)| = |(x,y)|$, provando que é ortogonal.",
+            "concepts": [
+              "operador-ortogonal",
+              "matriz-ortogonal"
+            ],
+            "notes": [
+              "operador-ortogonal"
+            ]
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Prove que, se $A$ é uma matriz ortogonal, suas colunas formam um conjunto ortonormal.",
+            "detail": "Seja $A = [\\mu_1 \\quad \\mu_2]$. Como $A$ é ortogonal, $A^t A = I$. Logo, $\\begin{bmatrix} \\mu_1^t \\\\ \\mu_2^t \\end{bmatrix} \\begin{bmatrix} \\mu_1 & \\mu_2 \\end{bmatrix} = \\begin{bmatrix} \\mu_1 \\cdot \\mu_1 & \\mu_1 \\cdot \\mu_2 \\\\ \\mu_2 \\cdot \\mu_1 & \\mu_2 \\cdot \\mu_2 \\end{bmatrix} = \\begin{bmatrix} 1 & 0 \\\\ 0 & 1 \\end{bmatrix}$. Isto significa que $\\mu_i \\cdot \\mu_j = 1$ se $i=j$ e $0$ se $i \\neq j$. Portanto, são ortonormais.",
+            "concepts": [
+              "matriz-ortogonal"
+            ],
+            "notes": [
+              "matriz-ortogonal"
+            ]
+          },
+          {
+            "tier": "silver",
+            "task_index": 2,
+            "text": "Se $f: V \\rightarrow V$ é um operador simétrico, prove que $f(\\mu) \\cdot v = \\mu \\cdot f(v)$.",
+            "detail": "Sendo $A = A^t$ a matriz de $f$, temos que $f(\\mu) \\cdot v = (A\\mu) \\cdot v = (A\\mu)^t v = \\mu^t A^t v$. Como a matriz é simétrica ($A=A^t$), a expressão se torna $\\mu^t A v = \\mu \\cdot (Av) = \\mu \\cdot f(v)$.",
+            "concepts": [
+              "operador-simetrico"
+            ],
+            "notes": [
+              "operador-simetrico"
+            ]
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "phase": 2,
+        "title": "Autovalores e Diagonalização",
+        "icon": "λ",
+        "summary": "Cálculo de autovalores, determinação de autovetores e análise de diagonalização de matrizes.",
+        "key_insight": "Os autovalores de uma matriz A são as raízes do seu polinômio característico, dado por det(A - λI) = 0.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "O que é um autovalor e um autovetor de uma matriz?",
+            "detail": "Um autovalor é um escalar λ para o qual existe um vetor não nulo v (autovetor) tal que Av = λv.",
+            "concepts": [
+              "autovalor"
+            ],
+            "notes": [
+              "autovalores-nota"
+            ]
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Como calcular os autovalores da matriz A = [[7, -3], [3, 7]]?",
+            "detail": "Calculando det(A - λI) = (7-λ)² + 9 = 0, obtemos λ² - 14λ + 58 = 0. As raízes são λ = 7 ± 3i.",
+            "concepts": [
+              "autovalor"
+            ],
+            "notes": [
+              "autovalores-nota"
+            ]
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "A matriz A = [[3, 0], [2, 3]] é diagonalizável?",
+            "detail": "Não. Ela possui autovalor λ=3 com multiplicidade algébrica 2. No entanto, o espaço nulo de (A - 3I) tem dimensão 1 (multiplicidade geométrica 1), falhando na condição de diagonalização.",
+            "concepts": [
+              "diagonalizacao",
+              "autovalor"
+            ],
+            "notes": [
+              "diagonalizacao-nota"
+            ]
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "phase": 2,
+        "title": "Mudança de Base e Coordenadas",
+        "icon": "🔄",
+        "summary": "Expressão de um vetor em termos de uma nova base ortogonal.",
+        "key_insight": "Se uma base é ortonormal, as coordenadas de qualquer vetor u podem ser facilmente calculadas usando o produto interno ⟨u, vᵢ⟩.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "O que são as coordenadas de um vetor em uma base B?",
+            "detail": "São os escalares c₁, c₂, ... que tornam verdadeira a equação u = c₁v₁ + c₂v₂ + ..., onde vᵢ são os vetores da base B.",
+            "concepts": [
+              "operador-linear"
+            ],
+            "notes": [
+              "mudanca-base-nota"
+            ]
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Por que usar bases ortogonais facilita o cálculo de coordenadas?",
+            "detail": "Porque a componente cᵢ pode ser obtida isoladamente usando projeção ortogonal: cᵢ = ⟨u, vᵢ⟩ / ⟨vᵢ, vᵢ⟩.",
+            "concepts": [
+              "operador-ortogonal"
+            ],
+            "notes": [
+              "mudanca-base-nota"
+            ]
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Se B = {(1/√2)(1, 1), (1/√2)(-1, 1)}, quais as coordenadas de u = (1, 2)?",
+            "detail": "Como B é ortonormal: c₁ = ⟨(1,2), (1/√2, 1/√2)⟩ = 3/√2 e c₂ = ⟨(1,2), (-1/√2, 1/√2)⟩ = 1/√2.",
+            "concepts": [
+              "operador-ortogonal"
+            ],
+            "notes": [
+              "mudanca-base-nota"
+            ]
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "phase": 2,
+        "title": "Revisão de Cálculo Diferencial",
+        "icon": "d/dt",
+        "summary": "Aplicação das regras da cadeia e do produto na derivação de funções compostas.",
+        "key_insight": "A regra da cadeia (f(g(t)))' = f'(g(t))g'(t) é fundamental para derivar funções compostas como f(x(t)).",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Como derivar a função composta f(x(t))?",
+            "detail": "Usando a regra da cadeia: a derivada em relação a t é f'(x(t)) * x'(t).",
+            "concepts": [
+              "derivada"
+            ],
+            "notes": [
+              "derivada-nota"
+            ]
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Como derivar g(t) = (1 + t³)(1 + e^(t²))?",
+            "detail": "Usando a regra do produto: g'(t) = (3t²)(1 + e^(t²)) + (1 + t³)(2t * e^(t²)).",
+            "concepts": [
+              "derivada"
+            ],
+            "notes": [
+              "derivada-nota"
+            ]
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Qual a derivada de m(t) = √(1 + x(t)²) onde x(t) = eᵗ?",
+            "detail": "Pela regra da cadeia: m'(t) = [1 / 2√(1 + e²ᵗ)] * 2x(t) * x'(t) = e²ᵗ / √(1 + e²ᵗ).",
+            "concepts": [
+              "derivada"
+            ],
+            "notes": [
+              "derivada-nota"
+            ]
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "phase": 2,
+        "title": "Revisão de Cálculo Integral",
+        "icon": "∫",
+        "summary": "Resolução de integrais indefinidas utilizando o método da substituição.",
+        "key_insight": "A substituição u = g(x) simplifica a integral ∫ f(g(x))g'(x)dx para a forma ∫ f(u)du.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "O que diferencia uma integral indefinida de uma definida?",
+            "detail": "A integral indefinida representa a família de todas as antiderivadas de uma função, incluindo a constante de integração C, sem limites de integração.",
+            "concepts": [
+              "integral-indefinida"
+            ],
+            "notes": [
+              "integral-nota"
+            ]
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Como resolver a integral ∫ (x³ - 1)²(3x²)dx?",
+            "detail": "Fazendo u = x³ - 1, temos du = 3x² dx. A integral torna-se ∫ u² du = u³/3 + C = (x³ - 1)³/3 + C.",
+            "concepts": [
+              "integral-indefinida"
+            ],
+            "notes": [
+              "integral-nota"
+            ]
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Como calcular ∫ 1/(1 + bx) dx, onde b é uma constante?",
+            "detail": "Usando u = 1 + bx, du = b dx. Assim, (1/b) ∫ 1/u du = (1/b) ln|u| + C = (1/b) ln|1 + bx| + C.",
+            "concepts": [
+              "integral-indefinida"
+            ],
+            "notes": [
+              "integral-nota"
+            ]
+          }
+        ]
+      }
+    ],
+    "concepts": [
+      {
+        "id": "operador-linear",
+        "label": "Operador Linear"
+      },
+      {
+        "id": "operador-inversivel",
+        "label": "Operador Inversível"
+      },
+      {
+        "id": "matriz-semelhante",
+        "label": "Matrizes Semelhantes"
+      },
+      {
+        "id": "operador-ortogonal",
+        "label": "Operador Ortogonal"
+      },
+      {
+        "id": "matriz-ortogonal",
+        "label": "Matriz Ortogonal"
+      },
+      {
+        "id": "operador-simetrico",
+        "label": "Operador Simétrico"
+      },
+      {
+        "id": "autovalor",
+        "label": "Autovalor"
+      },
+      {
+        "id": "autovetor",
+        "label": "Autovetor"
+      },
+      {
+        "id": "diagonalizacao",
+        "label": "Diagonalização"
+      },
+      {
+        "id": "derivada",
+        "label": "Derivada"
+      },
+      {
+        "id": "integral-indefinida",
+        "label": "Integral Indefinida"
+      }
+    ],
+    "prereqs": [
+      [
+        "operador-inversivel",
+        "operador-linear"
+      ],
+      [
+        "matriz-semelhante",
+        "operador-linear"
+      ],
+      [
+        "operador-ortogonal",
+        "operador-linear"
+      ],
+      [
+        "matriz-ortogonal",
+        "operador-ortogonal"
+      ],
+      [
+        "operador-simetrico",
+        "operador-linear"
+      ],
+      [
+        "autovalor",
+        "operador-linear"
+      ],
+      [
+        "autovetor",
+        "autovalor"
+      ],
+      [
+        "diagonalizacao",
+        "autovetor"
+      ],
+      [
+        "diagonalizacao",
+        "matriz-semelhante"
+      ]
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Autoavaliação de Equações Diferenciais Ordinárias",
+    "slug": "autoavaliacao-edo",
+    "phases": [
+      {
+        "num": 1,
+        "title": "Revisão de Pré-Requisitos"
+      }
+    ],
+    "days": [
+      {
+        "id": 1,
+        "phase": 1,
+        "title": "Álgebra Linear - Autovalores e Diagonalização",
+        "icon": "*",
+        "summary": "Cálculo de autovalores e autovetores, e verificação da diagonalizabilidade de matrizes.",
+        "key_insight": "Uma matriz é diagonalizável se a multiplicidade geométrica de cada autovalor for igual à sua multiplicidade algébrica.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Encontre os autovalores e determine se a matriz $A = \\begin{bmatrix} 2 & 0 & 0 \\\\ 6 & -3 & 0 \\\\ 4 & 3 & 1 \\end{bmatrix}$ é diagonalizável.",
+            "detail": "Sendo uma matriz triangular inferior, os autovalores são os elementos da diagonal principal: $\\lambda_1 = 2$, $\\lambda_2 = -3$, $\\lambda_3 = 1$. Como possui 3 autovalores distintos para uma matriz de dimensão $3\\times3$, ela é diagonalizável.",
+            "concepts": [
+              "autovalores",
+              "diagonalizacao"
+            ],
+            "notes": [
+              "autovalores",
+              "diagonalizacao"
+            ]
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Encontre os autovalores e determine se a matriz $A = \\begin{bmatrix} 7 & -3 \\\\ 3 & 7 \\end{bmatrix}$ é diagonalizável.",
+            "detail": "Resolvendo $\\det(A - \\lambda I) = (7-\\lambda)^2 + 9 = 0$, obtemos $\\lambda = 7 \\pm 3i$. Como os autovalores complexos são distintos, a matriz é diagonalizável sobre o corpo dos complexos $\\mathbb{C}$.",
+            "concepts": [
+              "autovalores",
+              "diagonalizacao"
+            ],
+            "notes": [
+              "autovalores",
+              "diagonalizacao"
+            ]
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Encontre os autovalores e determine se a matriz $A = \\begin{bmatrix} 3 & 0 \\\\ 2 & 3 \\end{bmatrix}$ é diagonalizável.",
+            "detail": "$\\det(A - \\lambda I) = (3-\\lambda)^2 = 0 \\implies \\lambda = 3$ (multiplicidade algébrica 2). Para $\\lambda=3$, a matriz $A - 3I = \\begin{bmatrix} 0 & 0 \\\\ 2 & 0 \\end{bmatrix}$ tem posto 1, logo a multiplicidade geométrica é $2 - 1 = 1$. Como a multiplicidade geométrica é menor que a algébrica, a matriz não é diagonalizável.",
+            "concepts": [
+              "autovalores",
+              "diagonalizacao"
+            ],
+            "notes": [
+              "autovalores",
+              "diagonalizacao"
+            ]
+          },
+          {
+            "tier": "gold",
+            "task_index": 3,
+            "text": "Dada a matriz $A = \\begin{bmatrix} 1 & 3 \\\\ 3 & 1 \\end{bmatrix}$, encontre seus autovalores, autovetores correspondentes e uma base de autovetores.",
+            "detail": "Autovalores: $\\det(A - \\lambda I) = (1-\\lambda)^2 - 9 = 0 \\implies \\lambda_1 = 4, \\lambda_2 = -2$. Para $\\lambda_1 = 4$, resolvendo $(A-4I)\\vec{v} = 0$, temos $\\vec{v}_1 = \\begin{bmatrix} 1 \\\\ 1 \\end{bmatrix}$. Para $\\lambda_2 = -2$, temos $\\vec{v}_2 = \\begin{bmatrix} 1 \\\\ -1 \\end{bmatrix}$. A base de autovetores é $B = \\{ (1,1)^T, (1,-1)^T \\}$.",
+            "concepts": [
+              "autovalores",
+              "autovetores"
+            ],
+            "notes": [
+              "autovalores",
+              "autovetores"
+            ]
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "phase": 1,
+        "title": "Mudança de Base e Coordenadas",
+        "icon": "*",
+        "summary": "Cálculo de coordenadas de um vetor em relação a uma nova base ortonormal.",
+        "key_insight": "Para uma base ortonormal, as coordenadas são dadas simplesmente pelo produto interno do vetor com os elementos da base.",
+        "cards": [
+          {
+            "tier": "gold",
+            "task_index": 0,
+            "text": "Encontre as coordenadas do vetor $\\vec{u} = (1, 2)$ em relação à base $B = \\{ \\vec{v}_1, \\vec{v}_2 \\}$, onde $\\vec{v}_1 = \\frac{1}{\\sqrt{2}}(1, 1)$ e $\\vec{v}_2 = \\frac{1}{\\sqrt{2}}(-1, 1)$.",
+            "detail": "Como a base é ortonormal, $c_i = \\langle \\vec{u}, \\vec{v}_i \\rangle$. Assim, $c_1 = \\frac{1}{\\sqrt{2}}(1\\cdot1 + 2\\cdot1) = \\frac{3}{\\sqrt{2}}$ e $c_2 = \\frac{1}{\\sqrt{2}}(1\\cdot(-1) + 2\\cdot1) = \\frac{1}{\\sqrt{2}}$. Logo, $\\vec{u} = \\frac{3}{\\sqrt{2}}\\vec{v}_1 + \\frac{1}{\\sqrt{2}}\\vec{v}_2$.",
+            "concepts": [
+              "base-ortonormal"
+            ],
+            "notes": [
+              "base-ortonormal"
+            ]
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "phase": 1,
+        "title": "Diferenciação e Regras de Derivação",
+        "icon": "*",
+        "summary": "Aplicação de regras de derivação, incluindo a regra da cadeia, do produto e do quociente.",
+        "key_insight": "A regra da cadeia é fundamental para derivar funções compostas, como $f(x(t))$.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Derive em relação a $t$ a função $f(x(t)) = \\frac{1 + x(t)^2}{1 + x(t)}$, onde $x(t) = 1 + t$.",
+            "detail": "Usando a regra da cadeia e do quociente: $f'(t) = \\frac{2x(t)x'(t)(1+x(t)) - (1+x(t)^2)x'(t)}{(1+x(t))^2}$. Como $x'(t)=1$, substituindo $x(t)=1+t$, temos $f'(t) = \\frac{2(1+t)(2+t) - (1+(1+t)^2)}{(2+t)^2} = \\frac{(1+t)^2 + 2(1+t) - 1}{(2+t)^2}$.",
+            "concepts": [
+              "regra-da-cadeia",
+              "derivadas"
+            ],
+            "notes": [
+              "regra-da-cadeia"
+            ]
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Derive em relação a $t$ a função $g(t) = (1 + t^3)(1 + e^{t^2})$.",
+            "detail": "Aplicando a regra do produto: $g'(t) = \\frac{d}{dt}(1 + t^3) \\cdot (1 + e^{t^2}) + (1 + t^3) \\cdot \\frac{d}{dt}(1 + e^{t^2}) = 3t^2(1 + e^{t^2}) + (1 + t^3)(2t e^{t^2})$.",
+            "concepts": [
+              "regra-da-cadeia",
+              "derivadas"
+            ],
+            "notes": [
+              "regra-da-cadeia"
+            ]
+          },
+          {
+            "tier": "silver",
+            "task_index": 2,
+            "text": "Derive em relação a $t$ a função $m(t) = \\sqrt{1 + x(t)^2}$, onde $x(t) = e^t$.",
+            "detail": "Pela regra da cadeia: $m'(t) = \\frac{1}{2\\sqrt{1 + x(t)^2}} \\cdot 2x(t) \\cdot x'(t)$. Substituindo $x(t) = e^t$ e $x'(t) = e^t$, obtemos $m'(t) = \\frac{e^t \\cdot e^t}{\\sqrt{1 + e^{2t}}} = \\frac{e^{2t}}{\\sqrt{1 + e^{2t}}}$.",
+            "concepts": [
+              "regra-da-cadeia",
+              "derivadas"
+            ],
+            "notes": [
+              "regra-da-cadeia"
+            ]
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "phase": 1,
+        "title": "Integração e Métodos Básicos",
+        "icon": "*",
+        "summary": "Cálculo de integrais indefinidas usando expansão algébrica, integração por partes e método de substituição.",
+        "key_insight": "O método de substituição é essencial para resolver integais compostas, transformando-as em formas elementares.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Calcule a integral indefinida: $\\int (x + e^{2x})(2x)\\,dx$.",
+            "detail": "Expandindo o integrando: $\\int (2x^2 + 2xe^{2x})\\,dx = \\frac{2x^3}{3} + \\int 2xe^{2x}\\,dx$. Para a segunda parte, usamos integração por partes com $u=x$ e $dv=e^{2x}dx$: $\\int 2xe^{2x}dx = x e^{2x} - \\frac{1}{2}e^{2x} + C$. O resultado final é $\\frac{2x^3}{3} + x e^{2x} - \\frac{1}{2}e^{2x} + C$.",
+            "concepts": [
+              "integracao-por-partes"
+            ],
+            "notes": [
+              "integracao-por-partes"
+            ]
+          },
+          {
+            "tier": "bronze",
+            "task_index": 1,
+            "text": "Calcule a integral indefinida: $\\int (x^3 - 1)^2(3x^2)\\,dx$.",
+            "detail": "Usando o método de substituição com $u = x^3 - 1$, temos $du = 3x^2 dx$. A integral torna-se $\\int u^2\\,du = \\frac{u^3}{3} + C$. Retornando para a variável $x$: $\\frac{(x^3 - 1)^3}{3} + C$.",
+            "concepts": [
+              "metodo-substituicao"
+            ],
+            "notes": [
+              "metodo-substituicao"
+            ]
+          },
+          {
+            "tier": "bronze",
+            "task_index": 2,
+            "text": "Calcule a integral indefinida: $\\int \\frac{1}{1 + bx}\\,dx$, onde $b$ é uma constante.",
+            "detail": "Usando substituição $u = 1 + bx$, temos $du = b\\,dx \\implies dx = \\frac{du}{b}$. A integral reescrita é $\\frac{1}{b} \\int \\frac{1}{u}\\,du = \\frac{1}{b} \\ln|u| + C$. Retornando a $x$, fica $\\frac{1}{b} \\ln|1 + bx| + C$.",
+            "concepts": [
+              "metodo-substituicao"
+            ],
+            "notes": [
+              "metodo-substituicao"
+            ]
+          }
+        ]
+      }
+    ],
+    "concepts": [
+      {
+        "id": "autovalores",
+        "label": "Autovalores"
+      },
+      {
+        "id": "autovetores",
+        "label": "Autovetores"
+      },
+      {
+        "id": "diagonalizacao",
+        "label": "Diagonalização"
+      },
+      {
+        "id": "base-ortonormal",
+        "label": "Base Ortonormal"
+      },
+      {
+        "id": "derivadas",
+        "label": "Derivadas"
+      },
+      {
+        "id": "regra-da-cadeia",
+        "label": "Regra da Cadeia"
+      },
+      {
+        "id": "integracao-por-partes",
+        "label": "Integração por Partes"
+      },
+      {
+        "id": "metodo-substituicao",
+        "label": "Método de Substituição"
+      }
+    ],
+    "prereqs": [
+      [
+        "autovetores",
+        "autovalores"
+      ],
+      [
+        "diagonalizacao",
+        "autovetores"
+      ],
+      [
+        "base-ortonormal",
+        "autovetores"
+      ],
+      [
+        "integracao-por-partes",
+        "derivadas"
+      ],
+      [
+        "metodo-substituicao",
+        "derivadas"
+      ],
+      [
+        "diagonalizacao",
+        "operador-linear"
+      ],
+      [
+        "base-ortonormal",
+        "operador-ortogonal"
+      ],
+      [
+        "regra-da-cadeia",
+        "derivada"
+      ],
+      [
+        "integracao-por-partes",
+        "integral-indefinida"
+      ],
+      [
+        "metodo-substituicao",
+        "integral-indefinida"
+      ]
+    ]
+  }
+]

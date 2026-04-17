@@ -1,0 +1,15 @@
+{
+  "xp": 35,
+  "streak": 0,
+  "best_streak": 0,
+  "last_completed": null,
+  "completed_tasks": {
+    "c1-d1-bronze-0": true,
+    "c1-d1-silver-1": true
+  },
+  "day_tiers": {
+    "1.1": "silver"
+  },
+  "generated_tasks": [],
+  "attempts": []
+}
