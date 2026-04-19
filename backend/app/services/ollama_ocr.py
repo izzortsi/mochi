@@ -10,6 +10,9 @@ from app.config import settings
 OLLAMA_TIMEOUT = 180
 OCR_CACHE_DIR = settings.data_dir / "ocr"
 PAGE_RETRIES = 2  # retry each page once before giving up
+# DPI fallbacks tried when an image-shape assertion fires in the vision model.
+# The first value matches the initial rasterization; the rest are fallbacks.
+DPI_FALLBACKS = [150, 120, 100, 200]
 
 
 def _page_cache_path(pdf_path: Path, page_num: int) -> Path:
@@ -38,19 +41,9 @@ async def _ocr_pdf(pdf_path: Path, max_pages: int = 30) -> str:
     OCR_CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
     with tempfile.TemporaryDirectory() as tmp_dir:
-        subprocess.run(
-            [
-                "pdftoppm",
-                "-png",
-                "-r",
-                "150",
-                str(pdf_path),
-                str(Path(tmp_dir) / "page"),
-            ],
-            check=True,
-            capture_output=True,
-        )
-        all_pages = sorted(Path(tmp_dir).glob("page-*.png"))[:to_process]
+        tmp = Path(tmp_dir)
+        _render_pages(pdf_path, tmp, DPI_FALLBACKS[0])
+        all_pages = sorted(tmp.glob(f"page-{DPI_FALLBACKS[0]}-*.png"))[:to_process]
 
         texts: list[str | None] = [None] * to_process
         need_ocr: list[tuple[int, Path]] = []
@@ -69,7 +62,9 @@ async def _ocr_pdf(pdf_path: Path, max_pages: int = 30) -> str:
                 for idx, page_path in need_ocr:
                     print(f"[ocr] page {idx + 1}/{to_process}...")
                     try:
-                        text = await _call_ollama_with_retry(client, page_path)
+                        text = await _ocr_page_with_dpi_fallback(
+                            client, pdf_path, idx + 1, page_path, tmp
+                        )
                     except Exception as e:
                         failures.append((idx + 1, str(e)[:200]))
                         print(f"[ocr] page {idx + 1} FAILED: {e}")
@@ -102,6 +97,69 @@ async def _ocr_pdf(pdf_path: Path, max_pages: int = 30) -> str:
 async def _ocr_image(image_path: Path) -> str:
     async with httpx.AsyncClient(timeout=OLLAMA_TIMEOUT) as client:
         return await _call_ollama_with_retry(client, image_path)
+
+
+def _render_pages(pdf_path: Path, out_dir: Path, dpi: int,
+                  first_page: int | None = None, last_page: int | None = None) -> None:
+    """Rasterize PDF pages with pdftoppm. Output: out_dir/page-{dpi}-NNN.png."""
+    cmd = [
+        "pdftoppm",
+        "-png",
+        "-r", str(dpi),
+    ]
+    if first_page is not None:
+        cmd += ["-f", str(first_page)]
+    if last_page is not None:
+        cmd += ["-l", str(last_page)]
+    cmd += [str(pdf_path), str(out_dir / f"page-{dpi}")]
+    subprocess.run(cmd, check=True, capture_output=True)
+
+
+def _is_shape_assert_error(exc: Exception) -> bool:
+    """Detect the GGML vision-model tensor-shape assertion seen with some
+    page resolutions. Retrying at a different DPI usually avoids it."""
+    msg = str(exc)
+    return "GGML_ASSERT" in msg or "ne[" in msg
+
+
+async def _ocr_page_with_dpi_fallback(
+    client: httpx.AsyncClient,
+    pdf_path: Path,
+    page_num: int,
+    initial_image: Path,
+    tmp_dir: Path,
+) -> str:
+    """Try OCR at the initial DPI; on shape-assertion failures, re-rasterize
+    the page at fallback DPIs."""
+    last_err: Exception | None = None
+    # First try the already-rendered image.
+    try:
+        return await _call_ollama_with_retry(client, initial_image)
+    except Exception as e:
+        last_err = e
+        if not _is_shape_assert_error(e):
+            raise
+
+    # Shape-assertion → re-render this page at fallback DPIs.
+    for dpi in DPI_FALLBACKS[1:]:
+        print(f"[ocr] page {page_num} re-rendering at {dpi}dpi")
+        _render_pages(pdf_path, tmp_dir, dpi, first_page=page_num, last_page=page_num)
+        # pdftoppm with -f/-l still zero-pads to the page number it sees, so the
+        # filename depends on total page count; take the newest match.
+        candidates = sorted(
+            tmp_dir.glob(f"page-{dpi}-*.png"), key=lambda p: p.stat().st_mtime
+        )
+        if not candidates:
+            continue
+        img = candidates[-1]
+        try:
+            return await _call_ollama_with_retry(client, img)
+        except Exception as e:
+            last_err = e
+            if not _is_shape_assert_error(e):
+                raise
+
+    raise last_err if last_err else RuntimeError("no DPI fallback produced an image")
 
 
 async def _call_ollama_with_retry(
