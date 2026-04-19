@@ -42,7 +42,7 @@ wheels = [
 [[package]]
 name = "anthropic-oauth"
 version = "0.1.0"
-source = { directory = "../../anthropic-oauth" }
+source = { git = "https://github.com/izzortsi/anthropic-oauth#9015b258f21e891d6635656fa11b6fd7e3038666" }
 dependencies = [
     { name = "httpx" },
 ]
@@ -51,15 +51,6 @@ dependencies = [
 anthropic = [
     { name = "anthropic" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "anthropic", marker = "extra == 'anthropic'", specifier = ">=0.32" },
-    { name = "httpx", specifier = ">=0.25" },
-    { name = "pytest", marker = "extra == 'dev'" },
-    { name = "ruff", marker = "extra == 'dev'" },
-]
-provides-extras = ["anthropic", "dev"]
 
 [[package]]
 name = "anyio"
@@ -488,7 +479,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "anthropic-oauth", extras = ["anthropic"], directory = "../../anthropic-oauth" },
+    { name = "anthropic-oauth", extras = ["anthropic"], git = "https://github.com/izzortsi/anthropic-oauth" },
     { name = "fastapi", specifier = ">=0.115" },
     { name = "httpx", specifier = ">=0.28" },
     { name = "pydantic", specifier = ">=2.10" },
