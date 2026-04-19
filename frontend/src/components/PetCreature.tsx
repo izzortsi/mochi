@@ -18,13 +18,13 @@ interface PetState {
 }
 
 const MOOD_COLORS: Record<string, string> = {
-  happy: "text-green-400",
-  idle: "text-green-300",
-  hungry: "text-yellow-400",
-  sad: "text-orange-400",
-  desperate: "text-red-400",
-  dead: "text-gray-500",
-  waiting: "text-gray-400",
+  happy: "text-amber-300",
+  idle: "text-orange-300",
+  hungry: "text-orange-400",
+  sad: "text-orange-500",
+  desperate: "text-red-500",
+  dead: "text-stone-500",
+  waiting: "text-stone-400",
 };
 
 const MOOD_ANIM: Record<string, { animate: object; transition: object }> = {
@@ -59,11 +59,18 @@ const MOOD_ANIM: Record<string, { animate: object; transition: object }> = {
 };
 
 const STAGE_BORDER: Record<string, string> = {
-  egg: "#6366f1",
-  hatchling: "#7c3aed",
-  baby: "#8b5cf6",
-  teen: "#ec4899",
-  adult: "#f59e0b",
+  coal: "#57534e",
+  spark: "#fbbf24",
+  emberling: "#f59e0b",
+  ember: "#f97316",
+  fire: "#fb923c",
+};
+
+const STAGE_XP_THRESHOLDS: Record<string, { current: number; next: number | null }> = {
+  spark: { current: 0, next: 100 },
+  emberling: { current: 100, next: 500 },
+  ember: { current: 500, next: 1500 },
+  fire: { current: 1500, next: null },
 };
 
 function pickFrame(art: Record<string, string[]>, mood: string, tick: number): string[] {
@@ -97,19 +104,6 @@ async function hatchPet(name: string): Promise<{ ok: boolean; name: string }> {
   return camelizeKeys<{ ok: boolean; name: string }>(await res.json());
 }
 
-async function regeneratePet(): Promise<{ ok: boolean; name: string }> {
-  const res = await fetch("/api/pet/regenerate", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({}),
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text.slice(0, 300));
-  }
-  return camelizeKeys<{ ok: boolean; name: string }>(await res.json());
-}
-
 function healthGradient(hp: number): { background: string; boxShadow: string } {
   if (hp > 60) return {
     background: "linear-gradient(90deg, #22c55e, #4ade80)",
@@ -128,13 +122,10 @@ function healthGradient(hp: number): { background: string; boxShadow: string } {
 export function PetCreature() {
   const [pet, setPet] = useState<PetState | null>(null);
   const [tick, setTick] = useState(0);
-  const [blink, setBlink] = useState(false);
   const [showHatch, setShowHatch] = useState(false);
   const [hatchName, setHatchName] = useState("");
   const [hatching, setHatching] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [regenerating, setRegenerating] = useState(false);
-  const [showRegen, setShowRegen] = useState(false);
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const refresh = useCallback(() => {
@@ -152,33 +143,18 @@ export function PetCreature() {
     return () => clearInterval(frameInterval);
   }, []);
 
-  useEffect(() => {
-    const doBlink = () => {
-      setBlink(true);
-      setTimeout(() => setBlink(false), 150);
-    };
-    const interval = setInterval(doBlink, 3500 + Math.random() * 2000);
-    return () => clearInterval(interval);
-  }, []);
-
   if (!pet) return null;
 
-  const isEgg = pet.stage === "egg";
+  const isCoal = pet.stage === "coal";
   const isDead = !!pet.died || pet.mood === "dead";
   const colorClass = MOOD_COLORS[pet.mood] || "text-gray-300";
   const frame = pickFrame(pet.art, pet.mood, tick);
   const anim = MOOD_ANIM[pet.mood] || MOOD_ANIM.idle;
 
   const stageLabel = pet.stage?.charAt(0).toUpperCase() + pet.stage?.slice(1);
-  const xpToNext = pet.stage === "adult"
-    ? null
-    : pet.stage === "teen" ? 1500
-    : pet.stage === "baby" ? 500
-    : 100;
-  const xpForCurrent = pet.stage === "adult" ? 1500
-    : pet.stage === "teen" ? 500
-    : pet.stage === "baby" ? 100
-    : 0;
+  const thresholds = STAGE_XP_THRESHOLDS[pet.stage];
+  const xpToNext = thresholds?.next ?? null;
+  const xpForCurrent = thresholds?.current ?? 0;
   const xpProgress = xpToNext && pet.totalXpEarned != null
     ? Math.min(100, ((pet.totalXpEarned - xpForCurrent) / (xpToNext - xpForCurrent)) * 100)
     : 100;
@@ -198,25 +174,11 @@ export function PetCreature() {
     }
   };
 
-  const handleRegenerate = async () => {
-    setRegenerating(true);
-    setError(null);
-    try {
-      await regeneratePet();
-      setShowRegen(false);
-      refresh();
-    } catch (e) {
-      setError(String(e));
-    } finally {
-      setRegenerating(false);
-    }
-  };
-
   const handleClick = () => {
-    if (isEgg || isDead) setShowHatch(true);
+    if (isCoal || isDead) setShowHatch(true);
   };
 
-  const lowHealth = !isEgg && pet.health <= 30;
+  const lowHealth = !isCoal && pet.health <= 30;
   const hpStyle = healthGradient(pet.health);
   const stageBorderColor = STAGE_BORDER[pet.stage] || "#6366f1";
 
@@ -225,15 +187,22 @@ export function PetCreature() {
       <motion.div
         className="cursor-pointer select-none"
         onClick={handleClick}
-        title={pet.name || "egg"}
+        title={pet.name || "coal"}
         animate={anim.animate}
         transition={anim.transition}
-        style={{ filter: "drop-shadow(0 0 4px currentColor)", opacity: 0.9 }}
+        style={{ transformOrigin: "center bottom" }}
       >
         <motion.div
-          animate={{ scaleY: blink && !isDead ? 0.1 : 1 }}
-          transition={{ duration: 0.08 }}
-          style={{ transformOrigin: "center center" }}
+          animate={isDead ? {} : {
+            filter: [
+              "drop-shadow(0 0 3px currentColor)",
+              "drop-shadow(0 0 8px currentColor)",
+              "drop-shadow(0 0 3px currentColor)",
+            ],
+            opacity: [0.85, 1, 0.85],
+          }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          style={{ transformOrigin: "center bottom" }}
         >
           <pre className={`${colorClass} text-[11px] leading-[12px] font-mono m-0 p-0 transition-colors duration-1000`}>
             {frame.join("\n")}
@@ -241,7 +210,7 @@ export function PetCreature() {
         </motion.div>
       </motion.div>
 
-      {!isEgg && (
+      {!isCoal && (
         <div className="flex flex-col gap-1 min-w-[110px] pt-1">
           {pet.name && (
             <span
@@ -305,17 +274,6 @@ export function PetCreature() {
           {pet.totalXpEarned != null && (
             <span className="text-[9px] opacity-40">{pet.totalXpEarned} XP</span>
           )}
-          {!isDead && (
-            <motion.button
-              onClick={() => setShowRegen(true)}
-              className="text-[9px] opacity-40 hover:opacity-80 mt-0.5 transition-opacity border-l border-[#2a2a3f] pl-1.5 hover:border-[#3a3a4f]"
-              title="Re-roll appearance"
-              whileHover={{ x: 2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              re-roll
-            </motion.button>
-          )}
         </div>
       )}
 
@@ -366,46 +324,6 @@ export function PetCreature() {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {showRegen && (
-          <motion.div
-            className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
-            onClick={() => setShowRegen(false)}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <motion.div
-              className="bg-[#121222] border border-[#2a2a3f] rounded-xl p-6 w-80 overflow-hidden"
-              onClick={e => e.stopPropagation()}
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <div
-                className="h-0.5 w-full -mt-6 -mx-6 mb-5"
-                style={{ background: "linear-gradient(90deg, #6366f1, #ec4899, #f59e0b)" }}
-              />
-              <h2 className="font-display text-xl mb-2">Re-roll pet?</h2>
-              <p className="text-sm opacity-50 mb-4">Keep {pet.name} but generate a new look.</p>
-              {error && <div className="mb-3 p-2 rounded bg-phase3/20 text-phase3 text-sm">{error}</div>}
-              <div className="border-t border-[#2a2a3f] my-3" />
-              <div className="flex justify-end gap-2">
-                <button onClick={() => setShowRegen(false)} className="px-3 py-2 rounded bg-[#1a1a2a] hover:bg-[#2a2a3f] text-sm">Cancel</button>
-                <motion.button
-                  onClick={handleRegenerate}
-                  disabled={regenerating}
-                  className="px-3 py-2 rounded bg-phase1 hover:bg-phase2 disabled:opacity-30 text-sm"
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                >{regenerating ? "generating..." : "Re-roll"}</motion.button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

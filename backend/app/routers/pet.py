@@ -6,33 +6,33 @@ from app.services import pet_art
 
 router = APIRouter()
 
-EGG_ART = {
+COAL_ART = {
     "idle": [
         "                    ",
         "                    ",
-        "        ___         ",
-        "      /     \\       ",
-        "     |  ? ?  |      ",
-        "     |   o   |      ",
-        "      \\  v  /       ",
-        "       \\   /        ",
-        "        \\_/         ",
         "                    ",
-        "    click to hatch  ",
+        "                    ",
+        "       .----.       ",
+        "      / .  . \\      ",
+        "     | . () . |     ",
+        "      \\ .  . /      ",
+        "       '----'       ",
+        "                    ",
+        "   click to kindle  ",
         "                    ",
     ],
     "happy": [
         "                    ",
         "                    ",
-        "        ___         ",
-        "      /     \\       ",
-        "     |  ! !  |      ",
-        "     |   ~   |      ",
-        "      \\  v  /       ",
-        "       \\   /        ",
-        "        \\_/         ",
         "                    ",
-        "    click to hatch  ",
+        "          .         ",
+        "       .----.       ",
+        "      / *  * \\      ",
+        "     | . () . |     ",
+        "      \\ *  * /      ",
+        "       '----'       ",
+        "                    ",
+        "   click to kindle  ",
         "                    ",
     ],
     "eating": [],
@@ -40,27 +40,7 @@ EGG_ART = {
     "dead": [],
 }
 
-DEAD_ART = {
-    "idle": [
-        "                    ",
-        "                    ",
-        "                    ",
-        "       .--.         ",
-        "      | o o|         ",
-        "      |  ~ |         ",
-        "      | ~~ |         ",
-        "       \\  /          ",
-        "        \\/           ",
-        "      R.I.P.        ",
-        "                    ",
-        "  [ hatch new egg ] ",
-    ],
-    "happy": [],
-    "eating": [],
-    "sleeping": [],
-    "dead": [],
-}
-
+# Mood is stage-independent; feeding amounts unchanged
 FEED_AMOUNTS = {
     "bronze": {"health": 3, "happiness": 2},
     "silver": {"health": 6, "happiness": 4},
@@ -68,15 +48,56 @@ FEED_AMOUNTS = {
     "gold_bonus": {"health": 15, "happiness": 10},
 }
 
-STAGE_XP = {"egg": 0, "hatchling": 0, "baby": 100, "teen": 500, "adult": 1500}
+# New ember stages
+STAGE_XP = {"coal": 0, "spark": 0, "emberling": 100, "ember": 500, "fire": 1500}
+
+# Migration map from legacy stages → new ember stages
+LEGACY_STAGE_MAP = {
+    "egg": "coal",
+    "hatchling": "spark",
+    "baby": "emberling",
+    "teen": "ember",
+    "adult": "fire",
+}
 
 
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+def _stage_for_xp(xp: int, hatched: bool) -> str:
+    if not hatched:
+        return "coal"
+    if xp >= 1500:
+        return "fire"
+    if xp >= 500:
+        return "ember"
+    if xp >= 100:
+        return "emberling"
+    return "spark"
+
+
+def _migrate_pet(pet: dict) -> dict:
+    """One-time migration for pets saved with the old archetype system.
+
+    Maps legacy stage names to new ember stages. If the pet has no parts bag,
+    rolls a new one and re-renders so existing pets don't crash the renderer.
+    """
+    stage = pet.get("stage", "coal")
+    if stage in LEGACY_STAGE_MAP:
+        pet["stage"] = LEGACY_STAGE_MAP[stage]
+    if not pet.get("parts") and pet.get("stage") != "coal":
+        parts = pet_art.roll_parts()
+        pet["parts"] = parts
+        pet["hue"] = parts["hue"]
+        pet["rarity"] = parts["rarity"]
+        pet["art"] = pet_art.render(pet["stage"], parts)
+    return pet
+
+
 def _decay_pet(pet: dict) -> dict:
-    if pet.get("died") or pet.get("stage") == "egg":
+    pet = _migrate_pet(pet)
+    if pet.get("died") or pet.get("stage") == "coal":
         return pet
     last_fed = pet.get("lastFed", pet.get("born", _now()))
     try:
@@ -88,20 +109,10 @@ def _decay_pet(pet: dict) -> dict:
     pet["happiness"] = max(0.0, pet.get("happiness", 100) - (hours / 120) * 100)
     if pet["health"] <= 0 and not pet.get("died"):
         pet["died"] = _now()
-        pet["art"] = DEAD_ART
+        # Dead art is rendered inline by the frame builders (smoke)
+        if pet.get("parts"):
+            pet["art"] = pet_art.render(pet["stage"], pet["parts"])
     return pet
-
-
-def _stage_for_xp(xp: int, hatched: bool) -> str:
-    if not hatched:
-        return "egg"
-    if xp >= 1500:
-        return "adult"
-    if xp >= 500:
-        return "teen"
-    if xp >= 100:
-        return "baby"
-    return "hatchling"
 
 
 @router.get("/api/pet")
@@ -111,11 +122,13 @@ def get_pet():
         return {
             "id": None,
             "name": None,
-            "stage": "egg",
+            "stage": "coal",
             "health": 100,
             "happiness": 100,
             "mood": "waiting",
-            "art": EGG_ART,
+            "art": COAL_ART,
+            "hue": None,
+            "rarity": None,
         }
     pet = _decay_pet(pet)
     store.save_pet(pet)
@@ -138,11 +151,13 @@ def get_pet():
     return {
         "id": pet.get("id"),
         "name": pet.get("name"),
-        "stage": pet.get("stage", "egg"),
+        "stage": pet.get("stage", "coal"),
         "health": round(pet.get("health", 100), 1),
         "happiness": round(min(100, pet.get("happiness", 100)), 1),
         "mood": mood,
-        "art": pet.get("art", EGG_ART),
+        "art": pet.get("art", COAL_ART),
+        "hue": pet.get("hue"),
+        "rarity": pet.get("rarity"),
         "died": pet.get("died"),
         "born": pet.get("born"),
         "lastFed": pet.get("lastFed"),
@@ -158,40 +173,30 @@ async def hatch_pet(body: dict):
     if existing and not existing.get("died"):
         raise HTTPException(400, "pet already alive")
 
-    art = await pet_art.generate_art()
+    art, parts = await pet_art.generate_art(stage="spark")
 
     pet = {
         "id": pet_art.random_id(),
         "name": name,
         "born": _now(),
         "died": None,
-        "stage": "hatchling",
+        "stage": "spark",
         "health": 100.0,
         "happiness": 100.0,
         "lastFed": _now(),
         "totalXpEarned": 0,
+        "parts": parts,
+        "hue": parts["hue"],
+        "rarity": parts["rarity"],
         "art": art,
     }
     store.save_pet(pet)
-    return {"ok": True, "name": name, "id": pet["id"]}
-
-
-@router.post("/api/pet/regenerate")
-async def regenerate_pet(body: dict):
-    pet = store.load_pet()
-    if not pet or pet.get("died") or pet.get("stage") == "egg":
-        raise HTTPException(400, "no living pet to regenerate")
-
-    art = await pet_art.generate_art()
-
-    pet["art"] = art
-    store.save_pet(pet)
-    return {"ok": True, "name": pet["name"]}
+    return {"ok": True, "name": name, "id": pet["id"], "hue": parts["hue"]}
 
 
 def feed_pet(tier: str, xp_gained: int = 0):
     pet = store.load_pet()
-    if not pet or pet.get("died") or pet.get("stage") == "egg":
+    if not pet or pet.get("died") or pet.get("stage") == "coal":
         return
 
     amounts = FEED_AMOUNTS.get(tier, FEED_AMOUNTS["bronze"])
@@ -200,7 +205,12 @@ def feed_pet(tier: str, xp_gained: int = 0):
     pet["lastFed"] = _now()
     pet["totalXpEarned"] = pet.get("totalXpEarned", 0) + xp_gained
 
+    old_stage = pet.get("stage", "spark")
     new_stage = _stage_for_xp(pet["totalXpEarned"], True)
     pet["stage"] = new_stage
+
+    # Re-render on stage transition so the flame visibly grows.
+    if new_stage != old_stage and pet.get("parts"):
+        pet["art"] = pet_art.render(new_stage, pet["parts"])
 
     store.save_pet(pet)
