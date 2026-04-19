@@ -164,6 +164,21 @@ class ConceptAlias(BaseModel):
     aliases: list[ConceptId] = []
 
 
+class SrsItem(BaseModel):
+    """A retrieval prompt tracked through the Leitner spacing schedule."""
+    # Globally unique id: "{cardUid}::{promptId}"
+    id: str
+    card_uid: CardUid
+    prompt_id: str
+    prompt: str
+    answer: str
+    concept: ConceptId | None = None
+    box: int = 1              # 1..5; interval grows with box
+    due: str                  # ISO date (YYYY-MM-DD)
+    last_reviewed: str | None = None
+    lapses: int = 0
+
+
 class Note(BaseModel):
     id: str
     title: str

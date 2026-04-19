@@ -72,6 +72,12 @@ def complete_phase(body: dict):
     phases_map[phase] = True
     progress.xp += gamification.xp_for_phase(tier, progress.streak)
 
+    # On first retrieval-phase completion, register SRS items for the session.
+    if phase == "retrieval":
+        from app.routers.srs import ensure_items_for_session
+
+        ensure_items_for_session(card_uid)
+
     # Auto-complete session when all phases done.
     newly_complete = (
         _all_phases_done(phases_map) and card_uid not in progress.completed_tasks

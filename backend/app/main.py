@@ -1,6 +1,6 @@
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import progress, courses, import_, ws, pet, notes, llm
+from app.routers import progress, courses, import_, ws, pet, notes, llm, srs
 
 app = FastAPI()
 
@@ -17,6 +17,7 @@ app.include_router(import_.router)
 app.include_router(pet.router)
 app.include_router(notes.router)
 app.include_router(llm.router)
+app.include_router(srs.router)
 
 
 @app.websocket("/ws")

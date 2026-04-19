@@ -127,6 +127,21 @@ def save_pet(pet: dict):
         _write_json(_pet_path(), pet)
 
 
+def _srs_path() -> Path:
+    return settings.data_dir / "srs.json"
+
+
+def load_srs() -> dict[str, dict]:
+    """SRS items keyed by `{cardUid}::{promptId}`."""
+    with _lock:
+        return _read_json(_srs_path(), {})
+
+
+def save_srs(items: dict[str, dict]):
+    with _lock:
+        _write_json(_srs_path(), items)
+
+
 def _notes_path() -> Path:
     return settings.data_dir / "notes.json"
 

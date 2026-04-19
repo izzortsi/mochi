@@ -159,6 +159,27 @@ export interface NotesGraphData {
 
 export type ConnectionStatus = "connecting" | "connected" | "disconnected";
 
+export interface SrsItem {
+  id: string;
+  cardUid: CardUid;
+  promptId: string;
+  prompt: string;
+  answer: string;
+  concept: ConceptId | null;
+  box: number;
+  due: string;
+  lastReviewed: string | null;
+  lapses: number;
+}
+
+export interface SrsStats {
+  total: number;
+  due: number;
+  byBox: Record<string, number>;
+}
+
+export type SrsVerdict = "correct" | "wrong";
+
 export type LlmProvider = "zai" | "anthropic-oauth";
 
 export interface LlmConfig {

@@ -1,4 +1,6 @@
-import type { UserProgress, CardUid, PhaseName } from "./types";
+import type {
+  UserProgress, CardUid, PhaseName, SrsItem, SrsStats, SrsVerdict,
+} from "./types";
 
 export function camelizeKey(key: string): string {
   return key.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
@@ -64,6 +66,11 @@ export const api = {
   deleteDay: (courseId: number, dayId: number) =>
     deleteJson<{ ok: boolean }>("/api/day", { "course-id": courseId, "day-id": dayId }),
   reset: () => postJson<UserProgress>("/api/progress/reset", {}),
+  srsDue: (limit = 50) =>
+    getJson<{ items: SrsItem[]; totalDue: number }>(`/api/srs/due?limit=${limit}`),
+  srsStats: () => getJson<SrsStats>("/api/srs/stats"),
+  srsReview: (id: string, verdict: SrsVerdict) =>
+    postJson<{ ok: boolean; item: SrsItem }>("/api/srs/review", { id, verdict }),
 };
 
 export { getJson, postJson };
