@@ -97,7 +97,7 @@ async def call_openai_chat(
     temperature: float = 0.2,
     max_tokens: int = IMPORT_MAX_TOKENS,
 ) -> str:
-    async with httpx.AsyncClient(timeout=600) as client:
+    async with httpx.AsyncClient(timeout=1800) as client:
         resp = await client.post(
             "https://api.z.ai/api/coding/paas/v4/chat/completions",
             headers={
