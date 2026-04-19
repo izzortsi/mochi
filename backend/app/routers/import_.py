@@ -200,17 +200,9 @@ def _commit_extend(courses, course, data: dict):
         if day:
             tier = ic.get("tier", "bronze")
             idx = sum(1 for cd in day.cards if cd.tier == tier)
-            resolved_concepts = [resolve_concept_id(c, aliases) for c in ic.get("concepts", [])]
-            day.cards.append(
-                Card(
-                    tier=tier,
-                    task_index=idx,
-                    text=ic.get("text", ""),
-                    detail=ic.get("detail", ""),
-                    concepts=resolved_concepts,
-                    notes=ic.get("notes", []),
-                )
-            )
+            card = _build_card({**ic, "tier": tier}, idx)
+            card.concepts = [resolve_concept_id(c, aliases) for c in card.concepts]
+            day.cards.append(card)
 
     store.save_courses(courses)
     _commit_notes(data.get("newNotes", []))
@@ -220,19 +212,75 @@ def _build_days(raw_days: list[dict]) -> list[Day]:
     return [_build_day(d) for d in raw_days]
 
 
-def _build_day(d: dict) -> Day:
-    cards = []
-    for c in d.get("cards", []):
-        cards.append(
-            Card(
-                tier=c.get("tier", "bronze"),
-                task_index=len(cards),
-                text=c.get("text", ""),
-                detail=c.get("detail", ""),
-                concepts=c.get("concepts", []),
-                notes=c.get("notes", []),
+def _build_card(c: dict, task_index: int) -> Card:
+    phases_raw = c.get("phases") or {}
+    phases_model = _build_phases(phases_raw)
+    # Keep legacy text/detail in sync with core for back-compat rendering.
+    legacy_text = c.get("text", "") or phases_model.core.problem
+    legacy_detail = c.get("detail", "") or phases_model.core.exposition
+    return Card(
+        tier=c.get("tier", "bronze"),
+        task_index=task_index,
+        text=legacy_text,
+        detail=legacy_detail,
+        concepts=c.get("concepts", []),
+        notes=c.get("notes", []),
+        phases=phases_model,
+    )
+
+
+def _build_phases(phases: dict):
+    from app.models import (
+        SessionPhases, PrimePhase, CorePhase, RetrievalPhase, RetrievalPrompt,
+        ElaboratePhase, ElaboratePrompt, CheckPhase,
+    )
+    prime_raw = phases.get("prime") or {}
+    core_raw = phases.get("core") or {}
+    retrieval_raw = phases.get("retrieval") or {}
+    elaborate_raw = phases.get("elaborate") or {}
+    check_raw = phases.get("check") or {}
+
+    retrieval_prompts = []
+    for i, rp in enumerate(retrieval_raw.get("prompts", [])):
+        retrieval_prompts.append(
+            RetrievalPrompt(
+                id=rp.get("id") or f"r{i+1}",
+                prompt=rp.get("prompt", ""),
+                answer=rp.get("answer", ""),
+                concept=rp.get("concept"),
             )
         )
+    elaborate_prompts = []
+    for i, ep in enumerate(elaborate_raw.get("prompts", [])):
+        elaborate_prompts.append(
+            ElaboratePrompt(
+                id=ep.get("id") or f"e{i+1}",
+                prompt=ep.get("prompt", ""),
+            )
+        )
+    return SessionPhases(
+        prime=PrimePhase(
+            goal=prime_raw.get("goal", ""),
+            prior_knowledge=prime_raw.get("priorKnowledge")
+            or prime_raw.get("prior_knowledge", ""),
+        ),
+        core=CorePhase(
+            exposition=core_raw.get("exposition", ""),
+            worked_example=core_raw.get("workedExample")
+            or core_raw.get("worked_example", ""),
+            problem=core_raw.get("problem", ""),
+        ),
+        retrieval=RetrievalPhase(prompts=retrieval_prompts),
+        elaborate=ElaboratePhase(prompts=elaborate_prompts),
+        check=CheckPhase(
+            prompt=check_raw.get("prompt", ""),
+            rubric=check_raw.get("rubric", ""),
+        ),
+    )
+
+
+def _build_day(d: dict) -> Day:
+    cards = [_build_card(c, i) for i, c in enumerate(d.get("cards", []))]
     return Day(
         id=d.get("id", 0),
         phase=d.get("phase", 1),

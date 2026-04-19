@@ -1,4 +1,4 @@
-import type { UserProgress, CardUid } from "./types";
+import type { UserProgress, CardUid, PhaseName } from "./types";
 
 export function camelizeKey(key: string): string {
   return key.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
@@ -53,6 +53,10 @@ export const api = {
     postJson<UserProgress>("/api/progress/complete", { "card-uid": cardUid }),
   uncomplete: (cardUid: CardUid) =>
     postJson<UserProgress>("/api/progress/uncomplete", { "card-uid": cardUid }),
+  completePhase: (cardUid: CardUid, phase: PhaseName) =>
+    postJson<UserProgress>("/api/progress/complete-phase", { "card-uid": cardUid, phase }),
+  uncompletePhase: (cardUid: CardUid, phase: PhaseName) =>
+    postJson<UserProgress>("/api/progress/uncomplete-phase", { "card-uid": cardUid, phase }),
   deleteCard: (cardUid: CardUid) =>
     deleteJson<{ ok: boolean }>("/api/card", { "card-uid": cardUid }),
   deleteCourse: (courseId: number) =>

@@ -9,13 +9,62 @@ ConceptId = str
 MasteryState = str
 
 
+class PrimePhase(BaseModel):
+    goal: str = ""
+    prior_knowledge: str = ""
+
+
+class CorePhase(BaseModel):
+    exposition: str = ""
+    worked_example: str = ""
+    problem: str = ""
+
+
+class RetrievalPrompt(BaseModel):
+    id: str
+    prompt: str
+    answer: str = ""
+    concept: ConceptId | None = None
+
+
+class RetrievalPhase(BaseModel):
+    prompts: list[RetrievalPrompt] = []
+
+
+class ElaboratePrompt(BaseModel):
+    id: str
+    prompt: str
+
+
+class ElaboratePhase(BaseModel):
+    prompts: list[ElaboratePrompt] = []
+
+
+class CheckPhase(BaseModel):
+    prompt: str = ""
+    rubric: str = ""
+
+
+class SessionPhases(BaseModel):
+    prime: PrimePhase = PrimePhase()
+    core: CorePhase = CorePhase()
+    retrieval: RetrievalPhase = RetrievalPhase()
+    elaborate: ElaboratePhase = ElaboratePhase()
+    check: CheckPhase = CheckPhase()
+
+
+PHASE_NAMES: tuple[str, ...] = ("prime", "core", "retrieval", "elaborate", "check")
+
+
 class Card(BaseModel):
     tier: Tier
     task_index: int
-    text: str
-    detail: str
+    # Legacy fields — mirrored to/from phases.core for back-compat.
+    text: str = ""
+    detail: str = ""
     concepts: list[ConceptId] = []
     notes: list[str] = []
+    phases: SessionPhases = SessionPhases()
 
 
 class Day(BaseModel):
@@ -54,6 +103,8 @@ class Progress(BaseModel):
     best_streak: int = 0
     last_completed: str | None = None
     completed_tasks: dict[CardUid, bool] = {}
+    # Per-phase completion: sessionUid -> { prime: bool, core: bool, ... }
+    completed_phases: dict[CardUid, dict[str, bool]] = {}
     day_tiers: dict[str, DayTier] = {}
     generated_tasks: list[dict] = []
     attempts: list[dict] = []

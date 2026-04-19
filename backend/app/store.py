@@ -32,9 +32,33 @@ def _chat_path() -> Path:
     return settings.data_dir / "chat.json"
 
 
+def _migrate_card(raw: dict) -> dict:
+    """Backfill phases.core from legacy text/detail when phases are empty."""
+    phases = raw.get("phases")
+    text = raw.get("text", "")
+    detail = raw.get("detail", "")
+    needs_backfill = (
+        not phases
+        or not phases.get("core")
+        or (not phases["core"].get("problem") and not phases["core"].get("exposition"))
+    )
+    if needs_backfill and (text or detail):
+        raw.setdefault("phases", {})
+        core = raw["phases"].setdefault("core", {})
+        if not core.get("problem"):
+            core["problem"] = text
+        if not core.get("exposition"):
+            core["exposition"] = detail
+    return raw
+
+
 def load_courses() -> list[CourseDef]:
     with _lock:
         raw = _read_json(_courses_path(), [])
+    for c in raw:
+        for d in c.get("days", []):
+            for card in d.get("cards", []):
+                _migrate_card(card)
     return [CourseDef(**c) for c in raw]
 
 

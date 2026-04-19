@@ -80,6 +80,8 @@ def get_course(id: int = Query(...)):
                         "text": card.text,
                         "detail": card.detail,
                         "concepts": card.concepts,
+                        "notes": card.notes,
+                        "phases": card.phases.model_dump(),
                     }
                     for card in d.cards
                 ],

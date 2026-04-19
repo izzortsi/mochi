@@ -9,6 +9,32 @@ export interface TaskItem {
   detail: string;
 }
 
+export type PhaseName = "prime" | "core" | "retrieval" | "elaborate" | "check";
+
+export const PHASE_NAMES: PhaseName[] = [
+  "prime", "core", "retrieval", "elaborate", "check",
+];
+
+export interface RetrievalPrompt {
+  id: string;
+  prompt: string;
+  answer: string;
+  concept: ConceptId | null;
+}
+
+export interface ElaboratePrompt {
+  id: string;
+  prompt: string;
+}
+
+export interface SessionPhases {
+  prime: { goal: string; priorKnowledge: string };
+  core: { exposition: string; workedExample: string; problem: string };
+  retrieval: { prompts: RetrievalPrompt[] };
+  elaborate: { prompts: ElaboratePrompt[] };
+  check: { prompt: string; rubric: string };
+}
+
 export interface CardView {
   cardUid: CardUid;
   tier: Tier;
@@ -17,6 +43,7 @@ export interface CardView {
   detail: string;
   concepts: ConceptId[];
   notes: string[];
+  phases: SessionPhases;
 }
 
 export interface DayView {
@@ -55,6 +82,7 @@ export interface UserProgress {
   bestStreak: number;
   lastCompleted: string | null;
   completedTasks: Record<CardUid, boolean> | null;
+  completedPhases: Record<CardUid, Record<PhaseName, boolean>> | null;
   dayTiers: Record<string, DayTier> | null;
 }
 

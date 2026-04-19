@@ -4,9 +4,9 @@ import { useParams, useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { api } from "@/lib/api";
 import { ontology } from "@/lib/ontology";
-import type { Course, UserProgress, Tier, DayView, CardUid } from "@/lib/types";
+import type { Course, UserProgress, Tier, DayView, CardUid, PhaseName } from "@/lib/types";
 import { MathText } from "@/components/MathText";
-import { TaskCard } from "@/components/TaskCard";
+import { SessionCard } from "@/components/SessionCard";
 import { StudyChat } from "@/components/StudyChat";
 
 const TIER_COLORS: Record<Tier, string> = {
@@ -32,9 +32,9 @@ export default function DayDetail() {
 
   useEffect(refresh, [refresh]);
 
-  const toggle = async (cardUid: CardUid, current: boolean) => {
-    if (current) await api.uncomplete(cardUid);
-    else await api.complete(cardUid);
+  const togglePhase = async (cardUid: CardUid, phase: PhaseName, next: boolean) => {
+    if (next) await api.completePhase(cardUid, phase);
+    else await api.uncompletePhase(cardUid, phase);
     refresh();
   };
 
@@ -45,7 +45,7 @@ export default function DayDetail() {
 
   if (!course || !day || !progress) return <div className="opacity-50">loading…</div>;
 
-  const completed = progress.completedTasks ?? {};
+  const completedPhases = progress.completedPhases ?? {};
   const dayCards = day.cards ?? [];
   const cardsByTier: Record<Tier, typeof dayCards> = { bronze: [], silver: [], gold: [] };
   for (const c of dayCards) cardsByTier[c.tier].push(c);
@@ -79,15 +79,14 @@ export default function DayDetail() {
           </h2>
           <div className="space-y-3">
             {cardsByTier[tier].map(card => (
-              <TaskCard
+              <SessionCard
                 key={card.cardUid}
                 cardUid={card.cardUid}
-                text={card.text}
-                detail={card.detail}
                 concepts={card.concepts}
                 notes={card.notes ?? []}
-                completed={!!completed[card.cardUid]}
-                onToggle={(next) => toggle(card.cardUid, !next)}
+                phases={card.phases}
+                completedPhases={completedPhases[card.cardUid] ?? {}}
+                onTogglePhase={(phase, next) => togglePhase(card.cardUid, phase, next)}
                 onDelete={handleDelete}
               />
             ))}
