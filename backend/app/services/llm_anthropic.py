@@ -52,7 +52,7 @@ def _merge_consecutive(messages: list[dict]) -> list[dict]:
     return merged
 
 
-def chat(model: str, messages: list[dict], max_tokens: int = 32000) -> str:
+def chat(model: str, messages: list[dict], max_tokens: int = 64000) -> str:
     client = _get_client()
     system, rest = _split_system(messages)
     rest = _merge_consecutive(rest)
@@ -75,7 +75,7 @@ def call_single_turn(
     model: str,
     system_prompt: str,
     user_content: str,
-    max_tokens: int = 32000,
+    max_tokens: int = 64000,
 ) -> str:
     messages = [
         {"role": "system", "content": system_prompt},

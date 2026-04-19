@@ -105,10 +105,17 @@ async def auto_import(body: dict):
     try:
         raw = await llm.call_llm(provider, api_key, model, system_prompt, user_content)
         parsed = llm.parse_json_response(raw)
+        if parsed.get("_truncated"):
+            print(
+                f"[import] LLM output truncated and repaired; "
+                f"result may be incomplete (raw len={len(raw)})"
+            )
     except RuntimeError as e:
         raise HTTPException(503, str(e))
     except Exception as e:
-        raise HTTPException(502, f"LLM failed: {type(e).__name__}: {e}")
+        raise HTTPException(
+            502, f"LLM failed: {type(e).__name__}: {e} (raw_len={len(locals().get('raw', '') or '')})"
+        )
 
     if mode == "extend":
         _commit_extend(courses, course, parsed)
@@ -118,6 +125,7 @@ async def auto_import(body: dict):
     return {
         "ok": True,
         "course-id": target_id if mode == "extend" else parsed.get("_course_id", 1),
+        "truncated": bool(parsed.get("_truncated")),
     }
 
 
