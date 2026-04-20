@@ -112,6 +112,13 @@ def _migrate_pet(pet: dict) -> dict:
     return pet
 
 
+# Hours for a fully-fed pet to fully decay without any feeding.
+# Roughly 3× gentler than the initial settings so the pet can survive a few
+# days off study without dying.
+HEALTH_DECAY_HOURS = 504    # 3 weeks → ~4.8% HP / day
+HAPPINESS_DECAY_HOURS = 360  # 2 weeks → ~6.7% happiness / day
+
+
 def _decay_pet(pet: dict) -> dict:
     pet = _migrate_pet(pet)
     if pet.get("died") or pet.get("stage") == "coal":
@@ -122,8 +129,8 @@ def _decay_pet(pet: dict) -> dict:
     except (ValueError, TypeError):
         dt = datetime.now(timezone.utc)
     hours = (datetime.now(timezone.utc) - dt).total_seconds() / 3600
-    pet["health"] = max(0.0, pet.get("health", 100) - (hours / 168) * 100)
-    pet["happiness"] = max(0.0, pet.get("happiness", 100) - (hours / 120) * 100)
+    pet["health"] = max(0.0, pet.get("health", 100) - (hours / HEALTH_DECAY_HOURS) * 100)
+    pet["happiness"] = max(0.0, pet.get("happiness", 100) - (hours / HAPPINESS_DECAY_HOURS) * 100)
     if pet["health"] <= 0 and not pet.get("died"):
         pet["died"] = _now()
         # Dead art is rendered inline by the frame builders (smoke)
