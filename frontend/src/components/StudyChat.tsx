@@ -246,7 +246,7 @@ export function StudyChat({ course, day, progress, onProgressChanged }: Props) {
   };
 
   return (
-    <div className="fixed right-4 bottom-4 top-20 w-96 flex flex-col rounded-xl border border-[#2a2a2a] bg-[#000000]/95 backdrop-blur">
+    <div className="fixed right-4 bottom-4 top-[140px] w-96 flex flex-col rounded-xl border border-[#2a2a2a] bg-[#000000]/95 backdrop-blur">
       <div className="px-4 py-2 border-b border-[#1a1a1a] flex items-center justify-between gap-2">
         <span className="font-display">Tutor</span>
         <div className="flex items-center gap-3">
