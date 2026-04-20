@@ -7,6 +7,7 @@ import { validateAndEncode, type ToolName } from "@/lib/tools";
 import { WsClient } from "@/lib/ws";
 import type { ChatMessage, ConnectionStatus, Course, DayView, UserProgress } from "@/lib/types";
 import { MathText } from "./MathText";
+import { MarkdownContent } from "./MarkdownContent";
 
 function summarizeToolError(raw: string): string {
   // Zod errors come through as JSON-encoded arrays; pluck the missing field names.
@@ -176,14 +177,25 @@ export function StudyChat({ course, day, progress, onProgressChanged }: Props) {
         <span className="font-display">Tutor</span>
         <span className="text-xs opacity-50">{status}</span>
       </div>
-      <div className="flex-1 overflow-y-auto px-4 py-2 space-y-3">
+      <div className="flex-1 overflow-y-auto px-3 py-2 space-y-3">
         {messages.map((m, i) => (
-          <div
-            key={i}
-            className={`text-sm ${m.role === "user" ? "text-paper" : m.role === "assistant" ? "opacity-80" : "opacity-50 font-mono text-xs"}`}
-          >
-            <div className="text-xs opacity-40 mb-1">{m.role}</div>
-            <MathText>{m.content}</MathText>
+          <div key={i} className="text-sm">
+            <div className="text-[10px] uppercase tracking-wider font-mono opacity-40 mb-1">
+              {m.role}
+            </div>
+            {m.role === "assistant" ? (
+              <div className="text-neutral-200">
+                <MarkdownContent content={m.content} compact />
+              </div>
+            ) : m.role === "tool" ? (
+              <pre className="font-mono text-xs opacity-60 whitespace-pre-wrap break-words m-0">
+                {m.content}
+              </pre>
+            ) : (
+              <div className="text-neutral-100 whitespace-pre-wrap">
+                <MathText>{m.content}</MathText>
+              </div>
+            )}
           </div>
         ))}
       </div>
