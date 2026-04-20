@@ -1,10 +1,14 @@
 "use client";
 import { useState } from "react";
-import { ChevronDown, Check, Trash2 } from "lucide-react";
+import { ChevronDown, Check, Trash2, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { MathText } from "./MathText";
-import type { CardUid, ConceptId, SessionPhases, PhaseName } from "@/lib/types";
+import type {
+  CardUid, ConceptId, SessionPhases, PhaseName, EvalResult, EvalKind,
+} from "@/lib/types";
 import { PHASE_NAMES } from "@/lib/types";
+import { evalAttempt } from "@/lib/llm";
+import { loadConfig, isConfigured } from "@/lib/settings";
 
 interface Props {
   cardUid: CardUid;
@@ -193,10 +197,8 @@ function PhaseContent({ phase, phases }: { phase: PhaseName; phases: SessionPhas
     const prompts = phases.elaborate.prompts;
     if (!prompts.length) return <Empty />;
     return (
-      <ol className="space-y-2 list-decimal list-inside">
-        {prompts.map((p) => (
-          <li key={p.id}><MathText>{p.prompt}</MathText></li>
-        ))}
+      <ol className="space-y-3 list-decimal list-inside">
+        {prompts.map((p) => <ElaborateItem key={p.id} prompt={p} />)}
       </ol>
     );
   }
@@ -226,22 +228,28 @@ function Empty() {
 function RetrievalItem({
   prompt,
 }: {
-  prompt: { id: string; prompt: string; answer: string };
+  prompt: { id: string; prompt: string; answer: string; concept?: string | null };
 }) {
   const [show, setShow] = useState(false);
   return (
     <li>
       <MathText>{prompt.prompt}</MathText>
+      <AttemptBox
+        kind="retrieval"
+        prompt={prompt.prompt}
+        answer={prompt.answer}
+        concept={prompt.concept ?? null}
+      />
       {prompt.answer && (
         <div className="mt-1">
           <button
             onClick={() => setShow((s) => !s)}
-            className="text-xs opacity-50 hover:opacity-100 flex items-center gap-1"
+            className="text-[11px] opacity-40 hover:opacity-100 flex items-center gap-1 font-mono uppercase tracking-wider"
           >
             <ChevronDown
               className={`w-3 h-3 transition-transform ${show ? "rotate-180" : ""}`}
             />
-            {show ? "hide answer" : "reveal answer"}
+            {show ? "hide answer" : "reveal"}
           </button>
           {show && (
             <div className="mt-1 p-2 border border-[#1f1f1f] bg-[#050505] font-mono text-xs">
@@ -251,5 +259,126 @@ function RetrievalItem({
         </div>
       )}
     </li>
+  );
+}
+
+function ElaborateItem({
+  prompt,
+}: {
+  prompt: { id: string; prompt: string };
+}) {
+  return (
+    <li>
+      <MathText>{prompt.prompt}</MathText>
+      <AttemptBox kind="elaborate" prompt={prompt.prompt} />
+    </li>
+  );
+}
+
+const RETRIEVAL_VERDICT_STYLE: Record<string, string> = {
+  correct: "border-green-800/60 text-green-300",
+  partial: "border-amber-800/60 text-amber-300",
+  wrong: "border-red-800/60 text-red-300",
+};
+
+const ELABORATE_VERDICT_STYLE: Record<string, string> = {
+  strong: "border-green-800/60 text-green-300",
+  adequate: "border-amber-800/60 text-amber-300",
+  weak: "border-red-800/60 text-red-300",
+};
+
+function AttemptBox({
+  kind,
+  prompt,
+  answer,
+  concept,
+}: {
+  kind: EvalKind;
+  prompt: string;
+  answer?: string;
+  concept?: string | null;
+}) {
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [result, setResult] = useState<EvalResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const submit = async () => {
+    if (!text.trim() || busy) return;
+    const config = loadConfig();
+    if (!isConfigured(config)) {
+      setError("Configure your LLM provider in Settings first.");
+      return;
+    }
+    setBusy(true);
+    setError(null);
+    try {
+      const r = await evalAttempt(config, {
+        kind,
+        prompt,
+        attempt: text,
+        answer,
+        concept: concept ?? undefined,
+      });
+      setResult(r);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const styleMap =
+    kind === "retrieval" ? RETRIEVAL_VERDICT_STYLE : ELABORATE_VERDICT_STYLE;
+
+  return (
+    <div className="mt-1.5">
+      <textarea
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder={kind === "retrieval" ? "your answer…" : "explain in your own words…"}
+        rows={kind === "retrieval" ? 2 : 3}
+        className="w-full bg-[#050505] border border-[#1f1f1f] focus:border-[#404040] outline-none p-1.5 text-xs font-mono resize-y placeholder:opacity-30"
+      />
+      <div className="mt-1 flex items-center gap-2">
+        <button
+          onClick={submit}
+          disabled={busy || !text.trim()}
+          className="inline-flex items-center gap-1 text-[10px] uppercase tracking-wider font-mono px-2 py-1 border border-neutral-700 hover:border-neutral-500 hover:bg-[#141414] disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          <Sparkles className="w-3 h-3" />
+          {busy ? "evaluating…" : "submit for eval"}
+        </button>
+        {result && (
+          <button
+            onClick={() => {
+              setResult(null);
+              setError(null);
+              setText("");
+            }}
+            className="text-[10px] uppercase tracking-wider font-mono opacity-50 hover:opacity-100"
+          >
+            clear
+          </button>
+        )}
+      </div>
+      {error && (
+        <div className="mt-1 text-[11px] text-red-400 font-mono">{error}</div>
+      )}
+      {result && (
+        <div
+          className={`mt-1.5 border p-2 text-xs ${
+            styleMap[result.verdict] ?? "border-[#2a2a2a] text-neutral-300"
+          }`}
+        >
+          <div className="text-[10px] uppercase tracking-wider font-mono opacity-70 mb-0.5">
+            {result.verdict}
+          </div>
+          <div className="text-neutral-200">
+            <MathText>{result.feedback}</MathText>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

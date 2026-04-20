@@ -88,6 +88,30 @@ IMPORTANT for concept IDs: use singular form (e.g. "autovalor" not "autovalores"
 
 
 IMPORT_MAX_TOKENS = 64000
+EVAL_MAX_TOKENS = 1000
+
+
+RETRIEVAL_EVAL_PROMPT = """You grade a student's retrieval-practice attempt.
+
+Input: the prompt, the canonical answer, and the student's attempt.
+Judge whether the attempt matches the canonical answer in meaning, not wording.
+Give partial credit when the key idea is present but details are missing or
+imprecise. Mark "wrong" only when the attempt is mistaken or empty.
+
+Return ONLY this JSON (no prose, no markdown fences):
+{"verdict": "correct" | "partial" | "wrong",
+ "feedback": "one or two sentences: what they got right, what is missing"}"""
+
+
+ELABORATE_EVAL_PROMPT = """You evaluate a student's explanation of a concept.
+
+There is no single correct answer. Judge whether the explanation is coherent,
+accurate, and demonstrates understanding. Flag factual errors and important
+missing pieces.
+
+Return ONLY this JSON (no prose, no markdown fences):
+{"verdict": "strong" | "adequate" | "weak",
+ "feedback": "two or three sentences: strengths first, then what to sharpen"}"""
 
 
 async def call_openai_chat(

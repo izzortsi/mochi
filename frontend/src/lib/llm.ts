@@ -1,4 +1,4 @@
-import type { LlmConfig, ChatMessage } from "./types";
+import type { LlmConfig, ChatMessage, EvalKind, EvalResult } from "./types";
 import type { ToolName } from "./tools";
 
 export const STUDY_TUTOR_SYSTEM_PROMPT = `
@@ -141,4 +141,39 @@ export async function runLlmTurn(
   const stripped = content.replace(toolRegex, "").trim();
 
   return { text: stripped, toolCalls };
+}
+
+
+export interface EvalRequest {
+  kind: EvalKind;
+  prompt: string;
+  attempt: string;
+  answer?: string;   // canonical answer, for retrieval
+  concept?: string;  // optional concept tag, for elaborate
+}
+
+export async function evalAttempt(
+  config: LlmConfig,
+  req: EvalRequest,
+): Promise<EvalResult> {
+  const body: Record<string, unknown> = {
+    kind: req.kind,
+    prompt: req.prompt,
+    attempt: req.attempt,
+    provider: config.provider,
+    model: config.model,
+  };
+  if (req.answer) body.answer = req.answer;
+  if (req.concept) body.concept = req.concept;
+  if (config.provider === "zai") body["api-key"] = config.apiKey;
+
+  const res = await fetch("/api/llm/eval", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    throw new Error(`eval failed ${res.status}: ${(await res.text()).slice(0, 300)}`);
+  }
+  return (await res.json()) as EvalResult;
 }

@@ -180,6 +180,13 @@ export interface SrsStats {
 
 export type SrsVerdict = "correct" | "wrong";
 
+export type EvalKind = "retrieval" | "elaborate";
+
+export interface EvalResult {
+  verdict: string; // "correct"|"partial"|"wrong" for retrieval; "strong"|"adequate"|"weak" for elaborate
+  feedback: string;
+}
+
 export type LlmProvider = "zai" | "anthropic-oauth";
 
 export interface LlmConfig {
