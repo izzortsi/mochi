@@ -3,6 +3,30 @@ import { useEffect, useState } from "react";
 import { ontology } from "@/lib/ontology";
 import type { NotesGraphData, NoteSummary } from "@/lib/types";
 import { NotesGraph } from "@/components/NotesGraph";
+import { Tutor } from "@/components/Tutor";
+
+const NOTES_SCOPE_COURSE_ID = 0;
+
+function buildNotesListContext(
+  notes: NoteSummary[],
+  domains: string[],
+  filter: string,
+): string {
+  const lines = [
+    "# CURRENT PAGE",
+    "View: Knowledge base (notes list)",
+    `Total notes: ${notes.length}`,
+    `Domains: ${domains.join(", ") || "(none)"}`,
+    filter ? `Active domain filter: ${filter}` : "Active domain filter: (none)",
+    "",
+    "Recent notes:",
+    ...notes.slice(0, 30).map(n => {
+      const tagStr = n.tags.length ? ` [${n.tags.join(", ")}]` : "";
+      return `- ${n.id}: ${n.title} (${n.domain || "no domain"})${tagStr}`;
+    }),
+  ];
+  return lines.join("\n");
+}
 
 function truncate(s: string, len = 120): string {
   const flat = s.replace(/\n+/g, " ").replace(/\$\$?/g, "").trim();
@@ -50,8 +74,10 @@ export default function NotesPage() {
 
   if (error && !graphData) return <div className="opacity-50">{error}</div>;
 
+  const pageContext = buildNotesListContext(notes, domains, filter);
+
   return (
-    <div>
+    <div className="pr-[26rem]">
       <h1 className="font-display text-3xl mb-2">Knowledge Base</h1>
       <p className="text-sm opacity-60 mb-4">Atomic notes extracted from your courses. Click a node to read.</p>
 
@@ -113,6 +139,13 @@ export default function NotesPage() {
           ))}
         </div>
       )}
+
+      <Tutor
+        courseId={NOTES_SCOPE_COURSE_ID}
+        pageContext={pageContext}
+        title="Knowledge base"
+        placeholder="Ask about a note, search for a concept, or request a connection…"
+      />
     </div>
   );
 }

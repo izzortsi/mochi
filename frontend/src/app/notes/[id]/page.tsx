@@ -6,6 +6,33 @@ import { ChevronLeft } from "lucide-react";
 import { ontology } from "@/lib/ontology";
 import type { NoteDetail } from "@/lib/types";
 import { MarkdownContent } from "@/components/MarkdownContent";
+import { Tutor } from "@/components/Tutor";
+
+const NOTES_SCOPE_COURSE_ID = 0;
+
+function buildNoteContext(note: NoteDetail): string {
+  const lines = [
+    "# CURRENT PAGE",
+    "View: Note detail",
+    `Note id: ${note.id}`,
+    `Title: ${note.title}`,
+    note.domain ? `Domain: ${note.domain}` : null,
+    note.tags.length ? `Tags: ${note.tags.join(", ")}` : null,
+    note.source ? `Source: ${note.source}` : null,
+    "",
+    "Content:",
+    note.content,
+  ].filter(Boolean) as string[];
+
+  if (note.related.length) {
+    lines.push("");
+    lines.push("Related notes:");
+    for (const r of note.related) {
+      lines.push(`- ${r.id}: ${r.title}${r.domain ? ` (${r.domain})` : ""}`);
+    }
+  }
+  return lines.join("\n");
+}
 
 export default function NotePage() {
   const params = useParams<{ id: string }>();
@@ -18,8 +45,10 @@ export default function NotePage() {
 
   if (!note) return <div className="opacity-50">loading…</div>;
 
+  const pageContext = buildNoteContext(note);
+
   return (
-    <div className="max-w-3xl">
+    <div className="pr-[26rem]">
       <Link href="/notes" className="text-xs opacity-50 hover:opacity-100 flex items-center gap-1">
         <ChevronLeft className="w-3 h-3" /> knowledge base
       </Link>
@@ -61,6 +90,13 @@ export default function NotePage() {
       {note.source && (
         <div className="mt-6 text-xs opacity-40">Source: {note.source}</div>
       )}
+
+      <Tutor
+        courseId={NOTES_SCOPE_COURSE_ID}
+        pageContext={pageContext}
+        title={`Notes · ${note.title.slice(0, 30)}${note.title.length > 30 ? "…" : ""}`}
+        placeholder="Ask about this note, request a clarification, or connect to another concept…"
+      />
     </div>
   );
 }

@@ -114,34 +114,45 @@ export default function MemoryPage() {
         )}
         <div className="space-y-4">
           {threads.map((t) => {
+            const isNotesScope = t.courseId === 0;
             const course = courseById[t.courseId];
+            const label = isNotesScope ? "notes" : `course ${t.courseId}`;
+            const openHref = isNotesScope ? "/notes" : `/course/${t.courseId}`;
+            const titleNode = isNotesScope ? (
+              <Link
+                href="/notes"
+                className="text-sm font-display truncate hover:underline decoration-neutral-600 text-neutral-100"
+              >
+                Knowledge base
+              </Link>
+            ) : course ? (
+              <Link
+                href={`/course/${t.courseId}`}
+                className="text-sm font-display truncate hover:underline decoration-neutral-600 text-neutral-100"
+              >
+                {course.title}
+              </Link>
+            ) : (
+              <span className="text-sm font-mono opacity-40 italic truncate">
+                course deleted
+              </span>
+            );
             return (
               <div key={t.courseId} className="border border-[#1a1a1a] bg-[#0c0c0c]">
                 <div className="flex items-center justify-between gap-3 px-3 py-2 border-b border-[#1a1a1a]">
                   <div className="flex items-baseline gap-2 min-w-0">
                     <span className="text-[10px] uppercase tracking-wider font-mono opacity-50 flex-shrink-0">
-                      course {t.courseId}
+                      {label}
                     </span>
-                    {course ? (
-                      <Link
-                        href={`/course/${t.courseId}`}
-                        className="text-sm font-display truncate hover:underline decoration-neutral-600 text-neutral-100"
-                      >
-                        {course.title}
-                      </Link>
-                    ) : (
-                      <span className="text-sm font-mono opacity-40 italic truncate">
-                        course deleted
-                      </span>
-                    )}
+                    {titleNode}
                     <span className="text-[10px] font-mono opacity-40 flex-shrink-0">
                       · {t.messages.length} turn{t.messages.length === 1 ? "" : "s"}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 flex-shrink-0">
-                    {course && (
+                    {(course || isNotesScope) && (
                       <Link
-                        href={`/course/${t.courseId}`}
+                        href={openHref}
                         className="text-[10px] uppercase tracking-wider font-mono opacity-50 hover:opacity-100 flex items-center gap-1"
                       >
                         open <ExternalLink className="w-3 h-3" />
