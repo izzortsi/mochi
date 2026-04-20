@@ -20,7 +20,7 @@ export function Header() {
   return (
     <header className="border-b border-[#1a1a1a] sticky top-0 bg-black/95 backdrop-blur z-40">
       <div className="max-w-6xl mx-auto px-4 py-2 flex items-center gap-6">
-        <Link href="/" className="font-display text-lg text-neutral-100">study plan</Link>
+        <Link href="/intro" className="font-display text-lg text-neutral-100" title="intro">study plan</Link>
         <nav className="flex items-center gap-4 text-xs uppercase tracking-wider font-mono opacity-70">
           <Link href="/review" className="hover:opacity-100 hover:text-neutral-100">review</Link>
           <Link href="/memory" className="hover:opacity-100 hover:text-neutral-100">memory</Link>
