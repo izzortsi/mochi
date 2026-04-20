@@ -40,12 +40,29 @@ COAL_ART = {
     "dead": [],
 }
 
-# Mood is stage-independent; feeding amounts unchanged
+# Feed amounts paid when a full session finishes (all 5 phases done).
 FEED_AMOUNTS = {
     "bronze": {"health": 3, "happiness": 2},
     "silver": {"health": 6, "happiness": 4},
     "gold": {"health": 10, "happiness": 8},
     "gold_bonus": {"health": 15, "happiness": 10},
+}
+
+# Small trickle paid on each session-phase (prime/core/retrieval/elaborate/check)
+# completion, scaled by the session's tier. Keeps the pet nibbled throughout
+# study rather than starving between session completions.
+PHASE_FEED_AMOUNTS = {
+    "bronze": {"health": 0.6, "happiness": 0.5},
+    "silver": {"health": 1.2, "happiness": 1.0},
+    "gold":   {"health": 2.0, "happiness": 1.8},
+}
+
+# Bonus paid when an entire tier (all sessions of that tier on a day) finishes.
+# Gold is the day-complete moment and also pays gold_bonus on top in the router.
+TIER_COMPLETE_FEED = {
+    "bronze": {"health": 4, "happiness": 3},
+    "silver": {"health": 8, "happiness": 6},
+    "gold":   {"health": 12, "happiness": 10},
 }
 
 # New ember stages
@@ -192,6 +209,44 @@ async def hatch_pet(body: dict):
     }
     store.save_pet(pet)
     return {"ok": True, "name": name, "id": pet["id"], "hue": parts["hue"]}
+
+
+def _apply_feed(pet: dict, amounts: dict, xp_gained: int = 0) -> dict:
+    """Bump health + happiness, update lastFed/XP, advance stage. Mutates + returns."""
+    pet["health"] = min(100, pet.get("health", 100) + amounts["health"])
+    pet["happiness"] = min(100, pet.get("happiness", 100) + amounts["happiness"])
+    pet["lastFed"] = _now()
+    if xp_gained:
+        pet["totalXpEarned"] = pet.get("totalXpEarned", 0) + xp_gained
+
+    old_stage = pet.get("stage", "spark")
+    new_stage = _stage_for_xp(pet.get("totalXpEarned", 0), True)
+    pet["stage"] = new_stage
+    if new_stage != old_stage and pet.get("parts"):
+        pet["art"] = pet_art.render(new_stage, pet["parts"])
+    return pet
+
+
+def feed_pet_phase(session_tier: str):
+    """Small per-phase trickle. No XP, no stage change gating."""
+    pet = store.load_pet()
+    if not pet or pet.get("died") or pet.get("stage") == "coal":
+        return
+    amounts = PHASE_FEED_AMOUNTS.get(session_tier, PHASE_FEED_AMOUNTS["bronze"])
+    _apply_feed(pet, amounts, xp_gained=0)
+    store.save_pet(pet)
+
+
+def feed_pet_tier_complete(day_tier: str):
+    """Bonus when a whole tier (bronze/silver/gold) on a day becomes complete."""
+    pet = store.load_pet()
+    if not pet or pet.get("died") or pet.get("stage") == "coal":
+        return
+    amounts = TIER_COMPLETE_FEED.get(day_tier)
+    if not amounts:
+        return
+    _apply_feed(pet, amounts, xp_gained=0)
+    store.save_pet(pet)
 
 
 def feed_pet(tier: str, xp_gained: int = 0):

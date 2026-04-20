@@ -27,6 +27,20 @@ def _tier_of(card_uid: str) -> str:
     return parts[2] if len(parts) >= 3 else "bronze"
 
 
+_TIER_RANK = {"none": 0, "bronze": 1, "silver": 2, "gold": 3}
+_TIER_ORDER = ["bronze", "silver", "gold"]
+
+
+def _tiers_crossed(old: str, new: str) -> list[str]:
+    """Tiers newly completed going from old to new (e.g. none→silver yields
+    ['bronze', 'silver']; silver→silver yields [])."""
+    old_r = _TIER_RANK.get(old or "none", 0)
+    new_r = _TIER_RANK.get(new or "none", 0)
+    if new_r <= old_r:
+        return []
+    return _TIER_ORDER[old_r:new_r]
+
+
 def _feed_and_recompute(
     progress: Progress, card_uid: str, reached_gold_bonus_callback: bool = True
 ) -> None:
@@ -35,14 +49,20 @@ def _feed_and_recompute(
     tier = _tier_of(card_uid)
     courses = store.load_courses()
     day_tier = _recompute_day_tier(card_uid, courses, progress.completed_tasks)
+
+    newly_cleared_tiers: list[str] = []
     if day_tier:
         for key, val in day_tier.items():
+            old_val = progress.day_tiers.get(key, "none")
+            newly_cleared_tiers.extend(_tiers_crossed(old_val, val))
             progress.day_tiers[key] = val
         gamification.update_streak(progress, list(day_tier.values())[-1] == "gold")
 
-    from app.routers.pet import feed_pet
+    from app.routers.pet import feed_pet, feed_pet_tier_complete
 
     feed_pet(tier, gamification.xp_for_card(tier, progress.streak))
+    for cleared_tier in newly_cleared_tiers:
+        feed_pet_tier_complete(cleared_tier)
     if reached_gold_bonus_callback and day_tier and list(day_tier.values())[-1] == "gold":
         feed_pet("gold_bonus", 0)
 
@@ -88,6 +108,11 @@ def complete_phase(body: dict):
         _feed_and_recompute(progress, card_uid)
         store.save_progress(progress)
     else:
+        # Per-phase trickle feed. Session-complete path below already feeds via
+        # _feed_and_recompute so don't double-feed on the phase that closes it.
+        from app.routers.pet import feed_pet_phase
+
+        feed_pet_phase(tier)
         store.save_progress(progress)
 
     return _progress_dict(progress)
