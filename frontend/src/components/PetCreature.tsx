@@ -74,15 +74,28 @@ const STAGE_XP_THRESHOLDS: Record<string, { current: number; next: number | null
 };
 
 function pickFrame(art: Record<string, string[]>, mood: string, tick: number): string[] {
-  if (mood === "dead") return art.dead?.length ? art.dead : art.idle || [];
-  if (mood === "waiting") return art.idle || [];
-  if (mood === "sleeping") return art.sleeping?.length ? art.sleeping : art.idle || [];
-  if (mood === "eating") return art.eating?.length ? art.eating : art.idle || [];
-  if (mood === "happy" || mood === "idle") {
+  let frame: string[];
+  if (mood === "dead") frame = art.dead?.length ? art.dead : art.idle || [];
+  else if (mood === "waiting") frame = art.idle || [];
+  else if (mood === "sleeping") frame = art.sleeping?.length ? art.sleeping : art.idle || [];
+  else if (mood === "eating") frame = art.eating?.length ? art.eating : art.idle || [];
+  else if (mood === "happy" || mood === "idle") {
     const frames = [art.idle, art.happy];
-    return frames[tick % 2]?.length ? frames[tick % 2] : art.idle || [];
+    frame = frames[tick % 2]?.length ? frames[tick % 2] : art.idle || [];
+  } else {
+    frame = art.idle || [];
   }
-  return art.idle || [];
+  return trimBlankLines(frame);
+}
+
+function trimBlankLines(rows: string[]): string[] {
+  // Drop leading/trailing all-whitespace rows so the pet takes as much
+  // vertical space as its actual silhouette, not the 12-row canvas.
+  let start = 0;
+  while (start < rows.length && rows[start].trim() === "") start++;
+  let end = rows.length;
+  while (end > start && rows[end - 1].trim() === "") end--;
+  return rows.slice(start, end);
 }
 
 async function fetchPet(): Promise<PetState> {
@@ -183,9 +196,9 @@ export function PetCreature() {
   const stageBorderColor = STAGE_BORDER[pet.stage] || "#6366f1";
 
   return (
-    <div className="flex items-start gap-3">
+    <div className="flex items-center gap-2">
       <motion.div
-        className="cursor-pointer select-none"
+        className="cursor-pointer select-none flex items-end"
         onClick={handleClick}
         title={pet.name || "coal"}
         animate={anim.animate}
@@ -204,14 +217,14 @@ export function PetCreature() {
           transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
           style={{ transformOrigin: "center bottom" }}
         >
-          <pre className={`${colorClass} text-[11px] leading-[12px] font-mono m-0 p-0 transition-colors duration-1000`}>
+          <pre className={`${colorClass} text-[8px] leading-[9px] font-mono m-0 p-0 transition-colors duration-1000`}>
             {frame.join("\n")}
           </pre>
         </motion.div>
       </motion.div>
 
       {!isCoal && (
-        <div className="flex flex-col gap-1 min-w-[110px] pt-1">
+        <div className="flex flex-col gap-0.5 min-w-[100px]">
           {pet.name && (
             <span
               className="text-[11px] font-semibold truncate max-w-[100px] opacity-90"
