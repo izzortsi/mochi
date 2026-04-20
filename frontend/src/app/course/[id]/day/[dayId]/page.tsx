@@ -10,7 +10,7 @@ import { SessionCard } from "@/components/SessionCard";
 import { StudyChat } from "@/components/StudyChat";
 
 const TIER_COLORS: Record<Tier, string> = {
-  bronze: "#cd7f32", silver: "#c0c0c0", gold: "#ffd700",
+  bronze: "#b8803a", silver: "#b8b8b8", gold: "#e6c200",
 };
 
 export default function DayDetail() {
@@ -55,29 +55,31 @@ export default function DayDetail() {
 
   return (
     <div className="pr-[26rem]">
-      <div className="mb-6">
-        <button onClick={() => router.push(`/course/${courseId}`)} className="text-xs opacity-50 hover:opacity-100 flex items-center gap-1">
+      <div className="mb-4">
+        <button onClick={() => router.push(`/course/${courseId}`)} className="text-[10px] uppercase tracking-wider font-mono opacity-50 hover:opacity-100 flex items-center gap-1">
           <ChevronLeft className="w-3 h-3" /> {course.title}
         </button>
-        <div className="mt-2 flex items-baseline gap-3">
-          <span className="text-5xl font-display">{day.icon}</span>
+        <div className="mt-1 flex items-baseline gap-2">
+          <span className="text-3xl font-display leading-none">{day.icon}</span>
           <div>
-            <div className="text-xs uppercase tracking-wider opacity-50">Day {day.id}</div>
-            <h1 className="font-display text-3xl">{day.title}</h1>
+            <div className="text-[10px] uppercase tracking-wider font-mono opacity-60">Day {day.id}</div>
+            <h1 className="font-display text-2xl leading-tight">{day.title}</h1>
           </div>
         </div>
-        <div className="mt-4 p-4 rounded-xl border border-[#2a2a3f] bg-[#121222]">
-          <div className="text-xs uppercase tracking-wider opacity-50 mb-1">Key Insight</div>
-          <MathText className="text-sm">{day.keyInsight}</MathText>
-        </div>
+        {day.keyInsight && (
+          <div className="mt-3 p-2 border border-[#1f1f1f] bg-[#0c0c0c]">
+            <div className="text-[10px] uppercase tracking-wider font-mono opacity-50 mb-0.5">Key Insight</div>
+            <MathText className="text-xs">{day.keyInsight}</MathText>
+          </div>
+        )}
       </div>
 
       {(["bronze", "silver", "gold"] as const).map(tier => (
-        <section key={tier} className="mb-6">
-          <h2 className="font-display text-lg mb-3" style={{ color: TIER_COLORS[tier] }}>
+        <section key={tier} className="mb-4">
+          <h2 className="font-mono text-[11px] uppercase tracking-wider mb-1.5" style={{ color: TIER_COLORS[tier] }}>
             {tier}
           </h2>
-          <div className="space-y-3">
+          <div className="space-y-1.5">
             {cardsByTier[tier].map(card => (
               <SessionCard
                 key={card.cardUid}
@@ -94,17 +96,17 @@ export default function DayDetail() {
         </section>
       ))}
 
-      <div className="flex justify-between mt-8 text-sm">
+      <div className="flex justify-between mt-6 text-xs font-mono uppercase tracking-wider">
         <button
           className="opacity-50 hover:opacity-100 disabled:invisible flex items-center gap-1"
           disabled={dayId <= minDay}
           onClick={() => router.push(`/course/${courseId}/day/${dayId - 1}`)}
-        ><ChevronLeft className="w-4 h-4" /> previous</button>
+        ><ChevronLeft className="w-3 h-3" /> prev</button>
         <button
           className="opacity-50 hover:opacity-100 disabled:invisible flex items-center gap-1"
           disabled={dayId >= maxDay}
           onClick={() => router.push(`/course/${courseId}/day/${dayId + 1}`)}
-        >next <ChevronRight className="w-4 h-4" /></button>
+        >next <ChevronRight className="w-3 h-3" /></button>
       </div>
 
       <StudyChat

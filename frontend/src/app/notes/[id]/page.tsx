@@ -31,7 +31,7 @@ export default function NotePage() {
             <span className="text-xs px-2 py-0.5 rounded-full bg-phase1/20 text-phase1">{note.domain}</span>
           )}
           {note.tags.map(t => (
-            <span key={t} className="text-xs px-2 py-0.5 rounded-full bg-[#1a1a2a] opacity-60">{t}</span>
+            <span key={t} className="text-xs px-2 py-0.5 rounded-full bg-[#1a1a1a] opacity-60">{t}</span>
           ))}
         </div>
       </div>
@@ -41,14 +41,14 @@ export default function NotePage() {
       </div>
 
       {note.related.length > 0 && (
-        <section className="mt-8 pt-6 border-t border-[#2a2a3f]">
+        <section className="mt-8 pt-6 border-t border-[#2a2a2a]">
           <h2 className="font-display text-lg opacity-70 mb-3">Related Notes</h2>
           <div className="flex flex-wrap gap-2">
             {note.related.map(r => (
               <Link
                 key={r.id}
                 href={`/notes/${encodeURIComponent(r.id)}`}
-                className="px-3 py-1.5 rounded-lg border border-[#2a2a3f] bg-[#121222] hover:border-[#3a3a4f] text-sm"
+                className="px-3 py-1.5 rounded-lg border border-[#2a2a2a] bg-[#0c0c0c] hover:border-[#404040] text-sm"
               >
                 {r.title}
                 {r.domain && <span className="ml-2 opacity-40 text-xs">{r.domain}</span>}

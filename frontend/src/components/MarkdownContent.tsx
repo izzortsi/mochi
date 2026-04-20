@@ -20,12 +20,12 @@ const components: Components = {
     const isBlock = className?.startsWith("language-");
     if (isBlock) {
       return (
-        <pre className="bg-[#0a0a14] p-3 rounded-lg my-3 overflow-x-auto font-mono text-sm">
+        <pre className="bg-[#050505] p-3 rounded-lg my-3 overflow-x-auto font-mono text-sm">
           <code>{children}</code>
         </pre>
       );
     }
-    return <code className="bg-[#1a1a2a] px-1.5 py-0.5 rounded text-sm font-mono">{children}</code>;
+    return <code className="bg-[#1a1a1a] px-1.5 py-0.5 rounded text-sm font-mono">{children}</code>;
   },
   a: ({ href, children }) => (
     <a href={href} className="text-phase1 hover:underline" target="_blank" rel="noopener noreferrer">

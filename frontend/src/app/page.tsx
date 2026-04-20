@@ -26,14 +26,14 @@ export default function CourseListPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="font-display text-3xl">Courses</h1>
-        <Link href="/import" className="inline-flex items-center gap-2 px-3 py-2 rounded bg-phase1 hover:bg-phase2">
-          <Plus className="w-4 h-4" /> import
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="font-display text-2xl">Courses</h1>
+        <Link href="/import" className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs uppercase tracking-wider font-mono border border-neutral-700 hover:border-neutral-500 hover:bg-[#141414]">
+          <Plus className="w-3 h-3" /> import
         </Link>
       </div>
-      {!courses.length && <div className="opacity-50">no courses yet. click &quot;+ import&quot; to add one.</div>}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {!courses.length && <div className="text-xs opacity-50 font-mono">no courses yet — click import to add one</div>}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
         {courses.map(c => <CourseCard key={c.id} course={c} onDelete={handleDeleteCourse} />)}
       </div>
     </div>

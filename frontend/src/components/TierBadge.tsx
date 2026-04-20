@@ -4,7 +4,7 @@ import type { DayTier } from "@/lib/types";
 
 const TIER_STYLES: Record<DayTier, { background: string; boxShadow: string; outline?: string }> = {
   none: {
-    background: "#2a2a3f",
+    background: "#2a2a2a",
     boxShadow: "none",
   },
   bronze: {
@@ -40,7 +40,7 @@ export function TierBadge({ tier, size = 16 }: { tier: DayTier; size?: number })
         boxShadow: style.boxShadow,
         outline: style.outline,
         outlineOffset: style.outline ? "2px" : undefined,
-        border: tier === "none" ? "1px solid #3a3a4f" : undefined,
+        border: tier === "none" ? "1px solid #404040" : undefined,
       }}
       aria-label={`tier ${tier}`}
     />

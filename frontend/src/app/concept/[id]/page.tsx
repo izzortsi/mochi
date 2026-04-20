@@ -7,7 +7,7 @@ import type { ConceptPageData } from "@/lib/types";
 import { MathText } from "@/components/MathText";
 
 const MASTERY_COLOR: Record<string, string> = {
-  "not-started": "#3a3a4f",
+  "not-started": "#404040",
   "learning": "#f59e0b",
   "mastered": "#22c55e",
 };
@@ -41,7 +41,7 @@ export default function ConceptPage() {
           <h2 className="font-display text-lg opacity-70 mb-2">Course {group.courseId}</h2>
           <ul className="space-y-2">
             {group.cards.map(c => (
-              <li key={c.cardUid} className="p-3 rounded border border-[#2a2a3f] bg-[#121222]">
+              <li key={c.cardUid} className="p-3 rounded border border-[#2a2a2a] bg-[#0c0c0c]">
                 <MathText>{c.text}</MathText>
               </li>
             ))}

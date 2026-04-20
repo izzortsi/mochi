@@ -222,7 +222,7 @@ export function PetCreature() {
           )}
           <div className="flex items-center gap-1">
             <span className="text-[9px] opacity-50 w-8">HP</span>
-            <div className="w-20 h-2.5 rounded-full bg-[#1a1a2a] overflow-hidden">
+            <div className="w-20 h-2.5 rounded-full bg-[#1a1a1a] overflow-hidden">
               <motion.div
                 className="h-full rounded-full"
                 style={{
@@ -237,7 +237,7 @@ export function PetCreature() {
           </div>
           <div className="flex items-center gap-1">
             <span className="text-[9px] opacity-50 w-8">Joy</span>
-            <div className="w-20 h-2.5 rounded-full bg-[#1a1a2a] overflow-hidden">
+            <div className="w-20 h-2.5 rounded-full bg-[#1a1a1a] overflow-hidden">
               <motion.div
                 className="h-full rounded-full"
                 style={{
@@ -251,7 +251,7 @@ export function PetCreature() {
           </div>
           <div className="flex items-center gap-1.5 mt-0.5">
             <motion.span
-              className="text-[9px] px-2 py-0.5 rounded bg-[#1a1a2a]"
+              className="text-[9px] px-2 py-0.5 rounded bg-[#1a1a1a]"
               style={{ borderLeft: `2px solid ${stageBorderColor}` }}
               animate={{ opacity: [0.7, 1, 0.7] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
@@ -259,7 +259,7 @@ export function PetCreature() {
               {stageLabel}
             </motion.span>
             {xpToNext != null && pet.totalXpEarned != null && (
-              <div className="w-16 h-1.5 rounded-full bg-[#1a1a2a] overflow-hidden">
+              <div className="w-16 h-1.5 rounded-full bg-[#1a1a1a] overflow-hidden">
                 <div
                   className="h-full rounded-full"
                   style={{
@@ -288,7 +288,7 @@ export function PetCreature() {
             transition={{ duration: 0.2 }}
           >
             <motion.div
-              className="bg-[#121222] border border-[#2a2a3f] rounded-xl p-6 w-80 overflow-hidden"
+              className="bg-[#0c0c0c] border border-[#2a2a2a] rounded-xl p-6 w-80 overflow-hidden"
               onClick={e => e.stopPropagation()}
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -302,7 +302,7 @@ export function PetCreature() {
               <h2 className="font-display text-xl mb-4">Hatch a new pet</h2>
               {error && <div className="mb-3 p-2 rounded bg-phase3/20 text-phase3 text-sm">{error}</div>}
               <input
-                className="w-full bg-[#0f0f1a] border border-[#2a2a3f] rounded px-3 py-2 text-sm mb-4 focus:ring-1 focus:ring-phase1/50 focus:border-phase1/50 outline-none"
+                className="w-full bg-[#000000] border border-[#2a2a2a] rounded px-3 py-2 text-sm mb-4 focus:ring-1 focus:ring-phase1/50 focus:border-phase1/50 outline-none"
                 placeholder="Name your pet (or leave blank for random)"
                 value={hatchName}
                 onChange={e => setHatchName(e.target.value)}
@@ -310,7 +310,7 @@ export function PetCreature() {
                 autoFocus
               />
               <div className="flex justify-end gap-2">
-                <button onClick={() => setShowHatch(false)} className="px-3 py-2 rounded bg-[#1a1a2a] hover:bg-[#2a2a3f] text-sm">Cancel</button>
+                <button onClick={() => setShowHatch(false)} className="px-3 py-2 rounded bg-[#1a1a1a] hover:bg-[#2a2a2a] text-sm">Cancel</button>
                 <motion.button
                   onClick={handleHatch}
                   disabled={hatching}

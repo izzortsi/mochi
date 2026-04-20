@@ -90,11 +90,11 @@ export function ImportWizard() {
             <span className="text-sm opacity-70">Mode</span>
             <div className="mt-1 flex gap-2">
               <button
-                className={`px-3 py-1 rounded border text-xs ${mode === "new" ? "border-[#f5f0e8]" : "border-[#2a2a3f] opacity-60"}`}
+                className={`px-3 py-1 rounded border text-xs ${mode === "new" ? "border-[#f5f0e8]" : "border-[#2a2a2a] opacity-60"}`}
                 onClick={() => setMode("new")}
               >New course</button>
               <button
-                className={`px-3 py-1 rounded border text-xs ${mode === "extend" ? "border-[#f5f0e8]" : "border-[#2a2a3f] opacity-60"}`}
+                className={`px-3 py-1 rounded border text-xs ${mode === "extend" ? "border-[#f5f0e8]" : "border-[#2a2a2a] opacity-60"}`}
                 onClick={() => setMode("extend")}
               >Extend existing course</button>
             </div>
@@ -103,7 +103,7 @@ export function ImportWizard() {
           <label className="block">
             <span className="text-sm opacity-70">Source file</span>
             <select
-              className="mt-1 w-full bg-[#0f0f1a] border border-[#2a2a3f] rounded px-3 py-2"
+              className="mt-1 w-full bg-[#000000] border border-[#2a2a2a] rounded px-3 py-2"
               value={filename}
               onChange={e => setFilename(e.target.value)}
             >
@@ -118,7 +118,7 @@ export function ImportWizard() {
               type="number"
               min={1}
               max={100}
-              className="mt-1 w-24 bg-[#0f0f1a] border border-[#2a2a3f] rounded px-3 py-2"
+              className="mt-1 w-24 bg-[#000000] border border-[#2a2a2a] rounded px-3 py-2"
               value={maxPages}
               onChange={e => setMaxPages(Math.max(1, parseInt(e.target.value, 10) || 10))}
             />
@@ -132,7 +132,7 @@ export function ImportWizard() {
                 accept="application/pdf"
                 onChange={handleUpload}
                 disabled={uploading}
-                className="text-sm file:mr-2 file:px-2 file:py-1 file:rounded file:border file:border-[#2a2a3f] file:bg-[#1a1a2a] file:text-[#f5f0e8] hover:file:bg-[#2a2a3f] file:cursor-pointer"
+                className="text-sm file:mr-2 file:px-2 file:py-1 file:rounded file:border file:border-[#2a2a2a] file:bg-[#1a1a1a] file:text-[#f5f0e8] hover:file:bg-[#2a2a2a] file:cursor-pointer"
               />
               {uploading && <span className="text-xs opacity-60">uploading…</span>}
             </div>
@@ -142,7 +142,7 @@ export function ImportWizard() {
             <label className="block">
               <span className="text-sm opacity-70">Course title</span>
               <input
-                className="mt-1 w-full bg-[#0f0f1a] border border-[#2a2a3f] rounded px-3 py-2"
+                className="mt-1 w-full bg-[#000000] border border-[#2a2a2a] rounded px-3 py-2"
                 value={title}
                 onChange={e => setTitle(e.target.value)}
                 placeholder="e.g. Steinbruch Ch 5"
@@ -154,7 +154,7 @@ export function ImportWizard() {
             <label className="block">
               <span className="text-sm opacity-70">Target course</span>
               <select
-                className="mt-1 w-full bg-[#0f0f1a] border border-[#2a2a3f] rounded px-3 py-2"
+                className="mt-1 w-full bg-[#000000] border border-[#2a2a2a] rounded px-3 py-2"
                 value={targetCourseId ?? ""}
                 onChange={e => setTargetCourseId(e.target.value ? parseInt(e.target.value, 10) : null)}
               >
@@ -179,7 +179,7 @@ export function ImportWizard() {
       {step === "importing" && (
         <div className="space-y-3">
           <div className="opacity-60">extracting PDF text → calling LLM → committing to store… ({elapsed}s)</div>
-          <div className="w-full bg-[#1a1a2a] rounded-full h-2 overflow-hidden">
+          <div className="w-full bg-[#1a1a1a] rounded-full h-2 overflow-hidden">
             <div className="h-full bg-phase1 rounded-full animate-pulse" style={{ width: "60%" }} />
           </div>
         </div>

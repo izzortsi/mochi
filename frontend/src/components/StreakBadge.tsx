@@ -14,9 +14,9 @@ function glowForStreak(streak: number): { boxShadow: string; bg: string; border?
   };
   if (streak >= 3) return {
     boxShadow: "0 0 10px rgba(245,158,11,0.35), 0 0 20px rgba(245,158,11,0.15)",
-    bg: "#1a1a10",
+    bg: "#141009",
   };
-  return { boxShadow: "none", bg: "#1a1a2a" };
+  return { boxShadow: "none", bg: "#1a1a1a" };
 }
 
 function flameAnimation(streak: number) {

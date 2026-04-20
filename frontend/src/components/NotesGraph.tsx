@@ -131,17 +131,17 @@ export function NotesGraph({ data, cacheKey, height = 560 }: { data: NotesGraphD
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
         onMouseLeave={onMouseUp}
-        style={{ background: "#0a0a14", borderRadius: 12, cursor: "grab" }}
+        style={{ background: "#050505", borderRadius: 12, cursor: "grab" }}
       >
         <g transform={`translate(${transform.x},${transform.y}) scale(${transform.k})`}>
           {linksRef.current.map((l, i) => {
             const s = typeof l.source === "object" ? l.source as Node : nodesRef.current.find(n => n.id === l.source);
             const t = typeof l.target === "object" ? l.target as Node : nodesRef.current.find(n => n.id === l.target);
             if (!s || !t || s.x == null || t.x == null) return null;
-            return <line key={i} x1={s.x} y1={s.y} x2={t.x} y2={t.y} stroke="#2a2a3f" strokeWidth={1.5} />;
+            return <line key={i} x1={s.x} y1={s.y} x2={t.x} y2={t.y} stroke="#2a2a2a" strokeWidth={1.5} />;
           })}
           {nodesRef.current.map(n => {
-            const fill = n.domain ? domainColor(n.domain, domains) : "#3a3a4f";
+            const fill = n.domain ? domainColor(n.domain, domains) : "#404040";
             return (
               <g
                 key={n.id}
@@ -150,7 +150,7 @@ export function NotesGraph({ data, cacheKey, height = 560 }: { data: NotesGraphD
                 onClick={() => { if (!didDragRef.current) router.push(`/notes/${encodeURIComponent(n.id)}`); }}
                 style={{ cursor: "pointer" }}
               >
-                <circle r={14} fill={fill} stroke="#0f0f1a" strokeWidth={2} />
+                <circle r={14} fill={fill} stroke="#000000" strokeWidth={2} />
                 <text y={26} textAnchor="middle" fill="#f5f0e8" fontSize="9" fontFamily="JetBrains Mono, monospace">
                   {n.label.length > 28 ? n.label.slice(0, 26) + "…" : n.label}
                 </text>

@@ -40,7 +40,7 @@ export function NextUpPanel({ courseId, days }: Props) {
   if (items.length === 0) return null;
 
   return (
-    <section className="mb-8 rounded-xl border border-[#2a2a3f] bg-[#121222] p-4">
+    <section className="mb-8 rounded-xl border border-[#2a2a2a] bg-[#0c0c0c] p-4">
       <h2 className="font-display text-lg mb-3">Next up</h2>
       <ul className="space-y-2">
         {items.map(it => (

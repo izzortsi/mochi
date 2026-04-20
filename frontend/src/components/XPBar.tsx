@@ -8,7 +8,7 @@ export function XPBar({ xp, multiplier, max = 1000 }: Props) {
   return (
     <div className="flex items-center gap-3">
       <div
-        className="relative h-3 w-72 rounded-full bg-[#1a1a2a] overflow-hidden"
+        className="relative h-3 w-72 rounded-full bg-[#1a1a1a] overflow-hidden"
         style={{ boxShadow: "inset 0 1px 2px rgba(0,0,0,0.5)" }}
       >
         <motion.div

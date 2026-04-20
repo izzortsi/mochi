@@ -109,7 +109,7 @@ export function AddCardModal({ courseId, days, onClose, onSaved }: Props) {
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50" onClick={onClose}>
-      <div className="bg-[#121222] border border-[#2a2a3f] rounded-xl p-6 w-[36rem] max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+      <div className="bg-[#0c0c0c] border border-[#2a2a2a] rounded-xl p-6 w-[36rem] max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-4">
           <h2 className="font-display text-xl">Add card</h2>
           <button onClick={onClose}><X className="w-5 h-5" /></button>
@@ -121,7 +121,7 @@ export function AddCardModal({ courseId, days, onClose, onSaved }: Props) {
         <label className="block mb-3">
           <span className="text-sm opacity-70">Day</span>
           <select
-            className="mt-1 w-full bg-[#0f0f1a] border border-[#2a2a3f] rounded px-3 py-2"
+            className="mt-1 w-full bg-[#000000] border border-[#2a2a2a] rounded px-3 py-2"
             value={dayId ?? ""}
             onChange={e => setDayId(parseInt(e.target.value, 10))}
           >
@@ -137,7 +137,7 @@ export function AddCardModal({ courseId, days, onClose, onSaved }: Props) {
                 key={t}
                 onClick={() => setTier(t)}
                 className={`px-3 py-1 rounded border text-xs uppercase tracking-wider ${
-                  tier === t ? "border-[#f5f0e8]" : "border-[#2a2a3f] opacity-60"
+                  tier === t ? "border-[#f5f0e8]" : "border-[#2a2a2a] opacity-60"
                 }`}
               >{t}</button>
             ))}
@@ -147,14 +147,14 @@ export function AddCardModal({ courseId, days, onClose, onSaved }: Props) {
         <label className="block mb-1">
           <span className="text-sm opacity-70">Problem text (LaTeX)</span>
           <textarea
-            className="mt-1 w-full bg-[#0f0f1a] border border-[#2a2a3f] rounded px-3 py-2 font-mono text-sm"
+            className="mt-1 w-full bg-[#000000] border border-[#2a2a2a] rounded px-3 py-2 font-mono text-sm"
             rows={3}
             value={text}
             onChange={e => setText(e.target.value)}
           />
         </label>
         {text && (
-          <div className="mb-3 p-2 rounded bg-[#0a0a14] text-sm">
+          <div className="mb-3 p-2 rounded bg-[#050505] text-sm">
             <div className="text-xs opacity-40 mb-1">preview</div>
             <MathText>{text}</MathText>
           </div>
@@ -163,14 +163,14 @@ export function AddCardModal({ courseId, days, onClose, onSaved }: Props) {
         <label className="block mb-1">
           <span className="text-sm opacity-70">Solution (LaTeX)</span>
           <textarea
-            className="mt-1 w-full bg-[#0f0f1a] border border-[#2a2a3f] rounded px-3 py-2 font-mono text-sm"
+            className="mt-1 w-full bg-[#000000] border border-[#2a2a2a] rounded px-3 py-2 font-mono text-sm"
             rows={3}
             value={detail}
             onChange={e => setDetail(e.target.value)}
           />
         </label>
         {detail && (
-          <div className="mb-3 p-2 rounded bg-[#0a0a14] text-sm">
+          <div className="mb-3 p-2 rounded bg-[#050505] text-sm">
             <div className="text-xs opacity-40 mb-1">preview</div>
             <MathText>{detail}</MathText>
           </div>
@@ -180,24 +180,24 @@ export function AddCardModal({ courseId, days, onClose, onSaved }: Props) {
           <span className="text-sm opacity-70">Concepts</span>
           <div className="mt-1 flex flex-wrap gap-1 mb-2">
             {chips.map(c => (
-              <span key={c.id} className={`text-xs px-2 py-0.5 rounded-full inline-flex items-center gap-1 ${c.isNew ? "bg-phase1/30" : "bg-[#1a1a2a]"}`}>
+              <span key={c.id} className={`text-xs px-2 py-0.5 rounded-full inline-flex items-center gap-1 ${c.isNew ? "bg-phase1/30" : "bg-[#1a1a1a]"}`}>
                 {c.label}
                 <button onClick={() => removeChip(c.id)} className="opacity-60 hover:opacity-100"><X className="w-3 h-3" /></button>
               </span>
             ))}
           </div>
           <input
-            className="w-full bg-[#0f0f1a] border border-[#2a2a3f] rounded px-3 py-1 text-sm"
+            className="w-full bg-[#000000] border border-[#2a2a2a] rounded px-3 py-1 text-sm"
             placeholder="search or add concept…"
             value={query}
             onChange={e => setQuery(e.target.value)}
           />
           {(suggestions.length > 0 || canMintNew) && (
-            <div className="mt-1 max-h-32 overflow-y-auto border border-[#2a2a3f] rounded bg-[#0a0a14]">
+            <div className="mt-1 max-h-32 overflow-y-auto border border-[#2a2a2a] rounded bg-[#050505]">
               {suggestions.map(s => (
                 <button
                   key={s.id}
-                  className="w-full text-left px-3 py-1 text-xs hover:bg-[#1a1a2a]"
+                  className="w-full text-left px-3 py-1 text-xs hover:bg-[#1a1a1a]"
                   onClick={() => addChip(s.id, s.label, false)}
                 >
                   {s.label} <span className="opacity-40">{s.id}</span>
@@ -205,7 +205,7 @@ export function AddCardModal({ courseId, days, onClose, onSaved }: Props) {
               ))}
               {canMintNew && (
                 <button
-                  className="w-full text-left px-3 py-1 text-xs hover:bg-[#1a1a2a] text-phase1 inline-flex items-center gap-1"
+                  className="w-full text-left px-3 py-1 text-xs hover:bg-[#1a1a1a] text-phase1 inline-flex items-center gap-1"
                   onClick={() => addChip(query.trim(), query.trim(), true)}
                 >
                   <Plus className="w-3 h-3" /> create &quot;{query.trim()}&quot;
@@ -216,7 +216,7 @@ export function AddCardModal({ courseId, days, onClose, onSaved }: Props) {
         </div>
 
         <div className="flex justify-end gap-2">
-          <button onClick={onClose} className="px-3 py-2 rounded bg-[#1a1a2a] hover:bg-[#2a2a3f]">Cancel</button>
+          <button onClick={onClose} className="px-3 py-2 rounded bg-[#1a1a1a] hover:bg-[#2a2a2a]">Cancel</button>
           <button
             onClick={save}
             disabled={!canSave}

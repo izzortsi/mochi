@@ -44,20 +44,20 @@ export default function NotesPage() {
       <p className="text-sm opacity-60 mb-4">Atomic notes extracted from your courses. Click a node to read.</p>
 
       <div className="flex items-center gap-3 mb-4">
-        <div className="flex rounded-lg border border-[#2a2a3f] overflow-hidden">
+        <div className="flex rounded-lg border border-[#2a2a2a] overflow-hidden">
           <button
-            className={`px-3 py-1.5 text-sm ${tab === "graph" ? "bg-[#2a2a3f]" : "hover:bg-[#1a1a2a]"}`}
+            className={`px-3 py-1.5 text-sm ${tab === "graph" ? "bg-[#2a2a2a]" : "hover:bg-[#1a1a1a]"}`}
             onClick={() => setTab("graph")}
           >Graph</button>
           <button
-            className={`px-3 py-1.5 text-sm ${tab === "list" ? "bg-[#2a2a3f]" : "hover:bg-[#1a1a2a]"}`}
+            className={`px-3 py-1.5 text-sm ${tab === "list" ? "bg-[#2a2a2a]" : "hover:bg-[#1a1a1a]"}`}
             onClick={() => setTab("list")}
           >List</button>
         </div>
         <select
           value={filter}
           onChange={e => setFilter(e.target.value)}
-          className="bg-[#121222] border border-[#2a2a3f] rounded px-2 py-1 text-sm"
+          className="bg-[#0c0c0c] border border-[#2a2a2a] rounded px-2 py-1 text-sm"
         >
           <option value="">All domains</option>
           {domains.map(d => <option key={d} value={d}>{d}</option>)}
@@ -78,14 +78,14 @@ export default function NotesPage() {
             <a
               key={n.id}
               href={`/notes/${encodeURIComponent(n.id)}`}
-              className="block p-4 rounded-xl border border-[#2a2a3f] bg-[#121222] hover:border-[#3a3a4f] transition-colors"
+              className="block p-4 rounded-xl border border-[#2a2a2a] bg-[#0c0c0c] hover:border-[#404040] transition-colors"
             >
               <div className="font-display text-base mb-1">{n.title}</div>
               {n.domain && <div className="text-xs opacity-50 mb-2">{n.domain}</div>}
               {n.tags.length > 0 && (
                 <div className="flex flex-wrap gap-1">
                   {n.tags.map(t => (
-                    <span key={t} className="text-xs px-1.5 py-0.5 rounded bg-[#1a1a2a] opacity-60">{t}</span>
+                    <span key={t} className="text-xs px-1.5 py-0.5 rounded bg-[#1a1a1a] opacity-60">{t}</span>
                   ))}
                 </div>
               )}

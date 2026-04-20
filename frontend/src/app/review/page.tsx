@@ -74,7 +74,7 @@ export default function ReviewPage() {
       )}
 
       {done ? (
-        <div className="rounded-xl border border-[#2a2a3f] bg-[#121222] p-8 text-center">
+        <div className="rounded-xl border border-[#2a2a2a] bg-[#0c0c0c] p-8 text-center">
           <div className="text-5xl mb-3">✓</div>
           <h2 className="font-display text-xl mb-2">Nothing due today</h2>
           <p className="text-sm opacity-60">
@@ -93,13 +93,13 @@ export default function ReviewPage() {
               {current.lapses > 0 && ` · ${current.lapses} lapse${current.lapses > 1 ? "s" : ""}`}
             </span>
           </div>
-          <div className="rounded-xl border border-[#2a2a3f] bg-[#121222] p-6">
+          <div className="rounded-xl border border-[#2a2a2a] bg-[#0c0c0c] p-6">
             <div className="mb-4">
               <MathText>{current.prompt}</MathText>
             </div>
 
             {reveal && current.answer && (
-              <div className="mt-4 p-4 rounded bg-[#0a0a14] border border-[#2a2a3f]">
+              <div className="mt-4 p-4 rounded bg-[#050505] border border-[#2a2a2a]">
                 <div className="text-xs uppercase tracking-wider opacity-40 mb-2">
                   Answer
                 </div>

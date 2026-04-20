@@ -36,30 +36,30 @@ export function SessionCard({
 
   return (
     <div
-      className={`rounded-xl border transition-colors ${
-        fullyDone ? "border-gold/50 bg-[#1a1a10]" : "border-[#2a2a3f] bg-[#121222]"
+      className={`border transition-colors ${
+        fullyDone ? "border-gold/40 bg-[#141009]" : "border-[#1f1f1f] bg-[#0c0c0c]"
       }`}
     >
-      <div className="flex items-start gap-3 p-4">
-        <div className="flex-1">
-          <div className="flex items-center gap-3 mb-2">
-            <span className="text-xs uppercase tracking-wider opacity-50">
-              {doneCount}/{PHASE_NAMES.length} phases
+      <div className="flex items-start gap-2 px-3 py-2">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="text-[10px] uppercase tracking-wider opacity-50 font-mono">
+              {doneCount}/{PHASE_NAMES.length}
             </span>
-            <div className="flex-1 h-1 rounded-full bg-[#1a1a2a] overflow-hidden">
+            <div className="flex-1 h-px bg-[#1f1f1f]">
               <div
-                className="h-full rounded-full bg-gold/60"
+                className="h-full bg-gold/70"
                 style={{ width: `${(doneCount / PHASE_NAMES.length) * 100}%` }}
               />
             </div>
           </div>
           {(concepts.length > 0 || notes.length > 0) && (
-            <div className="mb-2 flex flex-wrap gap-1">
+            <div className="flex flex-wrap gap-1">
               {concepts.map((c) => (
                 <Link
                   key={c}
                   href={`/concept/${encodeURIComponent(c)}`}
-                  className="text-xs px-2 py-0.5 rounded-full bg-[#1a1a2a] hover:bg-[#2a2a3f] opacity-70"
+                  className="text-[10px] px-1.5 py-px bg-[#141414] hover:bg-[#2a2a2a] text-neutral-300"
                 >
                   {c}
                 </Link>
@@ -68,7 +68,7 @@ export function SessionCard({
                 <Link
                   key={n}
                   href={`/notes/${encodeURIComponent(n)}`}
-                  className="text-xs px-2 py-0.5 rounded-full bg-[#1a1a10] hover:bg-[#2a2a1f] text-gold/70 border border-gold/20"
+                  className="text-[10px] px-1.5 py-px bg-[#141009] hover:bg-[#26220f] text-gold/80 border border-gold/20"
                 >
                   {n}
                 </Link>
@@ -82,13 +82,13 @@ export function SessionCard({
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => onDelete(cardUid)}
-                  className="text-xs px-2 py-1 rounded bg-red-600/80 hover:bg-red-600 text-white"
+                  className="text-[10px] px-1.5 py-0.5 bg-red-700 hover:bg-red-600 text-white"
                 >
                   delete
                 </button>
                 <button
                   onClick={() => setConfirmDelete(false)}
-                  className="text-xs px-2 py-1 rounded bg-[#1a1a2a] hover:bg-[#2a2a3f] opacity-70"
+                  className="text-[10px] px-1.5 py-0.5 bg-[#1a1a1a] hover:bg-[#2a2a2a] text-neutral-400"
                 >
                   cancel
                 </button>
@@ -96,49 +96,49 @@ export function SessionCard({
             ) : (
               <button
                 onClick={() => setConfirmDelete(true)}
-                className="opacity-20 hover:opacity-60 transition-opacity"
+                className="opacity-20 hover:opacity-70 transition-opacity"
                 aria-label="delete session"
               >
-                <Trash2 className="w-4 h-4" />
+                <Trash2 className="w-3.5 h-3.5" />
               </button>
             )}
           </div>
         )}
       </div>
 
-      <div className="divide-y divide-[#1a1a2a] border-t border-[#1a1a2a]">
+      <div className="divide-y divide-[#1a1a1a] border-t border-[#1a1a1a]">
         {PHASE_NAMES.map((p) => {
           const done = !!completedPhases?.[p];
           const isOpen = open[p];
           return (
             <div key={p}>
-              <div className="flex items-center gap-3 px-4 py-2">
+              <div className="flex items-center gap-2 px-3 py-1.5 hover:bg-[#0f0f0f] transition-colors">
                 <button
                   onClick={() => onTogglePhase(p, !done)}
-                  className={`w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 ${
-                    done ? "bg-gold border-gold" : "border-[#3a3a4f]"
+                  className={`w-3.5 h-3.5 border flex items-center justify-center flex-shrink-0 ${
+                    done ? "bg-gold border-gold" : "border-[#404040] hover:border-[#666]"
                   }`}
                   aria-label={done ? `mark ${p} incomplete` : `mark ${p} complete`}
                 >
-                  {done && <Check className="w-3 h-3 text-[#0f0f1a]" />}
+                  {done && <Check className="w-2.5 h-2.5 text-black" strokeWidth={3} />}
                 </button>
                 <button
                   onClick={() => setOpen((s) => ({ ...s, [p]: !s[p] }))}
-                  className="flex items-center gap-2 flex-1 text-left"
+                  className="flex items-center gap-2 flex-1 text-left min-w-0"
                 >
-                  <span className={`text-sm font-medium ${done ? "opacity-50" : ""}`}>
+                  <span className={`text-[11px] uppercase tracking-wider font-mono ${done ? "opacity-40" : "text-neutral-200"}`}>
                     {PHASE_META[p].label}
                   </span>
-                  <span className="text-xs opacity-40">— {PHASE_META[p].hint}</span>
+                  <span className="text-[10px] opacity-40 truncate">{PHASE_META[p].hint}</span>
                   <ChevronDown
-                    className={`w-3 h-3 ml-auto opacity-50 transition-transform ${
+                    className={`w-3 h-3 ml-auto opacity-40 transition-transform flex-shrink-0 ${
                       isOpen ? "rotate-180" : ""
                     }`}
                   />
                 </button>
               </div>
               {isOpen && (
-                <div className="px-4 pb-4 pt-1 text-sm">
+                <div className="px-3 pb-3 pt-1 text-sm bg-[#080808]">
                   <PhaseContent phase={p} phases={phases} />
                 </div>
               )}
@@ -213,14 +213,14 @@ function PhaseContent({ phase, phases }: { phase: PhaseName; phases: SessionPhas
 function Labeled({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="text-xs uppercase tracking-wider opacity-40 mb-1">{label}</div>
+      <div className="text-[10px] uppercase tracking-wider opacity-40 mb-0.5 font-mono">{label}</div>
       {children}
     </div>
   );
 }
 
 function Empty() {
-  return <div className="text-xs opacity-40 italic">(empty — add content via LLM import or edit)</div>;
+  return <div className="text-[11px] opacity-30 italic">empty</div>;
 }
 
 function RetrievalItem({
@@ -244,7 +244,7 @@ function RetrievalItem({
             {show ? "hide answer" : "reveal answer"}
           </button>
           {show && (
-            <div className="mt-1 p-2 rounded bg-[#0a0a14] font-mono text-xs">
+            <div className="mt-1 p-2 border border-[#1f1f1f] bg-[#050505] font-mono text-xs">
               <MathText>{prompt.answer}</MathText>
             </div>
           )}

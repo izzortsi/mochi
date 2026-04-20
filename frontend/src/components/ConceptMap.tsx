@@ -16,7 +16,7 @@ interface Node extends SimulationNodeDatum {
 interface Link extends SimulationLinkDatum<Node> { source: string | Node; target: string | Node; }
 
 const MASTERY_FILL: Record<Node["mastery"], string> = {
-  "not-started": "#3a3a4f",
+  "not-started": "#404040",
   "learning": "#f59e0b",
   "mastered": "#22c55e",
 };
@@ -124,7 +124,7 @@ export function ConceptMap({ data, cacheKey, height = 480 }: { data: ConceptMapD
       onMouseMove={onMouseMove}
       onMouseUp={onMouseUp}
       onMouseLeave={onMouseUp}
-      style={{ background: "#0a0a14", borderRadius: 12, cursor: "grab" }}
+      style={{ background: "#050505", borderRadius: 12, cursor: "grab" }}
     >
       <defs>
         <marker id="arrow" viewBox="0 -5 10 10" refX="18" refY="0" markerWidth="6" markerHeight="6" orient="auto">
@@ -136,7 +136,7 @@ export function ConceptMap({ data, cacheKey, height = 480 }: { data: ConceptMapD
           const s = typeof l.source === "object" ? l.source as Node : nodesRef.current.find(n => n.id === l.source);
           const t = typeof l.target === "object" ? l.target as Node : nodesRef.current.find(n => n.id === l.target);
           if (!s || !t || s.x == null || t.x == null) return null;
-          return <line key={i} x1={s.x} y1={s.y} x2={t.x} y2={t.y} stroke="#2a2a3f" strokeWidth={1.5} markerEnd="url(#arrow)" />;
+          return <line key={i} x1={s.x} y1={s.y} x2={t.x} y2={t.y} stroke="#2a2a2a" strokeWidth={1.5} markerEnd="url(#arrow)" />;
         })}
         {nodesRef.current.map(n => (
           <g
@@ -146,7 +146,7 @@ export function ConceptMap({ data, cacheKey, height = 480 }: { data: ConceptMapD
             onClick={() => { if (!didDragRef.current) router.push(`/concept/${encodeURIComponent(n.id)}`); }}
             style={{ cursor: "pointer" }}
           >
-            <circle r={12 + n.cardCount * 2} fill={MASTERY_FILL[n.mastery]} stroke="#0f0f1a" strokeWidth={2} />
+            <circle r={12 + n.cardCount * 2} fill={MASTERY_FILL[n.mastery]} stroke="#000000" strokeWidth={2} />
             <text y={28} textAnchor="middle" fill="#f5f0e8" fontSize="10" fontFamily="JetBrains Mono, monospace">{n.label}</text>
           </g>
         ))}

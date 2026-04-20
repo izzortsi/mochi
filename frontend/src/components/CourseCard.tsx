@@ -16,17 +16,17 @@ export function CourseCard({ course, onDelete }: Props) {
 
   return (
     <motion.article
-      className="rounded-xl border border-[#1a1a2a] bg-[#121222] p-6 hover:border-[#2a2a3f] transition-colors h-full flex items-center gap-4"
-      initial={{ opacity: 0, y: 8 }}
+      className="border border-[#1a1a1a] bg-[#0c0c0c] p-3 hover:border-[#2a2a2a] transition-colors h-full flex items-center gap-3"
+      initial={{ opacity: 0, y: 4 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <Link href={`/course/${course.id}`} className="flex items-center gap-4 flex-1 cursor-pointer">
-        <ProgressRing pct={course.completionPct} size={56} />
-        <div className="flex-1">
-          <div className="text-xs opacity-50 uppercase tracking-wider">Course {course.id}</div>
-          <h3 className="font-display text-lg mt-1">{course.title}</h3>
-          <div className="text-sm opacity-60 mt-1">
-            {course.completedCards} / {course.totalCards} cards · {course.dayCount} days
+      <Link href={`/course/${course.id}`} className="flex items-center gap-3 flex-1 cursor-pointer min-w-0">
+        <ProgressRing pct={course.completionPct} size={44} />
+        <div className="flex-1 min-w-0">
+          <div className="text-[10px] opacity-60 uppercase tracking-wider font-mono">Course {course.id}</div>
+          <h3 className="font-display text-base mt-0.5 leading-tight truncate">{course.title}</h3>
+          <div className="text-[11px] opacity-60 mt-0.5 font-mono">
+            {course.completedCards}/{course.totalCards} · {course.dayCount}d
           </div>
         </div>
       </Link>
@@ -36,13 +36,13 @@ export function CourseCard({ course, onDelete }: Props) {
             <div className="flex items-center gap-1" onClick={e => e.stopPropagation()}>
               <button
                 onClick={() => onDelete(course.id)}
-                className="text-xs px-2 py-1 rounded bg-red-600/80 hover:bg-red-600 text-white"
+                className="text-[10px] px-1.5 py-0.5 bg-red-700 hover:bg-red-600 text-white"
               >
                 delete
               </button>
               <button
                 onClick={() => setConfirmDelete(false)}
-                className="text-xs px-2 py-1 rounded bg-[#1a1a2a] hover:bg-[#2a2a3f] opacity-70"
+                className="text-[10px] px-1.5 py-0.5 bg-[#1a1a1a] hover:bg-[#2a2a2a] text-neutral-400"
               >
                 cancel
               </button>
@@ -50,10 +50,10 @@ export function CourseCard({ course, onDelete }: Props) {
           ) : (
             <button
               onClick={() => setConfirmDelete(true)}
-              className="opacity-20 hover:opacity-60 transition-opacity"
+              className="opacity-20 hover:opacity-70 transition-opacity"
               aria-label="delete course"
             >
-              <Trash2 className="w-4 h-4" />
+              <Trash2 className="w-3.5 h-3.5" />
             </button>
           )}
         </div>

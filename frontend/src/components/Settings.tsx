@@ -28,7 +28,7 @@ export function Settings({ onClose }: Props) {
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50" onClick={onClose}>
-      <div className="bg-[#121222] border border-[#2a2a3f] rounded-xl p-6 w-96" onClick={e => e.stopPropagation()}>
+      <div className="bg-[#0c0c0c] border border-[#2a2a2a] rounded-xl p-6 w-96" onClick={e => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-4">
           <h2 className="font-display text-xl">LLM Settings</h2>
           <button onClick={onClose}><X className="w-5 h-5" /></button>
@@ -38,7 +38,7 @@ export function Settings({ onClose }: Props) {
           <select
             value={config.provider}
             onChange={e => onProviderChange(e.target.value as LlmProvider)}
-            className="mt-1 w-full bg-[#0f0f1a] border border-[#2a2a3f] rounded px-3 py-2"
+            className="mt-1 w-full bg-[#000000] border border-[#2a2a2a] rounded px-3 py-2"
           >
             <option value="zai">z.ai (API key)</option>
             <option value="anthropic-oauth">Anthropic (Claude Pro/Max OAuth)</option>
@@ -51,7 +51,7 @@ export function Settings({ onClose }: Props) {
               type="password"
               value={config.apiKey}
               onChange={e => setConfig({ ...config, apiKey: e.target.value })}
-              className="mt-1 w-full bg-[#0f0f1a] border border-[#2a2a3f] rounded px-3 py-2 font-mono text-sm"
+              className="mt-1 w-full bg-[#000000] border border-[#2a2a2a] rounded px-3 py-2 font-mono text-sm"
             />
           </label>
         )}
@@ -67,7 +67,7 @@ export function Settings({ onClose }: Props) {
           <select
             value={config.model}
             onChange={e => setConfig({ ...config, model: e.target.value })}
-            className="mt-1 w-full bg-[#0f0f1a] border border-[#2a2a3f] rounded px-3 py-2"
+            className="mt-1 w-full bg-[#000000] border border-[#2a2a2a] rounded px-3 py-2"
           >
             {models.map(m => <option key={m.id} value={m.id}>{m.label}</option>)}
           </select>
