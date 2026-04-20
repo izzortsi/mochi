@@ -2,7 +2,7 @@ from __future__ import annotations
 import json
 import threading
 from pathlib import Path
-from app.models import CourseDef, Progress, ChatMessage, Note, ConceptAlias
+from app.models import CourseDef, Progress, ChatMessage, Note, ConceptAlias, TutorNote
 from app.config import settings
 
 
@@ -155,3 +155,18 @@ def load_notes() -> list[Note]:
 def save_notes(notes: list[Note]):
     with _lock:
         _write_json(_notes_path(), [n.model_dump() for n in notes])
+
+
+def _tutor_notes_path() -> Path:
+    return settings.data_dir / "tutor_notes.json"
+
+
+def load_tutor_notes() -> list[TutorNote]:
+    with _lock:
+        raw = _read_json(_tutor_notes_path(), [])
+    return [TutorNote(**n) for n in raw]
+
+
+def save_tutor_notes(notes: list[TutorNote]):
+    with _lock:
+        _write_json(_tutor_notes_path(), [n.model_dump() for n in notes])

@@ -63,6 +63,8 @@ def dispatch(tool: str, args: dict):
         "append-chat": _append_chat,
         "get-chat": _get_chat,
         "get-progress": _get_progress,
+        "record-tutor-note": _record_tutor_note,
+        "get-tutor-notes": _get_tutor_notes,
     }
     handler = handlers.get(tool)
     if not handler:
@@ -359,7 +361,57 @@ def _get_chat(args):
     course_id = args.get("courseId") or args.get("course-id", 0)
     chat = store.load_chat()
     msgs = chat.get(course_id, [])
-    return {"messages": [[m.role, m.content] for m in msgs]}
+    return {
+        "messages": [
+            {
+                "role": m.role,
+                "content": m.content,
+                "tool-name": m.tool_name,
+                "timestamp": m.timestamp,
+            }
+            for m in msgs
+        ]
+    }
+
+
+def _record_tutor_note(args):
+    from app.services import pet_art  # reuse random_id
+    from app.models import TutorNote
+
+    card_uid = args.get("cardUid") or args.get("card-uid", "")
+    body = (args.get("body") or "").strip()
+    if not card_uid or not body:
+        raise ValueError("card-uid and body required")
+    notes = store.load_tutor_notes()
+    note = TutorNote(
+        id=pet_art.random_id(),
+        card_uid=card_uid,
+        body=body,
+        source="tutor",
+        created_at=datetime.now().isoformat(),
+    )
+    notes.append(note)
+    store.save_tutor_notes(notes)
+    return {"ok": True, "id": note.id}
+
+
+def _get_tutor_notes(args):
+    card_uid = args.get("cardUid") or args.get("card-uid", "")
+    notes = store.load_tutor_notes()
+    if card_uid:
+        notes = [n for n in notes if n.card_uid == card_uid]
+    return {
+        "notes": [
+            {
+                "id": n.id,
+                "card-uid": n.card_uid,
+                "body": n.body,
+                "source": n.source,
+                "created-at": n.created_at,
+            }
+            for n in notes
+        ]
+    }
 
 
 def _get_progress(_args):

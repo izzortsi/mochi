@@ -22,6 +22,13 @@ export const appendChatSchema = z.object({
 });
 export const getChatSchema = z.object({ courseId: z.number() });
 export const getProgressSchema = z.object({});
+export const recordTutorNoteSchema = z.object({
+  cardUid: z.string(),
+  body: z.string(),
+});
+export const getTutorNotesSchema = z.object({
+  cardUid: z.string().optional().default(""),
+});
 
 export const listCoursesSchema = z.object({});
 export const listConceptsSchema = z.object({});
@@ -56,7 +63,8 @@ export type ToolName =
   | "create-concept" | "tag-card" | "add-prereq"
   | "query-concept-cards" | "concept-mastery" | "next-up"
   | "fetch-card" | "mark-task-complete" | "grade-attempt"
-  | "append-generated-task" | "append-chat" | "get-chat" | "get-progress";
+  | "append-generated-task" | "append-chat" | "get-chat" | "get-progress"
+  | "record-tutor-note" | "get-tutor-notes";
 
 export const toolSchemas: Record<ToolName, z.ZodTypeAny> = {
   "list-courses": listCoursesSchema,
@@ -81,6 +89,8 @@ export const toolSchemas: Record<ToolName, z.ZodTypeAny> = {
   "append-chat": appendChatSchema,
   "get-chat": getChatSchema,
   "get-progress": getProgressSchema,
+  "record-tutor-note": recordTutorNoteSchema,
+  "get-tutor-notes": getTutorNotesSchema,
 };
 
 function toKebab(key: string): string {

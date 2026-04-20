@@ -23,6 +23,7 @@ export function Header() {
         <Link href="/" className="font-display text-lg text-neutral-100">study plan</Link>
         <nav className="flex items-center gap-4 text-xs uppercase tracking-wider font-mono opacity-70">
           <Link href="/review" className="hover:opacity-100 hover:text-neutral-100">review</Link>
+          <Link href="/memory" className="hover:opacity-100 hover:text-neutral-100">memory</Link>
           <Link href="/concept-map" className="hover:opacity-100 hover:text-neutral-100">concepts</Link>
           <Link href="/notes" className="hover:opacity-100 hover:text-neutral-100">notes</Link>
         </nav>

@@ -187,3 +187,16 @@ class Note(BaseModel):
     content: str = ""
     related: list[str] = []
     source: str = ""
+
+
+class TutorNote(BaseModel):
+    """One-line observation the tutor jots about a specific session.
+
+    Injected back into the page context on future visits so the tutor
+    doesn't repeat hints the user has already absorbed.
+    """
+    id: str
+    card_uid: CardUid
+    body: str
+    source: str = "tutor"  # "tutor" | "user"
+    created_at: str = ""

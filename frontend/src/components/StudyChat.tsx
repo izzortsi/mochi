@@ -1,11 +1,14 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Send } from "lucide-react";
 import { loadConfig, isConfigured } from "@/lib/settings";
 import { runLlmTurn } from "@/lib/llm";
 import { validateAndEncode, type ToolName } from "@/lib/tools";
 import { WsClient } from "@/lib/ws";
-import type { ChatMessage, ConnectionStatus, Course, DayView, UserProgress } from "@/lib/types";
+import { api } from "@/lib/api";
+import type {
+  ChatMessage, ConnectionStatus, Course, DayView, UserProgress, TutorNote,
+} from "@/lib/types";
 import { MathText } from "./MathText";
 import { MarkdownContent } from "./MarkdownContent";
 
@@ -27,7 +30,12 @@ function summarizeToolError(raw: string): string {
   return raw.length > 200 ? raw.slice(0, 200) + "…" : raw;
 }
 
-function buildPageContext(course: Course, day: DayView, progress: UserProgress): string {
+function buildPageContext(
+  course: Course,
+  day: DayView,
+  progress: UserProgress,
+  notesByCard: Record<string, TutorNote[]>,
+): string {
   const completed = progress.completedTasks ?? {};
   const tiers: Array<"bronze" | "silver" | "gold"> = ["bronze", "silver", "gold"];
 
@@ -48,6 +56,13 @@ function buildPageContext(course: Course, day: DayView, progress: UserProgress):
       lines.push(`  Text: ${c.text}`);
       lines.push(`  Solution (internal — don't reveal unless asked): ${c.detail}`);
       if (c.concepts.length > 0) lines.push(`  Concepts: ${c.concepts.join(", ")}`);
+      const notes = notesByCard[c.cardUid] || [];
+      if (notes.length > 0) {
+        lines.push(`  Tutor notes:`);
+        for (const n of notes) {
+          lines.push(`    - [${n.source}] ${n.body}`);
+        }
+      }
     }
   }
 
@@ -70,6 +85,7 @@ export function StudyChat({ course, day, progress, onProgressChanged }: Props) {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState<ConnectionStatus>("disconnected");
+  const [notesByCard, setNotesByCard] = useState<Record<string, TutorNote[]>>({});
   const wsRef = useRef<WsClient | null>(null);
   const pendingRef = useRef<Map<string, (resp: string) => void>>(new Map());
 
@@ -92,7 +108,25 @@ export function StudyChat({ course, day, progress, onProgressChanged }: Props) {
     return () => ws.disconnect();
   }, []);
 
-  const callTool = (name: ToolName, args: object): Promise<string> => {
+  // Rehydrate chat + fetch tutor notes on course change.
+  useEffect(() => {
+    let cancelled = false;
+    api.memory.fetchChat(course.id).then((resp) => {
+      if (cancelled) return;
+      setMessages(resp.messages);
+    }).catch(() => {});
+    api.memory.fetchTutorNotes().then((resp) => {
+      if (cancelled) return;
+      const byCard: Record<string, TutorNote[]> = {};
+      for (const n of resp.notes) {
+        (byCard[n.cardUid] ||= []).push(n);
+      }
+      setNotesByCard(byCard);
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [course.id]);
+
+  const callTool = useCallback((name: ToolName, args: object): Promise<string> => {
     return new Promise((resolve, reject) => {
       const result = validateAndEncode(name, args);
       if (!result.ok) return reject(new Error(result.error));
@@ -105,67 +139,96 @@ export function StudyChat({ course, day, progress, onProgressChanged }: Props) {
         }
       }, 15000);
     });
-  };
+  }, []);
+
+  // Fire-and-forget persistence of a new turn. Errors are swallowed so a
+  // dropped WS frame doesn't block the UI; rehydration catches up on reload.
+  const persistTurn = useCallback((msg: ChatMessage) => {
+    callTool("append-chat", {
+      courseId: course.id,
+      role: msg.role,
+      content: msg.content,
+      toolName: msg.toolName,
+    }).catch(() => {});
+  }, [callTool, course.id]);
+
+  const pushMessage = useCallback((msg: ChatMessage) => {
+    setMessages((m) => [...m, msg]);
+    persistTurn(msg);
+  }, [persistTurn]);
 
   const send = async () => {
     if (!input.trim() || busy) return;
     const config = loadConfig();
     if (!isConfigured(config)) {
-      setMessages(m => [...m, {
-        role: "assistant", content: "Configure your API key in Settings first.",
-        toolName: null, timestamp: new Date().toISOString(),
-      }]);
+      pushMessage({
+        role: "assistant",
+        content: "Configure your API key in Settings first.",
+        toolName: null,
+        timestamp: new Date().toISOString(),
+      });
       return;
     }
 
     const userMsg: ChatMessage = {
       role: "user", content: input, toolName: null, timestamp: new Date().toISOString(),
     };
-    setMessages(m => [...m, userMsg]);
+    pushMessage(userMsg);
     setInput("");
     setBusy(true);
 
     try {
-      const context = buildPageContext(course, day, progress);
+      const context = buildPageContext(course, day, progress, notesByCard);
       const result = await runLlmTurn(config, messages, userMsg.content, context);
       const assistantMsg: ChatMessage = {
         role: "assistant", content: result.text || "(calling tool)",
         toolName: null, timestamp: new Date().toISOString(),
       };
-      setMessages(m => [...m, assistantMsg]);
+      pushMessage(assistantMsg);
 
+      let notesDirty = false;
       for (const call of result.toolCalls) {
-        setMessages(m => [...m, {
+        pushMessage({
           role: "tool", content: `→ ${call.name}`, toolName: call.name,
           timestamp: new Date().toISOString(),
-        }]);
+        });
         try {
           const resp = await callTool(call.name, call.args);
-          setMessages(m => [...m, {
+          pushMessage({
             role: "tool", content: resp, toolName: call.name,
             timestamp: new Date().toISOString(),
-          }]);
+          });
           if (call.name === "mark-task-complete") {
             onProgressChanged();
+          }
+          if (call.name === "record-tutor-note") {
+            notesDirty = true;
           }
         } catch (e) {
           // Feed validation errors back into the chat as a structured message
           // so the tutor can correct itself on the next turn.
           const msg = e instanceof Error ? e.message : String(e);
           const summary = summarizeToolError(msg);
-          setMessages(m => [...m, {
+          pushMessage({
             role: "tool",
             content: `${call.name} failed: ${summary}. Retry with complete args (see tool schema).`,
             toolName: call.name,
             timestamp: new Date().toISOString(),
-          }]);
+          });
         }
       }
+      if (notesDirty) {
+        api.memory.fetchTutorNotes().then((resp) => {
+          const byCard: Record<string, TutorNote[]> = {};
+          for (const n of resp.notes) (byCard[n.cardUid] ||= []).push(n);
+          setNotesByCard(byCard);
+        }).catch(() => {});
+      }
     } catch (e) {
-      setMessages(m => [...m, {
+      pushMessage({
         role: "assistant", content: `error: ${String(e)}`,
         toolName: null, timestamp: new Date().toISOString(),
-      }]);
+      });
     } finally {
       setBusy(false);
     }

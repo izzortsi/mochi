@@ -187,6 +187,19 @@ export interface EvalResult {
   feedback: string;
 }
 
+export interface TutorNote {
+  id: string;
+  cardUid: CardUid;
+  body: string;
+  source: "tutor" | "user";
+  createdAt: string;
+}
+
+export interface ChatThread {
+  courseId: number;
+  messages: ChatMessage[];
+}
+
 export type LlmProvider = "zai" | "anthropic-oauth";
 
 export interface LlmConfig {

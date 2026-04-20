@@ -1,5 +1,6 @@
 import type {
   UserProgress, CardUid, PhaseName, SrsItem, SrsStats, SrsVerdict,
+  ChatThread, ChatMessage, TutorNote,
 } from "./types";
 
 export function camelizeKey(key: string): string {
@@ -49,6 +50,12 @@ async function deleteJson<T>(path: string, body: object): Promise<T> {
   return camelizeKeys<T>(await res.json());
 }
 
+async function deletePath<T>(path: string): Promise<T> {
+  const res = await fetch(path, { method: "DELETE" });
+  if (!res.ok) throw new Error(`${path}: ${res.status}`);
+  return camelizeKeys<T>(await res.json());
+}
+
 export const api = {
   fetchProgress: () => getJson<UserProgress>("/api/progress"),
   complete: (cardUid: CardUid) =>
@@ -71,6 +78,30 @@ export const api = {
   srsStats: () => getJson<SrsStats>("/api/srs/stats"),
   srsReview: (id: string, verdict: SrsVerdict) =>
     postJson<{ ok: boolean; item: SrsItem }>("/api/srs/review", { id, verdict }),
+  memory: {
+    fetchAllChats: () =>
+      getJson<{ threads: ChatThread[] }>("/api/memory/chat"),
+    fetchChat: (courseId: number) =>
+      getJson<{ courseId: number; messages: ChatMessage[] }>(
+        `/api/memory/chat?course-id=${courseId}`,
+      ),
+    deleteChatTurn: (courseId: number, index: number) =>
+      deletePath<{ ok: boolean }>(
+        `/api/memory/chat/turn?course-id=${courseId}&index=${index}`,
+      ),
+    wipeChat: (courseId: number) =>
+      deletePath<{ ok: boolean }>(`/api/memory/chat?course-id=${courseId}`),
+    fetchTutorNotes: (cardUid?: string) =>
+      getJson<{ notes: TutorNote[] }>(
+        cardUid
+          ? `/api/memory/tutor-notes?card-uid=${encodeURIComponent(cardUid)}`
+          : "/api/memory/tutor-notes",
+      ),
+    deleteTutorNote: (id: string) =>
+      deletePath<{ ok: boolean }>(
+        `/api/memory/tutor-notes/${encodeURIComponent(id)}`,
+      ),
+  },
 };
 
 export { getJson, postJson };
