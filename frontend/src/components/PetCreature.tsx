@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { camelizeKeys } from "@/lib/api";
+import { api, camelizeKeys } from "@/lib/api";
 
 interface PetState {
   id: string | null;
@@ -167,8 +167,11 @@ export function PetCreature() {
   const [hatching, setHatching] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [reaction, setReaction] = useState<Reaction | null>(null);
+  const [heartKey, setHeartKey] = useState(0);
+  const [petStatus, setPetStatus] = useState<"ok" | "cooldown" | null>(null);
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const reactionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const statusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const refresh = useCallback(() => {
     fetchPet().then(setPet).catch(() => {});
@@ -188,6 +191,7 @@ export function PetCreature() {
   useEffect(() => {
     return () => {
       if (reactionTimerRef.current) clearTimeout(reactionTimerRef.current);
+      if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
     };
   }, []);
 
@@ -236,6 +240,21 @@ export function PetCreature() {
     );
   };
 
+  const handlePet = async (e: React.MouseEvent) => {
+    e.preventDefault(); // suppress the browser context menu
+    if (isCoal || isDead) return;
+    try {
+      await api.petPet();
+      setPetStatus("ok");
+      setHeartKey((k) => k + 1); // remount the heart so animation restarts
+      refresh();
+    } catch {
+      setPetStatus("cooldown");
+    }
+    if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
+    statusTimerRef.current = setTimeout(() => setPetStatus(null), 1200);
+  };
+
   const lowHealth = !isCoal && pet.health <= 30;
   const hpStyle = healthGradient(pet.health);
   const stageBorderColor = STAGE_BORDER[pet.stage] || "#6366f1";
@@ -243,9 +262,10 @@ export function PetCreature() {
   return (
     <div className="flex items-center gap-2">
       <motion.div
-        className="cursor-pointer select-none flex items-end"
+        className="cursor-pointer select-none flex items-end relative"
         onClick={handleClick}
-        title={pet.name || "coal"}
+        onContextMenu={handlePet}
+        title={(pet.name || "coal") + " · right-click to pet"}
         animate={reaction ? REACTIONS[reaction].animate : anim.animate}
         transition={reaction ? REACTIONS[reaction].transition : anim.transition}
         key={reaction ?? "mood"}
@@ -267,6 +287,30 @@ export function PetCreature() {
             {frame.join("\n")}
           </pre>
         </motion.div>
+        <AnimatePresence>
+          {petStatus === "ok" && (
+            <motion.div
+              key={`heart-${heartKey}`}
+              initial={{ opacity: 0, y: 0, scale: 0.6 }}
+              animate={{ opacity: [0, 1, 1, 0], y: -28, scale: [0.6, 1.1, 1, 0.9] }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.1, ease: "easeOut" }}
+              className="absolute left-1/2 -top-1 -translate-x-1/2 text-[12px] text-pink-400 font-mono pointer-events-none"
+            >
+              &lt;3
+            </motion.div>
+          )}
+          {petStatus === "cooldown" && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.7 }}
+              exit={{ opacity: 0 }}
+              className="absolute left-1/2 -top-1 -translate-x-1/2 text-[9px] text-neutral-500 font-mono uppercase tracking-wider pointer-events-none"
+            >
+              zzz
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
 
       {!isCoal && (

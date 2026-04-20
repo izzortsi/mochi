@@ -45,7 +45,13 @@ def _feed_and_recompute(
     progress: Progress, card_uid: str, reached_gold_bonus_callback: bool = True
 ) -> None:
     """After a session changes completion state, recompute the day tier,
-    update streaks, and feed the pet. Mutates progress in place."""
+    update streaks, and feed the pet. Mutates progress in place.
+
+    Feed routing (new three-stat economy):
+      session complete → feed_pet_session (small extra health bonus)
+      tier clear       → feed_pet_tier_complete (XP — drives evolution)
+      full day (gold)  → feed_pet_day_complete (joy)
+    """
     tier = _tier_of(card_uid)
     courses = store.load_courses()
     day_tier = _recompute_day_tier(card_uid, courses, progress.completed_tasks)
@@ -58,13 +64,15 @@ def _feed_and_recompute(
             progress.day_tiers[key] = val
         gamification.update_streak(progress, list(day_tier.values())[-1] == "gold")
 
-    from app.routers.pet import feed_pet, feed_pet_tier_complete
+    from app.routers.pet import (
+        feed_pet_session, feed_pet_tier_complete, feed_pet_day_complete,
+    )
 
-    feed_pet(tier, gamification.xp_for_card(tier, progress.streak))
+    feed_pet_session(tier)
     for cleared_tier in newly_cleared_tiers:
         feed_pet_tier_complete(cleared_tier)
-    if reached_gold_bonus_callback and day_tier and list(day_tier.values())[-1] == "gold":
-        feed_pet("gold_bonus", 0)
+    if reached_gold_bonus_callback and "gold" in newly_cleared_tiers:
+        feed_pet_day_complete()
 
 
 def _all_phases_done(phases_map: dict[str, bool]) -> bool:

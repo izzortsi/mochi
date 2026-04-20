@@ -40,30 +40,40 @@ COAL_ART = {
     "dead": [],
 }
 
-# Feed amounts paid when a full session finishes (all 5 phases done).
-FEED_AMOUNTS = {
-    "bronze": {"health": 3, "happiness": 2},
-    "silver": {"health": 6, "happiness": 4},
-    "gold": {"health": 10, "happiness": 8},
-    "gold_bonus": {"health": 15, "happiness": 10},
+# === New three-stat economy ===
+# health       ← per phase checkmark (staying alive requires only a little
+#                daily work); plus a small session-completion bonus.
+# happiness    ← full-day completion + petting the pet (right-click).
+# knowledge/xp ← per tier-clear on a day; drives stage evolution.
+
+# Per-phase health bump. Tier-scaled so harder sessions reward more per phase.
+PHASE_HEALTH_BUMP = {
+    "bronze": 3.0,
+    "silver": 6.0,
+    "gold":   10.0,
 }
 
-# Small trickle paid on each session-phase (prime/core/retrieval/elaborate/check)
-# completion, scaled by the session's tier. Keeps the pet nibbled throughout
-# study rather than starving between session completions.
-PHASE_FEED_AMOUNTS = {
-    "bronze": {"health": 0.6, "happiness": 0.5},
-    "silver": {"health": 1.2, "happiness": 1.0},
-    "gold":   {"health": 2.0, "happiness": 1.8},
+# Small additional health bonus when all 5 phases of a session are done.
+SESSION_HEALTH_BONUS = {
+    "bronze": 2.0,
+    "silver": 4.0,
+    "gold":   6.0,
 }
 
-# Bonus paid when an entire tier (all sessions of that tier on a day) finishes.
-# Gold is the day-complete moment and also pays gold_bonus on top in the router.
-TIER_COMPLETE_FEED = {
-    "bronze": {"health": 4, "happiness": 3},
-    "silver": {"health": 8, "happiness": 6},
-    "gold":   {"health": 12, "happiness": 10},
+# XP awarded when all sessions of that tier on a day are complete. Drives
+# pet stage evolution (spark → emberling → ember → fire).
+TIER_XP_BUMP = {
+    "bronze": 30,
+    "silver": 60,
+    "gold":   120,
 }
+
+# Joy bump when the day is fully completed (all three tiers cleared).
+DAY_COMPLETE_JOY = 25.0
+
+# Right-click-to-pet interaction.
+PET_JOY_BUMP = 3.0
+PET_COOLDOWN_SECONDS = 30
 
 # New ember stages
 STAGE_XP = {"coal": 0, "spark": 0, "emberling": 100, "ember": 500, "fire": 1500}
@@ -218,61 +228,104 @@ async def hatch_pet(body: dict):
     return {"ok": True, "name": name, "id": pet["id"], "hue": parts["hue"]}
 
 
-def _apply_feed(pet: dict, amounts: dict, xp_gained: int = 0) -> dict:
-    """Bump health + happiness, update lastFed/XP, advance stage. Mutates + returns."""
-    pet["health"] = min(100, pet.get("health", 100) + amounts["health"])
-    pet["happiness"] = min(100, pet.get("happiness", 100) + amounts["happiness"])
-    pet["lastFed"] = _now()
+def _apply_feed(
+    pet: dict, health_delta: float = 0, happiness_delta: float = 0,
+    xp_gained: int = 0, mark_fed: bool = True,
+) -> dict:
+    """Bump one or more stats. Health/happiness clamp to [0, 100]; XP accrues.
+    Stage re-renders when totalXpEarned crosses a threshold."""
+    if health_delta:
+        pet["health"] = min(100, pet.get("health", 100) + health_delta)
+    if happiness_delta:
+        pet["happiness"] = min(100, pet.get("happiness", 100) + happiness_delta)
+    if mark_fed:
+        pet["lastFed"] = _now()
     if xp_gained:
         pet["totalXpEarned"] = pet.get("totalXpEarned", 0) + xp_gained
+        old_stage = pet.get("stage", "spark")
+        new_stage = _stage_for_xp(pet["totalXpEarned"], True)
+        pet["stage"] = new_stage
+        if new_stage != old_stage and pet.get("parts"):
+            pet["art"] = pet_art.render(new_stage, pet["parts"])
+    return pet
 
-    old_stage = pet.get("stage", "spark")
-    new_stage = _stage_for_xp(pet.get("totalXpEarned", 0), True)
-    pet["stage"] = new_stage
-    if new_stage != old_stage and pet.get("parts"):
-        pet["art"] = pet_art.render(new_stage, pet["parts"])
+
+def _alive_pet() -> dict | None:
+    pet = store.load_pet()
+    if not pet or pet.get("died") or pet.get("stage") == "coal":
+        return None
     return pet
 
 
 def feed_pet_phase(session_tier: str):
-    """Small per-phase trickle. No XP, no stage change gating."""
-    pet = store.load_pet()
-    if not pet or pet.get("died") or pet.get("stage") == "coal":
+    """Per-phase health bump. The dominant way to keep the pet alive."""
+    pet = _alive_pet()
+    if not pet:
         return
-    amounts = PHASE_FEED_AMOUNTS.get(session_tier, PHASE_FEED_AMOUNTS["bronze"])
-    _apply_feed(pet, amounts, xp_gained=0)
+    _apply_feed(pet, health_delta=PHASE_HEALTH_BUMP.get(session_tier, 3.0))
+    store.save_pet(pet)
+
+
+def feed_pet_session(session_tier: str):
+    """Small extra health bonus when a full session finishes."""
+    pet = _alive_pet()
+    if not pet:
+        return
+    _apply_feed(pet, health_delta=SESSION_HEALTH_BONUS.get(session_tier, 2.0))
     store.save_pet(pet)
 
 
 def feed_pet_tier_complete(day_tier: str):
-    """Bonus when a whole tier (bronze/silver/gold) on a day becomes complete."""
-    pet = store.load_pet()
-    if not pet or pet.get("died") or pet.get("stage") == "coal":
+    """Tier clear = knowledge/XP toward stage evolution. No health or joy."""
+    pet = _alive_pet()
+    if not pet:
         return
-    amounts = TIER_COMPLETE_FEED.get(day_tier)
-    if not amounts:
+    xp = TIER_XP_BUMP.get(day_tier, 0)
+    if xp:
+        _apply_feed(pet, xp_gained=xp, mark_fed=False)
+        store.save_pet(pet)
+
+
+def feed_pet_day_complete():
+    """Joy bump for clearing all three tiers on a day."""
+    pet = _alive_pet()
+    if not pet:
         return
-    _apply_feed(pet, amounts, xp_gained=0)
+    _apply_feed(pet, happiness_delta=DAY_COMPLETE_JOY)
     store.save_pet(pet)
 
 
-def feed_pet(tier: str, xp_gained: int = 0):
-    pet = store.load_pet()
-    if not pet or pet.get("died") or pet.get("stage") == "coal":
-        return
+def pet_the_pet() -> tuple[bool, dict | str]:
+    """Right-click-to-pet interaction. Small joy bump with cooldown.
+    Returns (True, {...state}) on success, (False, message) on cooldown / no pet."""
+    pet = _alive_pet()
+    if not pet:
+        return False, "no living pet to pet"
 
-    amounts = FEED_AMOUNTS.get(tier, FEED_AMOUNTS["bronze"])
-    pet["health"] = min(100, pet.get("health", 100) + amounts["health"])
-    pet["happiness"] = min(100, pet.get("happiness", 100) + amounts["happiness"])
-    pet["lastFed"] = _now()
-    pet["totalXpEarned"] = pet.get("totalXpEarned", 0) + xp_gained
+    last_petted = pet.get("lastPetted")
+    if last_petted:
+        try:
+            last_dt = datetime.fromisoformat(last_petted)
+        except ValueError:
+            last_dt = None
+        if last_dt:
+            elapsed = (datetime.now(timezone.utc) - last_dt).total_seconds()
+            if elapsed < PET_COOLDOWN_SECONDS:
+                wait = int(PET_COOLDOWN_SECONDS - elapsed)
+                return False, f"cooldown: wait {wait}s"
 
-    old_stage = pet.get("stage", "spark")
-    new_stage = _stage_for_xp(pet["totalXpEarned"], True)
-    pet["stage"] = new_stage
-
-    # Re-render on stage transition so the flame visibly grows.
-    if new_stage != old_stage and pet.get("parts"):
-        pet["art"] = pet_art.render(new_stage, pet["parts"])
-
+    _apply_feed(pet, happiness_delta=PET_JOY_BUMP)
+    pet["lastPetted"] = _now()
     store.save_pet(pet)
+    return True, {
+        "happiness": round(pet["happiness"], 1),
+        "health": round(pet.get("health", 100), 1),
+    }
+
+
+@router.post("/api/pet/pet")
+def pet_pet():
+    ok, payload = pet_the_pet()
+    if not ok:
+        raise HTTPException(400, payload if isinstance(payload, str) else "unavailable")
+    return {"ok": True, **payload}

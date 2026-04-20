@@ -110,6 +110,17 @@ export const api = {
         `/api/memory/tutor-notes/${encodeURIComponent(id)}`,
       ),
   },
+  petPet: () =>
+    fetch("/api/pet/pet", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" })
+      .then(async (r) => {
+        if (!r.ok) {
+          const text = await r.text();
+          throw new Error(text.slice(0, 200));
+        }
+        return camelizeKeys<{ ok: boolean; happiness: number; health: number }>(
+          await r.json(),
+        );
+      }),
 };
 
 export { getJson, postJson };
