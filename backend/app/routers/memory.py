@@ -40,6 +40,32 @@ def list_chat_threads(course_id: int | None = Query(None)):
     }
 
 
+@router.post("/api/memory/chat/append")
+def append_chat(body: dict):
+    """Append a single turn to a course's chat thread. Dual-read keys so the
+    caller may send camelCase or kebab-case."""
+    from datetime import datetime
+    from app.models import ChatMessage
+
+    course_id = body.get("course-id")
+    if course_id is None:
+        course_id = body.get("courseId")
+    if course_id is None:
+        raise HTTPException(400, "course-id required")
+    role = body.get("role", "user")
+    content = body.get("content", "")
+    tool_name = body.get("tool-name") or body.get("toolName")
+    timestamp = body.get("timestamp") or datetime.now().isoformat()
+
+    chat = store.load_chat()
+    msgs = chat.setdefault(int(course_id), [])
+    msgs.append(
+        ChatMessage(role=role, content=content, tool_name=tool_name, timestamp=timestamp)
+    )
+    store.save_chat(chat)
+    return {"ok": True, "count": len(msgs)}
+
+
 @router.delete("/api/memory/chat/turn")
 def delete_chat_turn(course_id: int = Query(...), index: int = Query(...)):
     """Drop a single turn by its 0-based index."""

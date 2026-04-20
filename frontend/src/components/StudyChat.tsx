@@ -143,16 +143,12 @@ export function StudyChat({ course, day, progress, onProgressChanged }: Props) {
     });
   }, []);
 
-  // Fire-and-forget persistence of a new turn. Errors are swallowed so a
-  // dropped WS frame doesn't block the UI; rehydration catches up on reload.
+  // Fire-and-forget persistence of a new turn via REST so it doesn't depend
+  // on the WS being connected yet (otherwise the first turn after mount can
+  // fall into the 15s WS-timeout hole and be silently dropped).
   const persistTurn = useCallback((msg: ChatMessage) => {
-    callTool("append-chat", {
-      courseId: course.id,
-      role: msg.role,
-      content: msg.content,
-      toolName: msg.toolName,
-    }).catch(() => {});
-  }, [callTool, course.id]);
+    api.memory.appendChat(course.id, msg).catch(() => {});
+  }, [course.id]);
 
   const pushMessage = useCallback((msg: ChatMessage) => {
     setMessages((m) => [...m, msg]);

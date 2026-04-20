@@ -85,6 +85,14 @@ export const api = {
       getJson<{ courseId: number; messages: ChatMessage[] }>(
         `/api/memory/chat?course-id=${courseId}`,
       ),
+    appendChat: (courseId: number, m: ChatMessage) =>
+      postJson<{ ok: boolean; count: number }>("/api/memory/chat/append", {
+        "course-id": courseId,
+        role: m.role,
+        content: m.content,
+        "tool-name": m.toolName,
+        timestamp: m.timestamp,
+      }),
     deleteChatTurn: (courseId: number, index: number) =>
       deletePath<{ ok: boolean }>(
         `/api/memory/chat/turn?course-id=${courseId}&index=${index}`,
