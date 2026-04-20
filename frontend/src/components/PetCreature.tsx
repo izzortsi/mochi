@@ -73,6 +73,33 @@ const STAGE_XP_THRESHOLDS: Record<string, { current: number; next: number | null
   fire: { current: 1500, next: null },
 };
 
+// One-shot reactions triggered by clicking the pet. Picked at random on each
+// click and cleared by setTimeout so the mood loop resumes afterward.
+type Reaction = "vibrate" | "hop" | "spin";
+const REACTION_KEYS: Reaction[] = ["vibrate", "hop", "spin"];
+
+const REACTIONS: Record<Reaction, {
+  animate: Record<string, number[]>;
+  transition: { duration: number; ease: string };
+  holdMs: number;
+}> = {
+  vibrate: {
+    animate: { x: [0, -2, 2, -2, 2, -1, 1, 0] },
+    transition: { duration: 0.5, ease: "easeOut" },
+    holdMs: 550,
+  },
+  hop: {
+    animate: { y: [0, -10, 0, -4, 0] },
+    transition: { duration: 0.6, ease: "easeOut" },
+    holdMs: 650,
+  },
+  spin: {
+    animate: { rotate: [0, 15, -15, 10, -5, 0] },
+    transition: { duration: 0.7, ease: "easeOut" },
+    holdMs: 750,
+  },
+};
+
 function pickFrame(art: Record<string, string[]>, mood: string, tick: number): string[] {
   let frame: string[];
   if (mood === "dead") frame = art.dead?.length ? art.dead : art.idle || [];
@@ -139,7 +166,9 @@ export function PetCreature() {
   const [hatchName, setHatchName] = useState("");
   const [hatching, setHatching] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [reaction, setReaction] = useState<Reaction | null>(null);
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const reactionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const refresh = useCallback(() => {
     fetchPet().then(setPet).catch(() => {});
@@ -154,6 +183,12 @@ export function PetCreature() {
   useEffect(() => {
     const frameInterval = setInterval(() => setTick(t => t + 1), 3000);
     return () => clearInterval(frameInterval);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (reactionTimerRef.current) clearTimeout(reactionTimerRef.current);
+    };
   }, []);
 
   if (!pet) return null;
@@ -188,7 +223,17 @@ export function PetCreature() {
   };
 
   const handleClick = () => {
-    if (isCoal || isDead) setShowHatch(true);
+    if (isCoal || isDead) {
+      setShowHatch(true);
+      return;
+    }
+    const next = REACTION_KEYS[Math.floor(Math.random() * REACTION_KEYS.length)];
+    setReaction(next);
+    if (reactionTimerRef.current) clearTimeout(reactionTimerRef.current);
+    reactionTimerRef.current = setTimeout(
+      () => setReaction(null),
+      REACTIONS[next].holdMs,
+    );
   };
 
   const lowHealth = !isCoal && pet.health <= 30;
@@ -201,8 +246,9 @@ export function PetCreature() {
         className="cursor-pointer select-none flex items-end"
         onClick={handleClick}
         title={pet.name || "coal"}
-        animate={anim.animate}
-        transition={anim.transition}
+        animate={reaction ? REACTIONS[reaction].animate : anim.animate}
+        transition={reaction ? REACTIONS[reaction].transition : anim.transition}
+        key={reaction ?? "mood"}
         style={{ transformOrigin: "center bottom" }}
       >
         <motion.div
