@@ -36,6 +36,18 @@ export default function NotesPage() {
     ? notes.filter(n => n.domain === filter)
     : notes;
 
+  const filteredGraph: NotesGraphData | null = graphData && filter
+    ? (() => {
+        const keep = new Set(
+          graphData.nodes.filter(n => n.domain === filter).map(n => n.id),
+        );
+        return {
+          nodes: graphData.nodes.filter(n => keep.has(n.id)),
+          edges: graphData.edges.filter(e => keep.has(e.from) && keep.has(e.to)),
+        };
+      })()
+    : graphData;
+
   if (error && !graphData) return <div className="opacity-50">{error}</div>;
 
   return (
@@ -65,11 +77,19 @@ export default function NotesPage() {
         <span className="text-xs opacity-50">{filtered.length} notes</span>
       </div>
 
-      {tab === "graph" && graphData && graphData.nodes.length > 0 && (
-        <NotesGraph data={graphData} cacheKey="global" height={560} />
+      {tab === "graph" && filteredGraph && filteredGraph.nodes.length > 0 && (
+        <NotesGraph
+          data={filteredGraph}
+          cacheKey={filter || "global"}
+          height={560}
+        />
       )}
-      {tab === "graph" && graphData && graphData.nodes.length === 0 && (
-        <div className="opacity-50">No notes yet. Import a PDF to generate notes.</div>
+      {tab === "graph" && filteredGraph && filteredGraph.nodes.length === 0 && (
+        <div className="opacity-50">
+          {filter
+            ? `No notes in "${filter}". Clear the filter or import more material.`
+            : "No notes yet. Import a PDF to generate notes."}
+        </div>
       )}
 
       {tab === "list" && (
