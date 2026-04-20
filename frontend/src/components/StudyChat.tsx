@@ -113,8 +113,10 @@ export function StudyChat({ course, day, progress, onProgressChanged }: Props) {
     let cancelled = false;
     api.memory.fetchChat(course.id).then((resp) => {
       if (cancelled) return;
-      setMessages(resp.messages);
-    }).catch(() => {});
+      setMessages(Array.isArray(resp?.messages) ? resp.messages : []);
+    }).catch(() => {
+      if (!cancelled) setMessages([]);
+    });
     api.memory.fetchTutorNotes().then((resp) => {
       if (cancelled) return;
       const byCard: Record<string, TutorNote[]> = {};
@@ -179,7 +181,7 @@ export function StudyChat({ course, day, progress, onProgressChanged }: Props) {
 
     try {
       const context = buildPageContext(course, day, progress, notesByCard);
-      const result = await runLlmTurn(config, messages, userMsg.content, context);
+      const result = await runLlmTurn(config, messages ?? [], userMsg.content, context);
       const assistantMsg: ChatMessage = {
         role: "assistant", content: result.text || "(calling tool)",
         toolName: null, timestamp: new Date().toISOString(),
@@ -241,7 +243,7 @@ export function StudyChat({ course, day, progress, onProgressChanged }: Props) {
         <span className="text-xs opacity-50">{status}</span>
       </div>
       <div className="flex-1 overflow-y-auto px-3 py-2 space-y-3">
-        {messages.map((m, i) => (
+        {(messages ?? []).map((m, i) => (
           <div key={i} className="text-sm">
             <div className="text-[10px] uppercase tracking-wider font-mono opacity-40 mb-1">
               {m.role}
