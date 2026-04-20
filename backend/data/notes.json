@@ -1900,5 +1900,258 @@
       "discrete-ds-intro"
     ],
     "source": ""
+  },
+  {
+    "id": "sl-spectral-theorem",
+    "title": "Spectral Theorem for Regular Sturm–Liouville Problems",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "Sturm-Liouville",
+      "eigenvalues",
+      "compactness",
+      "orthonormal-basis"
+    ],
+    "content": "## Setup\n\nLet $p,r>0$, $q$ continuous on $[a,b]$ and $L=\\frac{1}{r}\\bigl(-(py')'+q\\bigr)$ with separated BCs:\n$$BC_a(f)=\\cos(\\alpha)f(a)-\\sin(\\alpha)p(a)f'(a)=0,\\quad BC_b(f)=\\cos(\\beta)f(b)-\\sin(\\beta)p(b)f'(b)=0.$$\n\n## Symmetry\n\nBy the Lagrange identity $\\langle g,Lf\\rangle=\\langle Lg,f\\rangle$ for $f,g\\in\\mathfrak{D}(L)$ (boundary terms vanish by the shared BCs).\n\n## Compact Resolvent\n\nFor $z$ not an eigenvalue the resolvent\n$$R_L(z)g(x)=\\int_a^b G(z,x,t)g(t)r(t)\\,dt$$\nis compact (Arzelà–Ascoli via uniform continuity of the Green function).\n\n## Main Theorem\n\n- Countably many **real** eigenvalues $E_0<E_1<\\cdots\\to+\\infty$, each **simple**.\n- Eigenfunctions $u_n$ form an **orthonormal basis** for $L^2([a,b],r\\,dx)$.\n- The $n$-th eigenfunction has exactly $n$ zeros in $(a,b)$.\n- Weyl asymptotics: $E_n\\sim\\pi^2 n^2\\bigl(\\int_a^b\\sqrt{r/p}\\,dt\\bigr)^{-2}$.\n\n## Rayleigh–Ritz\n\n$$E_0=\\min_{f\\in\\mathfrak{D}(L),\\|f\\|=1}Q(f),\\quad Q(f)=\\int_a^b\\bigl(p|f'|^2+q|f|^2\\bigr)dx+\\text{boundary terms}.$$\n",
+    "related": [
+      "sl-prufer-oscillation"
+    ],
+    "source": ""
+  },
+  {
+    "id": "sl-prufer-oscillation",
+    "title": "Prüfer Variables and Oscillation Theory",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "Prüfer",
+      "oscillation",
+      "zeros",
+      "Sturm-comparison"
+    ],
+    "content": "## Definition\n\nFor a non-trivial real solution $u$ of $-(pu')'+(q-\\lambda r)u=0$ define\n$$u=\\rho\\sin\\theta,\\quad pu'=\\rho\\cos\\theta,\\quad \\rho=\\sqrt{u^2+(pu')^2}>0.$$\n\n## Prüfer ODEs\n\n$$\\theta'=\\frac{\\cos^2\\theta}{p}+(\\lambda r-q)\\sin^2\\theta,$$\n$$\\frac{\\rho'}{\\rho}=\\left(\\frac{1}{p}+q-\\lambda r\\right)\\frac{\\sin 2\\theta}{2}.$$\n\nThe first equation is autonomous in $\\theta$ (given $\\lambda$).\n\n## Zero Counting\n\nAt a zero of $u$: $\\sin\\theta=0$ so $\\theta'=1/p>0$. Hence $\\theta$ crosses multiples of $\\pi$ **only upward**. The number of zeros of $u$ in $(a,b)$ equals the number of times $\\theta$ crosses an integer multiple of $\\pi$.\n\n## Monotonicity in $\\lambda$\n\nBy Theorem 1.3 (comparison), $\\theta_u(\\lambda_1,x)>\\theta_u(\\lambda_0,x)$ for $x>c$ when $\\lambda_1>\\lambda_0$. This forces the $n$-th eigenfunction to have exactly $n$ zeros and yields **Sturm's comparison theorem**.\n\n## Sturm Comparison\n\nIf $p_1\\le p_0$ and $\\lambda_0 r_0-q_0\\le\\lambda_1 r_1-q_1$ on $(c,d)$, then between any two consecutive zeros of $u_0$ there is at least one zero of $u_1$.\n",
+    "related": [
+      "sl-spectral-theorem"
+    ],
+    "source": ""
+  },
+  {
+    "id": "matrizes-semelhantes",
+    "title": "Matrizes Semelhantes",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "mudança de base",
+      "operador linear",
+      "determinante"
+    ],
+    "content": "## Matrizes Semelhantes\n\nDuas matrizes $T_A$ e $T_B$ são **semelhantes** se existe uma matriz inversível $Q$ tal que\n$$T_B = Q^{-1}T_A Q.$$\n\nGeometricamente, representam o **mesmo operador linear** $f$ em duas bases diferentes. $Q$ é a matriz de mudança de base de $B$ para $A$.\n\n### Derivação\n\nUsando $v_A = Qv_B$ e $f(v)_A = Qf(v)_B$:\n$$Qf(v)_B = T_A Q v_B \\implies f(v)_B = Q^{-1}T_AQ\\,v_B,$$\ndaí $T_B = Q^{-1}T_AQ$.\n\n### Propriedade Fundamental\n\n$$\\det T_A = \\det T_B.$$\n\n### Exemplo\n\n$f(x,y)=(2x+9y,x+2y)$, base canônica $A$, $B=\\{(3,1),(-3,1)\\}$:\n$$Q=\\begin{bmatrix}3&-3\\\\1&1\\end{bmatrix},\\quad T_B=Q^{-1}TQ=\\begin{bmatrix}5&0\\\\0&-1\\end{bmatrix}.$$\n\nA forma diagonal é mais simples e revela os autovetores do operador.",
+    "related": [
+      "operador-inversivel",
+      "mudanca-de-base",
+      "operador-simetrico"
+    ],
+    "source": ""
+  },
+  {
+    "id": "mudanca-de-base",
+    "title": "Matriz de Mudança de Base",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "base",
+      "coordenadas",
+      "transformação"
+    ],
+    "content": "## Matriz de Mudança de Base\n\nDadas duas bases $A=\\{a_1,\\ldots,a_n\\}$ e $B=\\{b_1,\\ldots,b_n\\}$ de $V$, a **matriz de mudança de base de $B$ para $A$** é\n$$Q = A^{-1}B,$$\nonde $A$ e $B$ são as matrizes cujas colunas são os vetores das respectivas bases.\n\n### Relação de Coordenadas\n\nSe $v_A$ e $v_B$ são coordenadas de $v$ nas bases $A$ e $B$:\n$$v_A = Q\\,v_B.$$\n\n### Caso Particular\n\nQuando $A$ é a base canônica, $A^{-1}=I$ e portanto $Q=B$.\n\n### Aplicação: Matrizes Semelhantes\n\nA mesma matriz $Q$ aparece na fórmula $T_B=Q^{-1}T_AQ$, que relaciona as representações matriciais de um operador em diferentes bases.",
+    "related": [
+      "matrizes-semelhantes"
+    ],
+    "source": ""
+  },
+  {
+    "id": "matriz-simetrica",
+    "title": "Matriz Simétrica",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "transposta",
+      "simetria",
+      "diagonal"
+    ],
+    "content": "## Matriz Simétrica\n\nUma matriz quadrada $A$ é **simétrica** se $A=A^t$, ou seja, se $a_{ij}=a_{ji}$ para todos os índices $i,j$.\n\n### Estrutura\n\nUma matriz simétrica $n\\times n$ tem entradas acima e abaixo da diagonal iguais:\n$$A=\\begin{bmatrix}a_{11}&a_{12}&\\cdots\\\\a_{12}&a_{22}&\\cdots\\\\\\vdots&\\vdots&\\ddots\\end{bmatrix}.$$\n\nSeus elementos são determinados pelas entradas da diagonal e do triângulo superior.\n\n### Relação com Operadores Simétricos\n\nUm operador linear é simétrico se (e somente se) sua matriz em qualquer base ortonormal é simétrica.\n\n### Propriedades Espectrais\n\nMatrizes simétricas reais têm:\n- Todos os autovalores reais.\n- Autovetores correspondentes a autovalores distintos são ortogonais.\n- São sempre diagonalizáveis (Teorema Espectral).",
+    "related": [
+      "operador-simetrico",
+      "autovalor"
+    ],
+    "source": ""
+  },
+  {
+    "id": "green-function-slp",
+    "title": "Green Functions for Sturm–Liouville Operators",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "green-function",
+      "sturm-liouville",
+      "spectral-theory",
+      "boundary-value-problems"
+    ],
+    "content": "## Setup\n\nFor the regular Sturm–Liouville operator $L = \\frac{1}{r}(-(pu')'+qu)$ on $[a,b]$ with boundary conditions $BC_a(f)=BC_b(f)=0$, choose solutions\n$$u_a(z,a)=\\sin\\alpha,\\quad p(a)u_a'(z,a)=\\cos\\alpha$$\n$$u_b(z,b)=\\sin\\beta,\\quad p(b)u_b'(z,b)=\\cos\\beta.$$\n\n## Green Function\n\n$$G(z,x,t) = \\frac{1}{W(z)}\\begin{cases}u_b(z,x)u_a(z,t),& x\\ge t,\\\\ u_b(z,t)u_a(z,x),& x\\le t,\\end{cases}$$\nwhere $W(z)=W(u_b(z),u_a(z))$ is the (constant) Wronskian.\n\n**Properties:**\n- $G(z,x,t)^* = G(z^*,x,t)$ and $G(z,x,t)=G(z,t,x)$.\n- Meromorphic in $z$; poles at zeros of $W(z)$ = eigenvalues of $L$.\n\n## Resolvent\n\n$$R_L(z)g(x) = \\int_a^b G(z,x,t)g(t)r(t)\\,dt$$\n\nsatisfies $(L-z)R_L(z)g=g$ and $R_L(z)(L-z)f=f$ for $f\\in\\mathfrak{D}(L)$.\n\n**Compactness:** $G(z,\\cdot,\\cdot)$ continuous $\\Rightarrow$ $R_L(z)$ compact (Arzelà–Ascoli).  \n**Symmetry:** $G(z,x,t)=G(z,t,x)$ for real $z$ $\\Rightarrow$ $R_L(z)$ symmetric.\n\n## Spectral Expansion\n\nBy the spectral theorem for compact symmetric operators:\n$$G(z,x,t) = \\sum_{n=0}^\\infty \\frac{u_n(x)u_n(t)}{E_n - z},$$\nwhere $\\{u_n\\}$ are normalized real eigenfunctions and $E_0<E_1<\\cdots\\to\\infty$.\n\nEvery $f\\in\\mathfrak{H}_0$ expands as $f=\\sum_n\\langle u_n,f\\rangle u_n$ (convergence in $\\mathfrak{H}_0$); uniform if $f\\in\\mathfrak{Q}(L)$.\n\n## Eigenvalue Count and Weyl Asymptotics\n\nWhen the BC at $b$ is Dirichlet: $\\#_{(-\\infty,\\lambda)}(L) = \\#(u_a(\\lambda))$ (zeros of $u_a(\\lambda,\\cdot)$ in $(a,b)$).\n\nPrüfer asymptotics give $\\theta_a(\\lambda,b)\\sim\\sqrt{\\lambda}\\,c$ as $\\lambda\\to+\\infty$, $c=\\int_a^b\\sqrt{r/p}\\,dt$, yielding **Weyl's law**:\n$$E_n = \\left(\\frac{\\pi n}{c}\\right)^2 + O(n).$$",
+    "related": [
+      "sturm-liouville",
+      "prufer-variable"
+    ],
+    "source": ""
+  },
+  {
+    "id": "frobenius-method",
+    "title": "Frobenius Method for Regular Singular Points",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "complex-ode",
+      "series-solutions",
+      "bessel"
+    ],
+    "content": "## Setup\n\nFor the equation $u'' + p(z)u' + q(z)u = 0$ near $z=0$, if\n$$p(z)=\\frac{1}{z}\\sum_{j=0}^\\infty p_j z^j,\\quad q(z)=\\frac{1}{z^2}\\sum_{j=0}^\\infty q_j z^j,$$\nthe point is a **regular singular point**.\n\n## Frobenius Ansatz\n\n$$u(z)=z^\\alpha \\sum_{j=0}^\\infty h_j z^j,\\quad h_0=1.$$\n\n## Indicial Equation\n\n$$\\alpha^2+(p_0-1)\\alpha+q_0=0.$$\n\nRoots $\\alpha_1\\ge\\alpha_2$ (by real part) are the **characteristic exponents**.\n\n## Cases\n\n| Condition | Second solution |\n|---|---|\n| $\\alpha_1-\\alpha_2\\notin\\mathbb{N}_0$ | $z^{\\alpha_2}h_2(z)$ |\n| $\\alpha_1-\\alpha_2=m\\in\\mathbb{N}$ | $z^{\\alpha_2}h_2(z)+c\\log(z)u_1(z)$, $c$ may be $0$ |\n| $\\alpha_1=\\alpha_2$ | $z^{\\alpha_1}h_2(z)+c\\log(z)u_1(z)$, $c\\neq 0$ |\n\n## Recurrence\n\n$$\\bigl((\\alpha+j)^2+(p_0-1)(\\alpha+j)+q_0\\bigr)h_j = -\\sum_{k=1}^j\\bigl((\\alpha+j-k)p_k+q_k\\bigr)h_{j-k}.$$\n\n## Radius of Convergence\n\nAt least equal to the minimum radius of convergence of $zp(z)$ and $z^2q(z)$.",
+    "related": [
+      "sturm-liouville",
+      "prufer-variable",
+      "green-function"
+    ],
+    "source": ""
+  },
+  {
+    "id": "regular-perturbation",
+    "title": "Regular Perturbation Theory for ODEs",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "perturbation",
+      "variational-equation",
+      "parameter-dependence"
+    ],
+    "content": "## Setting\n\n$$\\dot{x}=f(t,x,\\varepsilon),\\quad x(t_0)=x_0,\\quad f\\in C^k.$$\n\nBy Theorem 2.11, $\\phi(t,\\varepsilon)\\in C^k$ in $\\varepsilon$.\n\n## Taylor Expansion\n\n$$\\phi(t,\\varepsilon)=\\phi_0(t)+\\phi_1(t)\\varepsilon+O(\\varepsilon^2).$$\n\n## Unperturbed Solution\n\n$$\\dot\\phi_0=f(t,\\phi_0,0),\\quad \\phi_0(t_0)=x_0.$$\n\n## First Correction\n\n$$\\dot\\phi_1=f_x(t,\\phi_0)\\phi_1+f_\\varepsilon(t,\\phi_0,0),\\quad \\phi_1(t_0)=0.$$\n\nThis is solved by variation of constants using the principal matrix solution $\\Pi(t,t_0)$ of $\\dot y=f_x(t,\\phi_0)y$:\n$$\\phi_1(t)=\\int_{t_0}^t \\Pi(t,s)f_\\varepsilon(s,\\phi_0(s),0)\\,ds.$$\n\n## Caution\n\nThe expansion is valid for **fixed $t$** in a compact interval; the error bound grows exponentially in $t$ via Gronwall, so the approximation breaks down for large times even if $\\varepsilon$ is small.",
+    "related": [
+      "matrix-exponential",
+      "first-order-system",
+      "floquet-multiplier"
+    ],
+    "source": ""
+  },
+  {
+    "id": "frobenius-note",
+    "title": "Frobenius Method & Regular Singular Points",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "singular-ode",
+      "power-series",
+      "bessel",
+      "frobenius"
+    ],
+    "content": "## Regular Singular Points and the Frobenius Method\n\n### Setup\nFor the scalar equation $u'' + p(z)u' + q(z)u = 0$ with $p(z) = p_0/z + p_1 + \\ldots$ and $q(z) = q_0/z^2 + \\ldots$, the point $z=0$ is a **regular singular point**.\n\n### Indicial Equation\nThe Frobenius ansatz $u(z) = z^\\alpha \\sum_{j=0}^\\infty h_j z^j$ ($h_0=1$) yields:\n$$\\alpha^2 + (p_0 - 1)\\alpha + q_0 = 0$$\nwith roots (characteristic exponents) $\\alpha_1 \\geq \\alpha_2$ (by real part).\n\n### Two Cases\n- **Case 1** ($\\alpha_1 - \\alpha_2 \\notin \\mathbb{N}_0$): Two independent pure Frobenius solutions $u_j(z) = z^{\\alpha_j} h_j(z)$.\n- **Case 2** ($\\alpha_1 - \\alpha_2 = m \\in \\mathbb{N}_0$): $u_1 = z^{\\alpha_1} h_1(z)$; $u_2 = z^{\\alpha_2} h_2(z) + c \\log(z) u_1(z)$ (log term may vanish if $m>0$).\n\n### Bessel Functions\nFor $z^2 u'' + zu' + (z^2 - \\nu^2)u = 0$: characteristic exponents $\\pm\\nu$. Solution:\n$$J_\\nu(z) = \\sum_{j=0}^\\infty \\frac{(-1)^j}{j!\\,\\Gamma(\\nu+j+1)}\\left(\\frac{z}{2}\\right)^{2j+\\nu}$$\nFor $\\nu \\notin \\mathbb{Z}$: $J_{-\\nu}$ is independent. For $\\nu = n \\in \\mathbb{N}_0$: logarithmic second solution $Y_n(z)$.\n\n### Systems Version\nFor $\\dot{w} = A(z)w$ with $A(z) = A_0/z + A_1 + \\ldots$: fundamental system $W(z) = U(z) z^M$ where $U$ is analytic at 0 and eigenvalues of $M$ are characteristic exponents of $A_0$ (mod integers).",
+    "related": [
+      "green-function",
+      "sturm-liouville"
+    ],
+    "source": ""
+  },
+  {
+    "id": "chaos-note",
+    "title": "Chaos, Symbolic Dynamics & Strange Attractors",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "chaos",
+      "symbolic-dynamics",
+      "shift-map",
+      "cantor-set",
+      "hausdorff-dimension"
+    ],
+    "content": "## Chaos and Symbolic Dynamics\n\n### Devaney's Definition of Chaos\n$f: M \\to M$ is **chaotic** if:\n1. **Topologically transitive**: for any open $U, V$, $\\exists n$ with $f^n(U)\\cap V \\neq \\emptyset$.\n2. **Dense periodic points**: $\\overline{\\text{Per}(f)} = M$.\n\nThese two imply **sensitive dependence on initial conditions**.\n\n### Shift Map\nOn $\\Sigma_N = \\{0,\\ldots,N-1\\}^{\\mathbb{N}_0}$ with metric $d(x,y)=\\sum |x_n-y_n|/N^n$, the shift $\\sigma(x_0,x_1,\\ldots)=(x_1,x_2,\\ldots)$ is chaotic: periodic sequences are dense; a dense orbit is constructed by concatenating all finite blocks.\n\n### Tent Map $T_\\mu$, $\\mu > 2$\nThe invariant Cantor set $\\Lambda = \\bigcap_n \\Lambda_n$ satisfies $(\\Lambda, T_\\mu) \\cong (\\Sigma_2, \\sigma)$ via the itinerary map. Hausdorff dimension: $\\dim_H(\\Lambda) = \\log 2 / \\log\\mu$.\n\n### Smale Horseshoe\nContracting $x$, expanding $y$, then folding: $\\Lambda = \\Lambda(T_{1/\\lambda}) \\times \\Lambda(T_\\mu)$ is a Cantor set conjugate to the bi-infinite shift $\\Sigma_2^\\mathbb{Z}$.\n\n### Smale–Birkhoff Theorem\nIf $f$ has a hyperbolic fixed point $p$ with a **transversal homoclinic point** $q \\in W^s(p) \\cap W^u(p)$, then some iterate $f^n$ has a horseshoe near the homoclinic orbit.\n\n### Lorenz Attractor\n$\\text{div}(f) = -(1+\\sigma+b) < 0$ ⟹ volumes contract exponentially ⟹ attractor has Lebesgue measure zero.",
+    "related": [
+      "smale-horseshoe",
+      "homoclinic-orbit",
+      "logistic-map",
+      "period-doubling"
+    ],
+    "source": ""
+  },
+  {
+    "id": "melnikov-note",
+    "title": "Melnikov's Method for Chaos Detection",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "melnikov",
+      "homoclinic",
+      "perturbation",
+      "chaos",
+      "duffing"
+    ],
+    "content": "## Melnikov's Method\n\n### Setup\nConsider $\\dot{x} = f(x) + \\varepsilon g(\\tau, x, \\varepsilon)$, $\\dot{\\tau}=1$ with $g$ periodic. The unperturbed system has a homoclinic orbit $x_0(t)$ at a hyperbolic saddle $p_0$.\n\n### Melnikov Integral\n$$M_{x_0}(t_0) = \\int_{-\\infty}^{\\infty} e^{-\\int_0^s \\text{div}(f(x_0(r)))\\,dr}\\, f(x_0(s)) \\wedge g(s-t_0, x_0(s), 0)\\,ds$$\n\nFor **Hamiltonian** unperturbed systems ($\\text{div}\\,f = 0$):\n$$M(t_0) = \\int_{-\\infty}^\\infty f(x_0(s)) \\wedge g(s-t_0, x_0(s),0)\\,ds$$\n\n### Chaos Criterion\nIf $M(t_0)$ has a **simple zero**, the stable and unstable manifolds intersect transversally for small $\\varepsilon$, and by Smale–Birkhoff the Poincaré map is chaotic.\n\n### Forced Duffing Example\n$\\ddot{q} = q - q^3 + \\varepsilon(-\\delta\\dot{q} + \\gamma\\cos(\\omega\\tau))$.\nHomoclinic orbit: $q_0(t) = \\sqrt{2}\\,\\text{sech}(t)$.\n$$M(t_0) = -\\frac{4\\delta}{3} + \\sqrt{2}\\pi\\gamma\\omega\\,\\text{sech}\\!\\left(\\frac{\\pi\\omega}{2}\\right)\\sin(\\omega t_0)$$\nChaos if $|\\delta/\\gamma| < \\frac{3\\sqrt{2}\\pi|\\omega|}{4}\\,\\text{sech}\\!\\left(\\frac{\\pi\\omega}{2}\\right)$.",
+    "related": [
+      "melnikov-function",
+      "homoclinic-orbit",
+      "stable-manifold",
+      "hamiltonian-system",
+      "poincare-map"
+    ],
+    "source": ""
+  },
+  {
+    "id": "shannon-entropy",
+    "title": "Shannon's Formula for Entropy",
+    "domain": "Information Theory",
+    "tags": [
+      "information",
+      "entropy",
+      "probability"
+    ],
+    "content": "## Shannon Entropy\n\nFor a random experiment with outcomes $A_1,\\ldots,A_N$ having probabilities $p_1,\\ldots,p_N$:\n\n$$I = -\\sum_{i=1}^{N} p_i \\log_2 p_i \\quad \\text{(bits)}$$\n\n**Special cases:**\n- Equiprobable outcomes ($p_i=1/N$): $I = \\log_2 N$.\n- Certain event ($p=1$): $I=0$.\n- Maximum entropy: uniform distribution.\n\n**Mutual information** about events $A_1,\\ldots,A_N$ conveyed by knowing which $B_j$ occurred:\n\n$$I_{AB} = \\sum_{i,j} P(A_i B_j)\\log_2\\frac{P(A_i B_j)}{P(A_i)P(B_j)}$$\n\n**Interpretation:** $I$ measures both the average information in a message and the uncertainty of the experiment. Receiving a message reduces uncertainty to zero.",
+    "related": [
+      "mixed-strategy"
+    ],
+    "source": ""
+  },
+  {
+    "id": "mixed-strategy",
+    "title": "Mixed Strategies in 2×2 Zero-Sum Games",
+    "domain": "Game Theory",
+    "tags": [
+      "game theory",
+      "probability",
+      "optimisation"
+    ],
+    "content": "## Two-Person Zero-Sum Games\n\nPayoff matrix for player 1:\n$$\\begin{pmatrix}v_{11}&v_{12}\\\\v_{21}&v_{22}\\end{pmatrix}$$\n\n**Optimal mixed strategy for player 1** (probability $x^0$ on strategy 1):\n$$x^0 = \\frac{v_{22}-v_{21}}{v_{11}+v_{22}-(v_{12}+v_{21})}$$\n\n**Optimal mixed strategy for player 2** (probability $y^0$ on strategy 1):\n$$y^0 = \\frac{v_{11}-v_{12}}{v_{11}+v_{22}-(v_{12}+v_{21})}$$\n\n**Game value:**\n$$V(x^0,y^0)=v_{11}x^0+v_{21}(1-x^0)$$\n\nFor any $y\\in[0,1]$: $V(x^0,y)=V(x^0,y^0)$ (player 1's payoff is constant under optimal mixing).\n\n**Key property:** Deviating from the optimal mixed strategy allows the opponent to exploit the deviation.",
+    "related": [
+      "shannon-entropy"
+    ],
+    "source": ""
+  },
+  {
+    "id": "branching-process-note",
+    "title": "Branching Processes",
+    "domain": "Probability Theory",
+    "tags": [
+      "branching-process",
+      "generating-function",
+      "markov-chain",
+      "extinction"
+    ],
+    "content": "## Branching Processes\n\nA **branching process** $\\xi(t)$ models a population where each particle independently produces offspring. With $k$ particles at time $0$, the generating function satisfies\n$$F_k(t,z) = [F(t,z)]^k.$$\n\n### Kolmogorov ODE\nWith transition densities $\\lambda_k$ (single-particle rates) and $\\sum_k\\lambda_k=0$, define\n$$f(x)=\\sum_{k=0}^{\\infty}\\lambda_k x^k.$$\nThen $F(t,z)$ solves\n$$\\frac{d}{dt}F = f(F), \\quad F(0,z)=z,$$\nor equivalently $t=\\int_z^{F}du/f(u)$.\n\n### Convexity of $f$\n$f''(x)=\\sum_{k\\ge2}k(k-1)\\lambda_k x^{k-2}\\ge0$, so $f$ is convex on $[0,1]$. Combined with $f(1)=0$, there is at most one other root $\\alpha\\in(0,1)$.\n\n### Extinction Probability\n$$p_0 = \\lim_{t\\to\\infty}p_0(t) = \\alpha,$$\nwhere $\\alpha$ is the smaller root of $f(x)=0$ in $[0,1]$. If $f(x)>0$ for all $x\\in[0,1)$, then $\\alpha=1$ (certain extinction).\n\n### Explosion\nAn explosion (infinite population in finite time) occurs with positive probability iff\n$$\\int_{x_0}^{1}\\frac{dx}{|f(x)|}<\\infty$$\nfor some $x_0\\in(\\alpha,1)$.\n\n### Key Examples\n| Process | $f(x)$ | Extinction prob. |\n|---|---|---|\n| Pure death ($\\lambda_0=\\lambda$) | $\\lambda(1-x)$ | 1 |\n| Birth-death ($\\lambda_0=\\mu,\\lambda_2=\\lambda$) | $\\lambda(x-1)(x-\\mu/\\lambda)$ | $\\min(\\mu/\\lambda,1)$ |\n| Cosmic-ray ($\\lambda_2=\\lambda$) | $\\lambda x(x-1)$ | 0 |",
+    "related": [
+      "optimal-control-note",
+      "markov-chain"
+    ],
+    "source": ""
+  },
+  {
+    "id": "optimal-control-note",
+    "title": "Optimal Control and Bellman's Equation",
+    "domain": "Probability Theory",
+    "tags": [
+      "bellman-equation",
+      "markov-chain",
+      "dynamic-programming"
+    ],
+    "content": "## Optimal Control of Markov Chains\n\nA **guided Markov chain** has transition probabilities $p_{ij}(d)$ depending on a control parameter $d\\in D$. A **decision rule** $d(x,t)$ maps (state, time) to a control value.\n\n### Problem\nMaximize $P(d)=\\mathbf{P}\\{\\xi(n)\\in E\\}$ over all decision rules, where $E$ is a target set.\n\n### Bellman's Equation (backward induction)\nDefine $P^0(k,i)$ = maximum probability of reaching $E$ in $n-k$ steps from state $\\varepsilon_i$ at time $k$.\n\n**Terminal condition:**\n$$P^0(n,j) = \\begin{cases}1 & \\varepsilon_j\\in E,\\\\ 0 & \\text{otherwise.}\\end{cases}$$\n\n**Recursion:**\n$$P^0(k,i) = \\max_{d\\in D}\\sum_j p_{ij}(d)\\,P^0(k+1,j), \\quad k=n-1,\\ldots,0.$$\n\nThe optimal control $d^0(\\varepsilon_i,k)$ is the maximizer at each step.\n\n### Optimal Choice Problem\nFor $m$ objects of different quality, the optimal stopping rule rejects the first $m_0-1$ candidates and then selects the next one that is best so far, where $m_0$ satisfies\n$$\\frac{1}{m_0}+\\frac{1}{m_0+1}+\\cdots+\\frac{1}{m-1}>1.$$\nFor large $m$: $m_0\\approx m/e$.",
+    "related": [
+      "branching-process-note",
+      "markov-chain",
+      "stationary-distribution"
+    ],
+    "source": ""
   }
 ]

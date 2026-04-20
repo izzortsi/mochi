@@ -11,6 +11,156 @@
       "content": "Exactly right — you've identified the key gap yourself.\n\nThe point isn't just computational convenience (\"first-order systems are easier\"). The deeper reason the conversion matters is **representational**: once you write the state as the pair $(x, v)$, you've defined a **phase space** where every point is a complete, unique description of the system's future.\n\nThat has real consequences for qualitative analysis:\n\n- **Trajectories in phase space can't cross.** Because each point $(x, v)$ determines a unique future (assuming $F$ is well-behaved), two distinct trajectories can never pass through the same point. This single fact lets you reason about the *global* behavior of solutions — fixed points, limit cycles, separatrices — without solving the ODE explicitly.\n\n- **The vector field picture becomes available.** The first-order system $(\\dot x, \\dot v) = (v,\\, F(x)/m)$ is literally a vector field on the $(x,v)$ plane. You can sketch it, find nullclines, classify equilibria by linearization — none of that language even makes sense for a raw second-order equation.\n\n- **$x$ alone does not determine the future; $(x, v)$ does.** A stone at height $h$ could be moving up or down — same position, completely different futures. Making $v$ an explicit state variable is what encodes that distinction into the geometry.\n\nSo when you convert to a first-order system, you're not just reformatting — you're **choosing the right state space** in which the physics has a clean geometric representation. That's the foundation for everything in qualitative/phase-plane analysis.\n\nDoes this click with what you were sensing was missing?",
       "tool_name": null,
       "timestamp": "2026-04-20T00:09:23.215536"
+    },
+    {
+      "role": "tool",
+      "content": "[retrieval-eval · c4-d1-bronze-0 / r1]\nprompt: Why is it useful to convert Newton's second-order equation into a first-order system?\nattempt: A first-order system is better suited for theoretical analysis and can represent the same dynamics with both x and v as independent variables.\nverdict: correct\nfeedback: The student's answer is an exact match to the canonical answer, correctly identifying both the analytical benefit and the state-space representation with x and v as independent variables.",
+      "tool_name": "retrieval-eval",
+      "timestamp": "2026-04-20T11:06:43.738Z"
+    },
+    {
+      "role": "tool",
+      "content": "[retrieval-eval · c4-d1-bronze-0 / r2]\nprompt: What does the initial condition $(x(0), v(0))$ determine for a particle under constant force?\nattempt: The initial position for the particle and the initial velocity of it.\nverdict: wrong\nfeedback: The student only restated what the initial conditions are (position and velocity), rather than explaining what they determine—namely, the unique complete trajectory for all time, both past and future.",
+      "tool_name": "retrieval-eval",
+      "timestamp": "2026-04-20T11:08:00.615Z"
+    },
+    {
+      "role": "tool",
+      "content": "[retrieval-eval · c4-d1-bronze-0 / r2]\nprompt: What does the initial condition $(x(0), v(0))$ determine for a particle under constant force?\nattempt: The complete trajectory, or orbit, for the given particle.\nverdict: partial\nfeedback: The student correctly identifies that the initial condition determines the complete trajectory. However, they omit the explicit formula x(t) = x(0) + v(0)t - g/2·t² that shows how the trajectory is uniquely determined, and don't mention that it covers both past and future motion.",
+      "tool_name": "retrieval-eval",
+      "timestamp": "2026-04-20T11:08:53.959Z"
+    },
+    {
+      "role": "tool",
+      "content": "[elaborate-eval · c4-d1-bronze-0 / e1]\nprompt: Explain why the constant-force case $F(x) = -mg$ is easy to solve but the real gravitational force $F(x) = -\\gamma m M x/|x|^3$ is not.\nattempt: Mainly because in the constant-force case the value of doesn't depend on x (constant force) and can be modeled as a 1-dimensional sytem, whereas the real gravitational force uses the three-dimensional position of the particle.\nverdict: weak\nfeedback: The student correctly identifies that constant force is independent of position, which is the key insight. However, the claim that the real gravitational force is hard because it requires three dimensions is incorrect—the real difficulty exists even in the purely 1D version, where F = -γmM/x² is a nonlinear, position-dependent force that makes the ODE much harder to integrate analytically compared to the trivially integrable constant-force case. The student should explain that when F is constant, Newton's second law m·ẍ = const integrates immediately to give simple polynomial (kinematic) equations, whereas a position-dependent force like 1/x² yields a nonlinear ODE requiring more sophisticated techniques (e.g., energy methods or elliptic integrals).",
+      "tool_name": "elaborate-eval",
+      "timestamp": "2026-04-20T11:45:27.914Z"
+    },
+    {
+      "role": "user",
+      "content": "Why is the real gravitational force case so much harder?",
+      "tool_name": null,
+      "timestamp": "2026-04-20T11:51:50.530Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Great question — and the grader's feedback on your last attempt gives us a good starting point.\n\nYour instinct about \"position-dependence\" was on the right track, but the difficulty isn't really about dimensions. Here's the core issue:\n\n---\n\n**When force is constant** ($F = -mg$):\n\nNewton's law becomes $m\\ddot{x} = -mg$, i.e. $\\ddot{x} = -g$ (a constant). You can just **integrate twice**:\n\n$$\\dot{x}(t) = -gt + v_0, \\qquad x(t) = -\\frac{1}{2}gt^2 + v_0 t + x_0$$\n\nDone. No fuss — the right-hand side never \"fights back.\"\n\n---\n\n**When force depends on position** ($F(x) = -\\frac{\\gamma m M}{x^2}$):\n\nNewton's law becomes:\n\n$$m\\ddot{x} = -\\frac{\\gamma m M}{x^2} \\quad \\Longrightarrow \\quad \\ddot{x} = -\\frac{\\gamma M}{x^2}$$\n\nNow the right-hand side **depends on the unknown $x(t)$ itself**. You can't simply integrate — you need $x(t)$ to evaluate the force, but $x(t)$ is what you're trying to find. This circularity makes it a genuinely **nonlinear ODE**.\n\nSolving it requires clever tricks (e.g. energy methods: multiply both sides by $\\dot{x}$), and even then you end up with elliptic integrals — no clean closed form.\n\n---\n\n**One-line summary:** Constant force → integrate twice and you're done. Position-dependent force → the ODE is nonlinear because the unknown appears on the right-hand side, making direct integration impossible.\n\nDoes that click? Want to take another shot at phrasing it yourself, or move on to the bronze problem?",
+      "tool_name": null,
+      "timestamp": "2026-04-20T11:52:22.682Z"
+    },
+    {
+      "role": "user",
+      "content": "Bronze, Core: (i) is first order, scalar, linear, autonomous",
+      "tool_name": null,
+      "timestamp": "2026-04-20T13:06:27.463Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Good start! You've correctly identified several properties of (i). Let me give you a quick check:\n\n- **First order** ✓ — highest derivative is $y'$\n- **Scalar** ✓ — one dependent variable $y$\n- **Linear** ✓ — $y'$ and $y$ appear to the first power, no products or nonlinear functions of $y$\n- **Autonomous** ✓ — the equation $y' + y = 0$ has no explicit $t$ dependence\n\nThat's a complete and correct classification for (i). \n\nNow, can you try **(ii)** $\\ddot{u} = t\\sin(u)$ and **(iii)** $\\dot{x} = -y,\\ \\dot{y} = x$?",
+      "tool_name": null,
+      "timestamp": "2026-04-20T13:06:32.220Z"
+    },
+    {
+      "role": "user",
+      "content": "ii) scalar, 2nd order, nonautonomous, nonlinear\niii) system, first order, autonomous, linear",
+      "tool_name": null,
+      "timestamp": "2026-04-20T13:10:39.654Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Both are spot on! Let me confirm:\n\n**(ii)** $\\ddot{u} = t\\sin(u)$\n- **Scalar** ✓ — one dependent variable $u$\n- **2nd order** ✓ — highest derivative is $\\ddot{u}$\n- **Non-autonomous** ✓ — explicit $t$ on the right-hand side\n- **Nonlinear** ✓ — $\\sin(u)$ is nonlinear in $u$\n\n**(iii)** $\\dot{x} = -y,\\ \\dot{y} = x$\n- **System** ✓ — two dependent variables $x, y$\n- **First order** ✓ — only first derivatives appear\n- **Autonomous** ✓ — no explicit $t$\n- **Linear** ✓ — right-hand sides are linear in $x$ and $y$\n\nAll three classified perfectly. I'll mark this one complete and log that you're solid on ODE classification.\n\n\n\n\n\nReady to tackle the **Silver** card? You'll need to convert $\\ddot{x} = -y,\\ \\ddot{y} = x$ into a first-order system.",
+      "tool_name": null,
+      "timestamp": "2026-04-20T13:10:45.991Z"
+    },
+    {
+      "role": "tool",
+      "content": "→ grade-attempt",
+      "tool_name": "grade-attempt",
+      "timestamp": "2026-04-20T13:10:45.991Z"
+    },
+    {
+      "role": "tool",
+      "content": "\"ok\"",
+      "tool_name": "grade-attempt",
+      "timestamp": "2026-04-20T13:10:46.025Z"
+    },
+    {
+      "role": "tool",
+      "content": "→ record-tutor-note",
+      "tool_name": "record-tutor-note",
+      "timestamp": "2026-04-20T13:10:46.026Z"
+    },
+    {
+      "role": "tool",
+      "content": "{\"ok\":true,\"id\":\"h2nurpbt\"}",
+      "tool_name": "record-tutor-note",
+      "timestamp": "2026-04-20T13:10:46.049Z"
+    },
+    {
+      "role": "tool",
+      "content": "[retrieval-eval · c4-d2-bronze-0 / r1]\nprompt: What is the order of $\\ddot{x} + 3\\dot{x} + 2x = \\sin(t)$?\nattempt: 2\nverdict: correct\nfeedback: The student correctly identified the order as 2. No explanation was given, but the answer is right.",
+      "tool_name": "retrieval-eval",
+      "timestamp": "2026-04-20T13:11:14.565Z"
+    },
+    {
+      "role": "tool",
+      "content": "[retrieval-eval · c4-d2-bronze-0 / r2]\nprompt: Is $\\dot{x} = \\sin(x) + t$ linear?\nattempt: no due to the non-linear function sin(x)\nverdict: correct\nfeedback: The student correctly identifies that sin(x) makes the ODE nonlinear. The answer captures the key idea fully.",
+      "tool_name": "retrieval-eval",
+      "timestamp": "2026-04-20T13:11:46.698Z"
+    },
+    {
+      "role": "user",
+      "content": "Discuss Bronze, Elaborate with me.",
+      "tool_name": null,
+      "timestamp": "2026-04-20T13:12:30.565Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Sure! The bronze card is all about the **four axes of ODE classification**. You've already shown you're solid on all of them, so let's make the ideas crisp and connected rather than just definitional.\n\n---\n\n### The Four Axes\n\n**1. Order**\nThe order is simply the highest derivative present. $y'$ → order 1, $\\ddot{u}$ → order 2, etc. It tells you how much \"history\" the system needs to determine future evolution — a 2nd order ODE needs both $x(t_0)$ and $\\dot{x}(t_0)$ as initial conditions.\n\n**2. Linearity**\nAn ODE is linear if the dependent variable and all its derivatives appear *linearly* — no products like $y \\cdot y'$, no nonlinear functions like $\\sin(y)$, $e^y$, $y^2$. The coefficients can be arbitrary functions of $t$; only the dependence on $y$ matters.\n\n$$\\underbrace{a_n(t)y^{(n)} + \\cdots + a_1(t)y' + a_0(t)y}_{\\text{linear in }y\\text{ and its derivatives}} = f(t)$$\n\nYou correctly caught that $t\\sin(u)$ is nonlinear because of $\\sin(u)$, even though $t$ itself is fine.\n\n**3. Autonomy**\nAn ODE is autonomous if $t$ does not appear explicitly — the \"rules\" don't change with time. $\\dot{x} = -y,\\ \\dot{y} = x$ is autonomous; $\\ddot{u} = t\\sin(u)$ is not. Autonomous systems have nice geometric structure (phase portraits don't shift with time).\n\n**4. Scalar vs. System**\nOne dependent variable → scalar. Multiple → system. This is really about dimension: a scalar 2nd order ODE and a 2-dimensional first-order system are closely related (the silver card is exactly about this connection!).\n\n---\n\n### A Unifying View\n\nThese axes aren't independent — they combine to tell you how hard the ODE is to analyze:\n\n| | Linear | Nonlinear |\n|---|---|---|\n| **Autonomous** | Easiest (e.g. $y' + y = 0$) | Hard but geometric tools help |\n| **Non-autonomous** | Moderate | Hardest |\n\nDoes anything here feel unclear, or is there a connection you'd like to dig into further?",
+      "tool_name": null,
+      "timestamp": "2026-04-20T13:12:44.049Z"
+    },
+    {
+      "role": "user",
+      "content": "Help me to explain why a nonlinear equation cannot be solved by superposition of simpler solutions.",
+      "tool_name": null,
+      "timestamp": "2026-04-20T13:13:56.721Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Great question — this gets at *why* linearity is so powerful. Let me guide you to the answer rather than just give it.\n\n---\n\n**Start here:** Suppose $y_1$ and $y_2$ are both solutions to some ODE. We want to know when $y = c_1 y_1 + c_2 y_2$ is *also* a solution.\n\nFor a **linear** ODE, say $L[y] = 0$ where $L$ is a linear operator (e.g. $L[y] = y'' + p(t)y' + q(t)y$), what property of $L$ makes superposition work?\n\nTake a moment — what does \"linear operator\" mean formally, and how does it guarantee $L[c_1 y_1 + c_2 y_2] = 0$?",
+      "tool_name": null,
+      "timestamp": "2026-04-20T13:14:05.608Z"
+    },
+    {
+      "role": "user",
+      "content": "The fact that L is linear ensures that L[ay_1 + by_2] is linear because L applied to y_1 + a y_2 respects additivity and homogeneity",
+      "tool_name": null,
+      "timestamp": "2026-04-20T13:28:51.002Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Exactly right — additivity and homogeneity are the key. To state it precisely:\n\n$$L[c_1 y_1 + c_2 y_2] = c_1 L[y_1] + c_2 L[y_2] = c_1 \\cdot 0 + c_2 \\cdot 0 = 0$$\n\nSo superposition works *because* $L$ distributes over linear combinations.\n\n---\n\n**Now the nonlinear case.** Suppose instead your ODE involves a nonlinear operator $N$, for example:\n\n$$N[y] = y'' + y^2 = 0$$\n\nSuppose $y_1$ and $y_2$ are both solutions, so $N[y_1] = 0$ and $N[y_2] = 0$. Try applying $N$ to $y_1 + y_2$:\n\n$$N[y_1 + y_2] = (y_1 + y_2)'' + (y_1 + y_2)^2$$\n\nCan you expand $(y_1 + y_2)^2$ and identify the term that *breaks* superposition — the term that wouldn't appear if $N$ were linear?",
+      "tool_name": null,
+      "timestamp": "2026-04-20T13:28:56.267Z"
+    },
+    {
+      "role": "user",
+      "content": "all of them; y_1², y_2² and 2y_1 y_2",
+      "tool_name": null,
+      "timestamp": "2026-04-20T13:40:43.643Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Close, but let me sharpen this a bit!\n\n$y_1^2$ and $y_2^2$ are actually *expected* — they appear in $N[y_1]$ and $N[y_2]$ individually. Since $N[y_1] = 0$ and $N[y_2] = 0$, those terms are already \"accounted for.\"\n\nThe genuine **culprit** is the cross term $2y_1 y_2$. Let's see why:\n\n$$N[y_1 + y_2] = \\underbrace{(y_1'' + y_1^2)}_{=\\,N[y_1]=0} + \\underbrace{(y_2'' + y_2^2)}_{=\\,N[y_2]=0} + \\underbrace{2y_1 y_2}_{\\text{extra!}}$$\n\nSo even though $y_1$ and $y_2$ are individually solutions, you're left with:\n\n$$N[y_1 + y_2] = 2y_1 y_2 \\neq 0 \\text{ in general}$$\n\nThis cross term has no reason to vanish — it's a genuine *interaction* between the two solutions that a linear operator would never produce.\n\n---\n\n**The deeper point:** Nonlinearity means solutions *interact* when combined. There's no clean decomposition into independent simpler parts. This is why, for example, fluid turbulence or chaotic systems are so hard — you can't just add up \"modes\" and get a valid solution.\n\nDoes this feel satisfying, or would you like to see another concrete example of a nonlinear ODE where superposition fails?",
+      "tool_name": null,
+      "timestamp": "2026-04-20T13:40:52.232Z"
+    },
+    {
+      "role": "tool",
+      "content": "[elaborate-eval · c4-d2-bronze-0 / e1]\nprompt: Explain why a nonlinear equation like $\\ddot{x} = -\\cos(x)$ cannot be solved by superposition of simpler solutions.\nattempt: Consider the nonlinear operator N[x] = ẍ - cos(x). Let x, y be solutions. We'd need to have, for such equation to be solvable by superposition of simpler solution that N respected superposition, which is not the case as N[x + y] = ẍ + ÿ - cos(x + y) -- violates linearity\nverdict: adequate\nfeedback: The student correctly identifies the core issue: the nonlinear operator N does not satisfy superposition, and the key step showing cos(x+y) ≠ cos(x)+cos(y) is implicit in the calculation. To sharpen the argument, the student should explicitly complete the comparison—showing N[x+y] ≠ N[x]+N[y] requires noting that cos(x+y) ≠ cos(x)+cos(y) in general, which is precisely where linearity fails. It would also strengthen the explanation to clarify what superposition actually requires (i.e., that if x and y solve the equation, then αx+βy must also solve it) and why that property is essential for decomposing solutions into simpler parts.",
+      "tool_name": "elaborate-eval",
+      "timestamp": "2026-04-20T14:13:39.236Z"
     }
   ]
 }

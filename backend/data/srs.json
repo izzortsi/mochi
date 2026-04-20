@@ -70,5 +70,53 @@
     "due": "2026-04-20",
     "last_reviewed": null,
     "lapses": 0
+  },
+  "c4-d1-bronze-0::r1": {
+    "id": "c4-d1-bronze-0::r1",
+    "card_uid": "c4-d1-bronze-0",
+    "prompt_id": "r1",
+    "prompt": "Why is it useful to convert Newton's second-order equation into a first-order system?",
+    "answer": "A first-order system is better suited for theoretical analysis and can represent the same dynamics with both $x$ and $v$ as independent variables.",
+    "concept": "newtons-equations",
+    "box": 1,
+    "due": "2026-04-20",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c4-d1-bronze-0::r2": {
+    "id": "c4-d1-bronze-0::r2",
+    "card_uid": "c4-d1-bronze-0",
+    "prompt_id": "r2",
+    "prompt": "What does the initial condition $(x(0), v(0))$ determine for a particle under constant force?",
+    "answer": "It uniquely determines the entire trajectory past and future via $x(t) = x(0) + v(0)t - \\frac{g}{2}t^2$.",
+    "concept": "newtons-equations",
+    "box": 1,
+    "due": "2026-04-20",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c4-d2-bronze-0::r1": {
+    "id": "c4-d2-bronze-0::r1",
+    "card_uid": "c4-d2-bronze-0",
+    "prompt_id": "r1",
+    "prompt": "What is the order of $\\ddot{x} + 3\\dot{x} + 2x = \\sin(t)$?",
+    "answer": "Order 2, since the highest derivative is $\\ddot{x}$.",
+    "concept": "ode-classification",
+    "box": 1,
+    "due": "2026-04-20",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c4-d2-bronze-0::r2": {
+    "id": "c4-d2-bronze-0::r2",
+    "card_uid": "c4-d2-bronze-0",
+    "prompt_id": "r2",
+    "prompt": "Is $\\dot{x} = \\sin(x) + t$ linear?",
+    "answer": "No, because $\\sin(x)$ is nonlinear in $x$.",
+    "concept": "ode-classification",
+    "box": 1,
+    "due": "2026-04-20",
+    "last_reviewed": null,
+    "lapses": 0
   }
 }

@@ -634,6 +634,10 @@
       {
         "num": 5,
         "title": "Periodic Systems & Dynamical Behavior"
+      },
+      {
+        "num": 6,
+        "title": "Advanced Topics & Integration"
       }
     ],
     "days": [
@@ -2585,6 +2589,652 @@
             }
           }
         ]
+      },
+      {
+        "id": 24,
+        "phase": 5,
+        "title": "Sturm–Liouville Problems & Spectral Theory",
+        "icon": "∿",
+        "summary": "Regular Sturm–Liouville boundary value problems, eigenvalue structure, Prüfer angles, and Weyl asymptotics.",
+        "key_insight": "The Picard–Lindelöf iteration in function space plus compactness of the resolvent operator forces the eigenvalues to form a discrete sequence tending to infinity, with each eigenfunction having exactly as many zeros as its index.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Write the Bessel equation $z^2u''+zu'+(z^2-\\nu^2)u=0$ in Sturm–Liouville form and identify $p$, $q$, $r$.",
+            "detail": "The operator $L = \\frac{1}{r}(-(py')' + q)$ on $[a,b]$ with separated boundary conditions $BC_a(f)=BC_b(f)=0$ is symmetric in $L^2([a,b],r\\,dx)$. Its resolvent $R_L(z)$ is an integral operator with continuous kernel (Green function), hence compact. By the spectral theorem for compact symmetric operators the eigenvalues form a real sequence $E_0 < E_1 < \\cdots \\to +\\infty$ and the eigenfunctions are an orthonormal basis.",
+            "concepts": [
+              "linear-ode"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Recognize a regular Sturm–Liouville problem and state what is meant by its eigenvalues and eigenfunctions.",
+                "prior_knowledge": "You know that linear ODEs have solution spaces spanned by finitely many functions, and that integration by parts relates an operator to its adjoint."
+              },
+              "core": {
+                "exposition": "The operator $L = \\frac{1}{r}(-(py')' + q)$ on $[a,b]$ with separated boundary conditions $BC_a(f)=BC_b(f)=0$ is symmetric in $L^2([a,b],r\\,dx)$. Its resolvent $R_L(z)$ is an integral operator with continuous kernel (Green function), hence compact. By the spectral theorem for compact symmetric operators the eigenvalues form a real sequence $E_0 < E_1 < \\cdots \\to +\\infty$ and the eigenfunctions are an orthonormal basis.",
+                "worked_example": "$L = -d^2/dx^2$ on $[0,1]$ with Dirichlet BCs.\nEigenvalue equation: $-y'' = \\lambda y$, $y(0)=y(1)=0$.\nGeneral solution: $y = A\\sin(\\sqrt{\\lambda}x)$.\nBC at 1: $\\sin(\\sqrt{\\lambda})=0 \\Rightarrow \\sqrt{\\lambda}=n\\pi$.\n$E_n=(n\\pi)^2$, $u_n=\\sqrt{2}\\sin(n\\pi x)$, $n\\in\\mathbb{N}$.",
+                "problem": "Write the Bessel equation $z^2u''+zu'+(z^2-\\nu^2)u=0$ in Sturm–Liouville form and identify $p$, $q$, $r$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the two conditions (on eigenvalues and eigenfunctions) guaranteed by the spectral theorem for a regular Sturm–Liouville problem.",
+                    "answer": "Eigenvalues are real, discrete, and accumulate only at $+\\infty$; the corresponding eigenfunctions form an orthonormal basis for $L^2([a,b],r\\,dx)$.",
+                    "concept": "linear-ode"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why does the resolvent operator $R_L(z)$ of a regular Sturm–Liouville problem map bounded sets to equicontinuous families?",
+                    "answer": "The Green function $G(z,x,t)$ is continuous on the compact square $[a,b]^2$, so $|R_L(z)f(x)-R_L(z)f(y)|\\le \\varepsilon\\|f\\|$ whenever $|x-y|<\\delta$ by uniform continuity, giving equicontinuity independent of $f$.",
+                    "concept": "linear-ode"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain in your own words why a regular Sturm–Liouville operator cannot have a continuous spectrum, while $L=-d^2/dx^2$ on all of $\\mathbb{R}$ does."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Show that two eigenfunctions of a regular Sturm–Liouville problem corresponding to different eigenvalues are orthogonal in $L^2([a,b],r\\,dx)$.",
+                "rubric": "Compute $\\langle u_m, Lu_n\\rangle$ two ways using symmetry of $L$ to get $(E_n-E_m)\\langle u_m,u_n\\rangle=0$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 25,
+        "phase": 5,
+        "title": "Oscillation Theory & Prüfer Variables",
+        "icon": "📐",
+        "summary": "Prüfer polar coordinates in phase space turn the node-counting problem for Sturm–Liouville eigenfunctions into a monotone ODE problem.",
+        "key_insight": "The Prüfer angle $\\theta_u$ satisfies a first-order autonomous ODE that increases strictly at every zero of $u$; counting how many times $\\theta_u$ crosses integer multiples of $\\pi$ counts zeros.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Use Prüfer variables to prove that between two consecutive zeros of the $n$-th eigenfunction there is exactly one zero of the $(n+1)$-th eigenfunction (Sturm interlacing).",
+            "detail": "Set $u=\\rho\\sin\\theta$, $pu'=\\rho\\cos\\theta$. Then $\\theta'=\\cos^2\\!\\theta/p+(\\lambda r-q)\\sin^2\\!\\theta$ and at every zero of $u$ we have $\\sin\\theta=0$ so $\\theta'=1/p>0$. Hence $\\theta$ can only cross multiples of $\\pi$ upward: the $n$-th eigenfunction has exactly $n$ zeros in $(a,b)$.",
+            "concepts": [
+              "qualitative-analysis",
+              "linear-ode"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Use Prüfer variables to count zeros of a Sturm–Liouville solution and relate them to eigenvalue index.",
+                "prior_knowledge": "Polar coordinates in the phase plane $(u, pu')$ convert a second-order linear ODE into two first-order equations; the radial equation can be solved once the angular equation is known."
+              },
+              "core": {
+                "exposition": "Set $u=\\rho\\sin\\theta$, $pu'=\\rho\\cos\\theta$. Then $\\theta'=\\cos^2\\!\\theta/p+(\\lambda r-q)\\sin^2\\!\\theta$ and at every zero of $u$ we have $\\sin\\theta=0$ so $\\theta'=1/p>0$. Hence $\\theta$ can only cross multiples of $\\pi$ upward: the $n$-th eigenfunction has exactly $n$ zeros in $(a,b)$.",
+                "worked_example": "$L=-d^2/dx^2$ on $[0,\\pi]$, Dirichlet BCs, $\\lambda_n=n^2$.\nPrüfer angle eq: $\\theta'=\\cos^2\\theta+n^2\\sin^2\\theta$.\n$\\theta(0)=0$; for $u_n=\\sin(nx)$: $\\theta$ increases from $0$ to $n\\pi$, crossing $k\\pi$ at $x=k\\pi/n$ for $k=1,\\ldots,n-1$.\nExactly $n-1$ interior zeros, consistent with $\\#=n-1$.",
+                "problem": "Use Prüfer variables to prove that between two consecutive zeros of the $n$-th eigenfunction there is exactly one zero of the $(n+1)$-th eigenfunction (Sturm interlacing)."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Write the Prüfer ODE for the angle $\\theta_u$ when $u$ satisfies $-(pu')'+qu=\\lambda r u$.",
+                    "answer": "$\\theta_u'=\\cos^2(\\theta_u)/p(x)+(\\lambda r(x)-q(x))\\sin^2(\\theta_u)$.",
+                    "concept": "qualitative-analysis"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "How does the number of zeros of the $n$-th eigenfunction (indexed from 0) in $(a,b)$ relate to $n$?",
+                    "answer": "The $n$-th eigenfunction has exactly $n$ zeros in the open interval $(a,b)$.",
+                    "concept": "linear-ode"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why the Prüfer angle is strictly increasing at a zero of $u$ and why this rules out $\\theta_u$ crossing a multiple of $\\pi$ from above."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "State Weyl's asymptotic formula for the eigenvalues of a regular Sturm–Liouville problem and sketch why the Prüfer angle argument leads to it.",
+                "rubric": "$E_n\\sim \\pi^2 n^2/(\\int_a^b\\sqrt{r/p}\\,dt)^2$; the Prüfer angle grows like $\\sqrt{\\lambda}\\int\\sqrt{r/p}\\,dt$ so the $n$-th eigenvalue satisfies $\\sqrt{E_n}\\cdot\\int\\sqrt{r/p}\\approx n\\pi$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 26,
+        "phase": 5,
+        "title": "Green's Functions & Boundary Value Problems",
+        "icon": "🔧",
+        "summary": "Construct the Green function of a regular Sturm–Liouville operator and use it to invert L−z as a compact symmetric operator, recovering the eigenfunction expansion.",
+        "key_insight": "The Green function G(z,x,t) encodes the full spectral information of L: its poles are the eigenvalues, and the resolvent R_L(z) built from it is compact, unlocking the spectral theorem.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "For the same operator, verify directly that $R_L(z)(L-z)f = f$ for $f\\in\\mathfrak{D}(L)$ by substituting the Green function formula and using the Lagrange identity.",
+            "detail": "For a regular SL problem, choose $u_a(z,x)$ satisfying BC at $a$ and $u_b(z,x)$ satisfying BC at $b$. The Green function is $G(z,x,t)=W(z)^{-1}u_b(z,x_>)u_a(z,x_<)$, where $x_>=\\max(x,t)$. Then $R_L(z)g(x)=\\int_a^b G(z,x,t)g(t)r(t)dt$ inverts $L-z$ and is compact by Arzelà–Ascoli. Poles of $G$ occur exactly at eigenvalues of $L$.",
+            "concepts": [
+              "green-function",
+              "sturm-liouville"
+            ],
+            "notes": [
+              "green-function-slp"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Recall how the Green function of a Sturm–Liouville operator is defined and used to invert L−z.",
+                "prior_knowledge": "You know that a regular Sturm–Liouville operator L on [a,b] is symmetric and has compact resolvent built from two boundary-adapted solutions."
+              },
+              "core": {
+                "exposition": "For a regular SL problem, choose $u_a(z,x)$ satisfying BC at $a$ and $u_b(z,x)$ satisfying BC at $b$. The Green function is $G(z,x,t)=W(z)^{-1}u_b(z,x_>)u_a(z,x_<)$, where $x_>=\\max(x,t)$. Then $R_L(z)g(x)=\\int_a^b G(z,x,t)g(t)r(t)dt$ inverts $L-z$ and is compact by Arzelà–Ascoli. Poles of $G$ occur exactly at eigenvalues of $L$.",
+                "worked_example": "$L=-d^2/dx^2$, Dirichlet BCs on $[0,\\pi]$.\n$u_a=\\sin(x)$, $u_b=\\sin(\\pi-x)=\\sin(x)$ (?)\nActually $u_a(z,x)=\\sin(\\sqrt{z}\\,x)$, $u_b(z,x)=\\sin(\\sqrt{z}(\\pi-x))$, $W(z)=-\\sqrt{z}\\sin(\\sqrt{z}\\pi)$.\n$G(z,x,t)=\\frac{\\sin(\\sqrt{z}\\,x_<)\\sin(\\sqrt{z}(\\pi-x_>))}{\\sqrt{z}\\sin(\\sqrt{z}\\pi)}$.\nPoles at $z=n^2$, $n\\in\\mathbb{N}$.",
+                "problem": "For the same operator, verify directly that $R_L(z)(L-z)f = f$ for $f\\in\\mathfrak{D}(L)$ by substituting the Green function formula and using the Lagrange identity."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Why are the poles of the Green function $G(z,x,t)$ exactly the eigenvalues of $L$?",
+                    "answer": "Poles of $G$ come from zeros of $W(z)=W(u_b(z),u_a(z))$; $W(z)=0$ iff $u_b$ and $u_a$ are linearly dependent, i.e., one solution satisfies both BCs, making $z$ an eigenvalue.",
+                    "concept": "green-function"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why is the resolvent operator $R_L(z)$ compact on $\\mathfrak{H}_0=C([a,b],\\mathbb{C})$ with the $r$-weighted inner product?",
+                    "answer": "The kernel $G(z,x,t)$ is continuous on $[a,b]^2$, hence uniformly continuous, so $R_L(z)$ maps bounded sets to equicontinuous sets; by Arzelà–Ascoli a convergent subsequence can be extracted.",
+                    "concept": "green-function"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain in your own words why the symmetry $G(z,x,t)=G(z,t,x)$ for real $z$ is equivalent to $R_L(z)$ being a symmetric operator, and why that matters for the spectral theorem."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "State the formula for the Green function of a regular SL operator, identify its poles, and explain why the resulting resolvent is both compact and symmetric for real $z\\notin\\sigma(L)$.",
+                "rubric": "Answer names $G(z,x,t)=W^{-1}u_b(x_>)u_a(x_<)$, identifies poles as eigenvalues via zeros of the Wronskian, and notes compactness (Arzelà–Ascoli) plus symmetry ($G(z,x,t)=G(z,t,x)$)."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Use the Rayleigh–Ritz formula $E_0=\\min_{f\\in\\mathfrak{D}(L),\\|f\\|=1}Q(f)$ to show $E_0\\geq\\min_x q(x)$ when $p,r>0$ and the boundary terms in $Q$ are non-negative.",
+            "detail": "Because $R_L(\\lambda)$ is compact and symmetric for real non-eigenvalue $\\lambda$, the spectral theorem gives eigenfunctions $u_n$ with $R_L(\\lambda)u_n=\\alpha_n u_n$, equivalently $Lu_n=E_n u_n$ where $E_n=\\lambda+1/\\alpha_n$. Eigenvalues are simple (BC forces linear dependence of two solutions satisfying the same BC at $a$), can be ordered $E_0<E_1<\\cdots\\to\\infty$, and the $u_n$ form an orthonormal basis. The Green function has the Mercer-type expansion $G(z,x,t)=\\sum_n \\frac{u_n(x)u_n(t)}{E_n-z}$.",
+            "concepts": [
+              "green-function",
+              "sturm-liouville"
+            ],
+            "notes": [
+              "green-function-slp"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Connect the Green function expansion to the eigenfunction expansion theorem for regular SL problems.",
+                "prior_knowledge": "Compact symmetric operators have a countable orthonormal eigenbasis; the resolvent of L is compact and symmetric."
+              },
+              "core": {
+                "exposition": "Because $R_L(\\lambda)$ is compact and symmetric for real non-eigenvalue $\\lambda$, the spectral theorem gives eigenfunctions $u_n$ with $R_L(\\lambda)u_n=\\alpha_n u_n$, equivalently $Lu_n=E_n u_n$ where $E_n=\\lambda+1/\\alpha_n$. Eigenvalues are simple (BC forces linear dependence of two solutions satisfying the same BC at $a$), can be ordered $E_0<E_1<\\cdots\\to\\infty$, and the $u_n$ form an orthonormal basis. The Green function has the Mercer-type expansion $G(z,x,t)=\\sum_n \\frac{u_n(x)u_n(t)}{E_n-z}$.",
+                "worked_example": "For $-u''=\\lambda u$ on $[0,\\pi]$ with Dirichlet BCs:\n$E_n=(n+1)^2$, $u_n(x)=\\sqrt{2/\\pi}\\sin((n+1)x)$, $n\\geq 0$.\nExpansion: $G(z,x,t)=\\frac{2}{\\pi}\\sum_{n=1}^\\infty\\frac{\\sin(nx)\\sin(nt)}{n^2-z}$.\nResidues at $z=n^2$ recover $\\frac{2}{\\pi}\\sin(nx)\\cdot\\sin(nt)$, consistent with $u_n\\otimes u_n$.",
+                "problem": "Use the Rayleigh–Ritz formula $E_0=\\min_{f\\in\\mathfrak{D}(L),\\|f\\|=1}Q(f)$ to show $E_0\\geq\\min_x q(x)$ when $p,r>0$ and the boundary terms in $Q$ are non-negative."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "How does simplicity of the eigenvalues follow from the boundary conditions of the SL problem?",
+                    "answer": "If two independent eigenfunctions $u,v$ existed for $E_n$, then $BC_a(u)=BC_a(v)=0$ forces $W_a(u,v)=0$, making them linearly dependent—contradiction.",
+                    "concept": "sturm-liouville"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Write down the Mercer-type expansion for the Green function in terms of the eigenfunctions $u_n$ and eigenvalues $E_n$.",
+                    "answer": "$G(z,x,t)=\\sum_n u_n(x)u_n(t)/(E_n-z)$, valid for $z\\notin\\{E_n\\}$.",
+                    "concept": "green-function"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why does the eigenfunction expansion $f=\\sum_n\\langle u_n,f\\rangle u_n$ converge uniformly (not just in $\\mathfrak{H}_0$) when $f\\in\\mathfrak{Q}(L)$? Relate this to the bound on $\\sum_n E_n|\\langle u_n,f\\rangle|^2$."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "State Theorem 5.11 (regular SL spectral theorem) in your own words, including the role of the Green function and compactness.",
+                "rubric": "Answer mentions: discrete simple real eigenvalues accumulating at $\\infty$, real orthonormal eigenfunctions forming a basis, compactness of $R_L(z)$ as the key step, and uniform convergence for $f\\in\\mathfrak{D}(L)$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "For $L=-d^2/dx^2+q(x)$ on $[0,1]$ with $q\\in C^1$ and Dirichlet BCs, use the Prüfer asymptotic $\\theta_a(\\lambda,1)=\\sqrt{\\lambda}+O(1)$ to show $E_n=\\pi^2n^2+O(n)$ as $n\\to\\infty$.",
+            "detail": "The Green function residue formula $\\text{Res}_{z=E_n}G(z,x,t)=-u_n(x)u_n(t)$ links analytic and spectral data. The number of eigenvalues below $\\lambda$ equals the number of zeros of $u_a(\\lambda,\\cdot)$ in $(a,b)$ (Theorem 5.18 when BC at $b$ is Dirichlet). This count, combined with Prüfer asymptotics $\\theta_a(\\lambda,b)\\sim\\sqrt{\\lambda}\\int_a^b\\sqrt{r/p}\\,dt$, yields $\\#_{(-\\infty,\\lambda)}(L)\\sim\\sqrt{\\lambda}c/\\pi$ and hence Weyl's law $E_n\\sim(\\pi n/c)^2$.",
+            "concepts": [
+              "green-function",
+              "sturm-liouville",
+              "prufer-variable"
+            ],
+            "notes": [
+              "green-function-slp"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Synthesize Green function, oscillation theory, and Weyl asymptotics into a unified picture of the SL spectrum.",
+                "prior_knowledge": "Eigenvalues of a regular SL problem are simple and ordered; Prüfer angle $\\theta_a(\\lambda,b)=\\beta+n\\pi$ at the $n$-th eigenvalue; Weyl asymptotics $E_n\\sim\\pi^2n^2/c^2$."
+              },
+              "core": {
+                "exposition": "The Green function residue formula $\\text{Res}_{z=E_n}G(z,x,t)=-u_n(x)u_n(t)$ links analytic and spectral data. The number of eigenvalues below $\\lambda$ equals the number of zeros of $u_a(\\lambda,\\cdot)$ in $(a,b)$ (Theorem 5.18 when BC at $b$ is Dirichlet). This count, combined with Prüfer asymptotics $\\theta_a(\\lambda,b)\\sim\\sqrt{\\lambda}\\int_a^b\\sqrt{r/p}\\,dt$, yields $\\#_{(-\\infty,\\lambda)}(L)\\sim\\sqrt{\\lambda}c/\\pi$ and hence Weyl's law $E_n\\sim(\\pi n/c)^2$.",
+                "worked_example": "Let $p=r=1$, $q=0$ on $[0,c]$ with Dirichlet BCs.\nPrüfer: $\\theta_a(\\lambda,c)=\\sqrt{\\lambda}c$. Eigenvalue condition: $\\sqrt{E_n}c=n\\pi$, so $E_n=(n\\pi/c)^2$.\nGreen function: $G(z,x,t)=\\frac{2}{c}\\sum_{n=1}^\\infty\\frac{\\sin(n\\pi x/c)\\sin(n\\pi t/c)}{(n\\pi/c)^2-z}$.\nResidues match $u_n\\otimes u_n$ as expected.",
+                "problem": "For $L=-d^2/dx^2+q(x)$ on $[0,1]$ with $q\\in C^1$ and Dirichlet BCs, use the Prüfer asymptotic $\\theta_a(\\lambda,1)=\\sqrt{\\lambda}+O(1)$ to show $E_n=\\pi^2n^2+O(n)$ as $n\\to\\infty$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the connection between $\\#_{(-\\infty,\\lambda)}(L)$ and zeros of the solution $u_a(\\lambda,\\cdot)$ when $L$ has a Dirichlet BC at $b$.",
+                    "answer": "$\\#_{(-\\infty,\\lambda)}(L)=\\#(u_a(\\lambda))$, the number of zeros of $u_a(\\lambda,\\cdot)$ inside $(a,b)$ (Theorem 5.18).",
+                    "concept": "prufer-variable"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What is Weyl's asymptotic law for the eigenvalues of a regular SL problem and what quantity $c$ appears?",
+                    "answer": "$E_n\\sim(\\pi n/c)^2$ where $c=\\int_a^b\\sqrt{r(t)/p(t)}\\,dt$ is the optical length of the interval.",
+                    "concept": "sturm-liouville"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "A colleague says 'the Green function is just a computational tool.' Argue that it is actually the bridge between analysis (compact operators, spectral theorem) and geometry (zero counting, oscillation), using at least two concrete connections from this session."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Given $L=-d^2/dx^2$ on $[0,\\ell]$ with Dirichlet BCs, write down $G(z,x,t)$ explicitly, identify the eigenvalues as poles, state Weyl's law, and sketch how the Prüfer angle argument yields this law.",
+                "rubric": "Answer gives $G=\\sin(\\sqrt{z}x_<)\\sin(\\sqrt{z}(\\ell-x_>))/(\\sqrt{z}\\sin(\\sqrt{z}\\ell))$, eigenvalues $E_n=(n\\pi/\\ell)^2$, Weyl law $E_n\\sim(n\\pi/\\ell)^2$, and notes $\\theta_a(E_n,\\ell)=n\\pi$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 27,
+        "phase": 5,
+        "title": "Frobenius Method & Complex ODE",
+        "icon": "∑",
+        "summary": "Systematic power series solutions near regular singular points using the Frobenius method, characteristic exponents, and the connection to Bessel functions.",
+        "key_insight": "At a regular singular point z=0, solutions take the form z^α h(z); the indicial equation α²+(p₀−1)α+q₀=0 determines the characteristic exponents and whether logarithmic terms appear.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Apply the Frobenius method to zu''+(1−z)u'−u=0. Find the indicial equation, compute the first three coefficients h₀,h₁,h₂ for each exponent, and identify any logarithmic terms.",
+            "detail": "A singular point z₀ is regular if p(z) has at most a first-order pole and q(z) at most a second-order pole in u''+p(z)u'+q(z)u=0. The Frobenius ansatz u=z^α Σ hⱼzʲ leads to the indicial equation α²+(p₀−1)α+q₀=0 whose roots α₁,α₂ (with Re(α₁)≥Re(α₂)) are the characteristic exponents. If α₁−α₂∉ℕ₀ we get two independent series solutions; if α₁−α₂=m∈ℕ₀ the second solution may require a log term.",
+            "concepts": [
+              "sturm-liouville",
+              "prufer-variable"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Understand the Frobenius method for finding series solutions near a regular singular point.",
+                "prior_knowledge": "You know how to find power series solutions at ordinary points and you know the Euler equation has solutions z^α."
+              },
+              "core": {
+                "exposition": "A singular point z₀ is regular if p(z) has at most a first-order pole and q(z) at most a second-order pole in u''+p(z)u'+q(z)u=0. The Frobenius ansatz u=z^α Σ hⱼzʲ leads to the indicial equation α²+(p₀−1)α+q₀=0 whose roots α₁,α₂ (with Re(α₁)≥Re(α₂)) are the characteristic exponents. If α₁−α₂∉ℕ₀ we get two independent series solutions; if α₁−α₂=m∈ℕ₀ the second solution may require a log term.",
+                "worked_example": "Bessel equation: z²u''+zu'+(z²−ν²)u=0, so p₀=1, q₀=−ν².\nIndicial equation: α²−ν²=0 → α₁=ν, α₂=−ν.\nFor α=ν: recurrence j(j+2ν)h_{1,2j}+h_{1,2j−2}=0 gives h_{1,2j}=(−1)^j/[4^j j!(ν+1)_j].\nThis yields J_ν(z)=Σ (−1)^j/[j!Γ(ν+j+1)](z/2)^{2j+ν}.\nA second independent solution J_{−ν} exists when ν∉ℕ₀.",
+                "problem": "Apply the Frobenius method to zu''+(1−z)u'−u=0. Find the indicial equation, compute the first three coefficients h₀,h₁,h₂ for each exponent, and identify any logarithmic terms."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the indicial equation for u''+p(z)u'/z+q(z)u/z² =0 and what its roots determine.",
+                    "answer": "The indicial equation is α²+(p₀−1)α+q₀=0 where p₀=lim_{z→0} zp(z), q₀=lim_{z→0} z²q(z). Its roots α₁,α₂ are the characteristic exponents; if α₁−α₂∉ℕ, both give series solutions; if α₁−α₂=m∈ℕ₀, the second may need a log term.",
+                    "concept": "sturm-liouville"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "When does the second solution of a Frobenius problem necessarily contain a logarithm?",
+                    "answer": "When α₁=α₂ (m=0) a log term always appears. When α₁−α₂=m∈ℕ the log term appears unless a compatibility condition at step j=m is automatically satisfied.",
+                    "concept": "prufer-variable"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain in your own words why the Frobenius method fails at an irregular singular point and what goes wrong with the ansatz u=z^α Σ hⱼzʲ there."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "For u''+u'/z+(1−1/z²)u=0 identify p₀,q₀, write the indicial equation, and state whether a logarithmic second solution is needed.",
+                "rubric": "Student should get p₀=1, q₀=−1, indicial roots ±1, difference 2∈ℕ, so a log term may appear but a compatibility check is needed."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "For A(z)=(1/z)[[2,1],[0,2]], find A₀, solve the Euler system, and write down the structure of W(z).",
+            "detail": "For ẇ=A(z)w with A(z)=A₀/z+A₁+…, the Euler system ẇ=A₀w/z has fundamental solution W(z)=z^{A₀}=exp(log(z)A₀). For the general regular singularity, a fundamental system has the form W(z)=U(z)z^M where U(z) is analytic at 0 and M encodes eigenvalues of A₀ up to integer shifts.",
+            "concepts": [
+              "first-order-system"
+            ],
+            "notes": [
+              "frobenius-note"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Extend Frobenius theory from scalar equations to first-order systems with a simple (regular) singularity.",
+                "prior_knowledge": "You know the scalar Frobenius method and you know the principal matrix solution for regular linear systems."
+              },
+              "core": {
+                "exposition": "For ẇ=A(z)w with A(z)=A₀/z+A₁+…, the Euler system ẇ=A₀w/z has fundamental solution W(z)=z^{A₀}=exp(log(z)A₀). For the general regular singularity, a fundamental system has the form W(z)=U(z)z^M where U(z) is analytic at 0 and M encodes eigenvalues of A₀ up to integer shifts.",
+                "worked_example": "Euler system A₀=diag(α,β): z^{A₀}=diag(z^α,z^β). If α−β=1, a Jordan block in A₀ produces a log term: the (1,2) entry of z^J is log(z)·z^α.",
+                "problem": "For A(z)=(1/z)[[2,1],[0,2]], find A₀, solve the Euler system, and write down the structure of W(z)."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "For a linear system ẇ=A(z)w with a simple singularity, what is the form of a fundamental matrix solution guaranteed by the regular singularity theorem?",
+                    "answer": "W(z)=U(z)z^M where U(z) is analytic near z=0 and M is a constant matrix whose eigenvalues are characteristic exponents of A₀.",
+                    "concept": "matrix-exponential"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "How does the Jordan structure of A₀ relate to that of the monodromy matrix M in the Frobenius system solution?",
+                    "answer": "For each eigenvalue μ of M, α=μ+m (m∈ℕ₀) must be an eigenvalue of A₀; Jordan block sizes may split across multiple eigenvalues of A₀ that differ by integers.",
+                    "concept": "stable-manifold"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why is the condition 'simple singularity' (first-order pole for A(z)) critical for the Frobenius method to yield convergent series? What goes wrong for a second-order pole?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "State the Fuchs theorem for when a linear system ẇ=A(z)w has all solutions with at most power-type singularities (no essential singularity) at z=0.",
+                "rubric": "Must state: z=0 regular (simple) singularity ⟺ A(z) has at most a first-order pole, and the solution is W(z)=U(z)z^M with U analytic."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 28,
+        "phase": 5,
+        "title": "Perturbation Theory & Regular Perturbations",
+        "icon": "ε",
+        "summary": "Regular perturbation expansions for solutions depending on a small parameter ε, including the first variational equation and the Picard–Lindelöf justification.",
+        "key_insight": "If f is C^k in (x,ε), the solution φ(t,ε) is C^k in ε; the O(ε) correction φ₁ satisfies a linear equation driven by the unperturbed solution, making iterative improvement systematic.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "For ẋ=x²+ε, x(0)=0, compute φ₀ and φ₁. At what time does the O(ε⁰) solution blow up?",
+            "detail": "For ẋ=f(t,x,ε) with x(t₀)=x₀, if f∈C^k then φ(t,ε) is C^k in ε. Write φ=φ₀+φ₁ε+O(ε²). The unperturbed term φ₀ solves ẋ=f(t,x,0). The first correction φ₁ solves the linear first variational equation φ̇₁=f_x(t,φ₀)φ₁+f_ε(t,φ₀,0) with φ₁(t₀)=0. Higher corrections follow recursively.",
+            "concepts": [
+              "matrix-exponential",
+              "first-order-system"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Learn to expand the solution of an ODE in powers of a small parameter ε and compute the first correction term.",
+                "prior_knowledge": "You know the variation of constants formula for linear first-order systems and the concept of the Jacobian matrix."
+              },
+              "core": {
+                "exposition": "For ẋ=f(t,x,ε) with x(t₀)=x₀, if f∈C^k then φ(t,ε) is C^k in ε. Write φ=φ₀+φ₁ε+O(ε²). The unperturbed term φ₀ solves ẋ=f(t,x,0). The first correction φ₁ solves the linear first variational equation φ̇₁=f_x(t,φ₀)φ₁+f_ε(t,φ₀,0) with φ₁(t₀)=0. Higher corrections follow recursively.",
+                "worked_example": "ẋ=−εx−g, x(0)=0.\nφ₀: φ̇₀=−g → φ₀=−gt.\nVariational eq for φ₁: φ̇₁=−φ₀=gt, φ₁(0)=0 → φ₁=gt²/2.\nHence φ≈−gt+εgt²/2, matching Taylor expansion of exact solution g(e^{−εt}−1)/ε.",
+                "problem": "For ẋ=x²+ε, x(0)=0, compute φ₀ and φ₁. At what time does the O(ε⁰) solution blow up?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Write the ODE satisfied by the first perturbation term φ₁(t) and state its initial condition.",
+                    "answer": "φ̇₁=f_x(t,φ₀(t))φ₁+f_ε(t,φ₀(t),0) with φ₁(t₀)=0; this is a linear inhomogeneous equation with coefficient matrix equal to the Jacobian of f along the unperturbed solution.",
+                    "concept": "first-order-system"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why is a regular perturbation expansion only valid for fixed finite time, not uniformly as t→∞?",
+                    "answer": "The remainder estimate uses Gronwall's inequality which grows exponentially in t, so the O(ε) error bound blows up as t→∞ even if ε is fixed small.",
+                    "concept": "matrix-exponential"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Describe the conceptual difference between a regular perturbation (treated here) and a singular perturbation, giving an example of each from the course material."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "For ẍ+x+εx³=0, x(0)=1, ẋ(0)=0, write the equations for φ₀ and φ₁ (do not solve φ₁ fully) and state their initial conditions.",
+                "rubric": "φ₀ should satisfy ẍ₀+x₀=0 with x₀(0)=1, ẋ₀(0)=0; φ₁ satisfies ẍ₁+φ₁=−φ₀³ with zero initial conditions."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 29,
+        "phase": 6,
+        "title": "Singular ODEs & Frobenius Method",
+        "icon": "🔬",
+        "summary": "Extend power series solutions to equations with regular singular points using the Frobenius method, recovering Bessel functions as a prime example.",
+        "key_insight": "At a regular singular point z=0, solutions take the form z^α·h(z) where α satisfies the indicial equation; a logarithmic second solution appears when the exponent difference is a non-negative integer.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Apply the Frobenius method to zu''+(1−z)u'−u=0 at z=0: find the indicial equation, both exponents, and the leading terms of each solution.",
+            "detail": "A point z₀=0 is a regular singular point if p(z) has at most a first-order pole and q(z) has at most a second-order pole. The Frobenius ansatz u(z)=z^α Σ hⱼzʲ leads to the indicial equation α²+(p₀−1)α+q₀=0 for h₀≠0. Once α₁≥α₂ are chosen, the coefficients hⱼ follow by a recurrence. If α₁−α₂∉ℕ₀ both solutions are of this pure power form; otherwise the second may contain a log term.",
+            "concepts": [
+              "green-function"
+            ],
+            "notes": [
+              "frobenius-note"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Learn to find series solutions of linear ODEs near a regular singular point using the Frobenius method.",
+                "prior_knowledge": "You know that analytic ODEs have power-series solutions, and you have seen Euler's equation z²u''+p₀zu'+q₀u=0 solved via u=z^α."
+              },
+              "core": {
+                "exposition": "A point z₀=0 is a regular singular point if p(z) has at most a first-order pole and q(z) has at most a second-order pole. The Frobenius ansatz u(z)=z^α Σ hⱼzʲ leads to the indicial equation α²+(p₀−1)α+q₀=0 for h₀≠0. Once α₁≥α₂ are chosen, the coefficients hⱼ follow by a recurrence. If α₁−α₂∉ℕ₀ both solutions are of this pure power form; otherwise the second may contain a log term.",
+                "worked_example": "Bessel equation: z²u''+zu'+(z²−ν²)u=0. Here p₀=1, q₀=−ν². Indicial equation: α²−ν²=0, so α=±ν. For α=ν the recurrence gives h₂ⱼ=(−1)ʲ/[4ʲ j!(ν+1)ⱼ], h₂ⱼ₊₁=0, yielding Jᵥ(z)=Σ(−1)ʲ/(j!Γ(ν+j+1))(z/2)^{2j+ν}. For ν∉ℤ₀ J₋ᵥ is a second independent solution.",
+                "problem": "Apply the Frobenius method to zu''+(1−z)u'−u=0 at z=0: find the indicial equation, both exponents, and the leading terms of each solution."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the indicial equation for a regular singular point with coefficients p(z)=p₀/z+… and q(z)=q₀/z²+…",
+                    "answer": "α²+(p₀−1)α+q₀=0; its roots are the characteristic exponents α₁,α₂.",
+                    "concept": "sturm-liouville"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "When does the second Frobenius solution require a logarithmic term?",
+                    "answer": "When α₁−α₂=m∈ℕ₀ and the recurrence at order m produces an inconsistency (or m=0), a term c·log(z)·u₁(z) must be added.",
+                    "concept": "prufer-variable"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain in your own words why the condition 'regular singular point' (poles of order ≤1 and ≤2) is exactly what allows the Frobenius method to produce convergent series."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "For the Bessel equation of order ν=1/2, determine whether J₋₁/₂ is independent of J₁/₂ and identify the Wronskian at z→0⁺.",
+                "rubric": "Answer correctly identifies non-integer difference, notes independence, and computes/estimates the Wronskian using Liouville's formula."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 30,
+        "phase": 6,
+        "title": "Attractors, Chaos & Symbolic Dynamics",
+        "icon": "🦋",
+        "summary": "Understand strange attractors via volume contraction, and see how symbolic dynamics (shift map on Σ₂) encodes chaotic behavior in the tent map and Smale horseshoe.",
+        "key_insight": "A system is chaotic (Devaney) when it is topologically transitive and has dense periodic points; the shift map on Σ_N is the canonical example, and Smale's horseshoe embeds it in smooth dynamics near a transversal homoclinic point.",
+        "cards": [
+          {
+            "tier": "gold",
+            "task_index": 0,
+            "text": "Show that the Smale horseshoe Cantor set Λ=Λ(T_{1/λ})×Λ(T_μ) with λ=1/3, μ=3 has Hausdorff dimension dim_H(Λ)=2·log2/log3≈1.26.",
+            "detail": "The shift map σ on Σ₂={0,1}^ℕ is chaotic: periodic sequences are dense and σ has a dense orbit (constructed by listing all finite blocks). Theorem 11.5 says (Λ,T_μ) is topologically equivalent to (Σ₂,σ) via the itinerary map φ. The Smale horseshoe embeds the same structure in 2D: contracting the x-direction, expanding y, then folding produces Λ=Λ(T_{1/λ})×Λ(T_μ), on which f is conjugate to the bi-infinite shift. The Smale–Birkhoff theorem then says: a transversal homoclinic point of a hyperbolic fixed point implies a horseshoe in some iterate of the map.",
+            "concepts": [
+              "smale-horseshoe",
+              "logistic-map",
+              "period-doubling",
+              "homoclinic-orbit"
+            ],
+            "notes": [
+              "chaos-note"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Connect the symbolic shift map to chaotic behavior in concrete ODE-derived maps, and understand how a homoclinic orbit generates a horseshoe.",
+                "prior_knowledge": "You know the tent map T_μ for μ>2 has an invariant Cantor set Λ, and you know what a hyperbolic fixed point and its stable/unstable manifolds are."
+              },
+              "core": {
+                "exposition": "The shift map σ on Σ₂={0,1}^ℕ is chaotic: periodic sequences are dense and σ has a dense orbit (constructed by listing all finite blocks). Theorem 11.5 says (Λ,T_μ) is topologically equivalent to (Σ₂,σ) via the itinerary map φ. The Smale horseshoe embeds the same structure in 2D: contracting the x-direction, expanding y, then folding produces Λ=Λ(T_{1/λ})×Λ(T_μ), on which f is conjugate to the bi-infinite shift. The Smale–Birkhoff theorem then says: a transversal homoclinic point of a hyperbolic fixed point implies a horseshoe in some iterate of the map.",
+                "worked_example": "Tent map T₂ on [0,1]: T₂ⁿ maps each interval [j/2ⁿ,(j+1)/2ⁿ] onto [0,1]. Hence every such subinterval contains a fixed point of T₂ⁿ → periodic points are dense. For any open U⊆[0,1] and n large, T₂ⁿ(U)=[0,1]⊇V → topologically transitive. So (Λ,[0,1],T₂) is chaotic.",
+                "problem": "Show that the Smale horseshoe Cantor set Λ=Λ(T_{1/λ})×Λ(T_μ) with λ=1/3, μ=3 has Hausdorff dimension dim_H(Λ)=2·log2/log3≈1.26."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State Devaney's definition of a chaotic map f:M→M.",
+                    "answer": "f is chaotic if it is topologically transitive and has dense periodic points (which then implies sensitive dependence on initial conditions).",
+                    "concept": "smale-horseshoe"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What does the Smale–Birkhoff theorem guarantee when a diffeomorphism has a transversal homoclinic orbit?",
+                    "answer": "Some iterate fⁿ has a hyperbolic invariant Cantor set Λ on which fⁿ is topologically conjugate to the bi-infinite shift on two symbols.",
+                    "concept": "homoclinic-orbit"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why can the Poincaré–Bendixson theorem be seen as ruling out chaos in planar autonomous systems, and what extra ingredient (dimension or non-autonomy) is needed to allow chaos?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "The Lorenz system has div(f)=−(1+σ+b)<0. Explain concisely why this implies the Lorenz attractor has Lebesgue measure zero.",
+                "rubric": "Must invoke Liouville's lemma for volumes: V(t)=V·e^{−(1+σ+b)t}→0, so any invariant set in the attractor has zero volume."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 31,
+        "phase": 6,
+        "title": "Melnikov's Method & Chaos Detection",
+        "icon": "📐",
+        "summary": "Use the Melnikov integral to detect transversal homoclinic intersections — and hence chaos — in nearly-integrable planar systems under periodic perturbations.",
+        "key_insight": "The Melnikov integral M(t₀)=∫_{-∞}^{∞} e^{−∫₀ˢ div f dr} [f(x₀(s))∧g(s−t₀,x₀(s),0)] ds measures first-order splitting of stable/unstable manifolds; a simple zero implies transversal intersection and, by Smale–Birkhoff, chaos.",
+        "cards": [
+          {
+            "tier": "gold",
+            "task_index": 0,
+            "text": "For the forced pendulum ẍ=−sin(x)+ε sin(t), write down the homoclinic orbit of the unperturbed saddle at x=π and set up (but do not evaluate) the Melnikov integral.",
+            "detail": "For ẋ=f(x)+εg(τ,x,ε), ẋτ=1 with g periodic (period 2π), and a homoclinic orbit x₀(t) of the unperturbed system, the signed distance between perturbed stable and unstable manifolds is Δ(t₀,ε)=ε M(t₀)+O(ε²). A simple zero of M(t₀) implies transversal intersection, hence chaos. For a Hamiltonian unperturbed system (div f=0) the formula simplifies to M(t₀)=∫_{-∞}^{∞} f(x₀(s))∧g(s−t₀,x₀(s),0) ds.",
+            "concepts": [
+              "melnikov-function",
+              "homoclinic-orbit",
+              "stable-manifold",
+              "poincare-map"
+            ],
+            "notes": [
+              "melnikov-note"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Compute the Melnikov integral and use it to certify chaos in a forced nonlinear oscillator.",
+                "prior_knowledge": "You know that a hyperbolic fixed point has stable/unstable manifolds and that a transversal homoclinic orbit implies horseshoe dynamics via Smale–Birkhoff."
+              },
+              "core": {
+                "exposition": "For ẋ=f(x)+εg(τ,x,ε), ẋτ=1 with g periodic (period 2π), and a homoclinic orbit x₀(t) of the unperturbed system, the signed distance between perturbed stable and unstable manifolds is Δ(t₀,ε)=ε M(t₀)+O(ε²). A simple zero of M(t₀) implies transversal intersection, hence chaos. For a Hamiltonian unperturbed system (div f=0) the formula simplifies to M(t₀)=∫_{-∞}^{∞} f(x₀(s))∧g(s−t₀,x₀(s),0) ds.",
+                "worked_example": "Forced Duffing: q̈=q−q³+ε(−δq̇+γcos(ωτ)). Homoclinic orbit: q₀(t)=√2 sech(t), ṗ₀=−√2 tanh(t)sech(t). Melnikov integral: M(t₀)=−(4δ/3)+√2 πγω sech(πω/2)sin(ωt₀). Simple zeros exist (and chaos occurs) when |δ/γ|<(3√2 π|ω|/4)sech(πω/2).",
+                "problem": "For the forced pendulum ẍ=−sin(x)+ε sin(t), write down the homoclinic orbit of the unperturbed saddle at x=π and set up (but do not evaluate) the Melnikov integral."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What does a simple zero of the Melnikov function M(t₀) imply geometrically and dynamically?",
+                    "answer": "It implies the stable and unstable manifolds of the perturbed periodic orbit intersect transversally, so by Smale–Birkhoff, a horseshoe (and hence chaos) exists.",
+                    "concept": "melnikov-function"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "For a Hamiltonian unperturbed system, what is the simplified form of the Melnikov integral and why does the exponential weight disappear?",
+                    "answer": "M(t₀)=∫f(x₀(s))∧g(s−t₀,x₀(s),0) ds; the weight e^{−∫div f dr}=1 because div f=0 for Hamiltonian systems.",
+                    "concept": "hamiltonian-system"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why the Melnikov method cannot directly detect chaos in a purely autonomous planar perturbation (no τ-dependence), and what the Poincaré–Bendixson theorem says about this case."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "State the chaos criterion for the forced Duffing equation in terms of the parameters δ (damping), γ (forcing amplitude), and ω (frequency).",
+                "rubric": "Must give |δ/γ|<(3√2π|ω|/4)sech(πω/2) with correct identification of each factor from the Melnikov computation."
+              }
+            }
+          }
+        ]
       }
     ],
     "concepts": [
@@ -2671,6 +3321,30 @@
       {
         "id": "smale-horseshoe",
         "label": "Smale Horseshoe"
+      },
+      {
+        "id": "sturm-liouville",
+        "label": "Sturm–Liouville Problem"
+      },
+      {
+        "id": "prufer-variable",
+        "label": "Prüfer Variable"
+      },
+      {
+        "id": "green-function",
+        "label": "Green Function"
+      },
+      {
+        "id": "frobenius-method",
+        "label": "Frobenius Method"
+      },
+      {
+        "id": "chaos",
+        "label": "Chaos (Devaney)"
+      },
+      {
+        "id": "symbolic-dynamics",
+        "label": "Symbolic Dynamics"
       }
     ],
     "prereqs": [
@@ -2772,6 +3446,74 @@
       ],
       [
         "smale-horseshoe",
+        "poincare-map"
+      ],
+      [
+        "sturm-liouville",
+        "linear-ode"
+      ],
+      [
+        "prufer-variable",
+        "qualitative-analysis"
+      ],
+      [
+        "prufer-variable",
+        "sturm-liouville"
+      ],
+      [
+        "green-function",
+        "sturm-liouville"
+      ],
+      [
+        "green-function",
+        "sturm-liouville"
+      ],
+      [
+        "green-function",
+        "prufer-variable"
+      ],
+      [
+        "frobenius-method",
+        "linear-ode"
+      ],
+      [
+        "frobenius-method",
+        "matrix-exponential"
+      ],
+      [
+        "chaos",
+        "smale-horseshoe"
+      ],
+      [
+        "chaos",
+        "logistic-map"
+      ],
+      [
+        "chaos",
+        "period-doubling"
+      ],
+      [
+        "symbolic-dynamics",
+        "smale-horseshoe"
+      ],
+      [
+        "symbolic-dynamics",
+        "logistic-map"
+      ],
+      [
+        "melnikov-function",
+        "homoclinic-orbit"
+      ],
+      [
+        "melnikov-function",
+        "hamiltonian-system"
+      ],
+      [
+        "melnikov-function",
+        "stable-manifold"
+      ],
+      [
+        "melnikov-function",
         "poincare-map"
       ]
     ]
@@ -4083,6 +4825,307 @@
             }
           }
         ]
+      },
+      {
+        "id": 17,
+        "phase": 5,
+        "title": "Information Theory and Shannon's Formula",
+        "icon": "ℹ️",
+        "summary": "Shannon's measure of information: entropy, average information, and mutual information between events.",
+        "key_insight": "The average information I = −∑ pᵢ log₂ pᵢ measures both the information conveyed by a message and the uncertainty of the experiment.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "A fair die is rolled. Compute the Shannon entropy H of the outcome in bits.",
+            "detail": "For outcomes A₁,…,Aₙ with probabilities p₁,…,pₙ, Shannon's formula gives average information I = −∑ pᵢ log₂ pᵢ bits. For equiprobable outcomes this reduces to I = log₂ N. Entropy is also a measure of uncertainty: higher entropy means less predictability.",
+            "concepts": [
+              "probability",
+              "expectation"
+            ],
+            "notes": [
+              "shannon-entropy"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Define and compute Shannon's entropy for a discrete probability distribution.",
+                "prior_knowledge": "You know that P(A) measures likelihood; more surprising events carry more information."
+              },
+              "core": {
+                "exposition": "For outcomes A₁,…,Aₙ with probabilities p₁,…,pₙ, Shannon's formula gives average information I = −∑ pᵢ log₂ pᵢ bits. For equiprobable outcomes this reduces to I = log₂ N. Entropy is also a measure of uncertainty: higher entropy means less predictability.",
+                "worked_example": "Two outcomes: P(A₁)=1/5, P(A₂)=4/5.\nI = −(1/5)log₂(1/5) − (4/5)log₂(4/5)\n  = (1/5)(2.32) + (4/5)(0.322)\n  ≈ 0.464 + 0.258 = 0.722 bits.",
+                "problem": "A fair die is rolled. Compute the Shannon entropy H of the outcome in bits."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State Shannon's formula for entropy and what it equals when all N outcomes are equiprobable.",
+                    "answer": "I = −∑ pᵢ log₂ pᵢ; for equiprobable outcomes pᵢ=1/N, so I = log₂ N.",
+                    "concept": "probability"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What is the entropy of a certain event (probability 1)?",
+                    "answer": "I = −1·log₂1 = 0; a certain event conveys no information.",
+                    "concept": "expectation"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain in your own words why rare events carry more information and how Shannon's formula captures this."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Compute the entropy of a biased coin with P(H)=0.9, P(T)=0.1, and compare it to a fair coin.",
+                "rubric": "Student gets H≈0.469 bits vs 1 bit for fair coin, and notes lower entropy reflects less uncertainty."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "phase": 5,
+        "title": "Game Theory and Optimal Mixed Strategies",
+        "icon": "♟️",
+        "summary": "Two-person zero-sum games: pure vs mixed strategies, computing optimal mixed strategies, and the value of the game.",
+        "key_insight": "When no pure strategy dominates, both players randomize: player 1 chooses strategy 1 with probability x⁰=(v₂₂−v₂₁)/(v₁₁+v₂₂−v₁₂−v₂₁) to guarantee the game value V(x⁰,y⁰).",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "In a 2×2 game with v₁₁=2, v₁₂=−1, v₂₁=−1, v₂₂=2, find x⁰, y⁰, and the game value.",
+            "detail": "In a 2×2 zero-sum game with payoff matrix [[v₁₁,v₁₂],[v₂₁,v₂₂]], player 1 mixes with probability x on strategy 1. The optimal x⁰ equalises the opponent's best response: x⁰=(v₂₂−v₂₁)/(v₁₁+v₂₂−v₁₂−v₂₁). The game value is V=v₁₁x⁰+v₂₁(1−x⁰).",
+            "concepts": [
+              "probability",
+              "expectation",
+              "independence"
+            ],
+            "notes": [
+              "mixed-strategy"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Find optimal mixed strategies in a 2×2 zero-sum game.",
+                "prior_knowledge": "You know expectation and independent events; a mixed strategy assigns probabilities to pure strategies."
+              },
+              "core": {
+                "exposition": "In a 2×2 zero-sum game with payoff matrix [[v₁₁,v₁₂],[v₂₁,v₂₂]], player 1 mixes with probability x on strategy 1. The optimal x⁰ equalises the opponent's best response: x⁰=(v₂₂−v₂₁)/(v₁₁+v₂₂−v₁₂−v₂₁). The game value is V=v₁₁x⁰+v₂₁(1−x⁰).",
+                "worked_example": "Hide dime/quarter game: v₁₁=−10, v₁₂=15, v₂₁=15, v₂₂=−25.\nDenominator: −10+(−25)−15−15=−65.\nx⁰=(−25−15)/(−65)=40/65=8/13.\ny⁰=(−10−15)/(−65)=5/13.\nValue: −10(8/13)+15(5/13)=−5/13 cents (unfavourable to player 1).",
+                "problem": "In a 2×2 game with v₁₁=2, v₁₂=−1, v₂₁=−1, v₂₂=2, find x⁰, y⁰, and the game value."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Write the formula for player 1's optimal mixing probability x⁰ in a 2×2 zero-sum game.",
+                    "answer": "x⁰=(v₂₂−v₂₁)/(v₁₁+v₂₂−v₁₂−v₂₁).",
+                    "concept": "probability"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What does the game value V(x⁰,y⁰) represent for each player?",
+                    "answer": "It is player 1's guaranteed average payoff under mutual optimal play; player 2 guarantees −V(x⁰,y⁰).",
+                    "concept": "expectation"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why deviating from the optimal mixed strategy x⁰ allows a clever opponent to reduce your expected payoff."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "For the game in the worked example, verify that V(x⁰,y) is constant for all y∈[0,1].",
+                "rubric": "Student shows V(x⁰,y)=V(x⁰,y⁰)=−5/13 regardless of y, confirming x⁰ is optimal."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "phase": 5,
+        "title": "Branching Processes and Extinction",
+        "icon": "🌿",
+        "summary": "Study branching processes: generating function methods, the Kolmogorov ODE, extinction probability, and explosion criteria.",
+        "key_insight": "The extinction probability of a branching process equals the smaller root α of f(x)=0 in [0,1); if f(x)>0 on all of [0,1), extinction is certain.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "For $\\lambda_0=\\mu$, $\\lambda_1=-(\\lambda+\\mu)$, $\\lambda_2=\\lambda$ (birth-death), identify $f(x)$ and find its roots in $[0,1]$.",
+            "detail": "A branching process has $k$ particles each independently producing offspring with generating function $F(t,z)$. Because of independence, the generating function for $k$ particles is $[F(t,z)]^k$. With transition densities $\\lambda_k$ for a single particle, the Kolmogorov equations yield $\\frac{d}{dt}F = f(F)$ where $f(x)=\\sum_k \\lambda_k x^k$ and $F(0,z)=z$.",
+            "concepts": [
+              "moment-generating-function",
+              "poisson-distribution"
+            ],
+            "notes": [
+              "branching-process-note"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Derive and use the generating-function ODE for a branching process.",
+                "prior_knowledge": "Generating functions multiply for sums of independent random variables: $F_{\\xi_1+\\xi_2}(z)=F_{\\xi_1}(z)F_{\\xi_2}(z)$."
+              },
+              "core": {
+                "exposition": "A branching process has $k$ particles each independently producing offspring with generating function $F(t,z)$. Because of independence, the generating function for $k$ particles is $[F(t,z)]^k$. With transition densities $\\lambda_k$ for a single particle, the Kolmogorov equations yield $\\frac{d}{dt}F = f(F)$ where $f(x)=\\sum_k \\lambda_k x^k$ and $F(0,z)=z$.",
+                "worked_example": "Let $\\lambda_0=\\lambda$, $\\lambda_1=-\\lambda$, all others zero (pure death).\n$f(x)=\\lambda(1-x)$.\nSolve $dt/dx = 1/[\\lambda(1-x)]$ with $x(0)=z$:\n$t = -\\frac{1}{\\lambda}[\\ln(1-x)-\\ln(1-z)]$.\nResult: $F(t,z)=1-e^{-\\lambda t}(1-z)$, so $p_0(t)=1-e^{-\\lambda t}$, $p_1(t)=e^{-\\lambda t}$.",
+                "problem": "For $\\lambda_0=\\mu$, $\\lambda_1=-(\\lambda+\\mu)$, $\\lambda_2=\\lambda$ (birth-death), identify $f(x)$ and find its roots in $[0,1]$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What ODE does the generating function $F(t,z)$ of a branching process satisfy, and what is its initial condition?",
+                    "answer": "$\\frac{d}{dt}F = f(F)$ where $f(x)=\\sum_k\\lambda_k x^k$, with $F(0,z)=z$.",
+                    "concept": "moment-generating-function"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "For $k$ initial particles, how does the generating function $F_k(t,z)$ relate to $F(t,z)$?",
+                    "answer": "$F_k(t,z)=[F(t,z)]^k$ by independence of the $k$ lineages.",
+                    "concept": "moment-generating-function"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain in your own words why $f(x)=\\sum_k\\lambda_k x^k$ is always concave up on $[0,1]$ and why $x=1$ is always a root of $f(x)=0$."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "For the pure-death process above, verify that $\\sum_n p_n(t)=1$ for all $t\\ge0$.",
+                "rubric": "Should confirm $p_0(t)+p_1(t)=(1-e^{-\\lambda t})+e^{-\\lambda t}=1$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Cosmic-ray shower: $\\lambda_1=-\\lambda$, $\\lambda_2=\\lambda$. Find $f(x)$, its roots, and the extinction probability.",
+            "detail": "The probability of all particles eventually dying out is $p_0=\\lim_{t\\to\\infty}p_0(t)=\\alpha$, the smaller root of $f(x)=0$ in $[0,1]$. If no such root exists ($f>0$ on $[0,1)$), then $\\alpha=1$ and extinction is certain. An explosion (infinitely many particles in finite time) has positive probability iff $\\int_{x_0}^1 dx/|f(x)|<\\infty$.",
+            "concepts": [
+              "probability",
+              "characteristic-function"
+            ],
+            "notes": [
+              "branching-process-note"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Determine extinction probability and explosion criterion for a branching process.",
+                "prior_knowledge": "The equation $f(x)=0$ can have at most one root $\\alpha\\in(0,1)$ besides $x=1$ because $f$ is convex on $[0,1]$."
+              },
+              "core": {
+                "exposition": "The probability of all particles eventually dying out is $p_0=\\lim_{t\\to\\infty}p_0(t)=\\alpha$, the smaller root of $f(x)=0$ in $[0,1]$. If no such root exists ($f>0$ on $[0,1)$), then $\\alpha=1$ and extinction is certain. An explosion (infinitely many particles in finite time) has positive probability iff $\\int_{x_0}^1 dx/|f(x)|<\\infty$.",
+                "worked_example": "Birth-death: $f(x)=\\lambda x^2-(\\lambda+\\mu)x+\\mu=\\lambda(x-1)(x-\\mu/\\lambda)$.\nRoots: $x=1$ and $x=\\mu/\\lambda$.\nIf $\\mu<\\lambda$: $\\alpha=\\mu/\\lambda<1$, so extinction probability $= \\mu/\\lambda$.\nIf $\\mu\\ge\\lambda$: no root in $(0,1)$, extinction probability $=1$.",
+                "problem": "Cosmic-ray shower: $\\lambda_1=-\\lambda$, $\\lambda_2=\\lambda$. Find $f(x)$, its roots, and the extinction probability."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What is the extinction probability of a branching process, and how is it found from $f$?",
+                    "answer": "It equals the smaller root $\\alpha\\in[0,1)$ of $f(x)=0$; if $f>0$ on $(0,1)$, extinction probability is 1.",
+                    "concept": "probability"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "State the condition on $f$ under which there is a positive probability of an explosion by time $t$.",
+                    "answer": "$\\int_{x_0}^1 dx/|f(x)|<\\infty$ for some $x_0\\in(\\alpha,1)$; the integral diverges in the explosion-free case.",
+                    "concept": "probability"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Using the birth-death example, explain intuitively why extinction is certain when $\\mu\\ge\\lambda$ but not when $\\mu<\\lambda$."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "For the cosmic-ray shower ($\\lambda_2=\\lambda$, $\\lambda_1=-\\lambda$), compute $f(x)$, find the roots of $f(x)=0$ on $[0,1]$, and state the extinction probability.",
+                "rubric": "Should get $f(x)=\\lambda(x^2-x)=\\lambda x(x-1)$; roots $x=0$ and $x=1$; extinction probability $=0$ (population grows without bound almost surely)."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "phase": 5,
+        "title": "Optimal Control and Bellman's Equation",
+        "icon": "🎯",
+        "summary": "Introduce guided Markov chains, decision rules, and Bellman's backward induction equation for maximizing the probability of reaching a target set.",
+        "key_insight": "Backward induction (Bellman's equation) decomposes an n-step optimization into n one-step maximizations, each depending only on the already-optimized future.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "With $p_{11}(0)=1/8$, $p_{11}(1)=2/8$, $p_{21}(0)=4/8$, $p_{21}(1)=3/8$, compute $P^0(1,1)$ and $P^0(1,2)$ for target $E=\\{\\varepsilon_2\\}$.",
+            "detail": "A guided Markov chain has transition probabilities $p_{ij}(d)$ depending on a control parameter $d\\in D$. A decision rule $d(x,t)$ specifies $d$ given current state $x$ and time $t$. Bellman's equation computes the maximum probability $P^0(k,i)$ of reaching target set $E$ in $n-k$ remaining steps: $P^0(k,i)=\\max_{d\\in D}\\sum_j p_{ij}(d)P^0(k+1,j)$, initialized by $P^0(n,j)=1$ if $\\varepsilon_j\\in E$, else $0$.",
+            "concepts": [
+              "markov-chain",
+              "conditional-probability"
+            ],
+            "notes": [
+              "optimal-control-note"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Set up and apply Bellman's equation for a finite-horizon optimal control problem.",
+                "prior_knowledge": "For a Markov chain with transition matrix $P$, the probability of being in state $j$ after $n$ steps satisfies $p_j(n)=\\sum_k p_k(n-1)p_{kj}$."
+              },
+              "core": {
+                "exposition": "A guided Markov chain has transition probabilities $p_{ij}(d)$ depending on a control parameter $d\\in D$. A decision rule $d(x,t)$ specifies $d$ given current state $x$ and time $t$. Bellman's equation computes the maximum probability $P^0(k,i)$ of reaching target set $E$ in $n-k$ remaining steps: $P^0(k,i)=\\max_{d\\in D}\\sum_j p_{ij}(d)P^0(k+1,j)$, initialized by $P^0(n,j)=1$ if $\\varepsilon_j\\in E$, else $0$.",
+                "worked_example": "Two states $\\varepsilon_1,\\varepsilon_2$; target $E=\\{\\varepsilon_1\\}$; $n=2$.\nStep 1 (k=1): $P^0(1,i)=\\max_d p_{i1}(d)$.\nStep 2 (k=0): $P^0(0,1)=\\max_d[p_{11}(d)P^0(1,1)+p_{12}(d)P^0(1,2)]$.\nChoose $d$ to maximize this linear expression in $p_{11}(d)$.",
+                "problem": "With $p_{11}(0)=1/8$, $p_{11}(1)=2/8$, $p_{21}(0)=4/8$, $p_{21}(1)=3/8$, compute $P^0(1,1)$ and $P^0(1,2)$ for target $E=\\{\\varepsilon_2\\}$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Write Bellman's equation relating $P^0(k,i)$ to $P^0(k+1,j)$.",
+                    "answer": "$P^0(k,i)=\\max_{d\\in D}\\sum_j p_{ij}(d)P^0(k+1,j)$, with terminal condition $P^0(n,j)=\\mathbf{1}[\\varepsilon_j\\in E]$.",
+                    "concept": "markov-chain"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why can backward induction solve the n-step problem by solving n separate one-step problems?",
+                    "answer": "Because $p_{ij}(d)$ at step $k$ depends only on $d$ chosen at time $k$, and future $P^0(k+1,j)$ are already maximized and fixed when we optimize step $k$.",
+                    "concept": "conditional-probability"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Describe in your own words the logic of 'successive corrections': why does replacing $d(x,n-1)$ with its optimal value never decrease the probability at earlier steps?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "State Bellman's equation and its terminal condition, then explain what $P^0(0,i)$ represents in the optimal control problem.",
+                "rubric": "Should state the equation correctly, give terminal condition, and identify $P^0(0,i)$ as the maximum probability of reaching $E$ in $n$ steps from initial state $\\varepsilon_i$."
+              }
+            }
+          }
+        ]
       }
     ],
     "concepts": [
@@ -4249,6 +5292,26 @@
       {
         "id": "total-probability",
         "label": "Total Probability Formula"
+      },
+      {
+        "id": "shannon-entropy",
+        "label": "Shannon Entropy"
+      },
+      {
+        "id": "mixed-strategy",
+        "label": "Mixed Strategy (Game Theory)"
+      },
+      {
+        "id": "branching-process",
+        "label": "Branching Process"
+      },
+      {
+        "id": "extinction-probability",
+        "label": "Extinction Probability"
+      },
+      {
+        "id": "bellman-equation",
+        "label": "Bellman's Equation"
       }
     ],
     "prereqs": [
@@ -4403,6 +5466,596 @@
       [
         "total-probability",
         "mutually-exclusive"
+      ],
+      [
+        "shannon-entropy",
+        "probability"
+      ],
+      [
+        "shannon-entropy",
+        "expectation"
+      ],
+      [
+        "mixed-strategy",
+        "probability"
+      ],
+      [
+        "mixed-strategy",
+        "expectation"
+      ],
+      [
+        "mixed-strategy",
+        "independence"
+      ],
+      [
+        "branching-process",
+        "markov-chain"
+      ],
+      [
+        "branching-process",
+        "moment-generating-function"
+      ],
+      [
+        "branching-process",
+        "poisson-distribution"
+      ],
+      [
+        "extinction-probability",
+        "branching-process"
+      ],
+      [
+        "extinction-probability",
+        "probability"
+      ],
+      [
+        "bellman-equation",
+        "markov-chain"
+      ],
+      [
+        "bellman-equation",
+        "conditional-probability"
+      ]
+    ]
+  },
+  {
+    "id": 6,
+    "title": "Operadores Lineares",
+    "slug": "operadores-lineares",
+    "phases": [
+      {
+        "num": 1,
+        "title": "Operadores Inversíveis e Matrizes Semelhantes"
+      },
+      {
+        "num": 2,
+        "title": "Operadores Ortogonais"
+      },
+      {
+        "num": 3,
+        "title": "Operadores Simétricos e Integração"
+      }
+    ],
+    "days": [
+      {
+        "id": 1,
+        "phase": 1,
+        "title": "Operadores Inversíveis",
+        "icon": "↩",
+        "summary": "Um operador linear é inversível se e somente se o determinante de sua matriz é não nulo. O operador inverso desfaz a transformação original.",
+        "key_insight": "Se $\\det T \\neq 0$, então $f^{-1}$ existe e sua matriz é $T^{-1}$.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Verifique se $f(x,y)=(3x-4y,-x+2y)$ é inversível e, se sim, determine $f^{-1}(x,y)$.",
+            "detail": "Um operador $f:V\\to V$ é inversível se existe $f^{-1}$ tal que $f^{-1}\\circ f = f\\circ f^{-1} = I$. A condição prática é $\\det T \\neq 0$, onde $T$ é a matriz de $f$. Nesse caso, a matriz de $f^{-1}$ é $T^{-1}$.",
+            "concepts": [
+              "operador-linear",
+              "operador-inversivel"
+            ],
+            "notes": [
+              "operador-inversivel"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Entender quando um operador linear admite inverso e como calculá-lo.",
+                "prior_knowledge": "Transformações lineares $f:V\\to V$ possuem matrizes quadradas associadas."
+              },
+              "core": {
+                "exposition": "Um operador $f:V\\to V$ é inversível se existe $f^{-1}$ tal que $f^{-1}\\circ f = f\\circ f^{-1} = I$. A condição prática é $\\det T \\neq 0$, onde $T$ é a matriz de $f$. Nesse caso, a matriz de $f^{-1}$ é $T^{-1}$.",
+                "worked_example": "Dado $f(x,y)=(4x-3y,-2x+2y)$, temos $T=\\begin{bmatrix}4&-3\\\\-2&2\\end{bmatrix}$.\n$\\det T = 8-6=2\\neq 0$, logo $f$ é inversível.\n$T^{-1}=\\begin{bmatrix}1&3/2\\\\1&2\\end{bmatrix}$\nPortanto $f^{-1}(x,y)=(x+\\tfrac{3}{2}y,\\; x+2y)$.",
+                "problem": "Verifique se $f(x,y)=(3x-4y,-x+2y)$ é inversível e, se sim, determine $f^{-1}(x,y)$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Qual é a condição necessária e suficiente para que um operador linear $f$ com matriz $T$ seja inversível?",
+                    "answer": "$\\det T \\neq 0$. Nesse caso a matriz de $f^{-1}$ é $T^{-1}$.",
+                    "concept": "operador-inversivel"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Se $f\\circ f^{-1} = I$, o que isso significa geometricamente?",
+                    "answer": "$f^{-1}$ desfaz a ação de $f$: todo vetor transformado é devolvido à sua posição original.",
+                    "concept": "operador-linear"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que a condição $\\det T \\neq 0$ garante a existência de $f^{-1}$? Explique a ligação entre determinante e invertibilidade de matrizes."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Dado $f(x,y)=(2x-y,-4x+2y)$, determine se $f$ é inversível.",
+                "rubric": "Deve calcular $\\det T = 4-4=0$ e concluir que $f$ não é inversível."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Dado $f(x,y,z)=(x-y+2z,\\,y-z,\\,2y-3z)$, determine $f^{-1}(x,y,z)$.",
+            "detail": "Para $f:\\mathbb{R}^3\\to\\mathbb{R}^3$ inversível com matriz $T$, o operador $f^{-1}$ tem matriz $T^{-1}$. Para recuperar $v$ tal que $f(v)=w$, basta calcular $v=T^{-1}w$.",
+            "concepts": [
+              "operador-inversivel"
+            ],
+            "notes": [
+              "operador-inversivel"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Praticar o cálculo de $f^{-1}$ em $\\mathbb{R}^3$ via inversão de matriz.",
+                "prior_knowledge": "A inversa de uma matriz $3\\times 3$ pode ser calculada por adjunta ou escalonamento."
+              },
+              "core": {
+                "exposition": "Para $f:\\mathbb{R}^3\\to\\mathbb{R}^3$ inversível com matriz $T$, o operador $f^{-1}$ tem matriz $T^{-1}$. Para recuperar $v$ tal que $f(v)=w$, basta calcular $v=T^{-1}w$.",
+                "worked_example": "Seja $T=\\begin{bmatrix}1&0&1\\\\2&-1&1\\\\0&0&-1\\end{bmatrix}$, $\\det T=1\\neq 0$.\nCalculando $T^{-1}$: $f^{-1}(x,y,z)=(x+z,\\;2x-y+z,\\;-z)$.\nPara $f(v)=(2,-3,0)$: $v=T^{-1}(2,-3,0)=(2,7,0)$.",
+                "problem": "Dado $f(x,y,z)=(x-y+2z,\\,y-z,\\,2y-3z)$, determine $f^{-1}(x,y,z)$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Como se usa $T^{-1}$ para encontrar $v$ tal que $f(v)=w$?",
+                    "answer": "Calcula-se $v=T^{-1}w$, pois $f(v)=Tv=w$ implica $v=T^{-1}w$.",
+                    "concept": "operador-inversivel"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Se $f$ não é inversível e $f(v)=w$, a equação pode ter solução?",
+                    "answer": "Sim, pode ter zero ou infinitas soluções, mas não existe $f^{-1}$ definido globalmente.",
+                    "concept": "operador-inversivel"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explique por que as propriedades $f\\circ f^{-1}=I$ e $f^{-1}\\circ f=I$ são ambas necessárias na definição de operador inversível."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Determine $v\\in\\mathbb{R}^3$ tal que $f(v)=(2,-3,0)$ para o operador com matriz $T=\\begin{bmatrix}1&0&1\\\\2&-1&1\\\\0&0&-1\\end{bmatrix}$.",
+                "rubric": "Deve obter $v=(2,7,0)$ via $v=T^{-1}(2,-3,0)$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "phase": 1,
+        "title": "Matrizes Semelhantes",
+        "icon": "≈",
+        "summary": "Dois operadores que representam o mesmo $f$ em bases diferentes têm matrizes semelhantes, relacionadas por $T_B = Q^{-1}T_A Q$, onde $Q$ é a matriz de mudança de base.",
+        "key_insight": "Matrizes semelhantes têm o mesmo determinante e representam o mesmo operador em bases distintas.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Dado $f(x,y)=(7x-4y,-4x+y)$ com base canônica $A$ e $B=\\{(-2,1),(1,2)\\}$, calcule $T_B$.",
+            "detail": "Se $T_A$ e $T_B$ representam o mesmo operador $f$ nas bases $A$ e $B$, então $T_B = Q^{-1}T_A Q$, onde $Q$ é a matriz de mudança de base de $B$ para $A$. Duas matrizes são semelhantes se existe $Q$ inversível com essa relação. Matrizes semelhantes têm o mesmo determinante.",
+            "concepts": [
+              "matrizes-semelhantes",
+              "mudanca-de-base"
+            ],
+            "notes": [
+              "matrizes-semelhantes"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Compreender o conceito de matrizes semelhantes e a fórmula de mudança de base para operadores.",
+                "prior_knowledge": "A matriz de mudança de base converte coordenadas de uma base para outra."
+              },
+              "core": {
+                "exposition": "Se $T_A$ e $T_B$ representam o mesmo operador $f$ nas bases $A$ e $B$, então $T_B = Q^{-1}T_A Q$, onde $Q$ é a matriz de mudança de base de $B$ para $A$. Duas matrizes são semelhantes se existe $Q$ inversível com essa relação. Matrizes semelhantes têm o mesmo determinante.",
+                "worked_example": "Com $T=\\begin{bmatrix}2&9\\\\1&2\\end{bmatrix}$ (base canônica) e $B=\\{(3,1),(-3,1)\\}$:\n$Q=B=\\begin{bmatrix}3&-3\\\\1&1\\end{bmatrix}$, $Q^{-1}=\\begin{bmatrix}1/6&3/6\\\\-1/6&3/6\\end{bmatrix}$\n$T_B=Q^{-1}TQ=\\begin{bmatrix}5&0\\\\0&-1\\end{bmatrix}$.",
+                "problem": "Dado $f(x,y)=(7x-4y,-4x+y)$ com base canônica $A$ e $B=\\{(-2,1),(1,2)\\}$, calcule $T_B$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Enuncie a fórmula que relaciona $T_A$ e $T_B$ para o mesmo operador $f$ em bases diferentes.",
+                    "answer": "$T_B = Q^{-1}T_A Q$, onde $Q$ é a matriz de mudança de base de $B$ para $A$.",
+                    "concept": "matrizes-semelhantes"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Qual propriedade numérica é preservada por matrizes semelhantes?",
+                    "answer": "O determinante: $\\det T_B = \\det T_A$.",
+                    "concept": "matrizes-semelhantes"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que é vantajoso encontrar uma base $B$ onde a matriz de $f$ seja diagonal? Como isso se relaciona com matrizes semelhantes?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Dadas bases $A$ (canônica) e $B=\\{(3,1),(-3,1)\\}$, calcule $Q$ para o operador $f(x,y)=(2x+9y,x+2y)$.",
+                "rubric": "Deve identificar $Q=B=\\begin{bmatrix}3&-3\\\\1&1\\end{bmatrix}$ pois $A^{-1}=I$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Use o resultado acima para verificar que $\\det T_A = \\det T_B$.",
+            "detail": "A relação $T_B=Q^{-1}T_AQ$ pode ser invertida: $T_A=QT_BQ^{-1}$. Isso permite recuperar a matriz numa base a partir da matriz na outra base e da mudança de base.",
+            "concepts": [
+              "matrizes-semelhantes",
+              "mudanca-de-base"
+            ],
+            "notes": [
+              "matrizes-semelhantes"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Calcular $T_A$ a partir de $T_B$ usando a relação inversa entre matrizes semelhantes.",
+                "prior_knowledge": "Se $T_B=Q^{-1}T_AQ$, então $T_A=QT_BQ^{-1}$."
+              },
+              "core": {
+                "exposition": "A relação $T_B=Q^{-1}T_AQ$ pode ser invertida: $T_A=QT_BQ^{-1}$. Isso permite recuperar a matriz numa base a partir da matriz na outra base e da mudança de base.",
+                "worked_example": "Com $A=\\{(1,0),(0,1)\\}$, $B=\\{(4,1),(-11,-3)\\}$ e $T_B=\\begin{bmatrix}3&5\\\\1&2\\end{bmatrix}$:\n$Q=A^{-1}B=B=\\begin{bmatrix}4&-11\\\\1&-3\\end{bmatrix}$\n$Q^{-1}=\\begin{bmatrix}-3&11\\\\-1&4\\end{bmatrix}$\n$T_A=QT_BQ^{-1}=\\begin{bmatrix}1&-3\\\\-1&4\\end{bmatrix}$.",
+                "problem": "Use o resultado acima para verificar que $\\det T_A = \\det T_B$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Quando a base $A$ é canônica, como simplifica o cálculo de $Q$?",
+                    "answer": "$Q=A^{-1}B=I\\cdot B=B$, então $Q$ é simplesmente a matriz cujas colunas são os vetores de $B$.",
+                    "concept": "mudanca-de-base"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Enuncie a fórmula para obter $T_A$ conhecendo $T_B$ e $Q$.",
+                    "answer": "$T_A = Q T_B Q^{-1}$.",
+                    "concept": "matrizes-semelhantes"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explique por que a escolha de $Q$ como mudança de base de $B$ para $A$ (e não de $A$ para $B$) é essencial na fórmula $T_B=Q^{-1}T_AQ$."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Mostre que as matrizes $T_A=\\begin{bmatrix}-2&4\\\\2&-1\\end{bmatrix}$ e $T_B=\\begin{bmatrix}2&-4\\\\1&-5\\end{bmatrix}$ do Problema Resolvido 4.3.2.1 têm o mesmo determinante.",
+                "rubric": "Deve calcular $\\det T_A = 2-8=-6$ e $\\det T_B=-10+4=-6$, confirmando a igualdade."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "phase": 2,
+        "title": "Operadores Ortogonais",
+        "icon": "⊥",
+        "summary": "Um operador ortogonal preserva o módulo dos vetores. Sua matriz (em base ortonormal) satisfaz $A^tA=I$, tem determinante $\\pm 1$, e suas colunas formam uma base ortonormal.",
+        "key_insight": "$f$ é ortogonal $\\iff$ $|f(v)|=|v|$ para todo $v$ $\\iff$ $A^t = A^{-1}$.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Verifique se $f(x,y)=(\\frac{1}{\\sqrt{2}}x-\\frac{1}{\\sqrt{2}}y,\\;\\frac{1}{\\sqrt{2}}x+\\frac{1}{\\sqrt{2}}y)$ é ortogonal calculando $|f(x,y)|$.",
+            "detail": "Um operador $f:V\\to V$ é ortogonal se $|f(v)|=|v|$ para todo $v\\in V$. Em base ortonormal, sua matriz $A$ satisfaz $A^tA=I$, ou seja, $A^t=A^{-1}$. Consequentemente, $\\det A=\\pm 1$ e as colunas de $A$ são vetores ortonormais.",
+            "concepts": [
+              "operador-ortogonal",
+              "matriz-ortogonal"
+            ],
+            "notes": [
+              "operador-ortogonal"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Definir operador ortogonal e identificar a condição matricial equivalente.",
+                "prior_knowledge": "O módulo de um vetor em espaço euclidiano é $|v|=\\sqrt{v\\cdot v}$."
+              },
+              "core": {
+                "exposition": "Um operador $f:V\\to V$ é ortogonal se $|f(v)|=|v|$ para todo $v\\in V$. Em base ortonormal, sua matriz $A$ satisfaz $A^tA=I$, ou seja, $A^t=A^{-1}$. Consequentemente, $\\det A=\\pm 1$ e as colunas de $A$ são vetores ortonormais.",
+                "worked_example": "Rotação de ângulo $\\theta$: $A=\\begin{bmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{bmatrix}$.\n$|f(x,y)|^2=(x\\cos\\theta-y\\sin\\theta)^2+(x\\sin\\theta+y\\cos\\theta)^2$\n$=x^2(\\cos^2\\theta+\\sin^2\\theta)+y^2(\\sin^2\\theta+\\cos^2\\theta)=x^2+y^2=|(x,y)|^2$.\nLogo $f$ é ortogonal.",
+                "problem": "Verifique se $f(x,y)=(\\frac{1}{\\sqrt{2}}x-\\frac{1}{\\sqrt{2}}y,\\;\\frac{1}{\\sqrt{2}}x+\\frac{1}{\\sqrt{2}}y)$ é ortogonal calculando $|f(x,y)|$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Qual é a condição sobre a matriz $A$ de um operador ortogonal (em base ortonormal)?",
+                    "answer": "$A^tA=I$, equivalentemente $A^t=A^{-1}$, chamada de matriz ortogonal.",
+                    "concept": "matriz-ortogonal"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Por que $\\det A=\\pm 1$ para qualquer matriz ortogonal?",
+                    "answer": "De $A^tA=I$ temos $(\\det A)^2=1$, logo $\\det A=\\pm 1$.",
+                    "concept": "matriz-ortogonal"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que um operador ortogonal também preserva o produto interno $f(\\mu)\\cdot f(v)=\\mu\\cdot v$? Mostre a cadeia de igualdades."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "A matriz $C=\\begin{bmatrix}1/\\sqrt{5}&2/\\sqrt{5}\\\\2/\\sqrt{5}&-1/\\sqrt{5}\\end{bmatrix}$ é ortogonal? Justifique.",
+                "rubric": "Deve verificar que as colunas são unitárias e ortogonais entre si (ou que $C^tC=I$), concluindo que sim."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Construa uma matriz ortogonal $3\\times 3$ cuja primeira coluna seja $(\\frac{1}{3},-\\frac{2}{3},-\\frac{2}{3})$.",
+            "detail": "Dada uma coluna unitária $\\mu_1$, a segunda coluna $\\mu_2$ deve ser unitária e ortogonal a $\\mu_1$. Em $\\mathbb{R}^2$, se $\\mu_1=(a,b)$ com $a^2+b^2=1$, então $\\mu_2=(-b,a)$ ou $(b,-a)$. O caso $\\det A=+1$ corresponde a uma rotação; $\\det A=-1$ a uma reflexão.",
+            "concepts": [
+              "matriz-ortogonal",
+              "operador-ortogonal"
+            ],
+            "notes": [
+              "operador-ortogonal"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Construir matrizes ortogonais a partir de uma coluna dada e identificar rotações.",
+                "prior_knowledge": "As colunas de uma matriz ortogonal formam uma base ortonormal."
+              },
+              "core": {
+                "exposition": "Dada uma coluna unitária $\\mu_1$, a segunda coluna $\\mu_2$ deve ser unitária e ortogonal a $\\mu_1$. Em $\\mathbb{R}^2$, se $\\mu_1=(a,b)$ com $a^2+b^2=1$, então $\\mu_2=(-b,a)$ ou $(b,-a)$. O caso $\\det A=+1$ corresponde a uma rotação; $\\det A=-1$ a uma reflexão.",
+                "worked_example": "Primeira coluna: $(\\frac{2}{\\sqrt{5}},-\\frac{1}{\\sqrt{5}})$.\nEscolhemos $\\mu_2=(\\frac{1}{\\sqrt{5}},\\frac{2}{\\sqrt{5}})$ (rotação, $\\det=+1$).\nMatriz: $\\begin{bmatrix}2/\\sqrt{5}&1/\\sqrt{5}\\\\-1/\\sqrt{5}&2/\\sqrt{5}\\end{bmatrix}$.",
+                "problem": "Construa uma matriz ortogonal $3\\times 3$ cuja primeira coluna seja $(\\frac{1}{3},-\\frac{2}{3},-\\frac{2}{3})$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Como distinguir, para uma matriz ortogonal $2\\times 2$, se ela representa uma rotação ou uma reflexão?",
+                    "answer": "Se $\\det A=+1$ é uma rotação; se $\\det A=-1$ é uma reflexão.",
+                    "concept": "operador-ortogonal"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Qual é a inversa de uma matriz ortogonal?",
+                    "answer": "$A^{-1}=A^t$ (transposta da matriz).",
+                    "concept": "matriz-ortogonal"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explique por que o produto de duas matrizes ortogonais é também ortogonal, usando a definição $A^tA=I$."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "A matriz $A=\\begin{bmatrix}3/5&-4/5\\\\4/5&3/5\\end{bmatrix}$ é ortogonal? É uma rotação? Qual ângulo?",
+                "rubric": "Deve verificar $A^tA=I$, $\\det A=+1$ (rotação), e identificar $\\cos\\theta=3/5$, $\\sin\\theta=4/5$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "phase": 3,
+        "title": "Operadores Simétricos",
+        "icon": "⇔",
+        "summary": "Um operador simétrico tem matriz simétrica ($A=A^t$) em qualquer base ortonormal, e satisfaz $f(\\mu)\\cdot v = \\mu\\cdot f(v)$ para todos os vetores.",
+        "key_insight": "$f$ simétrico $\\iff$ $A=A^t$ $\\iff$ $f(\\mu)\\cdot v=\\mu\\cdot f(v)$ para quaisquer $\\mu,v$.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Determine $m$ e $n$ para que $f(x,y,z)=(3x-2y,\\,mx+y-3z,\\,ny+z)$ seja simétrico.",
+            "detail": "Um operador linear $f:V\\to V$ é simétrico se sua matriz em base ortonormal satisfaz $A=A^t$. Equivalentemente, $f(\\mu)\\cdot v=\\mu\\cdot f(v)$ para quaisquer $\\mu,v\\in V$. A demonstração usa $f(\\mu)\\cdot v=(A\\mu)^tv=\\mu^tA^tv=\\mu^tAv=\\mu\\cdot f(v)$.",
+            "concepts": [
+              "operador-simetrico",
+              "matriz-simetrica"
+            ],
+            "notes": [
+              "operador-simetrico"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Definir operador simétrico e verificar a propriedade $f(\\mu)\\cdot v=\\mu\\cdot f(v)$.",
+                "prior_knowledge": "Uma matriz é simétrica se $A=A^t$, ou seja, $a_{ij}=a_{ji}$ para todos $i,j$."
+              },
+              "core": {
+                "exposition": "Um operador linear $f:V\\to V$ é simétrico se sua matriz em base ortonormal satisfaz $A=A^t$. Equivalentemente, $f(\\mu)\\cdot v=\\mu\\cdot f(v)$ para quaisquer $\\mu,v\\in V$. A demonstração usa $f(\\mu)\\cdot v=(A\\mu)^tv=\\mu^tA^tv=\\mu^tAv=\\mu\\cdot f(v)$.",
+                "worked_example": "$f(x,y)=(x+3y,3x-4y)$, $A=\\begin{bmatrix}1&3\\\\3&-4\\end{bmatrix}=A^t$.\nCom $\\mu=(2,3)$, $v=(4,2)$: $f(\\mu)=(11,-6)$, $f(v)=(10,4)$.\n$f(\\mu)\\cdot v=44-12=32$; $\\mu\\cdot f(v)=20+12=32$. ✓",
+                "problem": "Determine $m$ e $n$ para que $f(x,y,z)=(3x-2y,\\,mx+y-3z,\\,ny+z)$ seja simétrico."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "O que significa dizer que um operador linear é simétrico?",
+                    "answer": "Sua matriz em base ortonormal é simétrica: $A=A^t$, ou equivalentemente $f(\\mu)\\cdot v=\\mu\\cdot f(v)$.",
+                    "concept": "operador-simetrico"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Cite a condição para $f(x,y,z)=(ax+by,cx+dy,ez)$ ser simétrico.",
+                    "answer": "Requer $b=c$ (entradas fora da diagonal simétricas): a matriz deve satisfazer $a_{ij}=a_{ji}$.",
+                    "concept": "matriz-simetrica"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Demonstre algebricamente que $A=A^t$ implica $f(\\mu)\\cdot v=\\mu\\cdot f(v)$, explicitando cada passo da cadeia de igualdades."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "O operador $f(x,y,z)=(x-y,\\,-x+3y-2z,\\,-2y)$ é simétrico? Exiba a matriz canônica.",
+                "rubric": "Deve escrever $A=\\begin{bmatrix}1&-1&0\\\\-1&3&-2\\\\0&-2&0\\end{bmatrix}$ e verificar $A=A^t$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Dado $f(x,y)=(7x-4y,-4x+y)$, verifique que $f$ é simétrico e use a base $B=\\{(-2,1),(1,2)\\}$ para diagonalizar sua matriz.",
+            "detail": "Um operador pode ser simultaneamente simétrico e ter representação diagonal em alguma base (via matrizes semelhantes). Para operadores simétricos, a diagonalização por uma base ortonormal é sempre possível (Teorema Espectral). A mudança de base que diagonaliza $f$ usa uma matriz ortogonal $Q$.",
+            "concepts": [
+              "operador-simetrico",
+              "operador-ortogonal",
+              "matrizes-semelhantes"
+            ],
+            "notes": [
+              "operador-simetrico",
+              "operador-ortogonal"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Integrar os conceitos de operadores simétrico, ortogonal e matrizes semelhantes em um problema único.",
+                "prior_knowledge": "Operadores simétricos têm $A=A^t$; ortogonais têm $A^t=A^{-1}$; matrizes semelhantes satisfazem $T_B=Q^{-1}T_AQ$."
+              },
+              "core": {
+                "exposition": "Um operador pode ser simultaneamente simétrico e ter representação diagonal em alguma base (via matrizes semelhantes). Para operadores simétricos, a diagonalização por uma base ortonormal é sempre possível (Teorema Espectral). A mudança de base que diagonaliza $f$ usa uma matriz ortogonal $Q$.",
+                "worked_example": "$f(x,y)=(2x+9y,x+2y)$, base $B=\\{(3,1),(-3,1)\\}$:\n$T_B=\\begin{bmatrix}5&0\\\\0&-1\\end{bmatrix}$ (diagonal, via $T_B=Q^{-1}TQ$).\n$\\det T_B=\\det T=-5$ confirma a semelhança.\nA forma diagonal torna $f$ muito mais fácil de aplicar.",
+                "problem": "Dado $f(x,y)=(7x-4y,-4x+y)$, verifique que $f$ é simétrico e use a base $B=\\{(-2,1),(1,2)\\}$ para diagonalizar sua matriz."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "O que a diagonalidade de $T_B$ significa em termos de $f$ e da base $B$?",
+                    "answer": "Os vetores de $B$ são direções especiais (autovetores) onde $f$ age apenas por escalonamento.",
+                    "concept": "matrizes-semelhantes"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Para diagonalizar um operador simétrico, que tipo especial de matriz $Q$ pode ser usada?",
+                    "answer": "Uma matriz ortogonal, pois o Teorema Espectral garante base ortonormal de autovetores para operadores simétricos.",
+                    "concept": "operador-simetrico"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Compare as propriedades de operadores ortogonais e simétricos: quais propriedades são exclusivas de cada um, e existe alguma que ambos compartilham?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Para $f(x,y)=(7x-4y,-4x+y)$ com $T_A=\\begin{bmatrix}7&-4\\\\-4&1\\end{bmatrix}$ e $B=\\{(-2,1),(1,2)\\}$, calcule $\\det T_A$ e confirme que $\\det T_B$ coincide.",
+                "rubric": "Deve calcular $\\det T_A=7-16=-9$ e obter $\\det T_B=9\\cdot(-1)=-9$ da resposta $T_B=\\begin{bmatrix}9&0\\\\0&-1\\end{bmatrix}$."
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "concepts": [
+      {
+        "id": "operador-linear",
+        "label": "Operador Linear"
+      },
+      {
+        "id": "operador-inversivel",
+        "label": "Operador Inversível"
+      },
+      {
+        "id": "matrizes-semelhantes",
+        "label": "Matrizes Semelhantes"
+      },
+      {
+        "id": "mudanca-de-base",
+        "label": "Mudança de Base"
+      },
+      {
+        "id": "operador-ortogonal",
+        "label": "Operador Ortogonal"
+      },
+      {
+        "id": "matriz-ortogonal",
+        "label": "Matriz Ortogonal"
+      },
+      {
+        "id": "operador-simetrico",
+        "label": "Operador Simétrico"
+      },
+      {
+        "id": "matriz-simetrica",
+        "label": "Matriz Simétrica"
+      }
+    ],
+    "prereqs": [
+      [
+        "operador-inversivel",
+        "operador-linear"
+      ],
+      [
+        "matrizes-semelhantes",
+        "operador-linear"
+      ],
+      [
+        "matrizes-semelhantes",
+        "mudanca-de-base"
+      ],
+      [
+        "operador-ortogonal",
+        "operador-linear"
+      ],
+      [
+        "matriz-ortogonal",
+        "operador-ortogonal"
+      ],
+      [
+        "operador-simetrico",
+        "operador-linear"
+      ],
+      [
+        "matriz-simetrica",
+        "operador-simetrico"
       ]
     ]
   }

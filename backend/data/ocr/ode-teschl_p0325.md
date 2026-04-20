@@ -1,0 +1,11 @@
+For every sufficiently small neighborhood $U$ of $p$ there is an $n \in \mathbb{N}$ and an $f^n$ invariant Cantor set $\Lambda \subset U$ (i.e., $f^n(\Lambda) = \Lambda$) such that $(\Lambda, f^n)$ is topologically equivalent to the shift on two symbols $(\Sigma_2, \sigma)$.
+
+Proof. We will need to construct two disjoint intervals $I_j \subset U \cap W$, $j = 0, 1$, as in Theorem 11.23 for the map $F = f^n$ with $n$ suitable. By shrinking $W$ it is no restriction to assume $W \subset U$.
+
+The idea is to take compact intervals $I_0$ containing $p$ and $I_1$ containing $q$. Since $f^l(q) = p$, the interval $f^l(I_1)$ contains again $p$. Taking sufficiently many iterations we can blow up both intervals such that the iterated images contain both original ones. The only tricky part is to ensure that the derivative of the iterated map is larger than one.
+
+So we start with an interval $I_1 \subset W$ containing $q \in W$. Since $q$ is nondegenerate we can choose $I_1$ such that $|(f^l)'(x)| \geq \varepsilon > 0$ for all $x \in I_1$. Moreover, by shrinking $I_1$ if necessary we can also assume $f^l(I_1) \cap I_1 = \emptyset$. Next pick $m$ so large that $g^m(I_1) \subset f^l(I_1)$ (g being the local inverse of $f$ as above) and $\alpha^m \varepsilon > 1$. Set $n = m + l$. Next, choose $\tilde{I}_1 \subset I_1$ such that $g^m(I_1) \subset f^l(\tilde{I}_1)$ but $f^l(\tilde{I}_1) \subset g^m(W)$. Then we have $g^m(\tilde{I}_1) \subset g^m(I_1) \subset f^l(\tilde{I}_1)$ and we can replace $I_1$ by $\tilde{I}_1$. By construction $f^l(I_1) \subset g^m(W)$, that is, $f^n(I_1) \subset W$ and thus $|(f^n)'(x)| \geq \varepsilon \alpha^m > 1$ for $x \in I_1$.
+
+Next we will choose $I_0 = g^l(f^l(I_1))$. Then we have $I_0 \cap I_1 = \emptyset$ and $I_0 \subset f^n(I_1)$ since $I_0 \subset f^l(I_1)$. Furthermore, by $p \in I_0$ we have $I_0 \subset f^n(I_0)$ and by $g^m(I_1) \subset f^l(I_1) = f^l(I_0)$ we have $I_1 \subset f^n(I_0)$. Finally, since $I_0 \subset g^n(W)$ we have $|(f^n)'(x)| \geq \alpha^n > 1$ for $x \in I_0$ and we are done.
+
+Problem 11.13. Why is the degeneracy condition in Theorem 11.24 necessary? Can you give a counter example?

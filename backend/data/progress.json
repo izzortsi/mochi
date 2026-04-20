@@ -1,12 +1,14 @@
 {
-  "xp": 84,
-  "streak": 1,
-  "best_streak": 1,
-  "last_completed": "2026-04-19",
+  "xp": 100,
+  "streak": 2,
+  "best_streak": 2,
+  "last_completed": "2026-04-20",
   "completed_tasks": {
     "c5-d1-bronze-0": true,
     "c3-d1-bronze-0": true,
-    "c3-d1-silver-1": true
+    "c3-d1-silver-1": true,
+    "c4-d1-bronze-0": true,
+    "c4-d2-bronze-0": true
   },
   "completed_phases": {
     "c5-d1-bronze-0": {
@@ -25,9 +27,19 @@
     },
     "c4-d1-bronze-0": {
       "prime": true,
-      "core": true
+      "core": true,
+      "retrieval": true,
+      "elaborate": true,
+      "check": true
     },
     "c3-d1-silver-1": {
+      "prime": true,
+      "core": true,
+      "retrieval": true,
+      "elaborate": true,
+      "check": true
+    },
+    "c4-d2-bronze-0": {
       "prime": true,
       "core": true,
       "retrieval": true,
@@ -37,7 +49,9 @@
   },
   "day_tiers": {
     "5.1": "gold",
-    "3.1": "silver"
+    "3.1": "silver",
+    "4.1": "gold",
+    "4.2": "bronze"
   },
   "generated_tasks": [],
   "attempts": [
@@ -46,6 +60,12 @@
       "verdict": "partial",
       "comment": "O usuário identificou corretamente que os autovalores são complexos da forma 7 ± 3i, mas inicialmente errou ao escrever apenas 7 - 3i sem incluir o par conjugado 7 + 3i. Com auxílio chegou à resposta correta.",
       "timestamp": "2026-04-19T22:23:44.534016"
+    },
+    {
+      "card-uid": "c4-d2-bronze-0",
+      "verdict": "correct",
+      "comment": "Correctly classified all three ODEs: order, linearity, autonomy, scalar vs system.",
+      "timestamp": "2026-04-20T10:10:45.993954"
     }
   ]
 }
