@@ -4,11 +4,26 @@ import { ChevronDown, Check, Trash2, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { MathText } from "./MathText";
 import type {
-  CardUid, ConceptId, SessionPhases, PhaseName, EvalResult, EvalKind,
+  CardUid, ConceptId, SessionPhases, PhaseName, EvalResult, EvalKind, ChatMessage,
 } from "@/lib/types";
 import { PHASE_NAMES } from "@/lib/types";
 import { evalAttempt } from "@/lib/llm";
 import { loadConfig, isConfigured } from "@/lib/settings";
+import { api } from "@/lib/api";
+
+// Event fired after any attempt (retrieval or elaborate) is persisted to the
+// course chat thread. StudyChat listens for this so it can append the turn
+// to its in-memory history live, without a reload.
+export const CHAT_APPENDED_EVENT = "studyplan:chat-appended";
+export interface ChatAppendedDetail {
+  courseId: number;
+  message: ChatMessage;
+}
+
+function parseCourseId(cardUid: string): number | null {
+  const m = cardUid.match(/^c(\d+)-/);
+  return m ? parseInt(m[1], 10) : null;
+}
 
 interface Props {
   cardUid: CardUid;
@@ -143,7 +158,7 @@ export function SessionCard({
               </div>
               {isOpen && (
                 <div className="px-3 pb-3 pt-1 text-sm bg-[#080808]">
-                  <PhaseContent phase={p} phases={phases} />
+                  <PhaseContent phase={p} phases={phases} cardUid={cardUid} />
                 </div>
               )}
             </div>
@@ -154,7 +169,9 @@ export function SessionCard({
   );
 }
 
-function PhaseContent({ phase, phases }: { phase: PhaseName; phases: SessionPhases }) {
+function PhaseContent({
+  phase, phases, cardUid,
+}: { phase: PhaseName; phases: SessionPhases; cardUid: CardUid }) {
   if (phase === "prime") {
     const { goal, priorKnowledge } = phases.prime;
     if (!goal && !priorKnowledge) return <Empty />;
@@ -189,7 +206,9 @@ function PhaseContent({ phase, phases }: { phase: PhaseName; phases: SessionPhas
     if (!prompts.length) return <Empty />;
     return (
       <ol className="space-y-3 list-decimal list-inside">
-        {prompts.map((p) => <RetrievalItem key={p.id} prompt={p} />)}
+        {prompts.map((p) => (
+          <RetrievalItem key={p.id} prompt={p} cardUid={cardUid} />
+        ))}
       </ol>
     );
   }
@@ -198,7 +217,9 @@ function PhaseContent({ phase, phases }: { phase: PhaseName; phases: SessionPhas
     if (!prompts.length) return <Empty />;
     return (
       <ol className="space-y-3 list-decimal list-inside">
-        {prompts.map((p) => <ElaborateItem key={p.id} prompt={p} />)}
+        {prompts.map((p) => (
+          <ElaborateItem key={p.id} prompt={p} cardUid={cardUid} />
+        ))}
       </ol>
     );
   }
@@ -226,9 +247,10 @@ function Empty() {
 }
 
 function RetrievalItem({
-  prompt,
+  prompt, cardUid,
 }: {
   prompt: { id: string; prompt: string; answer: string; concept?: string | null };
+  cardUid: CardUid;
 }) {
   const [show, setShow] = useState(false);
   return (
@@ -239,6 +261,8 @@ function RetrievalItem({
         prompt={prompt.prompt}
         answer={prompt.answer}
         concept={prompt.concept ?? null}
+        cardUid={cardUid}
+        promptId={prompt.id}
       />
       {prompt.answer && (
         <div className="mt-1">
@@ -263,14 +287,20 @@ function RetrievalItem({
 }
 
 function ElaborateItem({
-  prompt,
+  prompt, cardUid,
 }: {
   prompt: { id: string; prompt: string };
+  cardUid: CardUid;
 }) {
   return (
     <li>
       <MathText>{prompt.prompt}</MathText>
-      <AttemptBox kind="elaborate" prompt={prompt.prompt} />
+      <AttemptBox
+        kind="elaborate"
+        prompt={prompt.prompt}
+        cardUid={cardUid}
+        promptId={prompt.id}
+      />
     </li>
   );
 }
@@ -292,16 +322,51 @@ function AttemptBox({
   prompt,
   answer,
   concept,
+  cardUid,
+  promptId,
 }: {
   kind: EvalKind;
   prompt: string;
   answer?: string;
   concept?: string | null;
+  cardUid: CardUid;
+  promptId: string;
 }) {
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<EvalResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [piped, setPiped] = useState(false);
+
+  const pipeToTutor = async (r: EvalResult, attempt: string) => {
+    const courseId = parseCourseId(cardUid);
+    if (courseId == null) return;
+    const lines = [
+      `[${kind}-eval · ${cardUid} / ${promptId}]`,
+      `prompt: ${prompt}`,
+      `attempt: ${attempt}`,
+      `verdict: ${r.verdict}`,
+      r.feedback ? `feedback: ${r.feedback}` : null,
+    ].filter(Boolean);
+    const message: ChatMessage = {
+      role: "tool",
+      content: lines.join("\n"),
+      toolName: `${kind}-eval`,
+      timestamp: new Date().toISOString(),
+    };
+    try {
+      await api.memory.appendChat(courseId, message);
+      setPiped(true);
+      // Let any open StudyChat on this course update in-place.
+      window.dispatchEvent(
+        new CustomEvent<ChatAppendedDetail>(CHAT_APPENDED_EVENT, {
+          detail: { courseId, message },
+        }),
+      );
+    } catch {
+      // non-fatal — the eval result still shows, just not piped
+    }
+  };
 
   const submit = async () => {
     if (!text.trim() || busy) return;
@@ -321,6 +386,7 @@ function AttemptBox({
         concept: concept ?? undefined,
       });
       setResult(r);
+      pipeToTutor(r, text);
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -371,8 +437,15 @@ function AttemptBox({
             styleMap[result.verdict] ?? "border-[#2a2a2a] text-neutral-300"
           }`}
         >
-          <div className="text-[10px] uppercase tracking-wider font-mono opacity-70 mb-0.5">
-            {result.verdict}
+          <div className="flex items-center justify-between gap-2 mb-0.5">
+            <span className="text-[10px] uppercase tracking-wider font-mono opacity-70">
+              {result.verdict}
+            </span>
+            {piped && (
+              <span className="text-[9px] uppercase tracking-wider font-mono opacity-40">
+                · piped to tutor
+              </span>
+            )}
           </div>
           <div className="text-neutral-200">
             <MathText>{result.feedback}</MathText>

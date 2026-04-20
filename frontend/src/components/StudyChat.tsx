@@ -12,6 +12,7 @@ import type {
 } from "@/lib/types";
 import { MathText } from "./MathText";
 import { MarkdownContent } from "./MarkdownContent";
+import { CHAT_APPENDED_EVENT, type ChatAppendedDetail } from "./SessionCard";
 
 function summarizeToolError(raw: string): string {
   // Zod errors come through as JSON-encoded arrays; pluck the missing field names.
@@ -108,6 +109,17 @@ export function StudyChat({ course, day, progress, onProgressChanged }: Props) {
     wsRef.current = ws;
     return () => ws.disconnect();
   }, []);
+
+  // Live-append when an attempt elsewhere on the page pipes to the tutor.
+  useEffect(() => {
+    const onAppended = (e: Event) => {
+      const ce = e as CustomEvent<ChatAppendedDetail>;
+      if (!ce.detail || ce.detail.courseId !== course.id) return;
+      setMessages((prev) => [...(prev ?? []), ce.detail.message]);
+    };
+    window.addEventListener(CHAT_APPENDED_EVENT, onAppended);
+    return () => window.removeEventListener(CHAT_APPENDED_EVENT, onAppended);
+  }, [course.id]);
 
   // Rehydrate chat + fetch tutor notes on course change.
   useEffect(() => {
