@@ -5,7 +5,7 @@ export const markTaskCompleteSchema = z.object({ cardUid: z.string() });
 export const gradeAttemptSchema = z.object({
   cardUid: z.string(),
   verdict: z.enum(["correct", "partial", "wrong"]),
-  comment: z.string(),
+  comment: z.string().default(""),
 });
 export const appendGeneratedTaskSchema = z.object({
   id: z.string(),

@@ -8,6 +8,24 @@ import { WsClient } from "@/lib/ws";
 import type { ChatMessage, ConnectionStatus, Course, DayView, UserProgress } from "@/lib/types";
 import { MathText } from "./MathText";
 
+function summarizeToolError(raw: string): string {
+  // Zod errors come through as JSON-encoded arrays; pluck the missing field names.
+  try {
+    const parsed: Array<{ path?: unknown[]; code?: string; message?: string }> =
+      JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      const missing = parsed
+        .filter((e) => e?.code === "invalid_type" && e?.message === "Required")
+        .map((e) => (e.path || []).join("."))
+        .filter(Boolean);
+      if (missing.length) return `missing required fields: ${missing.join(", ")}`;
+    }
+  } catch {
+    /* not JSON, fall through */
+  }
+  return raw.length > 200 ? raw.slice(0, 200) + "…" : raw;
+}
+
 function buildPageContext(course: Course, day: DayView, progress: UserProgress): string {
   const completed = progress.completedTasks ?? {};
   const tiers: Array<"bronze" | "silver" | "gold"> = ["bronze", "silver", "gold"];
@@ -130,8 +148,14 @@ export function StudyChat({ course, day, progress, onProgressChanged }: Props) {
             onProgressChanged();
           }
         } catch (e) {
+          // Feed validation errors back into the chat as a structured message
+          // so the tutor can correct itself on the next turn.
+          const msg = e instanceof Error ? e.message : String(e);
+          const summary = summarizeToolError(msg);
           setMessages(m => [...m, {
-            role: "tool", content: `error: ${String(e)}`, toolName: call.name,
+            role: "tool",
+            content: `${call.name} failed: ${summary}. Retry with complete args (see tool schema).`,
+            toolName: call.name,
             timestamp: new Date().toISOString(),
           }]);
         }
