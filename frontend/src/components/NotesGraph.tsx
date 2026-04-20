@@ -61,8 +61,8 @@ export function NotesGraph({ data, cacheKey, height = 560 }: { data: NotesGraphD
       .force("link", forceLink<Node, Link>(links).id(d => d.id).distance(90).strength(0.4))
       .force("charge", forceManyBody<Node>().strength(-80))
       .force("center", forceCenter(400, height / 2))
-      .force("x", forceX<Node>(400).strength(0.08))
-      .force("y", forceY<Node>(height / 2).strength(0.08))
+      .force("x", forceX<Node>(400).strength(0.25))
+      .force("y", forceY<Node>(height / 2).strength(0.25))
       .force("collide", forceCollide<Node>().radius(22))
       .alphaDecay(0.03);
 
