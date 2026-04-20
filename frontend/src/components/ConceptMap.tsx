@@ -52,7 +52,7 @@ export function ConceptMap({ data, cacheKey, height = 480 }: { data: ConceptMapD
 
     const sim = forceSimulation<Node, Link>(nodes)
       .force("link", forceLink<Node, Link>(links).id(d => d.id).distance(80).strength(0.5))
-      .force("charge", forceManyBody<Node>().strength(-180))
+      .force("charge", forceManyBody<Node>().strength(-90))
       .force("center", forceCenter(320, height / 2))
       .force("collide", forceCollide<Node>().radius(d => 16 + d.cardCount * 2))
       .alphaDecay(0.03);

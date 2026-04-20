@@ -58,7 +58,7 @@ export function NotesGraph({ data, cacheKey, height = 560 }: { data: NotesGraphD
 
     const sim = forceSimulation<Node, Link>(nodes)
       .force("link", forceLink<Node, Link>(links).id(d => d.id).distance(90).strength(0.4))
-      .force("charge", forceManyBody<Node>().strength(-160))
+      .force("charge", forceManyBody<Node>().strength(-80))
       .force("center", forceCenter(400, height / 2))
       .force("collide", forceCollide<Node>().radius(22))
       .alphaDecay(0.03);
