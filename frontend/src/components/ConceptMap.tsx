@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   forceSimulation, forceManyBody, forceLink, forceCenter, forceCollide,
+  forceX, forceY,
   type Simulation, type SimulationNodeDatum, type SimulationLinkDatum,
 } from "d3-force";
 import type { ConceptMapData } from "@/lib/types";
@@ -54,6 +55,8 @@ export function ConceptMap({ data, cacheKey, height = 480 }: { data: ConceptMapD
       .force("link", forceLink<Node, Link>(links).id(d => d.id).distance(80).strength(0.5))
       .force("charge", forceManyBody<Node>().strength(-90))
       .force("center", forceCenter(320, height / 2))
+      .force("x", forceX<Node>(320).strength(0.08))
+      .force("y", forceY<Node>(height / 2).strength(0.08))
       .force("collide", forceCollide<Node>().radius(d => 16 + d.cardCount * 2))
       .alphaDecay(0.03);
 
