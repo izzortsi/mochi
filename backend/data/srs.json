@@ -46,5 +46,29 @@
     "due": "2026-04-19",
     "last_reviewed": null,
     "lapses": 0
+  },
+  "c3-d1-silver-1::r1": {
+    "id": "c3-d1-silver-1::r1",
+    "card_uid": "c3-d1-silver-1",
+    "prompt_id": "r1",
+    "prompt": "Qual é a condição suficiente para que uma matriz seja diagonalizável?",
+    "answer": "Todos os autovalores são distintos.",
+    "concept": "diagonalizacao",
+    "box": 1,
+    "due": "2026-04-20",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c3-d1-silver-1::r2": {
+    "id": "c3-d1-silver-1::r2",
+    "card_uid": "c3-d1-silver-1",
+    "prompt_id": "r2",
+    "prompt": "Toda matriz simétrica é diagonalizável. Por quê?",
+    "answer": "Porque o Teorema Espectral garante uma base ortonormal de autovetores.",
+    "concept": "diagonalizacao",
+    "box": 1,
+    "due": "2026-04-20",
+    "last_reviewed": null,
+    "lapses": 0
   }
 }
