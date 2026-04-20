@@ -1,0 +1,5 @@
+the eigenspace corresponding to the positive eigenvalue, it is the other way round. If $x_0$ has components in both eigenspaces, it will grow exponentially as $t \to \pm\infty$.
+
+If both eigenvalues are purely imaginary, the solutions will be periodic and encircle the origin. The phase portrait looks as in Figure 3.4 and the origin is called a **center**. All solutions are clearly bounded in this case.
+
+In the case where the matrix is not diagonalizable, the phase portrait looks as in Figure 3.5. As before, the line corresponds to the eigenvector. If $\alpha$ is negative, all solutions will converge to 0, whereas if $\alpha$ is positive, all solutions will grow exponentially as $t \to \infty$. The polynomial term $t$ does not play a role since it is dominated by the exponential term $\exp(\alpha t)$ unless $\alpha = 0$ (cf. Problem 3.7). If $\alpha = 0$ the solution is constant if we start in the subspace spanned by the eigenvector (i.e., $y_{0,2} = 0$ in (3.41)) and grows like $t$ otherwise (i.e., $y_{0,2} \neq 0$).

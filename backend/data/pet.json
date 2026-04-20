@@ -1,13 +1,23 @@
 {
-  "id": "hw09l7rg",
-  "name": "Fern",
-  "born": "2026-04-19T22:13:46.584907+00:00",
+  "id": "rqfij1r7",
+  "name": "Mizu",
+  "born": "2026-04-20T00:06:11.193665+00:00",
   "died": null,
   "stage": "spark",
-  "health": 94.2104255165344,
-  "happiness": 91.89459572314814,
-  "lastFed": "2026-04-19T22:13:46.584915+00:00",
-  "totalXpEarned": 0,
+  "health": 37.166819799603154,
+  "happiness": 0.0,
+  "lastFed": "2026-04-20T02:26:40.744140+00:00",
+  "totalXpEarned": 30,
+  "parts": {
+    "core": ".",
+    "flame": "plain",
+    "sparks": "* * *",
+    "aura": "",
+    "hue": "yellow",
+    "rarity": "rare"
+  },
+  "hue": "yellow",
+  "rarity": "rare",
   "art": {
     "idle": [
       "                    ",
@@ -17,9 +27,9 @@
       "                    ",
       "                    ",
       "                    ",
-      "          '         ",
+      "         * *        ",
       "          *         ",
-      "        (O O)       ",
+      "        (. .)       ",
       "         '-'        ",
       "                    "
     ],
@@ -30,10 +40,10 @@
       "                    ",
       "                    ",
       "                    ",
-      "          '         ",
+      "        * * *       ",
       "                    ",
       "          *         ",
-      "        (O^O)       ",
+      "        (.^.)       ",
       "         '-'        ",
       "                    "
     ],
@@ -47,7 +57,7 @@
       "                    ",
       "                    ",
       "          *         ",
-      "        (OwO)       ",
+      "        (.w.)       ",
       "         '-'        ",
       "                    "
     ],
@@ -79,15 +89,5 @@
       "                    ",
       "                    "
     ]
-  },
-  "parts": {
-    "core": "O",
-    "flame": "plain",
-    "sparks": "'",
-    "aura": "",
-    "hue": "yellow",
-    "rarity": "common"
-  },
-  "hue": "yellow",
-  "rarity": "common"
+  }
 }

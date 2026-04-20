@@ -1,0 +1,50 @@
+{
+  "c5-d1-bronze-0::r1": {
+    "id": "c5-d1-bronze-0::r1",
+    "card_uid": "c5-d1-bronze-0",
+    "prompt_id": "r1",
+    "prompt": "State the classical probability formula for equiprobable outcomes.",
+    "answer": "$P(A) = N(A)/N$, where $N(A)$ is favorable outcomes and $N$ is total outcomes.",
+    "concept": "probability",
+    "box": 1,
+    "due": "2026-04-19",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c5-d1-bronze-0::r2": {
+    "id": "c5-d1-bronze-0::r2",
+    "card_uid": "c5-d1-bronze-0",
+    "prompt_id": "r2",
+    "prompt": "What does relative frequency converge to, and what is the limiting definition?",
+    "answer": "Relative frequency $n(A)/n$ converges to probability $P(A) = \\lim_{n \\to \\infty} n(A)/n$.",
+    "concept": "relative-frequency",
+    "box": 1,
+    "due": "2026-04-19",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c3-d1-bronze-0::r1": {
+    "id": "c3-d1-bronze-0::r1",
+    "card_uid": "c3-d1-bronze-0",
+    "prompt_id": "r1",
+    "prompt": "O que é o polinômio característico de uma matriz?",
+    "answer": "$\\det(A - \\lambda I)$; suas raízes são os autovalores.",
+    "concept": "autovalor",
+    "box": 1,
+    "due": "2026-04-19",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c3-d1-bronze-0::r2": {
+    "id": "c3-d1-bronze-0::r2",
+    "card_uid": "c3-d1-bronze-0",
+    "prompt_id": "r2",
+    "prompt": "Para uma matriz triangular, como você encontra rapidamente os autovalores?",
+    "answer": "São exatamente os elementos da diagonal principal.",
+    "concept": "autovalor",
+    "box": 1,
+    "due": "2026-04-19",
+    "last_reviewed": null,
+    "lapses": 0
+  }
+}

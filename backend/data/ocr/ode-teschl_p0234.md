@@ -1,0 +1,11 @@
+7.3. The Poincaré–Bendixson theorem
+
+**Figure 7.8. Proof of Lemma 7.15**
+
+**Lemma 7.15.** Let $x \in M$, $\sigma \in \{\pm\}$, and suppose $\omega_{\sigma}(x)$ is compact. Let $x_{\pm} \in \omega_{\sigma}(x)$ be distinct fixed points. Then there exists at most one orbit $\gamma(y) \subset \omega_{\sigma}(x)$ with $\omega_{\pm}(y) = x_{\pm}$.
+
+**Proof.** Suppose there are two orbits $\gamma(y_{1,2})$. Since $\lim_{t \to \pm\infty} \Phi(t,y_{1,2}) = x_{\pm}$, we can extend $\Phi(t,y_{1,2})$ to continuous functions on $\mathbb{R} \cup \{\pm\infty\}$ by $\Phi(\pm\infty,y_{1,2}) = x_{\pm}$. Hence the curve $J$ from $x_{-}$ to $x_{+}$ along $\gamma(y_1)$ and back from $x_{+}$ to $x_{-}$ along $\gamma(y_2)$ is a Jordan curve. Writing $M \setminus J = M_1 \cup M_2$ we can assume $x \in M_1$ (since $x \in J$ is prohibited by Corollary 7.11). Pick two transversal arcs $\Sigma_{1,2}$ containing $y_{1,2}$ respectively (compare Figure 7.8). Then $\gamma_{\sigma}(x)$ intersects $\Sigma_{1,2}$ in some points $z_{1,2}$ respectively. Without loss we can assume that there are no further intersections with $\Sigma_1$ and $\Sigma_2$ of $\gamma(x)$ between $z_1$ and $z_2$. Now consider the Jordan curve from $y_1$ to $z_1$ to $z_2$ to $y_2$ to $x_{+}$ and back to $y_1$ (along $\Sigma_1$, $\gamma_{\sigma}(x)$, $\Sigma_2$, $\gamma(y_2)$, $\gamma(y_1))$. It dissects $M$ into two parts $N_1, N_2$ such that $\gamma_{\sigma}(z_1)$ or $\gamma_{\sigma}(z_2)$ must remain in one of them, say $N_2$ (as in the proof of Lemma 7.9). But now $\gamma_{\sigma}(x)$ cannot return close to points of $\gamma(y_{1,2}) \cap N_1$ contradicting our assumption.
+
+These preparations now yield the following theorem.
+
+**Theorem 7.16** (generalized Poincaré–Bendixson). Let $M$ be an open subset of $\mathbb{R}^2$ and $f \in C^1(M,\mathbb{R}^2)$. Fix $x \in M$, $\sigma \in \{\pm\}$, and suppose $\omega_{\sigma}(x) \neq \emptyset$ is compact, connected, and contains only finitely many fixed points. Then one of the following cases holds:

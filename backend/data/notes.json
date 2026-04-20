@@ -395,5 +395,1510 @@
       "regra-da-cadeia"
     ],
     "source": ""
+  },
+  {
+    "id": "autovalor-definicao",
+    "title": "Autovalor: Definição e Cálculo",
+    "domain": "álgebra-linear",
+    "tags": [
+      "autovalor",
+      "polinômio-característico",
+      "determinante"
+    ],
+    "content": "## Definição\n\nSeja $A$ uma matriz $n \\times n$. Um **autovalor** de $A$ é um escalar $\\lambda$ tal que existe um vetor não-nulo $\\vec{v}$ (chamado autovetor) satisfazendo:\n\n$$A\\vec{v} = \\lambda \\vec{v}$$\n\n## Cálculo via Polinômio Característico\n\nOs autovalores são as raízes do **polinômio característico**:\n\n$$p(\\lambda) = \\det(A - \\lambda I)$$\n\nPara resolver $p(\\lambda) = 0$, você:\n1. Forma a matriz $A - \\lambda I$\n2. Calcula o determinante (como polinômio em $\\lambda$)\n3. Resolve a equação resultante\n\n## Exemplo: Matriz Triangular\n\nPara uma matriz triangular, $\\det(A - \\lambda I)$ é o produto dos elementos da diagonal:\n\n$$A = \\begin{bmatrix} a_{11} & * \\\\ 0 & a_{22} \\end{bmatrix} \\implies \\det(A - \\lambda I) = (a_{11} - \\lambda)(a_{22} - \\lambda)$$\n\nLogo os autovalores são $\\lambda = a_{11}$ e $\\lambda = a_{22}$.\n\n## Multiplicidade Algébrica\n\nA **multiplicidade algébrica** de um autovalor é sua multiplicidade como raiz do polinômio característico.",
+    "related": [
+      "autovetor-definicao",
+      "diagonalizacao-criterio"
+    ],
+    "source": ""
+  },
+  {
+    "id": "autovetor-definicao",
+    "title": "Autovetor: Definição e Encontro",
+    "domain": "álgebra-linear",
+    "tags": [
+      "autovetor",
+      "espaço-nulo",
+      "sistema-linear"
+    ],
+    "content": "## Definição\n\nSeja $A$ uma matriz $n \\times n$ e $\\lambda$ um autovalor. Um **autovetor** correspondente a $\\lambda$ é um vetor não-nulo $\\vec{v}$ tal que:\n\n$$A\\vec{v} = \\lambda\\vec{v}$$\n\nEquivalentemente: $(A - \\lambda I)\\vec{v} = \\vec{0}$\n\n## Como Encontrar Autovetores\n\nPara um autovalor $\\lambda$ dado:\n\n1. Forme a matriz $A - \\lambda I$\n2. Resolva o sistema linear **homogêneo** $(A - \\lambda I)\\vec{v} = \\vec{0}$\n3. O espaço de soluções é o **auto-espaço** (um subespaço vetorial)\n4. Escolha uma base do auto-espaço; cada elemento (não-nulo) é um autovetor\n\n## Exemplo\n\nPara $A = \\begin{bmatrix} 1 & 3 \\\\ 3 & 1 \\end{bmatrix}$ com autovalor $\\lambda = 4$:\n\n$$A - 4I = \\begin{bmatrix} -3 & 3 \\\\ 3 & -3 \\end{bmatrix}$$\n\nResolvendo $\\begin{bmatrix} -3 & 3 \\\\ 3 & -3 \\end{bmatrix}\\begin{bmatrix} v_1 \\\\ v_2 \\end{bmatrix} = \\vec{0}$: temos $-3v_1 + 3v_2 = 0$, logo $v_1 = v_2$. Um autovetor é $\\vec{v} = \\begin{bmatrix} 1 \\\\ 1 \\end{bmatrix}$.\n\n## Independência Linear\n\nAutovetores **correspondentes a autovalores distintos** são sempre linearmente independentes.",
+    "related": [
+      "autovalor-definicao",
+      "diagonalizacao-criterio"
+    ],
+    "source": ""
+  },
+  {
+    "id": "diagonalizacao-criterio",
+    "title": "Diagonalização: Critérios e Condições",
+    "domain": "álgebra-linear",
+    "tags": [
+      "diagonalização",
+      "autovalor",
+      "base-autovetor"
+    ],
+    "content": "## Definição\n\nUma matriz $A$ é **diagonalizável** se existe uma matriz invertível $P$ tal que:\n\n$$P^{-1}AP = D$$\n\nonde $D$ é diagonal. As colunas de $P$ são autovetores de $A$, e os elementos diagonais de $D$ são os autovalores.\n\n## Critério Principal\n\nUma matriz $A$ é diagonalizável **se e somente se** existe uma base de $\\mathbb{R}^n$ (ou $\\mathbb{C}^n$) formada por autovetores de $A$.\n\n## Condições Suficientes\n\n1. **Autovalores Distintos**: Se todos os $n$ autovalores são distintos, então $A$ é diagonalizável (os autovetores correspondentes formam uma base).\n\n2. **Matriz Simétrica**: Se $A$ é simétrica ($A^T = A$), então $A$ é **sempre** diagonalizável. Além disso, podemos diagonalizá-la ortogonalmente.\n\n## Condição Necessária e Suficiente\n\nPara cada autovalor $\\lambda$ com multiplicidade algébrica $m$, a dimensão do auto-espaço (multiplicidade geométrica) deve ser igual a $m$.\n\n## Exemplo: Matriz Não-Diagonalizável\n\n$$A = \\begin{bmatrix} 3 & 0 \\\\ 2 & 3 \\end{bmatrix}$$\n\nTem autovalor $\\lambda = 3$ com multiplicidade algébrica 2, mas o auto-espaço é $\\text{span}\\left\\{\\begin{bmatrix} 1 \\\\ 0 \\end{bmatrix}\\right\\}$ (dimensão 1). Logo $A$ **não é diagonalizável**.",
+    "related": [
+      "autovalor-definicao",
+      "autovetor-definicao"
+    ],
+    "source": ""
+  },
+  {
+    "id": "regra-cadeia",
+    "title": "Regra da Cadeia para Derivadas",
+    "domain": "cálculo",
+    "tags": [
+      "derivada",
+      "função-composta",
+      "regra-da-cadeia"
+    ],
+    "content": "## Enunciado\n\nSeja $y = f(x)$ e $x = x(t)$. Então:\n\n$$\\frac{dy}{dt} = \\frac{dy}{dx} \\cdot \\frac{dx}{dt}$$\n\nOu: $\\frac{d}{dt}f(x(t)) = f'(x(t)) \\cdot x'(t)$\n\n## Interpretação\n\nA taxa de mudança de $y$ em relação a $t$ é a taxa de mudança de $y$ em relação a $x$, multiplicada pela taxa de mudança de $x$ em relação a $t$. É como \"contar o efeito em camadas\".\n\n## Exemplo 1: Função Racional Composta\n\nSeja $f(x) = \\frac{1+x^2}{1+x}$ e $x(t) = 1 + t$.\n\n- $f'(x) = \\frac{2x(1+x) - (1+x^2)}{(1+x)^2} = \\frac{x^2 + 2x - 1}{(1+x)^2}$\n- $x'(t) = 1$\n- $\\frac{df}{dt} = f'(x(t)) \\cdot 1 = \\frac{(1+t)^2 + 2(1+t) - 1}{(2+t)^2}$\n\n## Exemplo 2: Exponencial\n\nSeja $g(t) = e^{h(t)}$. Então $g'(t) = e^{h(t)} \\cdot h'(t)$.\n\nPara $g(t) = e^{t^2}$: $g'(t) = e^{t^2} \\cdot 2t$.\n\n## Exemplo 3: Raiz Quadrada\n\nSeja $m(t) = \\sqrt{f(t)}$. Então $m'(t) = \\frac{f'(t)}{2\\sqrt{f(t)}}$.\n\nPara $m(t) = \\sqrt{1 + e^{2t}}$: $m'(t) = \\frac{2e^{2t}}{2\\sqrt{1 + e^{2t}}} = \\frac{e^{2t}}{\\sqrt{1 + e^{2t}}}$.",
+    "related": [
+      "derivada"
+    ],
+    "source": ""
+  },
+  {
+    "id": "regra-cadeia-exponencial",
+    "title": "Aplicações da Regra da Cadeia: Exponenciais e Produtos",
+    "domain": "cálculo",
+    "tags": [
+      "derivada",
+      "exponencial",
+      "regra-do-produto"
+    ],
+    "content": "## Regra do Produto\n\nSeja $g(t) = u(t) \\cdot v(t)$. Então:\n\n$$g'(t) = u'(t) \\cdot v(t) + u(t) \\cdot v'(t)$$\n\n## Combinando Produto e Cadeia\n\nAo derivar um produto onde os fatores são compostos, use:\n1. Regra do produto para os fatores\n2. Regra da cadeia para cada fator composto\n\n## Exemplo: $g(t) = (1 + t^3)(1 + e^{t^2})$\n\nSeja $u(t) = 1 + t^3$ e $v(t) = 1 + e^{t^2}$.\n\n- $u'(t) = 3t^2$\n- $v'(t) = e^{t^2} \\cdot 2t$ (cadeia)\n\nPelo produto:\n$$g'(t) = 3t^2(1 + e^{t^2}) + (1 + t^3) \\cdot 2t e^{t^2}$$\n$$= 3t^2 + 3t^2 e^{t^2} + 2t e^{t^2} + 2t^4 e^{t^2}$$\n$$= 3t^2 + (3t^2 + 2t + 2t^4)e^{t^2}$$\n\n## Ordem de Operações\n\nQuando derivar um produto de funções compostas:\n1. Identifique os fatores (use a regra do produto)\n2. Para cada fator, aplique a cadeia se necessário\n3. Combine os resultados",
+    "related": [
+      "derivada",
+      "regra-cadeia"
+    ],
+    "source": ""
+  },
+  {
+    "id": "regra-cadeia-raiz",
+    "title": "Regra da Cadeia para Raízes e Funções Aninhadas",
+    "domain": "cálculo",
+    "tags": [
+      "derivada",
+      "raiz-quadrada",
+      "funções-aninhadas"
+    ],
+    "content": "## Derivada da Raiz Quadrada\n\n$$\\frac{d}{du}\\sqrt{u} = \\frac{1}{2\\sqrt{u}}$$\n\n## Cadeia com Raiz: $m(t) = \\sqrt{f(t)}$\n\nPela regra da cadeia:\n\n$$m'(t) = \\frac{1}{2\\sqrt{f(t)}} \\cdot f'(t) = \\frac{f'(t)}{2\\sqrt{f(t)}}$$\n\n## Exemplo: $m(t) = \\sqrt{1 + x(t)^2}$ com $x(t) = e^t$\n\nPrimeiro, derive $f(t) = 1 + x(t)^2$ em relação a $t$:\n\n$$f'(t) = 2x(t) \\cdot x'(t) = 2e^t \\cdot e^t = 2e^{2t}$$\n\nDepois, aplique a fórmula:\n\n$$m'(t) = \\frac{2e^{2t}}{2\\sqrt{1 + e^{2t}}} = \\frac{e^{2t}}{\\sqrt{1 + e^{2t}}}$$\n\n## Funções Aninhadas: Múltiplas Camadas\n\nQuando há várias composições, aplique a cadeia repetidamente de fora para dentro.\n\nPara $h(t) = \\sqrt{1 + (1 + t)^3}$:\n\n- Camada externa: $\\sqrt{u}$ onde $u = 1 + (1+t)^3$\n- Camada interna: $u' = 3(1+t)^2 \\cdot 1 = 3(1+t)^2$\n- Resultado: $h'(t) = \\frac{3(1+t)^2}{2\\sqrt{1 + (1+t)^3}}$",
+    "related": [
+      "derivada",
+      "regra-cadeia"
+    ],
+    "source": ""
+  },
+  {
+    "id": "integral-linear",
+    "title": "Linearidade da Integral e Integrais Simples",
+    "domain": "cálculo",
+    "tags": [
+      "integral-indefinida",
+      "linearidade",
+      "primitiva"
+    ],
+    "content": "## Propriedade de Linearidade\n\nA integral é **linear**:\n\n$$\\int (af(t) + bg(t)) \\, dt = a\\int f(t) \\, dt + b\\int g(t) \\, dt$$\n\nonde $a$ e $b$ são constantes.\n\n## Integrais Básicas\n\n- $\\int x^n \\, dx = \\frac{x^{n+1}}{n+1} + C$ (para $n \\neq -1$)\n- $\\int e^{bx} \\, dx = \\frac{1}{b}e^{bx} + C$\n- $\\int \\sin(bx) \\, dx = -\\frac{1}{b}\\cos(bx) + C$\n- $\\int \\cos(bx) \\, dx = \\frac{1}{b}\\sin(bx) + C$\n\n## Exemplo: $\\int (x + e^{2x})(2x) \\, dx$\n\nExpanda: $(x + e^{2x})(2x) = 2x^2 + 2xe^{2x}$\n\nApplique linearidade:\n$$\\int (2x^2 + 2xe^{2x}) \\, dx = 2\\int x^2 \\, dx + 2\\int xe^{2x} \\, dx$$\n\n- Primeira parte: $2 \\cdot \\frac{x^3}{3} = \\frac{2x^3}{3}$\n- Segunda parte: requer integração por partes (veja nota separada)\n\n## Verificação\n\nSempre verifique sua resposta derivando:\n\n$$\\frac{d}{dx}\\left(\\frac{2x^3}{3} + \\cdots\\right) \\stackrel{?}{=} 2x^2 + 2xe^{2x}$$",
+    "related": [
+      "integral-indefinida"
+    ],
+    "source": ""
+  },
+  {
+    "id": "substituicao-potencia",
+    "title": "Integração por Substituição: Potências e Composições",
+    "domain": "cálculo",
+    "tags": [
+      "integral-indefinida",
+      "substituição",
+      "regra-da-cadeia-inversa"
+    ],
+    "content": "## Ideia\n\nA substituição inverte a regra da cadeia. Se você vê $\\int f(g(x)) \\cdot g'(x) \\, dx$, então:\n\n$$\\int f(g(x)) \\cdot g'(x) \\, dx = \\int f(u) \\, du = F(u) + C = F(g(x)) + C$$\n\nonde $u = g(x)$ e $F$ é uma primitiva de $f$.\n\n## Passo a Passo\n\n1. Identifique uma sub-função $u = g(x)$\n2. Calcule $du = g'(x) \\, dx$\n3. Reescreva a integral inteira em termos de $u$\n4. Integre em relação a $u$\n5. Substitua $u$ de volta\n\n## Exemplo: $\\int (x^3 - 1)^2(3x^2) \\, dx$\n\nObserve que a derivada de $x^3 - 1$ é $3x^2$, que aparece como fator.\n\n- Seja $u = x^3 - 1$, então $du = 3x^2 \\, dx$\n- Reescreva: $\\int u^2 \\, du$\n- Integre: $\\frac{u^3}{3} + C$\n- Substitua de volta: $\\frac{(x^3-1)^3}{3} + C$\n\n## Verificação\n\nDerive: $\\frac{d}{dx}\\left[\\frac{(x^3-1)^3}{3}\\right] = \\frac{1}{3} \\cdot 3(x^3-1)^2 \\cdot 3x^2 = (x^3-1)^2 \\cdot 3x^2$ ✓\n\n## Quando Usar\n\nProcure por um padrão $f(g(x)) \\cdot g'(x)$: uma função composta vezes a derivada de sua parte interna.",
+    "related": [
+      "integral-indefinida"
+    ],
+    "source": ""
+  },
+  {
+    "id": "integral-logaritmica",
+    "title": "Integração de Funções Racionais Simples: Logaritmos",
+    "domain": "cálculo",
+    "tags": [
+      "integral-indefinida",
+      "função-racional",
+      "logaritmo"
+    ],
+    "content": "## A Integral $\\int \\frac{1}{u} \\, du$\n\n$$\\int \\frac{1}{u} \\, du = \\ln|u| + C$$\n\nObserve o valor absoluto: $\\ln|u|$ é definido para todo $u \\neq 0$.\n\n## Generalização: $\\int \\frac{1}{ax + b} \\, dx$\n\nUsando substituição $u = ax + b$, temos $du = a \\, dx$:\n\n$$\\int \\frac{1}{ax+b} \\, dx = \\int \\frac{1}{u} \\cdot \\frac{1}{a} \\, du = \\frac{1}{a}\\ln|u| + C = \\frac{1}{a}\\ln|ax+b| + C$$\n\n## Exemplo: $\\int \\frac{1}{1 + bx} \\, dx$\n\nAqui $a = b$ (o coeficiente de $x$) e a constante é 1.\n\n- Seja $u = 1 + bx$, então $du = b \\, dx$, logo $dx = \\frac{du}{b}$\n- Substitua: $\\int \\frac{1}{u} \\cdot \\frac{1}{b} \\, du = \\frac{1}{b}\\ln|u| + C = \\frac{1}{b}\\ln|1+bx| + C$\n\n## Verificação\n\nDerive: $\\frac{d}{dx}\\left[\\frac{1}{b}\\ln|1+bx|\\right] = \\frac{1}{b} \\cdot \\frac{1}{1+bx} \\cdot b = \\frac{1}{1+bx}$ ✓\n\n## Aplicações\n\nEste padrão aparece frequentemente em:\n- Equações diferenciais lineares de primeira ordem\n- Resolução de sistemas econômicos e físicos\n- Dinâmica de populações",
+    "related": [
+      "integral-indefinida"
+    ],
+    "source": ""
+  },
+  {
+    "id": "newtons-equations-intro",
+    "title": "Newton's Equations and Differential Equations",
+    "domain": "Physics & ODEs",
+    "tags": [
+      "mechanics",
+      "second-order",
+      "initial-value-problem"
+    ],
+    "content": "# Newton's Equations\n\nNewton's second law of motion states:\n$$m\\ddot{x}(t) = F(x(t))$$\n\nwhere $x(t) \\in \\mathbb{R}^3$ is the position of a particle, $m > 0$ is its mass, and $F: \\mathbb{R}^3 \\to \\mathbb{R}^3$ is an external force field.\n\n## Converting to a First-Order System\n\nWhile this is a second-order ODE, it can be rewritten as a first-order system:\n$$\\dot{x} = v, \\quad \\dot{v} = \\frac{1}{m}F(x)$$\n\nThis introduces velocity $v = \\dot{x}$ as a new variable. The advantage is that the theory of first-order systems is often more elegant.\n\n## Uniqueness and Initial Conditions\n\nFor well-behaved force fields $F \\in C^1(\\mathbb{R}^3)$, specifying both initial position $x(0)$ and initial velocity $v(0)$ uniquely determines the entire trajectory past and future.\n\n## Example: Free Fall near Earth's Surface\n\nUnder constant gravitational force $F(x) = -mg\\mathbf{e}_3$:\n$$\\ddot{x}_i = 0 \\quad (i = 1,2), \\quad \\ddot{x}_3 = -g$$\n\nIntegrating twice gives the parabolic trajectory:\n$$x(t) = x(0) + v(0)t - \\frac{g}{2}t^2\\mathbf{e}_3$$\n\n## Limitations\n\nWhen the force depends on position (e.g., real gravity $F(x) = -\\gamma mM x/|x|^3$), explicit integration becomes impossible, requiring numerical or qualitative methods.",
+    "related": [
+      "first-order-system",
+      "ode-classification"
+    ],
+    "source": ""
+  },
+  {
+    "id": "ode-classification-note",
+    "title": "Classification of Ordinary Differential Equations",
+    "domain": "ODE Theory",
+    "tags": [
+      "order",
+      "linearity",
+      "autonomy",
+      "systems"
+    ],
+    "content": "# Classification of ODEs\n\nOrdinary differential equations are classified along several dimensions:\n\n## Order\nThe **order** is the highest derivative appearing in the equation.\n- First-order: $\\dot{x} = f(t,x)$\n- Second-order: $\\ddot{x} = f(t,x,\\dot{x})$\n- $n$-th order: $x^{(n)} = f(t, x, \\dot{x}, \\ldots, x^{(n-1)})$\n\n## Linearity\nAn ODE is **linear** if the dependent variable and its derivatives appear only to the first power:\n$$x^{(n)} = a_0(t)x + a_1(t)\\dot{x} + \\cdots + a_{n-1}(t)x^{(n-1)} + g(t)$$\n\nNon-linear equations may include terms like $x^2$, $\\sin(x)$, $\\dot{x}\\cdot x$, etc.\n\n## Autonomy\nAn ODE is **autonomous** if the independent variable $t$ does not appear explicitly:\n$$\\dot{x} = f(x) \\quad \\text{(autonomous)}$$\n$$\\dot{x} = f(t,x) \\quad \\text{(non-autonomous)}$$\n\nAutonomous systems have time-translation symmetry: if $\\phi(t)$ is a solution, so is $\\phi(t - t_0)$.\n\n## Systems vs. Scalar\nA **system** has multiple dependent variables; a **scalar** equation has one.\n\n$$\\text{Scalar: } \\ddot{x} + x = 0$$\n$$\\text{System: } \\dot{x} = y, \\quad \\dot{y} = -x$$\n\n## Reduction to First-Order Systems\nAny $n$-th order scalar ODE can be reduced to an $n$-dimensional first-order system:\n$$y_1 = x, \\quad y_2 = \\dot{x}, \\quad \\ldots, \\quad y_n = x^{(n-1)}$$\n$$\\dot{y}_1 = y_2, \\quad \\dot{y}_2 = y_3, \\quad \\ldots, \\quad \\dot{y}_n = f(t, y_1, \\ldots, y_n)$$",
+    "related": [
+      "first-order-system",
+      "autonomous-equation",
+      "linear-ode"
+    ],
+    "source": ""
+  },
+  {
+    "id": "first-order-system-note",
+    "title": "First-Order Systems",
+    "domain": "ODE Theory",
+    "tags": [
+      "system",
+      "reduction",
+      "phase-space"
+    ],
+    "content": "# First-Order Systems\n\nA **first-order system** of ODEs has the form:\n$$\\dot{x}_1 = f_1(t, x_1, \\ldots, x_n)$$\n$$\\vdots$$\n$$\\dot{x}_n = f_n(t, x_1, \\ldots, x_n)$$\n\nwhere $x = (x_1, \\ldots, x_n) \\in \\mathbb{R}^n$ is the state vector.\n\n## Reduction from Higher Orders\nAny $k$-th order scalar ODE can be converted to a first-order system of $k$ equations by introducing derivatives as new variables:\n\n$$x^{(k)} = f(t, x, \\dot{x}, \\ldots, x^{(k-1)})$$\n\ndefines variables:\n$$y_1 = x, \\quad y_2 = \\dot{x}, \\quad \\ldots, \\quad y_k = x^{(k-1)}$$\n\ngiving the system:\n$$\\dot{y}_1 = y_2, \\quad \\dot{y}_2 = y_3, \\quad \\ldots, \\quad \\dot{y}_k = f(t, y_1, \\ldots, y_k)$$\n\n## Phase Space\nThe space $\\mathbb{R}^n$ in which the state vector $x$ lives is called the **phase space**. A solution $x(t)$ traces out a **trajectory** or **orbit** in phase space.\n\n## Advantages\n- Unified theoretical framework (same existence/uniqueness theorems apply)\n- Easier to analyze qualitative behavior\n- Geometric intuition in phase space\n\n## Autonomy\nA first-order system is autonomous if:\n$$\\dot{x} = f(x)$$\n\nwithout explicit $t$ dependence. Any non-autonomous system can be made autonomous by adding time as a variable:\n$$\\dot{t} = 1, \\quad \\dot{x} = f(t, x)$$",
+    "related": [
+      "ode-classification",
+      "autonomous-equation"
+    ],
+    "source": ""
+  },
+  {
+    "id": "autonomous-equation-note",
+    "title": "Autonomous Equations and Time-Shift Symmetry",
+    "domain": "ODE Theory",
+    "tags": [
+      "autonomy",
+      "time-invariance",
+      "phase-space"
+    ],
+    "content": "# Autonomous Equations\n\nAn ODE is **autonomous** if it does not explicitly depend on the independent variable (time $t$):\n$$\\dot{x} = f(x)$$\n\nversus a non-autonomous equation:\n$$\\dot{x} = f(t, x)$$\n\n## Time-Translation Symmetry\nAutonomous systems possess a crucial symmetry: **if $\\phi(t)$ is a solution, then $\\phi(t - t_0)$ is also a solution** for any $t_0 \\in \\mathbb{R}$.\n\nThis means the dynamics are independent of when you start: the future evolution depends only on the current state, not on the absolute time.\n\n## Consequence for Initial Value Problems\nFor an autonomous system, specifying an initial condition at $t = 0$ determines the solution everywhere:\n$$\\dot{x} = f(x), \\quad x(0) = x_0 \\quad \\Rightarrow \\quad x(t) = \\phi(t, x_0)$$\n\nTo solve with initial condition at time $t = t_0$, simply shift:\n$$x(t) = \\phi(t - t_0, x_0)$$\n\n## Advantages in Analysis\n- **Phase portrait** can be studied without reference to time\n- **Equilibria** (fixed points) $f(x^*) = 0$ correspond to constant solutions\n- **Qualitative analysis** is often simpler: no need to worry about explicit $t$ dependence\n\n## Making Non-Autonomous Equations Autonomous\nAny non-autonomous system can be made autonomous by treating time as an additional variable:\n$$\\dot{t} = 1, \\quad \\dot{x} = f(t, x)$$\n\nThe trade-off: the phase space dimension increases by one.",
+    "related": [
+      "ode-classification",
+      "first-order-system"
+    ],
+    "source": ""
+  },
+  {
+    "id": "linear-ode-note",
+    "title": "Linear Ordinary Differential Equations",
+    "domain": "ODE Theory",
+    "tags": [
+      "linearity",
+      "homogeneous",
+      "particular-solution",
+      "superposition"
+    ],
+    "content": "# Linear Ordinary Differential Equations\n\nA first-order linear ODE has the form:\n$$\\dot{x} = a(t)x + g(t)$$\n\nMore generally, an $n$-th order linear ODE is:\n$$x^{(n)} + a_{n-1}(t)x^{(n-1)} + \\cdots + a_1(t)\\dot{x} + a_0(t)x = g(t)$$\n\n## Homogeneous vs. Inhomogeneous\n- **Homogeneous**: $g(t) \\equiv 0$ (or right-hand side $\\equiv 0$)\n- **Inhomogeneous**: $g(t) \\not\\equiv 0$ (forcing term present)\n\n## Solution of First-Order Linear Equations\n\n### Homogeneous Case\n$$\\dot{x} = a(t)x$$\n\nSolution:\n$$x(t) = x_0 e^{\\int_0^t a(s)ds} = x_0 A(t)$$\n\nwhere $A(t) = e^{\\int_0^t a(s)ds}$.\n\n### Inhomogeneous Case\n$$\\dot{x} = a(t)x + g(t)$$\n\nGeneral solution:\n$$x(t) = x_0 A(t) + \\int_0^t A(t)A(s)^{-1}g(s)ds$$\n\nor written differently:\n$$x(t) = x_0 e^{\\int_0^t a(s)ds} + \\int_0^t e^{\\int_s^t a(u)du}g(s)ds$$\n\n## Superposition Principle\nFor linear systems, solutions to the homogeneous equation form a **vector space**, and the general solution of the inhomogeneous equation is:\n$$\\text{General solution} = \\text{Homogeneous solution} + \\text{Any particular solution}$$\n\n## Advantages\n- Explicitly solvable (via integration)\n- Superposition allows decomposition\n- Unique solution exists globally (if $a, g$ are continuous)\n- Stability can be analyzed via eigenvalues (for constant-coefficient case)",
+    "related": [
+      "ode-classification",
+      "bernoulli-equation",
+      "riccati-equation"
+    ],
+    "source": ""
+  },
+  {
+    "id": "bernoulli-equation-note",
+    "title": "Bernoulli Equations",
+    "domain": "Solution Methods",
+    "tags": [
+      "nonlinear",
+      "transformation",
+      "power-law"
+    ],
+    "content": "# Bernoulli Equations\n\nA **Bernoulli equation** is a nonlinear first-order ODE of the form:\n$$\\dot{x} = f(t)x + g(t)x^n$$\n\nwhere $n \\neq 0, 1$ (if $n = 0$ or $n = 1$, the equation is already linear).\n\n## Transformation to Linear Form\nThe substitution:\n$$y = x^{1-n}$$\n\nleads to a linear ODE in $y$. To see this, differentiate:\n$$\\dot{y} = (1-n)x^{-n}\\dot{x} = (1-n)x^{-n}(f(t)x + g(t)x^n)$$\n$$= (1-n)f(t)x^{1-n} + (1-n)g(t)$$\n$$= (1-n)f(t)y + (1-n)g(t)$$\n\n## Solution Procedure\n1. Make the substitution $y = x^{1-n}$\n2. Obtain the linear equation $\\dot{y} = (1-n)f(t)y + (1-n)g(t)$\n3. Solve the linear equation using standard methods\n4. Back-substitute: $x = y^{1/(1-n)}$\n\n## Example\n$$\\dot{x} = x + x^3, \\quad n = 3$$\n\nSet $y = x^{1-3} = x^{-2}$:\n$$\\dot{y} = -2x^{-3}\\dot{x} = -2x^{-3}(x + x^3) = -2x^{-2} - 2$$\n$$\\dot{y} + 2y = -2$$\n\nSolve: $y(t) = Ce^{-2t} - 1$, so $x(t) = (Ce^{-2t} - 1)^{-1/2}$.\n\n## Key Advantage\nTransforms a nonlinear problem into a linear one, making explicit solution possible.",
+    "related": [
+      "linear-ode",
+      "riccati-equation"
+    ],
+    "source": ""
+  },
+  {
+    "id": "riccati-equation-note",
+    "title": "Riccati Equations",
+    "domain": "Solution Methods",
+    "tags": [
+      "nonlinear",
+      "quadratic",
+      "particular-solution"
+    ],
+    "content": "# Riccati Equations\n\nA **Riccati equation** is a nonlinear first-order ODE of the form:\n$$\\dot{x} = f(t)x + g(t)x^2 + h(t)$$\n\nIt is quadratic in the dependent variable $x$ and generally much harder to solve than Bernoulli equations.\n\n## Reduction via Known Particular Solution\nIf a **particular solution** $x_p(t)$ is known, the substitution:\n$$y = \\frac{1}{x - x_p}$$\n\ntransforms the Riccati equation into a linear ODE:\n$$\\dot{y} = -(f(t) + 2g(t)x_p(t))y - g(t)$$\n\n## Why This Works\nDifferentiate the substitution:\n$$\\dot{y} = -\\frac{\\dot{x} - \\dot{x}_p}{(x - x_p)^2}$$\n\nSubstitute $\\dot{x} = f(t)x + g(t)x^2 + h(t)$ and $\\dot{x}_p = f(t)x_p + g(t)x_p^2 + h(t)$:\n$$\\dot{y} = -\\frac{f(t)(x - x_p) + g(t)(x^2 - x_p^2)}{(x - x_p)^2}$$\n$$= -(f(t) + g(t)(x + x_p))y$$\n\nSubstituting $x = x_p + 1/y$ yields the linear equation.\n\n## Difficulty\nUnlike Bernoulli, there is no automatic transformation for Riccati. You **must find or guess** a particular solution first. Once you have one, the problem reduces to solving a linear ODE.\n\n## Example\n$$\\dot{x} = x^2 - t^2$$\n\nGuess $x_p(t) = t$. Then:\n$$y = \\frac{1}{x - t}$$\n\ngives:\n$$\\dot{y} = -2ty - 1$$\n\nwhich is linear.\n\n## Connection to Bernoulli\nRiccati with $h(t) \\equiv 0$ reduces to Bernoulli with $n = 2$.",
+    "related": [
+      "linear-ode",
+      "bernoulli-equation"
+    ],
+    "source": ""
+  },
+  {
+    "id": "separable-equations-note",
+    "title": "Separable Equations",
+    "domain": "Solution Methods",
+    "tags": [
+      "separation-of-variables",
+      "first-order",
+      "implicit-solution"
+    ],
+    "content": "# Separable Equations\n\nA first-order ODE is **separable** if it can be written in the form:\n$$\\dot{x} = f(x)g(t)$$\n\nwhere $f$ depends only on $x$ and $g$ depends only on $t$.\n\n## Solution by Separation of Variables\nAssuming $f(x) \\neq 0$:\n\n1. **Separate**: $\\frac{dx}{f(x)} = g(t)dt$\n\n2. **Integrate both sides**:\n$$\\int \\frac{dx}{f(x)} = \\int g(t)dt + C$$\n\n3. **Define antiderivatives**:\n$$F(x) = \\int \\frac{dx}{f(x)}, \\quad G(t) = \\int g(t)dt$$\n\nThen:\n$$F(x(t)) = G(t) + C$$\n\n4. **Invert** (if possible): $x(t) = F^{-1}(G(t) + C)$\n\n## Example\n$$\\dot{x} = \\sin(t) \\cdot x$$\n\n1. Separate: $\\frac{dx}{x} = \\sin(t)dt$\n\n2. Integrate: $\\ln|x| = -\\cos(t) + C$\n\n3. Solve: $x(t) = Ae^{-\\cos(t)}$\n\n## Special Case: $f(x_0) = 0$\nIf $f(x_0) = 0$, then $\\phi(t) = x_0$ is a (constant) solution. If additionally:\n$$\\int_{x_0}^{x_0 + \\varepsilon} \\frac{dy}{|f(y)|} < \\infty$$\n\nthen there also exists a non-trivial solution passing through $x_0$, potentially leading to non-uniqueness.\n\n## Limitations\n- Only works when variables can be separated\n- The integrals $F(x)$ and $G(t)$ must be computable\n- Solution is implicit: $F(x(t)) = G(t) + C$ (may not solve for $x$ explicitly)",
+    "related": [
+      "ode-classification",
+      "linear-ode"
+    ],
+    "source": ""
+  },
+  {
+    "id": "qualitative-analysis-note",
+    "title": "Qualitative Analysis of Differential Equations",
+    "domain": "Dynamical Systems",
+    "tags": [
+      "phase-line",
+      "equilibria",
+      "stability",
+      "long-time-behavior"
+    ],
+    "content": "# Qualitative Analysis\n\n**Qualitative analysis** studies the behavior of solutions without finding explicit formulas. For autonomous first-order equations $\\dot{x} = f(x)$, much can be understood by analyzing the sign of $f$.\n\n## Phase Line Analysis\nFor $\\dot{x} = f(x)$:\n\n1. **Find equilibria**: Solve $f(x) = 0$\n2. **Determine sign**: Where is $f(x) > 0$ (solutions increase) and where is $f(x) < 0$ (solutions decrease)?\n3. **Draw phase line**: Mark equilibria on a line; draw arrows showing direction of motion\n4. **Interpret**: Solutions flow toward stable equilibria, away from unstable ones\n\n## Equilibria Classification\n- **Stable (attracting)**: $f$ changes sign from positive to negative as $x$ increases through the equilibrium\n- **Unstable (repelling)**: $f$ changes sign from negative to positive\n- **Bifurcation**: Parameter values where equilibria appear/disappear or change stability\n\n## Example: $\\dot{x} = (1-x)x - h$\nFor $h = 0.2$ there are two equilibria. Between them $f > 0$ (increase), outside both $f < 0$ (decrease). Solutions above the upper equilibrium decrease toward it; below the lower one they diverge to $-\\infty$.\n\n## Convergence Lemma (1.1)\nIf $f(x_0) \\neq 0$, the solution converges to the nearest zero of $f$ (equilibrium). If there is no zero in that direction, solutions diverge to $\\pm\\infty$.\n\n## Advantages\n- No need to solve the ODE explicitly\n- Provides complete qualitative picture\n- Scales poorly to higher dimensions (but concepts extend)\n\n## Extension: Super/Sub Solutions\nA **super-solution** $x_+(t)$ satisfies $\\dot{x}_+ > f(t, x_+)$; **sub-solution** $x_-(t)$ satisfies $\\dot{x}_- < f(t, x_-)$. Solutions starting between them remain trapped, useful for proving convergence without explicit solutions.",
+    "related": [
+      "autonomous-equation",
+      "super-sub-solutions"
+    ],
+    "source": ""
+  },
+  {
+    "id": "super-sub-solutions-note",
+    "title": "Super and Sub Solutions",
+    "domain": "Comparison Methods",
+    "tags": [
+      "comparison-principle",
+      "bounds",
+      "trapping-regions"
+    ],
+    "content": "# Super and Sub Solutions\n\nSuper and sub solutions provide powerful comparison techniques to bound solutions without solving the ODE explicitly.\n\n## Definitions\nFor $\\dot{x} = f(t, x)$:\n- **Super-solution**: $x_+(t)$ satisfies $\\dot{x}_+(t) > f(t, x_+(t))$\n- **Sub-solution**: $x_-(t)$ satisfies $\\dot{x}_-(t) < f(t, x_-(t))$\n\n## Comparison Principle (Lemma 1.2)\nIf $x_-(t_0) \\leq x(t_0) \\leq x_+(t_0)$ for a solution $x(t)$ and super/sub-solutions $x_\\pm$, then:\n$$x_-(t) < x(t) < x_+(t) \\quad \\text{for all } t > t_0$$\n\n(Strict inequality holds for $t > t_0$ even if we start with $x(t_0) = x_\\pm(t_0)$.)\n\n## Intuition\nIf a solution tries to cross above $x_+$, it would have $\\dot{x} > \\dot{x}_+$ (since $f(t,x) > f(t, x_+)$ for $x > x_+$ when $f$ is monotone in $x$), but $\\dot{x}_+ > f(t, x_+)$ contradicts this.\n\n## Applications\n\n### 1. Proving Convergence\nConstruct $x_\\pm$ such that:\n- Both converge to some curve $L$ as $t \\to \\infty$\n- The gap $x_+ - x_- \\to 0$\n- Any solution starting between them must converge to $L$\n\n### 2. Proving Blow-Up\nIf $x_+(t) \\to \\infty$ in finite time $T$ and solutions stay below it, they must also blow up by time $T$.\n\n### 3. Trapping Regions\nIdentify rectangular or other regions where super/sub-solutions form boundaries, containing all nearby trajectories.\n\n## Example: $\\dot{x} = x^2 - t^2$\n- $x_+(t) = t$ is a super-solution: $\\dot{x}_+ = 1 > 0 = f(t, t)$\n- $x_-(t) = -t$ is a sub-solution: $\\dot{x}_- = -1 < 0 = f(t, -t)$\n- Solutions starting between them remain trapped and must converge to $x = -t$\n\n## Lipschitz Condition\nTheorem 1.3 extends the comparison principle to allow weak inequalities ($\\dot{x}_+ \\geq f(t, x_+)$) if $f$ is **locally Lipschitz continuous** in $x$:\n$$|f(t,x) - f(t,y)| \\leq L|x - y|$$\n\nThis holds if $\\partial f/\\partial x$ is continuous.",
+    "related": [
+      "qualitative-analysis",
+      "linear-ode"
+    ],
+    "source": ""
+  },
+  {
+    "id": "poincare-map-note",
+    "title": "Poincaré Maps and Periodic Dynamics",
+    "domain": "Dynamical Systems",
+    "tags": [
+      "periodic-systems",
+      "discrete-dynamics",
+      "return-map"
+    ],
+    "content": "# Poincaré Maps\n\nThe **Poincaré map** reduces the study of periodic (time-dependent) ODEs to discrete dynamical systems.\n\n## Definition\nFor a time-periodic system $\\dot{x} = f(t, x)$ with period $T$ (so $f(t+T, x) = f(t, x)$), define:\n$$P(x) = \\phi(T, x)$$\n\nwhere $\\phi(t, x)$ is the solution starting at $(0, x)$. The Poincaré map $P$ takes an initial condition to where it returns after one period.\n\n## Periodic Orbits\nA solution is **periodic with period $T$** if and only if its initial condition $x_0$ satisfies:\n$$P(x_0) = x_0$$\n\ni.e., $x_0$ is a **fixed point** of the Poincaré map.\n\n## Properties\n\n### Monotonicity\nFor smooth $f$ with $f(t, x)$ increasing in $x$:\n- Solutions cannot cross (by uniqueness)\n- If $x < y$, then $\\phi(T, x) < \\phi(T, y)$\n- Therefore $P'(x) > 0$ (strictly increasing)\n\n### Stability\nAt a fixed point $x_0$ of $P$:\n- If $|P'(x_0)| < 1$: the periodic orbit is **attracting** (stable)\n- If $|P'(x_0)| > 1$: the periodic orbit is **repelling** (unstable)\n- If $|P'(x_0)| = 1$: stability is inconclusive (requires higher-order analysis)\n\n## Computing the Derivative\nFor $\\dot{x} = f(t, x)$ with solution $\\phi(t, x)$, define:\n$$\\theta(t, x) = \\frac{\\partial \\phi}{\\partial x}(t, x)$$\n\nDifferentiating the ODE with respect to $x$:\n$$\\dot{\\theta}(t, x) = \\frac{\\partial f}{\\partial x}(t, \\phi(t, x)) \\cdot \\theta(t, x)$$\n\nwith $\\theta(0, x) = 1$. Thus:\n$$\\theta(T, x) = \\exp\\left(\\int_0^T \\frac{\\partial f}{\\partial x}(s, \\phi(s, x))ds\\right)$$\n\nand:\n$$P'(x) = \\theta(T, x)$$\n\n## Example: Harvested Logistic Growth\n$$\\dot{x} = (1-x)x - h(1 - \\sin(2\\pi t))$$\n\nFor $h = 0.2$, the map $P$ is strictly increasing. There exists a unique attracting periodic orbit (fixed point of $P$ with $|P'(x_0)| < 1$), and all solutions converge to it.\n\n## Advantages\n- Reduces infinite-dimensional (time-continuous) dynamics to finite-dimensional (discrete) map\n- Fixed points of $P$ directly correspond to periodic solutions\n- Stability is determined by $|P'(x_0)|$\n- Can reveal bifurcations and periodic-doubling routes to chaos (in more complex systems)",
+    "related": [
+      "autonomous-equation",
+      "qualitative-analysis"
+    ],
+    "source": ""
+  },
+  {
+    "id": "blow-up-note",
+    "title": "Finite-Time Blow-Up and Escape Times",
+    "domain": "Solution Dynamics",
+    "tags": [
+      "singularity",
+      "finite-time",
+      "integrable",
+      "maximal-interval"
+    ],
+    "content": "# Finite-Time Blow-Up\n\nSolutions to ODEs may diverge to infinity in **finite time**, even though the equation is well-defined everywhere.\n\n## Blow-Up for Autonomous First-Order ODEs\nFor $\\dot{x} = f(x), x(0) = x_0$ with $f(x_0) \\neq 0$:\n\nIf $f$ has a zero at $x = x_2$ (the next zero in the direction of motion), the time to reach $x_2$ is:\n$$T_+ = \\int_{x_0}^{x_2} \\frac{dy}{f(y)}$$\n\nIf this integral **diverges**, $T_+ = \\infty$ and the solution is defined for all $t > 0$ (global existence).\n\nIf this integral **converges** to a finite value, the solution reaches $x_2$ (or diverges to infinity) in finite time $T_+$.\n\n## Example: $\\dot{x} = x^2$\nWith $x_0 = 1$:\n$$T_+ = \\int_1^\\infty \\frac{dy}{y^2} = 1$$\n\nThe solution is:\n$$x(t) = \\frac{1}{1-t}$$\n\nwhich diverges to $+\\infty$ as $t \\to 1^-$.\n\n## Example: $\\dot{x} = x$\nWith $x_0 = 1$:\n$$T_+ = \\int_1^\\infty \\frac{dy}{y} = \\infty$$\n\nThe solution is:\n$$x(t) = e^t$$\n\nwhich grows to $\\infty$ as $t \\to \\infty$ (global existence).\n\n## Interpreting the Integral\nWhen $\\frac{1}{f(x)}$ is **not integrable** near the boundary, the solution can reach it only at $t = \\infty$.\n\nWhen $\\frac{1}{f(x)}$ **is integrable**, the solution escapes to the boundary in finite time.\n\n## Non-Autonomous Case\nFor $\\dot{x} = f(t, x)$, the situation is more complex. Solutions may blow up in finite time or remain bounded depending on the interplay between $x(t)$ and $f(t, x(t))$.\n\nExample: $\\dot{x} = x^2 - t^2$ has solutions that blow up in finite time for some initial conditions and converge to $x = -t$ for others.\n\n## Maximal Interval of Existence\nIf a solution exists on $[t_0, T_+)$ but not at or beyond $T_+$, we say $[t_0, T_+)$ is the **maximal interval of existence**. Common scenarios:\n- Solution diverges to $\\pm\\infty$ at $T_+$\n- Solution hits a boundary of the domain\n- Solution reaches a point where uniqueness fails (though rare if $f$ is $C^1$)",
+    "related": [
+      "qualitative-analysis",
+      "autonomous-equation"
+    ],
+    "source": ""
+  },
+  {
+    "id": "non-uniqueness-note",
+    "title": "Non-Uniqueness and Non-Smooth Right-Hand Sides",
+    "domain": "Existence & Uniqueness",
+    "tags": [
+      "lipschitz",
+      "differentiability",
+      "singular-points"
+    ],
+    "content": "# Non-Uniqueness of Solutions\n\n## When Uniqueness Fails\nUniqueness of solutions to $\\dot{x} = f(x), x(0) = x_0$ is guaranteed if $f \\in C^1$ (i.e., $f$ is continuously differentiable). When $f$ is merely continuous but not $C^1$ (e.g., $f(x) = \\sqrt{|x|}$), uniqueness can fail.\n\n## Example: $\\dot{x} = \\sqrt{|x|}, x(0) = 0$\n\n**Trivial solution**: $x(t) = 0$ for all $t$.\n\n**Non-trivial solution**: Separate variables (for $x > 0$):\n$$\\frac{dx}{\\sqrt{x}} = dt \\implies 2\\sqrt{x} = t \\implies x(t) = \\frac{t^2}{4}$$\n\nBoth satisfy the initial condition $x(0) = 0$!\n\n## Pasting Solutions\nInfinitely many solutions can be created by \"patching\" the trivial and non-trivial solutions:\n$$\\tilde{x}(t) = \\begin{cases} 0, & t_0 \\leq t \\leq t_1 \\\\ \\frac{(t - t_1)^2}{4}, & t > t_1 \\end{cases}$$\n\nfor any $t_0 < t_1$. Each is continuously differentiable and satisfies the ODE everywhere.\n\n## Integrability Condition\nFor $\\dot{x} = f(x)$ with $f(x_0) = 0$, **non-uniqueness occurs** at $x_0$ if and only if:\n$$\\int_{x_0}^{x_0 + \\varepsilon} \\frac{dy}{|f(y)|} < \\infty$$\n\nThis means the solution can leave the equilibrium in finite time (or instantaneously).\n\n## Connection to Lipschitz Continuity\nA function $f$ is **Lipschitz continuous** near $x_0$ if:\n$$|f(x) - f(y)| \\leq L|x - y|$$\n\nfor some constant $L$. If $f$ is Lipschitz, then solutions are unique.\n\nFor $f(x) = \\sqrt{|x|}$:\n$$\\left|\\frac{df}{dx}\\right| = \\frac{1}{2\\sqrt{|x|}} \\to \\infty \\quad \\text{as } x \\to 0$$\n\nSo $f$ is not Lipschitz at $x = 0$, causing non-uniqueness.\n\n## Practical Implications\n1. Always check that $f \\in C^1$ before claiming uniqueness\n2. Non-smooth (non-differentiable) points are dangerous\n3. In applications, non-uniqueness often signals a physical inconsistency or missing information\n\n## Remedy: Regularization\nReplace $f(x) = \\sqrt{|x|}$ with a smooth approximation $f_\\epsilon(x) = \\sqrt{x^2 + \\epsilon}$ to recover uniqueness.",
+    "related": [
+      "qualitative-analysis",
+      "existence-uniqueness-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "existence-uniqueness-note",
+    "title": "Existence and Uniqueness of Solutions",
+    "domain": "Fundamental Theory",
+    "tags": [
+      "picard-lindelof",
+      "lipschitz",
+      "local-existence",
+      "global-existence"
+    ],
+    "content": "# Existence and Uniqueness of Solutions\n\nTwo fundamental questions: (1) Does a solution exist? (2) Is it unique?\n\n## Existence Theorem\n**Local Existence**: If $f(t, x)$ is **continuous** in a neighborhood of $(t_0, x_0)$, then the initial value problem\n$$\\dot{x} = f(t, x), \\quad x(t_0) = x_0$$\n\nhas a solution $x(t)$ defined in some neighborhood $|t - t_0| < h$ for some $h > 0$ (Peano's theorem).\n\nNote: This only guarantees local existence; the solution may not extend globally.\n\n## Uniqueness Theorem\n**Local Uniqueness**: If $f$ is **locally Lipschitz continuous in $x$** (uniformly in $t$) near $(t_0, x_0)$, the solution is **unique** in a neighborhood of $(t_0, x_0)$.\n\n**Lipschitz Condition**: $f$ is locally Lipschitz if there exists $L > 0$ such that:\n$$|f(t, x) - f(t, y)| \\leq L|x - y|$$\n\nfor all $(t, x), (t, y)$ in a compact neighborhood of $(t_0, x_0)$.\n\n**Sufficient Condition**: If $\\frac{\\partial f}{\\partial x}$ is continuous in a neighborhood, then $f$ is Lipschitz there (by the mean value theorem).\n\n## Picard-Lindelöf Theorem (Combined)\nIf $f$ and $\\frac{\\partial f}{\\partial x}$ are continuous in a rectangle:\n$$R: |t - t_0| \\leq a, \\quad |x - x_0| \\leq b$$\n\nthen there exists a unique solution on the interval $|t - t_0| \\leq h$ where:\n$$h = \\min\\left\\{a, \\frac{b}{M}\\right\\}, \\quad M = \\max_{(t,x) \\in R} |f(t, x)|$$\n\n## Global Existence\nIf $f$ is defined and Lipschitz on all of $\\mathbb{R}^2$ with at most linear growth:\n$$|f(t, x)| \\leq C(1 + |x|)$$\n\nfor some constant $C$, then solutions exist **globally** for all $t \\in \\mathbb{R}$.\n\n## Examples\n\n**Good case**: $f(t, x) = \\sin(t) + x$\n- Continuous everywhere\n- $\\frac{\\partial f}{\\partial x} = 1$ continuous everywhere\n- By Picard-Lindelöf, unique solution exists globally\n\n**Bad case**: $f(x) = \\sqrt{|x|}$\n- Continuous everywhere\n- $\\frac{\\partial f}{\\partial x}$ is unbounded at $x = 0$\n- Non-uniqueness occurs at $x = 0$\n- Multiple solutions satisfy $\\dot{x} = \\sqrt{|x|}, x(0) = 0$\n\n## Escape to Infinity\nEven with uniqueness, solutions may not exist globally. If the solution \"escapes to infinity\" in finite time, it has a maximal interval of existence $(t_-, t_+)$ with $t_+ < \\infty$.",
+    "related": [
+      "ode-classification",
+      "qualitative-analysis"
+    ],
+    "source": ""
+  },
+  {
+    "id": "lyapunov-function-note",
+    "title": "Lyapunov Functions and Stability",
+    "domain": "Stability Theory",
+    "tags": [
+      "lyapunov",
+      "energy",
+      "stability",
+      "asymptotic-stability"
+    ],
+    "content": "# Lyapunov Functions\n\nA **Lyapunov function** is a tool for determining stability of equilibria without solving the ODE.\n\n## Definition\nFor the system $\\dot{x} = f(x)$, a smooth function $V: \\mathbb{R}^n \\to \\mathbb{R}$ is a **Lyapunov function** for an equilibrium $x^* = 0$ (without loss of generality) if:\n\n1. $V(0) = 0$ and $V(x) > 0$ for $x \\neq 0$ (locally)\n2. $\\dot{V} := \\nabla V \\cdot f < 0$ along trajectories (or $\\leq 0$)\n\nThe second condition means:\n$$\\dot{V}(x) = \\sum_{i=1}^n \\frac{\\partial V}{\\partial x_i}(x) f_i(x) < 0$$\n\nfor all $x$ in a neighborhood of the origin.\n\n## Interpretation\n$V(x)$ decreases along trajectories. If $V$ resembles energy, its decay means the system dissipates energy, causing trajectories to spiral inward toward equilibrium.\n\n## Main Results\n\n**Stability** (Lyapunov's First Theorem): If there exists a Lyapunov function $V$ with $\\dot{V} \\leq 0$, then $x = 0$ is stable (small initial perturbations remain small).\n\n**Asymptotic Stability**: If $\\dot{V} < 0$ (strict inequality), then $x = 0$ is asymptotically stable (all nearby trajectories converge to 0).\n\n**Global Asymptotic Stability**: If $V(x) \\to \\infty$ as $|x| \\to \\infty$ and $\\dot{V} < 0$ everywhere, then $x = 0$ is **globally** asymptotically stable.\n\n## Example 1: Linear System\n$$\\dot{x} = -ax, \\quad \\dot{y} = -by, \\quad a, b > 0$$\n\nTry $V(x, y) = x^2 + y^2$. Then:\n$$\\dot{V} = 2x(-ax) + 2y(-by) = -2ax^2 - 2by^2 < 0$$\n\nSince $V \\to \\infty$ as $|(x,y)| \\to \\infty$ and $\\dot{V} < 0$ everywhere, the origin is globally asymptotically stable.\n\n## Example 2: Nonlinear System\n$$\\dot{x} = y, \\quad \\dot{y} = -x - y$$\n\nTry $V(x, y) = x^2 + y^2$. Then:\n$$\\dot{V} = 2xy + 2y(-x-y) = 2xy - 2xy - 2y^2 = -2y^2 \\leq 0$$\n\nThis shows stability but not asymptotic stability from $\\dot{V} \\leq 0$ alone. However, analyzing the system more carefully, we can show asymptotic stability.\n\n## Advantages\n- Avoids explicit solution of the ODE\n- Scales to higher dimensions (where phase-plane analysis fails)\n- Can prove global stability when local analysis is intractable\n\n## Challenges\n- Finding the right Lyapunov function is often difficult (no systematic procedure)\n- Requires problem-specific insight or trial-and-error\n- Failure to find $V$ does not mean the system is unstable\n\n## Connection to Energy\nIn mechanical systems, kinetic plus potential energy often serves as a Lyapunov function. More generally, entropy or dissipation measures can work.",
+    "related": [
+      "qualitative-analysis",
+      "autonomous-equation"
+    ],
+    "source": ""
+  },
+  {
+    "id": "probability-definition",
+    "title": "Classical Probability and Relative Frequency",
+    "domain": "probability",
+    "tags": [
+      "foundational",
+      "definition"
+    ],
+    "content": "## Probability Definition\n\nFor an experiment with $N$ mutually exclusive, equiprobable outcomes, the probability of an event $A$ is:\n$$P(A) = \\frac{N(A)}{N},$$\nwhere $N(A)$ is the number of outcomes favorable to $A$.\n\n## Relative Frequency Interpretation\n\nWhen an experiment is repeated many times under identical conditions, the relative frequency of an event $A$ converges to its probability:\n$$P(A) = \\lim_{n \\to \\infty} \\frac{n(A)}{n},$$\nwhere $n(A)$ is the count of occurrences in $n$ trials.\n\nThis provides the foundation for interpreting probabilities empirically and for the **law of large numbers**.",
+    "related": [
+      "relative-frequency",
+      "law-of-large-numbers"
+    ],
+    "source": ""
+  },
+  {
+    "id": "relative-frequency",
+    "title": "Relative Frequency and Empirical Probability",
+    "domain": "probability",
+    "tags": [
+      "interpretation",
+      "empirical"
+    ],
+    "content": "## Definition\n\nIn a series of $n$ independent trials, the relative frequency of an event $A$ is:\n$$f_n(A) = \\frac{n(A)}{n},$$\nwhere $n(A)$ is the number of trials in which $A$ occurs.\n\n## Empirical Convergence\n\nEmpirical observation reveals that relative frequencies stabilize around a limiting value as $n$ increases. This limiting value is the **probability** of the event:\n$$P(A) = \\lim_{n \\to \\infty} f_n(A).$$\n\n## Example: Coin Tosses\n\nIn Rozanov's Table 1, coin tosses grouped into 100 series of 100 trials each show relative frequencies near 0.5. Over 1000 trials, the convergence is even tighter, confirming the probability $P(\\text{heads}) = 0.5$.",
+    "related": [
+      "probability-definition",
+      "law-of-large-numbers"
+    ],
+    "source": ""
+  },
+  {
+    "id": "combinatorial-analysis",
+    "title": "Rudiments of Combinatorial Analysis",
+    "domain": "probability",
+    "tags": [
+      "counting",
+      "techniques"
+    ],
+    "content": "## Fundamental Counting Principles\n\n**Theorem 1.1 (Ordered Pairs):** Given $n_1$ elements of the first kind and $n_2$ of the second kind, there are exactly $n_1 n_2$ distinct ordered pairs.\n\n**Theorem 1.2 (Generalization):** For $r$ kinds with $n_1, n_2, \\ldots, n_r$ elements respectively, the number of ordered $r$-tuples is:\n$$N = n_1 n_2 \\cdots n_r.$$\n\n## Sampling\n\n- **With replacement:** $n^r$ ordered samples from $n$ objects, $r$ selections.\n- **Without replacement:** $n(n-1)\\cdots(n-r+1)$ ordered samples (permutations).\n\n## Permutations and Combinations\n\nPermutations of $n$ objects taken $r$ at a time (order matters):\n$$P_r^n = \\frac{n!}{(n-r)!}.$$\n\nCombinations of $n$ objects taken $r$ at a time (order irrelevant):\n$$C_r^n = \\binom{n}{r} = \\frac{n!}{r!(n-r)!}.$$\n\n## Multinomial Coefficients\n\nNumber of ways to partition $n$ objects into $k$ groups of sizes $n_1, \\ldots, n_k$ (with $\\sum n_i = n$):\n$$\\frac{n!}{n_1! n_2! \\cdots n_k!}.$$",
+    "related": [
+      "permutation",
+      "combination",
+      "multinomial-coefficient"
+    ],
+    "source": ""
+  },
+  {
+    "id": "sample-space-definition",
+    "title": "Sample Space and Elementary Events",
+    "domain": "probability",
+    "tags": [
+      "foundational",
+      "sets"
+    ],
+    "content": "## Sample Space $\\Omega$\n\nThe **sample space** is the set of all possible outcomes (elementary events) of a random experiment. It is typically denoted $\\Omega$.\n\n## Elementary Events $\\omega$\n\nAn **elementary event** (or **sample point**) $\\omega$ is a single, indivisible outcome. The set of all elementary events is $\\Omega$.\n\n## Events as Subsets\n\nAn **event** $A$ is a subset of $\\Omega$. We say $A$ occurs if the outcome of the experiment is an elementary event in $A$:\n$$A \\subseteq \\Omega.$$\n\n## Special Events\n\n- **Certain event:** The entire sample space $\\Omega$ (always occurs).\n- **Impossible event:** The empty set $\\emptyset$ (never occurs).\n\n## Example: Two Dice\n\n$$\\Omega = \\{(a,b) : 1 \\le a, b \\le 6\\}, \\quad |\\Omega| = 36.$$\n\nEvent $A$ = \"sum is 7\" = $\\{(1,6), (2,5), (3,4), (4,3), (5,2), (6,1)\\}$, $|A| = 6$.",
+    "related": [
+      "elementary-event",
+      "event-algebra"
+    ],
+    "source": ""
+  },
+  {
+    "id": "event-operations",
+    "title": "Set Operations on Events",
+    "domain": "probability",
+    "tags": [
+      "algebra",
+      "sets"
+    ],
+    "content": "## Union: $A_1 \\cup A_2$\n\n$A_1 \\cup A_2$ is the event \"$A_1$ or $A_2$ occurs\" (or both). In set notation, it contains all outcomes in either set.\n\n## Intersection: $A_1 \\cap A_2$\n\n$A_1 \\cap A_2$ (or $A_1 A_2$) is the event \"both $A_1$ and $A_2$ occur.\" It is the set of outcomes common to both.\n\n## Complement: $\\bar{A}$\n\n$\\bar{A} = \\Omega - A$ is the event \"$A$ does not occur.\" It is the set of all outcomes not in $A$.\n\n## Difference: $A_1 - A_2$\n\n$A_1 - A_2$ is the event \"$A_1$ occurs but $A_2$ does not.\" Equivalently, $A_1 - A_2 = A_1 \\cap \\bar{A}_2$.\n\n## De Morgan's Laws\n\nFor events and complements:\n- $\\overline{A_1 \\cup A_2} = \\bar{A}_1 \\cap \\bar{A}_2$\n- $\\overline{A_1 \\cap A_2} = \\bar{A}_1 \\cup \\bar{A}_2$\n\nThese allow transformation of complex event statements into simpler forms.",
+    "related": [
+      "event-algebra",
+      "addition-law"
+    ],
+    "source": ""
+  },
+  {
+    "id": "addition-law-theorem",
+    "title": "Addition Law for Probabilities",
+    "domain": "probability",
+    "tags": [
+      "theorems",
+      "probability-rules"
+    ],
+    "content": "## Mutually Exclusive Events\n\nFor mutually exclusive events $A_1, A_2, \\ldots, A_n$ (pairwise disjoint):\n$$P(A_1 \\cup A_2 \\cup \\cdots \\cup A_n) = P(A_1) + P(A_2) + \\cdots + P(A_n).$$\n\n## Arbitrary Events (Inclusion–Exclusion)\n\nFor any events $A_1, A_2$:\n$$P(A_1 \\cup A_2) = P(A_1) + P(A_2) - P(A_1 \\cap A_2).$$\n\nFor $n$ arbitrary events, the **inclusion–exclusion principle** states:\n$$P\\left(\\bigcup_{k=1}^n A_k\\right) = \\sum_{i} P(A_i) - \\sum_{i < j} P(A_i A_j) + \\sum_{i < j < k} P(A_i A_j A_k) - \\cdots \\pm P(A_1 \\cdots A_n).$$\n\n## Key Properties\n\n1. If $A_1 \\subseteq A_2$, then $P(A_1) \\le P(A_2)$.\n2. $P(A_1 - A_2) = P(A_1) - P(A_1 \\cap A_2)$.\n3. For complement: $P(\\bar{A}) = 1 - P(A)$.",
+    "related": [
+      "addition-law",
+      "inclusion-exclusion"
+    ],
+    "source": ""
+  },
+  {
+    "id": "conditional-probability-definition",
+    "title": "Conditional Probability",
+    "domain": "probability",
+    "tags": [
+      "foundational",
+      "dependence"
+    ],
+    "content": "## Definition\n\nGiven an event $B$ with $P(B) > 0$, the **conditional probability** of event $A$ given $B$ is:\n$$P(A | B) = \\frac{P(A \\cap B)}{P(B)}.$$\n\nThis represents the probability of $A$ when we know that $B$ has occurred.\n\n## Multiplication Rule\n\nFrom the definition of conditional probability:\n$$P(A \\cap B) = P(A | B) P(B) = P(B | A) P(A).$$\n\nFor multiple events:\n$$P(A_1 \\cap A_2 \\cap \\cdots \\cap A_n) = P(A_1) P(A_2 | A_1) P(A_3 | A_1 \\cap A_2) \\cdots P(A_n | A_1 \\cap \\cdots \\cap A_{n-1}).$$\n\n## Law of Total Probability\n\nIf $B_1, B_2, \\ldots, B_n$ partition $\\Omega$ (i.e., disjoint and $\\bigcup B_i = \\Omega$), then:\n$$P(A) = \\sum_{i=1}^n P(A | B_i) P(B_i).$$\n\n## Example: Drawing Without Replacement\n\nDraw two cards from a deck.\n- $P(\\text{1st is ace}) = 4/52$.\n- $P(\\text{2nd is ace | 1st is ace}) = 3/51$.\n- $P(\\text{both aces}) = (4/52) \\cdot (3/51) = 12/(52 \\cdot 51)$.",
+    "related": [
+      "conditional-probability",
+      "multiplication-rule"
+    ],
+    "source": ""
+  },
+  {
+    "id": "independence-concept",
+    "title": "Statistical Independence",
+    "domain": "probability",
+    "tags": [
+      "foundational",
+      "dependence"
+    ],
+    "content": "## Definition\n\nTwo events $A$ and $B$ are **independent** if:\n$$P(A \\cap B) = P(A) P(B).$$\n\nEquivalently, if $P(B) > 0$:\n$$P(A | B) = P(A).$$\n\nIntuitively, the occurrence of $B$ provides no information about $A$.\n\n## Mutual Independence\n\nEvents $A_1, A_2, \\ldots, A_n$ are **mutually independent** if:\n$$P(A_{i_1} \\cap A_{i_2} \\cap \\cdots \\cap A_{i_k}) = P(A_{i_1}) P(A_{i_2}) \\cdots P(A_{i_k})$$\nfor every subset of indices.\n\n## Non-Independent Events\n\nEvents are **dependent** if $P(A \\cap B) \\neq P(A) P(B)$. Common examples:\n- Drawing cards without replacement.\n- Outcomes that share common causes.\n\n## Example: Independent Dice Rolls\n\nRoll two fair dice. Let $A$ = \"first die shows 6,\" $B$ = \"second die shows 6.\"\n- $P(A) = 1/6$, $P(B) = 1/6$.\n- $P(A \\cap B) = 1/36 = P(A) P(B)$.\n\nSo $A$ and $B$ are independent.",
+    "related": [
+      "independence",
+      "conditional-probability"
+    ],
+    "source": ""
+  },
+  {
+    "id": "random-variable-definition",
+    "title": "Random Variables",
+    "domain": "probability",
+    "tags": [
+      "foundational",
+      "definitions"
+    ],
+    "content": "## Definition\n\nA **random variable** is a function $X: \\Omega \\to \\mathbb{R}$ that assigns a real number to each elementary event in the sample space.\n\n## Discrete vs. Continuous\n\n- **Discrete:** $X$ takes values in a countable set (e.g., $\\{0, 1, 2, \\ldots\\}$).\n- **Continuous:** $X$ takes values in an interval or the real line.\n\n## Distribution Function (CDF)\n\nThe **cumulative distribution function** is:\n$$F_X(x) = P(X \\le x) = P(\\{\\omega \\in \\Omega : X(\\omega) \\le x\\}).$$\n\nProperties:\n1. $F$ is non-decreasing.\n2. $F$ is right-continuous.\n3. $\\lim_{x \\to -\\infty} F(x) = 0$; $\\lim_{x \\to \\infty} F(x) = 1$.\n\n## Probability Mass Function (Discrete)\n\nFor discrete $X$:\n$$p_X(x) = P(X = x).$$\n\nDensity Function (Continuous):\n\nFor continuous $X$:\n$$F_X(x) = \\int_{-\\infty}^x f_X(t) dt,$$\nwhere $f_X$ is the **probability density function**.\n\n## Example\n\nFair die: $X \\in \\{1, 2, \\ldots, 6\\}$, $p_X(k) = 1/6$ for each $k$.",
+    "related": [
+      "random-variable",
+      "distribution-function"
+    ],
+    "source": ""
+  },
+  {
+    "id": "expectation-definition",
+    "title": "Expectation (Mean) of a Random Variable",
+    "domain": "probability",
+    "tags": [
+      "statistics",
+      "moments"
+    ],
+    "content": "## Definition: Discrete Case\n\nFor a discrete random variable $X$ with probability mass function $p_X(x)$:\n$$E[X] = \\sum_{x} x \\cdot p_X(x).$$\n\nThis is the **weighted average** of values, weighted by their probabilities.\n\n## Definition: Continuous Case\n\nFor a continuous random variable with pdf $f_X(x)$:\n$$E[X] = \\int_{-\\infty}^\\infty x f_X(x) dx.$$\n\n## Properties\n\n1. **Linearity:** $E[aX + bY] = a E[X] + b E[Y]$ for constants $a, b$ and random variables $X, Y$.\n2. **Independence:** If $X, Y$ are independent, $E[XY] = E[X] E[Y]$.\n3. **Monotonicity:** If $X \\le Y$ (almost surely), then $E[X] \\le E[Y]$.\n\n## Higher Moments\n\nThe **$k$-th moment** is $E[X^k] = \\sum x^k p_X(x)$ (discrete) or $\\int x^k f_X(x) dx$ (continuous).\n\n## Example: Fair Die\n\n$$E[X] = \\frac{1}{6}(1 + 2 + 3 + 4 + 5 + 6) = \\frac{21}{6} = 3.5.$$",
+    "related": [
+      "expectation",
+      "variance"
+    ],
+    "source": ""
+  },
+  {
+    "id": "variance-definition",
+    "title": "Variance and Standard Deviation",
+    "domain": "probability",
+    "tags": [
+      "statistics",
+      "dispersion"
+    ],
+    "content": "## Definition\n\nThe **variance** of a random variable $X$ with mean $\\mu = E[X]$ is:\n$$\\text{Var}(X) = E[(X - \\mu)^2] = E[X^2] - (E[X])^2.$$\n\nThe **standard deviation** is:\n$$\\sigma = \\sqrt{\\text{Var}(X)}.$$\n\n## Interpretation\n\nVariance measures the spread of $X$ around its mean. Larger variance indicates greater variability.\n\n## Properties\n\n1. $\\text{Var}(X) \\ge 0$; $\\text{Var}(X) = 0$ iff $X$ is constant.\n2. $\\text{Var}(aX + b) = a^2 \\text{Var}(X)$ for constants $a, b$.\n3. If $X, Y$ are independent: $\\text{Var}(X + Y) = \\text{Var}(X) + \\text{Var}(Y)$.\n\n## Chebyshev's Inequality\n\nFor any $k > 0$:\n$$P(|X - \\mu| \\ge k\\sigma) \\le \\frac{1}{k^2}.$$\n\nOr equivalently:\n$$P(|X - \\mu| > \\epsilon) \\le \\frac{\\text{Var}(X)}{\\epsilon^2}.$$\n\n## Example: Fair Die\n\n$E[X] = 3.5$, $E[X^2] = (1 + 4 + 9 + 16 + 25 + 36)/6 = 91/6 \\approx 15.17$.\n$$\\text{Var}(X) = 15.17 - (3.5)^2 = 15.17 - 12.25 = 2.92.$$",
+    "related": [
+      "variance",
+      "expectation",
+      "chebyshev"
+    ],
+    "source": ""
+  },
+  {
+    "id": "binomial-distribution",
+    "title": "Binomial Distribution",
+    "domain": "probability",
+    "tags": [
+      "distributions",
+      "discrete"
+    ],
+    "content": "## Definition\n\nThe **binomial distribution** $\\text{Binomial}(n, p)$ models the number of successes $X$ in $n$ independent Bernoulli trials, each with success probability $p$.\n\n## Probability Mass Function\n\n$$P(X = k) = \\binom{n}{k} p^k (1-p)^{n-k}, \\quad k = 0, 1, \\ldots, n.$$\n\n## Mean and Variance\n\n$$E[X] = np, \\quad \\text{Var}(X) = np(1-p).$$\n\n## Poisson Approximation\n\nIf $n \\to \\infty$, $p \\to 0$ with $\\lambda = np$ fixed, then:\n$$\\binom{n}{k} p^k (1-p)^{n-k} \\to \\frac{\\lambda^k e^{-\\lambda}}{k!}.$$\n\nThis is the **Poisson distribution** with parameter $\\lambda$.\n\n## Example: Quality Control\n\nIn a batch of 100 items, each has a 2% defect rate. Let $X$ = number of defective items.\n- $X \\sim \\text{Binomial}(100, 0.02)$.\n- $E[X] = 2$, $\\text{Var}(X) = 1.96$.\n- $P(X = 0) = (0.98)^{100} \\approx 0.133$.",
+    "related": [
+      "binomial-distribution",
+      "poisson-distribution",
+      "bernoulli-trial"
+    ],
+    "source": ""
+  },
+  {
+    "id": "normal-distribution",
+    "title": "Normal (Gaussian) Distribution",
+    "domain": "probability",
+    "tags": [
+      "distributions",
+      "continuous"
+    ],
+    "content": "## Definition\n\nA random variable $X$ has a **normal distribution** $N(\\mu, \\sigma^2)$ with mean $\\mu$ and variance $\\sigma^2$ if its probability density function is:\n$$f_X(x) = \\frac{1}{\\sigma \\sqrt{2\\pi}} \\exp\\left(-\\frac{(x - \\mu)^2}{2\\sigma^2}\\right).$$\n\n## Standard Normal\n\nThe **standard normal** distribution $N(0, 1)$ has $\\mu = 0$, $\\sigma = 1$:\n$$\\phi(x) = \\frac{1}{\\sqrt{2\\pi}} e^{-x^2/2}.$$\n\nIts CDF is denoted $\\Phi(x) = P(Z \\le x)$.\n\n## Standardization\n\nIf $X \\sim N(\\mu, \\sigma^2)$, then:\n$$Z = \\frac{X - \\mu}{\\sigma} \\sim N(0, 1).$$\n\n## Properties\n\n1. The distribution is symmetric about the mean.\n2. $P(\\mu - \\sigma < X < \\mu + \\sigma) \\approx 0.68$.\n3. $P(\\mu - 2\\sigma < X < \\mu + 2\\sigma) \\approx 0.95$.\n\n## Importance\n\nThe normal distribution arises naturally via the **Central Limit Theorem**: sums and averages of many independent random variables are approximately normal, regardless of the original distribution.",
+    "related": [
+      "normal-distribution",
+      "clt",
+      "de-moivre-laplace-theorem"
+    ],
+    "source": ""
+  },
+  {
+    "id": "central-limit-theorem",
+    "title": "Central Limit Theorem",
+    "domain": "probability",
+    "tags": [
+      "limit-theorems",
+      "convergence"
+    ],
+    "content": "## Statement\n\nLet $X_1, X_2, \\ldots$ be a sequence of independent and identically distributed (i.i.d.) random variables with finite mean $\\mu$ and variance $\\sigma^2 > 0$. Define the sample mean:\n$$\\bar{X}_n = \\frac{1}{n} \\sum_{i=1}^n X_i.$$\n\nThen, as $n \\to \\infty$:\n$$\\frac{\\bar{X}_n - \\mu}{\\sigma / \\sqrt{n}} \\xrightarrow{d} N(0, 1),$$\nwhere $\\xrightarrow{d}$ denotes convergence in distribution.\n\n## Practical Interpretation\n\nFor large $n$, $\\bar{X}_n$ is approximately $N(\\mu, \\sigma^2/n)$.\n\n## De Moivre–Laplace Theorem (Special Case)\n\nFor $X_i \\sim \\text{Bernoulli}(p)$ (i.e., $X_i \\in \\{0, 1\\}$), the sum $S_n = \\sum X_i \\sim \\text{Binomial}(n, p)$, and:\n$$\\frac{S_n - np}{\\sqrt{np(1-p)}} \\xrightarrow{d} N(0, 1).$$\n\n## Significance\n\nThe CLT explains why the normal distribution is ubiquitous: many real-world quantities are sums or averages of many small random effects, hence approximately normal.\n\n## Example: Averages of Die Rolls\n\nRoll a die $n = 100$ times and compute the sample mean. By CLT, the distribution of $\\bar{X}_{100}$ is approximately $N(3.5, 2.92/100) = N(3.5, 0.0292)$.",
+    "related": [
+      "clt",
+      "normal-distribution",
+      "de-moivre-laplace-theorem"
+    ],
+    "source": ""
+  },
+  {
+    "id": "law-of-large-numbers",
+    "title": "Law of Large Numbers",
+    "domain": "probability",
+    "tags": [
+      "limit-theorems",
+      "convergence"
+    ],
+    "content": "## Weak Law (Chebyshev's)\n\nLet $X_1, X_2, \\ldots$ be a sequence of i.i.d. random variables with mean $\\mu$ and finite variance $\\sigma^2$. Then for any $\\epsilon > 0$:\n$$P\\left(\\left| \\bar{X}_n - \\mu \\right| > \\epsilon \\right) \\to 0 \\quad \\text{as } n \\to \\infty,$$\nwhere $\\bar{X}_n = (X_1 + \\cdots + X_n)/n$ is the sample mean.\n\nWe say $\\bar{X}_n$ **converges to $\\mu$ in probability**, written $\\bar{X}_n \\xrightarrow{P} \\mu$.\n\n## Strong Law\n\nUnder the same conditions:\n$$P\\left( \\lim_{n \\to \\infty} \\bar{X}_n = \\mu \\right) = 1,$$\nwe say $\\bar{X}_n$ **converges to $\\mu$ almost surely**, written $\\bar{X}_n \\xrightarrow{a.s.} \\mu$.\n\n## Quantitative Bound (Chebyshev)\n\n$$P\\left(\\left| \\bar{X}_n - \\mu \\right| > \\epsilon \\right) \\le \\frac{\\sigma^2}{n \\epsilon^2}.$$\n\n## Interpretation\n\nThe LLN justifies interpreting probability as a limiting relative frequency. Over many trials, the empirical average stabilizes around the true expected value.\n\n## Example: Coin Tosses\n\nFlip a fair coin repeatedly. By LLN, the fraction of heads converges to 0.5. Chebyshev bounds how quickly: after 10,000 flips, with probability $\\ge 1 - 0.25/(10000 \\cdot 0.01^2) = 1 - 0.25 = 0.75$, the relative frequency is within 0.01 of 0.5.",
+    "related": [
+      "law-of-large-numbers",
+      "weak-convergence",
+      "strong-convergence"
+    ],
+    "source": ""
+  },
+  {
+    "id": "characteristic-function",
+    "title": "Characteristic Functions",
+    "domain": "probability",
+    "tags": [
+      "tools",
+      "analysis"
+    ],
+    "content": "## Definition\n\nThe **characteristic function** of a random variable $X$ is:\n$$\\phi_X(t) = E[e^{itX}] = \\int_{-\\infty}^\\infty e^{itx} dF_X(x),$$\nwhere $i = \\sqrt{-1}$, $t \\in \\mathbb{R}$, and $F_X$ is the distribution function of $X$.\n\n## Properties\n\n1. $\\phi_X(0) = 1$.\n2. $|\\phi_X(t)| \\le 1$ for all $t$.\n3. $\\phi_X(-t) = \\overline{\\phi_X(t)}$ (complex conjugate).\n4. $\\phi_X(t)$ is uniformly continuous.\n5. $E[X^k] = \\frac{1}{i^k} \\phi_X^{(k)}(0)$ (moment formula).\n\n## Uniqueness\n\nThe characteristic function uniquely determines the distribution: if $\\phi_X = \\phi_Y$, then $X$ and $Y$ have the same distribution.\n\n## Inversion Formula\n\nFor continuous parts of the distribution:\n$$f_X(x) = \\frac{1}{2\\pi} \\int_{-\\infty}^\\infty e^{-itx} \\phi_X(t) dt.$$\n\n## Lévy's Continuity Theorem\n\n$F_n \\xrightarrow{w} F$ (weak convergence) if and only if $\\phi_n(t) \\to \\phi(t)$ for all $t$.\n\n## Examples\n\n- $N(0, 1)$: $\\phi(t) = e^{-t^2/2}$.\n- Poisson$(\\lambda)$: $\\phi(t) = e^{\\lambda(e^{it} - 1)}$.\n- Uniform$[0, 1]$: $\\phi(t) = \\frac{e^{it} - 1}{it}$.",
+    "related": [
+      "characteristic-function",
+      "moment-generating-function",
+      "clt"
+    ],
+    "source": ""
+  },
+  {
+    "id": "markov-chain-definition",
+    "title": "Markov Chains",
+    "domain": "probability",
+    "tags": [
+      "stochastic-processes",
+      "temporal"
+    ],
+    "content": "## Definition\n\nA **Markov chain** is a sequence of random variables $X_0, X_1, X_2, \\ldots$ taking values in a finite state space $\\{1, 2, \\ldots, m\\}$, satisfying the **Markov property**:\n$$P(X_{n+1} = j \\mid X_n = i, X_{n-1}, \\ldots, X_0) = P(X_{n+1} = j \\mid X_n = i) = P_{ij}$$\nfor all $n$ and all sequences of states.\n\nThe conditional distribution of the future depends only on the current state, not the past (memorylessness).\n\n## Transition Matrix\n\nThe **transition matrix** $P$ has entries:\n$$P_{ij} = P(X_{n+1} = j \\mid X_n = i),$$\nwith rows summing to 1 (stochastic matrix).\n\n## $n$-Step Transitions\n\nThe probability of transitioning from state $i$ to state $j$ in $n$ steps is:\n$$(P^n)_{ij} = P(X_n = j \\mid X_0 = i).$$\n\n## Initial Distribution\n\nLet $\\pi^{(0)}$ be the distribution of $X_0$. Then:\n$$P(X_n = j) = \\sum_i \\pi_i^{(0)} (P^n)_{ij}.$$\n\n## Stationary Distribution\n\nA distribution $\\pi$ is **stationary** if $\\pi = \\pi P$, i.e., $\\pi_j = \\sum_i \\pi_i P_{ij}$.\n\nFor an irreducible aperiodic chain, there is a unique stationary distribution, and $\\lim_{n \\to \\infty} (P^n)_{ij} = \\pi_j$ for all $i, j$.",
+    "related": [
+      "markov-chain",
+      "transition-matrix",
+      "stationary-distribution"
+    ],
+    "source": ""
+  },
+  {
+    "id": "stationary-distribution",
+    "title": "Stationary and Limiting Distributions",
+    "domain": "probability",
+    "tags": [
+      "markov-chains",
+      "asymptotics"
+    ],
+    "content": "## Stationary Distribution\n\nA probability distribution $\\pi = (\\pi_1, \\ldots, \\pi_m)$ is **stationary** (or **invariant**) for a Markov chain with transition matrix $P$ if:\n$$\\pi = \\pi P.$$\n\nEquivalently, $\\pi_j = \\sum_{i=1}^m \\pi_i P_{ij}$ for all $j$.\n\n## Interpretation\n\nIf $X_0$ has distribution $\\pi$, then $X_n$ also has distribution $\\pi$ for all $n$. The chain is in \"equilibrium.\"\n\n## Existence and Uniqueness\n\n- For a **finite, irreducible, aperiodic** Markov chain, there exists a unique stationary distribution.\n- For **reducible** chains, stationary distributions may not be unique; different chains of communicating states have different stationary distributions.\n\n## Limiting Distribution\n\nFor an irreducible aperiodic finite chain:\n$$\\lim_{n \\to \\infty} P_{ij}^{(n)} = \\pi_j$$\nfor all states $i, j$, regardless of the initial state.\n\nThis limiting behavior justifies using $\\pi$ to predict long-run behavior.\n\n## Example: Two-State Chain\n\n$$P = \\begin{pmatrix} 0.7 & 0.3 \\\\ 0.4 & 0.6 \\end{pmatrix}.$$\n\nStationary distribution satisfies:\n- $\\pi_1 = 0.7 \\pi_1 + 0.4 \\pi_2$\n- $\\pi_2 = 0.3 \\pi_1 + 0.6 \\pi_2$\n- $\\pi_1 + \\pi_2 = 1$\n\nSolution: $\\pi = (4/7, 3/7) \\approx (0.571, 0.429)$.",
+    "related": [
+      "stationary-distribution",
+      "markov-chain",
+      "ergodic-chain"
+    ],
+    "source": ""
+  },
+  {
+    "id": "binomial-coefficient",
+    "title": "Binomial Coefficients",
+    "domain": "probability",
+    "tags": [
+      "combinatorics",
+      "identities"
+    ],
+    "content": "## Definition\n\nThe **binomial coefficient** $\\binom{n}{k}$ (read \"$n$ choose $k$\") is:\n$$\\binom{n}{k} = \\frac{n!}{k!(n-k)!}.$$\n\nIt counts the number of ways to choose an unordered subset of $k$ elements from $n$ distinct elements.\n\n## Pascal's Triangle\n\nBinomial coefficients satisfy the **Pascal recurrence**:\n$$\\binom{n}{k} = \\binom{n-1}{k-1} + \\binom{n-1}{k}.$$\n\nThis generates Pascal's triangle:\n```\n     1\n    1 1\n   1 2 1\n  1 3 3 1\n 1 4 6 4 1\n```\n\n## Binomial Theorem\n\n$$(x + y)^n = \\sum_{k=0}^n \\binom{n}{k} x^k y^{n-k}.$$\n\n## Key Identities\n\n- $\\binom{n}{k} = \\binom{n}{n-k}$ (symmetry).\n- $\\sum_{k=0}^n \\binom{n}{k} = 2^n$.\n- $\\sum_{k=0}^n (-1)^k \\binom{n}{k} = 0$ for $n \\ge 1$.\n\n## Application to Probability\n\nIn a fair coin toss of $n$ flips, the probability of exactly $k$ heads is:\n$$P(X = k) = \\binom{n}{k} \\left(\\frac{1}{2}\\right)^n.$$",
+    "related": [
+      "combination",
+      "binomial-distribution"
+    ],
+    "source": ""
+  },
+  {
+    "id": "derangement",
+    "title": "Derangements and the Coincidence Problem",
+    "domain": "probability",
+    "tags": [
+      "combinatorics",
+      "special-problems"
+    ],
+    "content": "## Derangement Definition\n\nA **derangement** of $n$ objects is a permutation in which no object appears in its original position. Denote by $D_n$ the number of derangements of $n$ objects.\n\n## Counting Derangements\n\nUsing inclusion–exclusion:\n$$D_n = n! \\sum_{k=0}^n \\frac{(-1)^k}{k!}.$$\n\nFor large $n$:\n$$D_n \\approx \\frac{n!}{e},$$\nwhere $e \\approx 2.718$ is the base of natural logarithms.\n\n## Probability of No Matches\n\nIf $n$ objects are randomly permuted, the probability that no object is in its original position is:\n$$P(\\text{no matches}) = \\frac{D_n}{n!} = \\sum_{k=0}^n \\frac{(-1)^k}{k!} \\approx \\frac{1}{e} \\approx 0.368.$$\n\nRemarkably, this probability is nearly constant for large $n$.\n\n## Raincoat Problem\n\n$n$ students hang raincoats on a rack. Each retrieves one at random. The probability that at least one student gets their own coat is:\n$$P(\\text{at least one match}) = 1 - P(\\text{no matches}) \\approx 1 - \\frac{1}{e} \\approx 0.632.$$\n\nUsing inclusion–exclusion, this equals $1 - 1/2! + 1/3! - 1/4! + \\cdots \\pm 1/n!$.\n\n## Values\n\n| $n$ | $D_n$ | $P(\\text{no matches})$ |\n|-----|-------|------------------------|\n| 2   | 1     | 0.5000                 |\n| 3   | 2     | 0.3333                 |\n| 4   | 9     | 0.3750                 |\n| 5   | 44    | 0.3667                 |\n| $\\infty$ | - | $1/e \\approx 0.3679$ |",
+    "related": [
+      "derangement",
+      "coincidence-problem",
+      "inclusion-exclusion"
+    ],
+    "source": ""
+  },
+  {
+    "id": "continuous-markov-process",
+    "title": "Continuous-Time Markov Processes",
+    "domain": "Probability Theory",
+    "tags": [
+      "markov-chain",
+      "stochastic-processes",
+      "continuous-time"
+    ],
+    "content": "## Overview\n\nA **continuous-time Markov process** (or **continuous-time Markov chain**) is a generalization of discrete-time Markov chains where transitions occur at random times. Instead of a transition matrix $P$, we use an **intensity matrix** or **generator matrix** $Q$.\n\n### Key Definition\n\n- **State space**: discrete (countable)\n- **Time parameter**: $t \\in [0,\\infty)$ (continuous)\n- **Sojourn times**: the time spent in each state is exponentially distributed\n- **Intensity matrix** $Q$: entries $q_{ij}$ (rate of jumping from $i$ to $j$)\n\n### Intensity Matrix Structure\n\nFor a continuous Markov process:\n$$q_{ij} \\geq 0 \\text{ for } i \\neq j, \\quad q_{ii} = -\\sum_{j \\neq i} q_{ij} \\leq 0$$\n\nRows of $Q$ sum to zero. The diagonal entries are negative and represent the negative total exit rate from each state.\n\n### Transition Probabilities and Kolmogorov Equations\n\nLet $P_{ij}(t) = \\mathbf{P}\\{X(t)=j \\mid X(0)=i\\}$ be the transition probability from state $i$ to state $j$ in time $t$.\n\n**Forward Kolmogorov Equation:**\n$$\\frac{dP(t)}{dt} = P(t)Q$$\n\n**Backward Kolmogorov Equation:**\n$$\\frac{dP(t)}{dt} = QP(t)$$\n\nFormal solution: $P(t) = e^{tQ}$ (matrix exponential).\n\n### Sojourn Times\n\nThe time $\\tau_i$ spent in state $i$ before jumping to another state follows an exponential distribution with parameter $\\lambda_i = -q_{ii}$:\n$$\\mathbf{P}\\{\\tau_i > t\\} = e^{-\\lambda_i t}$$\n\nMean sojourn time: $\\mathbf{E}[\\tau_i] = 1/\\lambda_i = -1/q_{ii}$.\n\n### Stationary Distribution\n\nThe **stationary distribution** $\\pi$ satisfies:\n$$\\pi Q = 0, \\quad \\sum_i \\pi_i = 1$$\n\nIf the chain is **irreducible** and **aperiodic**, then:\n$$\\lim_{t\\to\\infty} P(t) = \\mathbf{1}\\pi^T$$\n\nwhere each row of the limit is $\\pi$.\n\n### Example: 2-State Chain\n\nStates: 1, 2 with rates $q_{12} = \\lambda$ (leaving state 1 for state 2) and $q_{21} = \\mu$ (leaving state 2 for state 1).\n\n$$Q = \\begin{pmatrix} -\\lambda & \\lambda \\\\ \\mu & -\\mu \\end{pmatrix}$$\n\nStationary distribution: $\\pi = \\left(\\frac{\\mu}{\\lambda+\\mu}, \\frac{\\lambda}{\\lambda+\\mu}\\right)$.\n\n### Applications\n\n- **Queuing theory**: M/M/c queues, call centers\n- **Population dynamics**: birth-death processes\n- **Reliability**: failure and repair rates\n- **Chemistry**: reaction rate kinetics",
+    "related": [
+      "markov-chain",
+      "stationary-distribution"
+    ],
+    "source": ""
+  },
+  {
+    "id": "kolmogorov-equations",
+    "title": "Kolmogorov Forward and Backward Equations",
+    "domain": "Probability Theory",
+    "tags": [
+      "continuous-markov-process",
+      "differential-equations"
+    ],
+    "content": "## Kolmogorov Equations for Continuous-Time Markov Chains\n\n### Forward Equation (Fokker–Planck Equation)\n\nThe **forward Kolmogorov equation** describes how transition probabilities evolve in time:\n$$\\frac{\\partial P_{ij}(t)}{\\partial t} = \\sum_k P_{ik}(t) q_{kj}$$\n\nIn matrix form:\n$$\\frac{dP(t)}{dt} = P(t)Q$$\n\nwith initial condition $P(0) = I$ (identity matrix).\n\n**Intuition:** The rate of change of the probability of reaching state $j$ from state $i$ equals the sum over all intermediate states $k$ of the probability of being in $k$ times the rate of jumping from $k$ to $j$.\n\n### Backward Equation\n\nThe **backward Kolmogorov equation** conditions on the first jump:\n$$\\frac{\\partial P_{ij}(t)}{\\partial t} = \\sum_k q_{ik} P_{kj}(t)$$\n\nIn matrix form:\n$$\\frac{dP(t)}{dt} = QP(t)$$\n\nwith initial condition $P(0) = I$.\n\n**Intuition:** The rate of change depends on the rates of leaving state $i$, weighted by where we jump and the subsequent transition probabilities.\n\n### Formal Solution\n\nBoth equations have the solution:\n$$P(t) = e^{tQ} = \\sum_{n=0}^{\\infty} \\frac{(tQ)^n}{n!}$$\n\nFor **small** $t$:\n$$P(t) \\approx I + tQ$$\n\n### Equilibrium (Stationary State)\n\nAt equilibrium, $\\frac{dP}{dt} = 0$, so:\n$$\\pi Q = 0$$\n\nwhere $\\pi$ is the stationary distribution.\n\n### Example: M/M/1 Queue\n\nState $n$ = number of customers in system. Rates: arrival $\\lambda$, service $\\mu$.\n\n$$q_{n,n+1} = \\lambda, \\quad q_{n,n-1} = \\mu, \\quad q_{nn} = -(\\lambda+\\mu)$$\n\nBalance equations at equilibrium:\n$$\\pi_n \\lambda = \\pi_{n+1} \\mu$$\n\nYielding $\\pi_n = (1-\\rho)\\rho^n$ where $\\rho = \\lambda/\\mu < 1$.",
+    "related": [
+      "continuous-markov-process",
+      "markov-chain"
+    ],
+    "source": ""
+  },
+  {
+    "id": "erlang-formula",
+    "title": "Erlang's Formula for Queueing Systems",
+    "domain": "Probability Theory",
+    "tags": [
+      "queuing-theory",
+      "continuous-markov-process"
+    ],
+    "content": "## Erlang's Formula and Blocking Probability\n\n### Context: M/M/c Queue\n\nConsider a queueing system with:\n- $c$ servers (channels)\n- Arrivals follow a Poisson process with rate $\\lambda$\n- Service times are independent exponential with rate $\\mu$ per server\n\nThis is an **M/M/c queue** (Markovian arrivals, Markovian service, $c$ servers).\n\n### Erlang B Formula\n\nThe **probability that an arriving customer is blocked** (all servers busy, no queue) is:\n\n$$B_c = \\frac{\\frac{\\rho^c}{c!}(1-\\rho)^{-1}}{\\sum_{k=0}^{c}\\frac{\\rho^k}{k!}(1-\\rho)^{-1}} = \\frac{\\frac{(\\lambda/\\mu)^c}{c!(1-\\rho)}}{\\sum_{k=0}^{c}\\frac{(\\lambda/\\mu)^k}{k!}(1-\\rho)^{-1}}$$\n\nwhere $\\rho = \\lambda/(c\\mu)$ is the **utilization factor**.\n\nAlternatively (more compact):\n$$B_c = \\frac{\\frac{a^c}{c!}\\left(\\frac{c}{c-a}\\right)}{\\sum_{k=0}^{c}\\frac{a^k}{k!}\\left(\\frac{c}{c-a}\\right)^{\\mathbb{1}_{k=c}}}$$\n\nwhere $a = \\lambda/\\mu$.\n\n### Stationary Distribution\n\nIn steady state, the probability of $n$ customers in the system is:\n\n$$\\pi_n = \\begin{cases}\n\\frac{a^n}{n!}C & \\text{if } 0 \\leq n \\leq c \\\\\n\\frac{a^n}{c! \\cdot c^{n-c}}C & \\text{if } n > c\n\\end{cases}$$\n\nwhere $C = \\left[\\sum_{k=0}^{c-1}\\frac{a^k}{k!} + \\frac{a^c}{c!(c-a)}\\right]^{-1}$ (normalization).\n\n### Erlang C Formula\n\nThe **probability that a customer must wait** (enters the queue) is:\n$$C_c = \\frac{\\frac{a^c}{c!}\\frac{c}{c-a}}{\\sum_{k=0}^{c-1}\\frac{a^k}{k!} + \\frac{a^c}{c!}\\frac{c}{c-a}}$$\n\nNote: $B_c < C_c$ (not all blocked customers wait; some may be turned away).\n\n### Key Properties\n\n1. **Stability condition**: $a < c$ (equivalently, $\\lambda < c\\mu$) ensures finite queue\n2. **Blocking increases with $a$**: heavier traffic → higher blocking\n3. **Blocking decreases with $c$**: more servers → lower blocking (diminishing returns)\n4. **Limiting cases**:\n   - $c=1$: $B_1 = \\frac{a}{1+a}$ (M/M/1)\n   - $c\\to\\infty$: $B_c \\to 0$ (queue vanishes)\n\n### Practical Example\n\n**Call center**: 5 agents, call arrival rate $\\lambda=10$ calls/hour, avg service time 12 min $\\Rightarrow \\mu=5$ calls/hour per agent.\n\n$a = \\lambda/\\mu = 10/5 = 2$, $c=5$, $\\rho = 2/5 = 0.4$.\n\nBlocking probability $B_5 \\approx 0.00000275$ (negligible; very few callers blocked).",
+    "related": [
+      "markov-chain",
+      "continuous-markov-process"
+    ],
+    "source": ""
+  },
+  {
+    "id": "markov-chain-overview",
+    "title": "Overview: Markov Chains in Probability",
+    "domain": "Probability Theory",
+    "tags": [
+      "markov-chain",
+      "stochastic-processes"
+    ],
+    "content": "## What Are Markov Chains?\n\nA **Markov chain** is a sequence of random variables $X_0, X_1, X_2, \\ldots$ (discrete time) or $\\{X(t): t \\geq 0\\}$ (continuous time) with the **Markov property**:\n\n$$\\mathbf{P}(X_{n+1}=j \\mid X_n=i, X_{n-1}=i_{n-1}, \\ldots, X_0=i_0) = \\mathbf{P}(X_{n+1}=j \\mid X_n=i) = P_{ij}$$\n\n**Intuition**: The future depends only on the present state, not the history—the chain is \"memoryless.\"\n\n### Discrete-Time Markov Chains\n\n**Transition matrix** $P = (P_{ij})$ where $P_{ij}$ is the one-step probability of moving from state $i$ to state $j$.\n\n- Properties: $P_{ij} \\geq 0$, $\\sum_j P_{ij} = 1$ (each row is a probability distribution)\n- $n$-step transition: $P^{(n)} = P^n$ (matrix power)\n\n**Examples:**\n- Random walk on a grid\n- Weather transitions (sunny → rainy → sunny, ...)\n- Population dynamics (birth-death processes)\n\n### Continuous-Time Markov Chains\n\nTransitions occur at random **times** (exponentially distributed sojourn times).\n\n- **Intensity matrix** $Q$ (replaces $P$)\n- Transition probabilities $P(t) = e^{tQ}$\n- Kolmogorov equations govern the evolution\n\n**Examples:**\n- M/M/c queueing systems\n- Radioactive decay\n- Server load balancing\n\n### Key Concepts\n\n1. **Irreducibility**: Can reach any state from any other state\n2. **Aperiodicity**: No periodic cycles in state returns\n3. **Recurrence/Transience**: Does the chain return to a state with probability 1?\n4. **Stationary distribution** $\\pi$: $\\pi P = \\pi$ (discrete) or $\\pi Q = 0$ (continuous)\n\n### Long-Run Behavior\n\nFor an **irreducible, aperiodic, finite-state** chain:\n$$\\lim_{n\\to\\infty} P^n_{ij} = \\pi_j$$\n\nThe chain \"forgets\" its initial state and converges to the stationary distribution.\n\n### Why Markov Chains Matter\n\n- **Simplicity**: Memorylessness makes analysis tractable\n- **Universality**: Model many real phenomena (queues, weather, finance, biology)\n- **Computability**: Matrix operations give exact answers\n- **Theory**: Rich mathematical structure (eigenvalues, mixing times, hitting times)",
+    "related": [
+      "markov-chain",
+      "transition-matrix",
+      "stationary-distribution"
+    ],
+    "source": ""
+  },
+  {
+    "id": "matrix-exponential-intro",
+    "title": "The Matrix Exponential $\\exp(A)$",
+    "domain": "Linear Algebra & ODEs",
+    "tags": [
+      "linear-systems",
+      "exponential-function",
+      "solution-formula"
+    ],
+    "content": "## Definition & Convergence\n\nFor an $n \\times n$ matrix $A$, the **matrix exponential** is defined as:\n$$\\exp(A) = \\sum_{j=0}^{\\infty} \\frac{1}{j!}A^j = \\mathbb{I} + A + \\frac{A^2}{2!} + \\frac{A^3}{3!} + \\cdots$$\n\nThis series converges for all matrices (in the matrix norm) because:\n$$\\left\\|\\sum_{j=0}^m \\frac{1}{j!}A^j\\right\\| \\leq \\sum_{j=0}^m \\frac{\\|A\\|^j}{j!} \\leq e^{\\|A\\|}$$\n\n## Solution of $\\dot{x} = Ax$\n\nThe solution to the initial value problem $\\dot{x}(t) = Ax(t), x(0) = x_0$ is:\n$$x(t) = \\exp(tA)x_0$$\n\nThis can be verified using Picard iteration or by noting that $\\frac{d}{dt}\\exp(tA) = A\\exp(tA)$ and $\\exp(0) = \\mathbb{I}$.\n\n## Key Properties\n\n1. **Commutativity**: If $[A,B] = AB - BA = 0$, then $\\exp(A+B) = \\exp(A)\\exp(B)$.\n2. **Similarity**: $\\exp(UAU^{-1}) = U\\exp(A)U^{-1}$ for any invertible $U$.\n3. **Determinant**: $\\det(\\exp(A)) = e^{\\text{tr}(A)}$.\n4. **Eigenvalues**: If $\\alpha$ is an eigenvalue of $A$, then $e^\\alpha$ is an eigenvalue of $\\exp(A)$.",
+    "related": [
+      "jordan-canonical-form",
+      "linear-systems-theory"
+    ],
+    "source": ""
+  },
+  {
+    "id": "jordan-canonical-form",
+    "title": "Jordan Canonical Form & Computation of $\\exp(A)$",
+    "domain": "Linear Algebra & ODEs",
+    "tags": [
+      "eigenvalues",
+      "normal-form",
+      "matrix-exponential"
+    ],
+    "content": "## The Jordan Form\n\nEvery complex matrix $A$ can be transformed to a block-diagonal **Jordan canonical form** via a change of basis $U$:\n$$J = U^{-1}AU = \\begin{pmatrix} J_1 & & \\\\ & \\ddots & \\\\ & & J_m \\end{pmatrix}$$\n\nwhere each **Jordan block** has the form:\n$$J_i = \\begin{pmatrix} \\alpha_i & 1 & & \\\\ & \\alpha_i & \\ddots & \\\\ & & \\ddots & 1 \\\\ & & & \\alpha_i \\end{pmatrix}$$\n\nThe entries $\\alpha_i$ are the eigenvalues of $A$.\n\n## Computing $\\exp(tJ)$\n\nFor a Jordan block $J = \\alpha\\mathbb{I} + N$ (where $N$ is nilpotent with $N^k = 0$ for $k \\times k$ block):\n$$\\exp(tJ) = e^{\\alpha t}\\exp(tN) = e^{\\alpha t}\\sum_{j=0}^{k-1} \\frac{t^j}{j!}N^j$$\n\nThe series terminates since $N^k = 0$.\n\n## Computing $\\exp(tA)$\n\nOnce $J$ is found:\n$$\\exp(tA) = U\\exp(tJ)U^{-1}$$\n\n## Example (2×2 Real Matrix)\n\nFor $A = \\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}$:\n$$\\exp(A) = e^\\delta\\left(\\cosh(\\Delta)\\mathbb{I} + \\frac{\\sinh(\\Delta)}{\\Delta}\\begin{pmatrix} \\gamma & b \\\\ c & -\\gamma \\end{pmatrix}\\right)$$\nwhere $\\delta = \\frac{a+d}{2}$, $\\gamma = \\frac{a-d}{2}$, $\\Delta = \\sqrt{\\gamma^2 + bc}$.",
+    "related": [
+      "matrix-exponential-intro",
+      "eigenvalue-analysis"
+    ],
+    "source": ""
+  },
+  {
+    "id": "jordan-form-basics",
+    "title": "Generalized Eigenvectors and the Jordan Form",
+    "domain": "Linear Algebra",
+    "tags": [
+      "eigenvectors",
+      "defective-matrices",
+      "generalized-eigenvectors"
+    ],
+    "content": "## Defective vs. Non-Defective Matrices\n\nA matrix is **diagonalizable** if it has $n$ linearly independent eigenvectors. Otherwise, it is **defective** or **non-diagonalizable**.\n\nFor a defective matrix, we introduce **generalized eigenvectors**:\n- A **generalized eigenvector of rank 1** is an eigenvector $u$ with $Au = \\alpha u$.\n- A **generalized eigenvector of rank 2** satisfies $(A - \\alpha\\mathbb{I})^2u = 0$ but $(A - \\alpha\\mathbb{I})u \\neq 0$.\n\nMore generally, a generalized eigenvector of rank $k$ satisfies $(A - \\alpha\\mathbb{I})^k u = 0$.\n\n## Jordan Chain\n\nFor a single eigenvalue $\\alpha$ with algebraic multiplicity $m$, we can construct a **Jordan chain** of generalized eigenvectors:\n$$u_1, u_2, \\ldots, u_k$$\nwhere $(A - \\alpha\\mathbb{I})u_{j+1} = u_j$ and $(A - \\alpha\\mathbb{I})u_1 = 0$.\n\nThese form a Jordan block in the canonical form.\n\n## Finding Jordan Form\n\n1. Find all eigenvalues of $A$.\n2. For each eigenvalue $\\alpha$, find the geometric multiplicity (dimension of eigenspace).\n3. Construct Jordan chains to fill the remaining algebraic multiplicity.\n4. Arrange chains as columns of $U$ to get $U^{-1}AU = J$.",
+    "related": [
+      "matrix-exponential-intro",
+      "eigenvalue-analysis"
+    ],
+    "source": ""
+  },
+  {
+    "id": "fixed-point-definition",
+    "title": "Fixed Points and Equilibria",
+    "domain": "Dynamical Systems",
+    "tags": [
+      "equilibrium",
+      "autonomous-systems",
+      "phase-portrait"
+    ],
+    "content": "## Definition\n\nFor an autonomous system $\\dot{x} = f(x)$, a **fixed point** (or **equilibrium point**) $x^*$ satisfies:\n$$f(x^*) = 0$$\n\nAt a fixed point, the solution is constant: $x(t) = x^*$ for all $t$.\n\n## Stability Classifications\n\n1. **Asymptotically Stable**: All nearby trajectories converge to $x^*$ as $t \\to \\infty$. Formally: $\\exists\\delta > 0$ such that $|x_0 - x^*| < \\delta \\Rightarrow \\lim_{t \\to \\infty} |x(t) - x^*| = 0$.\n\n2. **Stable (Lyapunov)**: Nearby trajectories remain nearby. Formally: $\\forall\\varepsilon > 0, \\exists\\delta > 0$ such that $|x_0 - x^*| < \\delta \\Rightarrow |x(t) - x^*| < \\varepsilon$ for all $t \\geq 0$.\n\n3. **Unstable**: Not stable; some nearby trajectories diverge from $x^*$.\n\n## 1D Case\n\nFor $\\dot{x} = f(x)$ in one dimension:\n- If $f'(x^*) < 0$: $x^*$ is asymptotically stable (sink).\n- If $f'(x^*) > 0$: $x^*$ is unstable (source).\n- If $f'(x^*) = 0$: inconclusive; need higher-order analysis.\n\n## Phase Line\n\nThe phase line shows the direction of motion: arrows point right where $f(x) > 0$ and left where $f(x) < 0$. Fixed points appear as points where arrows meet.",
+    "related": [
+      "qualitative-analysis",
+      "autonomous-equation"
+    ],
+    "source": ""
+  },
+  {
+    "id": "stability-definitions",
+    "title": "Stability Concepts & Bifurcations",
+    "domain": "Dynamical Systems",
+    "tags": [
+      "stability",
+      "bifurcation",
+      "parameter-variation"
+    ],
+    "content": "## Stability Definitions Revisited\n\n**Definition (Asymptotic Stability)**: A fixed point $x^*$ of $\\dot{x} = f(x)$ is asymptotically stable if there is a neighborhood $U$ of $x^*$ such that for all $x_0 \\in U$, the solution $x(t;x_0)$ satisfies $\\lim_{t \\to \\infty} x(t;x_0) = x^*$.\n\n**Definition (Stability)**: $x^*$ is stable if for every $\\varepsilon > 0$, there exists $\\delta > 0$ such that $|x_0 - x^*| < \\delta$ implies $|x(t;x_0) - x^*| < \\varepsilon$ for all $t \\geq 0$.\n\n**Definition (Instability)**: $x^*$ is unstable if it is not stable.\n\n## Bifurcations\n\nA **bifurcation** occurs when the qualitative structure of the phase portrait changes as a parameter varies. Common types:\n\n1. **Saddle-Node** (fold): Two fixed points appear or collide and disappear.\n2. **Pitchfork**: A fixed point splits into three (or vice versa).\n3. **Transcritical**: Two fixed points exchange stability.\n4. **Hopf**: A fixed point loses stability and a periodic orbit is born.\n\nBifurcations often occur when $f'(x^*, \\mu) = 0$ or $f(x^*, \\mu) = 0$ with varying parameter $\\mu$.",
+    "related": [
+      "fixed-point-definition",
+      "qualitative-analysis"
+    ],
+    "source": ""
+  },
+  {
+    "id": "hartman-grobman-linearization",
+    "title": "The Hartman–Grobman Theorem & Linearization",
+    "domain": "Dynamical Systems",
+    "tags": [
+      "linearization",
+      "topological-equivalence",
+      "stability-criterion"
+    ],
+    "content": "## Statement of Hartman–Grobman\n\n**Theorem**: Let $x^*$ be a hyperbolic fixed point of $\\dot{x} = f(x)$ (i.e., all eigenvalues of the Jacobian $J = \\nabla f(x^*)$ have nonzero real part). Then the nonlinear system is **topologically conjugate** near $x^*$ to its linearization $\\dot{y} = Jy$.\n\nThis means there exists a continuous homeomorphism that maps solutions of the nonlinear system to solutions of the linear system, preserving the direction of time.\n\n## Practical Consequence\n\n**Stability via Linearization**: If all eigenvalues of $J$ have negative real part, then $x^*$ is asymptotically stable. If any eigenvalue has positive real part, then $x^*$ is unstable.\n\n## Non-Hyperbolic Cases\n\nWhen at least one eigenvalue is purely imaginary (or zero), the linearization is **inconclusive**. The nonlinear terms dominate and higher-order analysis is needed.\n\n## Example\n\nFor $\\dot{x} = -x + x^2$, $\\dot{y} = -2y$ near the origin:\n- Linearization: $\\dot{x} \\approx -x$, $\\dot{y} = -2y$ → origin is asymptotically stable (both eigenvalues negative).\n- The full nonlinear system's origin is still asymptotically stable (verified by Lyapunov function or higher-order analysis).",
+    "related": [
+      "linear-ode",
+      "autovalor",
+      "qualitative-analysis"
+    ],
+    "source": ""
+  },
+  {
+    "id": "jacobian-matrix",
+    "title": "The Jacobian Matrix & Its Interpretation",
+    "domain": "Multivariable Calculus & ODEs",
+    "tags": [
+      "partial-derivatives",
+      "linearization",
+      "multivariate"
+    ],
+    "content": "## Definition\n\nFor a smooth function $f: \\mathbb{R}^n \\to \\mathbb{R}^n$ given by $f(x) = (f_1(x), \\ldots, f_n(x))$, the **Jacobian matrix** at a point $x^*$ is:\n$$J(x^*) = \\frac{\\partial f}{\\partial x}(x^*) = \\begin{pmatrix} \\frac{\\partial f_1}{\\partial x_1} & \\cdots & \\frac{\\partial f_1}{\\partial x_n} \\\\ \\vdots & \\ddots & \\vdots \\\\ \\frac{\\partial f_n}{\\partial x_1} & \\cdots & \\frac{\\partial f_n}{\\partial x_n} \\end{pmatrix}_{x^*}$$\n\n## Linearization\n\nNear $x^*$, the nonlinear system $\\dot{x} = f(x)$ is approximated by:\n$$\\dot{\\xi} = J(x^*)\\xi, \\quad \\xi = x - x^*$$\n\nThis linear system governs the behavior of small perturbations from $x^*$.\n\n## Eigenvalues & Stability\n\nThe **eigenvalues** of $J(x^*)$ determine the local behavior:\n- All eigenvalues have Re$(\\lambda) < 0$ → $x^*$ is asymptotically stable.\n- Any eigenvalue has Re$(\\lambda) > 0$ → $x^*$ is unstable.\n- Purely imaginary eigenvalues → linearization inconclusive (need Lyapunov or center manifold theory).\n\n## Example\n\nFor $\\dot{x} = y, \\dot{y} = -\\sin(x)$ (pendulum), at the origin:\n$$J(0,0) = \\begin{pmatrix} 0 & 1 \\\\ -1 & 0 \\end{pmatrix}$$\nEigenvalues: $\\lambda = \\pm i$ (purely imaginary) → linearization inconclusive. Nonlinear analysis shows the origin is stable (center).",
+    "related": [
+      "hartman-grobman-linearization",
+      "autovalor"
+    ],
+    "source": ""
+  },
+  {
+    "id": "phase-portrait-analysis",
+    "title": "Phase Portraits & Qualitative Behavior",
+    "domain": "Dynamical Systems",
+    "tags": [
+      "2D-systems",
+      "eigenvalues",
+      "geometric-interpretation"
+    ],
+    "content": "## Phase Portrait Types for 2D Systems\n\nFor $\\dot{x} = Ax$ with eigenvalues $\\alpha_1, \\alpha_2$:\n\n### Both Eigenvalues Real\n\n1. **Two Negative** ($\\alpha_1, \\alpha_2 < 0$): **Sink**\n   - All solutions converge to origin.\n   - Curves approach origin exponentially.\n\n2. **Two Positive** ($\\alpha_1, \\alpha_2 > 0$): **Source**\n   - All solutions diverge from origin.\n   - Reverse time version of sink.\n\n3. **Opposite Signs** ($\\alpha_1 < 0 < \\alpha_2$): **Saddle**\n   - Stable manifold (along negative eigenvalue) attracts solutions.\n   - Unstable manifold (along positive eigenvalue) repels solutions.\n   - Most initial conditions diverge.\n\n### Complex Conjugate Eigenvalues $\\alpha = \\lambda \\pm i\\omega$\n\n1. **Both with $\\lambda < 0$**: **Spiral Sink**\n   - Solutions spiral inward; rotation from imaginary part, decay from negative real part.\n\n2. **Both with $\\lambda > 0$**: **Spiral Source**\n   - Solutions spiral outward.\n\n3. **Purely Imaginary** ($\\lambda = 0$): **Center**\n   - Solutions form closed orbits (periodic).\n   - Concentric ellipses (or circles for orthogonal eigenvectors).\n\n## Key Features\n\n- **Eigenvectors**: Point in directions of stretching/compression. Visible as straight-line solutions in sink/source/saddle.\n- **Orbits**: Curves traced by solutions in the phase plane.\n- **Separatrix**: Boundary between regions of different behavior (e.g., stable/unstable manifold of saddle).",
+    "related": [
+      "linear-ode",
+      "qualitative-analysis"
+    ],
+    "source": ""
+  },
+  {
+    "id": "eigenvalue-analysis",
+    "title": "Eigenvalues, Eigenvectors & Stability",
+    "domain": "Linear Algebra & Dynamics",
+    "tags": [
+      "characteristic-polynomial",
+      "stability-criterion",
+      "spectral-analysis"
+    ],
+    "content": "## Eigenvalue Problem\n\nFor a matrix $A$, an eigenvalue $\\alpha$ and eigenvector $u \\neq 0$ satisfy:\n$$Au = \\alpha u$$\n\nEquivalently, $\\det(A - \\alpha\\mathbb{I}) = 0$ (characteristic polynomial).\n\n## Stability Criterion for $\\dot{x} = Ax$\n\n**Theorem**: The origin is:\n- **Asymptotically stable** if all eigenvalues satisfy Re$(\\alpha) < 0$.\n- **Unstable** if any eigenvalue satisfies Re$(\\alpha) > 0$.\n- **Marginally stable** if all Re$(\\alpha) \\leq 0$ and at least one Re$(\\alpha) = 0$ with geometric multiplicity equal to algebraic multiplicity.\n\n## Dimension Analysis\n\nFor an $n \\times n$ matrix:\n- **Stable subspace** $E^s$: Spanned by eigenvectors with Re$(\\alpha) < 0$.\n- **Unstable subspace** $E^u$: Spanned by eigenvectors with Re$(\\alpha) > 0$.\n- **Center subspace** $E^c$: Spanned by eigenvectors with Re$(\\alpha) = 0$.\n\nSolutions decompose: $x(t) = x^s(t) + x^u(t) + x^c(t)$ where $x^s \\to 0$, $x^u \\to \\infty$ (typically), and $x^c$ remains bounded.\n\n## 2D Example\n\nFor $A = \\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}$:\n- Characteristic polynomial: $\\lambda^2 - (a+d)\\lambda + (ad-bc) = 0$.\n- Trace: $\\text{tr}(A) = a + d$.\n- Determinant: $\\det(A) = ad - bc$.\n- Stability: Both eigenvalues have negative real part iff $\\text{tr}(A) < 0$ and $\\det(A) > 0$.",
+    "related": [
+      "matrix-exponential-intro",
+      "jordan-canonical-form"
+    ],
+    "source": ""
+  },
+  {
+    "id": "lyapunov-function-method",
+    "title": "Lyapunov Functions & Global Stability",
+    "domain": "Dynamical Systems",
+    "tags": [
+      "energy-method",
+      "global-stability",
+      "Lyapunov-theorem"
+    ],
+    "content": "## Definition\n\nA **Lyapunov function** for a fixed point $x^*$ of $\\dot{x} = f(x)$ is a $C^1$ function $V: U \\to \\mathbb{R}$ on a neighborhood $U$ of $x^*$ such that:\n\n1. $V(x^*) = 0$ and $V(x) > 0$ for all $x \\in U \\setminus \\{x^*\\}$ (**positive definite**).\n2. $\\dot{V}(x) := \\nabla V(x) \\cdot f(x) \\leq 0$ for all $x \\in U$ along solutions (**decreasing along orbits**).\n\n## Lyapunov's Theorem\n\n**Theorem**: If a Lyapunov function $V$ exists for $x^*$, then $x^*$ is **stable**. If additionally $\\dot{V}(x) < 0$ for all $x \\in U \\setminus \\{x^*\\}$, then $x^*$ is **asymptotically stable**.\n\n## Advantage Over Linearization\n\n- Works even when linearization is inconclusive (eigenvalues on imaginary axis).\n- Can prove global stability (if $V$ is defined on all of $\\mathbb{R}^n$ and $V(x) \\to \\infty$ as $|x| \\to \\infty$).\n- Avoids solving the differential equation.\n\n## Common Choices\n\n- **Energy functions**: $V = \\text{kinetic} + \\text{potential energy}$ (mechanical systems).\n- **Quadratic forms**: $V(x) = x^T P x$ for symmetric positive definite $P$.\n- **Norms**: $V(x) = |x|^2$ (when $\\dot{V} < 0$).\n\n## Example\n\nFor $\\dot{x} = -x + y^3, \\dot{y} = -y$, try $V(x,y) = x^2 + y^2$:\n$$\\dot{V} = 2x(-x+y^3) + 2y(-y) = -2x^2 - 2y^2 + 2xy^3$$\nFor $|y|$ small, $\\dot{V} < 0$ near the origin, so it is asymptotically stable.",
+    "related": [
+      "qualitative-analysis",
+      "stability-definitions"
+    ],
+    "source": ""
+  },
+  {
+    "id": "energy-functions",
+    "title": "Energy & Hamiltonian Methods",
+    "domain": "Dynamical Systems & Mechanics",
+    "tags": [
+      "Hamiltonian-systems",
+      "conservation",
+      "integrating-factor"
+    ],
+    "content": "## Hamiltonian Systems\n\nA **Hamiltonian system** has the form:\n$$\\dot{q} = \\frac{\\partial H}{\\partial p}, \\quad \\dot{p} = -\\frac{\\partial H}{\\partial q}$$\n\nwhere $H(q, p)$ is the Hamiltonian (energy function). Along solutions, $H$ is conserved: $\\frac{dH}{dt} = 0$.\n\n## Mechanical Systems\n\nFor a particle with mass $m$, potential energy $V(q)$, the Hamiltonian is:\n$$H(q, p) = \\frac{p^2}{2m} + V(q)$$\n\nThis gives Newton's equations: $\\ddot{q} = -V'(q)/m$.\n\n## Using Energy as Lyapunov Function\n\nFor a dissipative perturbation $\\dot{q} = \\frac{\\partial H}{\\partial p}, \\dot{p} = -\\frac{\\partial H}{\\partial q} - \\gamma\\dot{q}$ (friction $\\gamma > 0$):\n$$\\dot{H} = -\\gamma\\left(\\frac{\\partial H}{\\partial p}\\right)^2 \\leq 0$$\n\nThe perturbed Hamiltonian is a Lyapunov function.\n\n## Level Sets\n\nThe curves $H(q, p) = c$ (constant energy) are trajectories of the Hamiltonian system. They are invariant: if a solution starts on one level set, it stays there.\n\n## Example: Pendulum\n\n$\\ddot{\\theta} + g\\sin(\\theta)/\\ell = 0$ with Hamiltonian:\n$$H = \\frac{1}{2}m\\ell^2\\dot{\\theta}^2 - mg\\ell\\cos(\\theta)$$\nLevel sets are closed curves around stable equilibrium and separatrix connecting saddle points.",
+    "related": [
+      "lyapunov-function-method",
+      "autonomous-equation"
+    ],
+    "source": ""
+  },
+  {
+    "id": "poincare-map-intro",
+    "title": "Introduction to Poincaré Maps",
+    "domain": "Dynamical Systems",
+    "tags": [
+      "periodic-orbits",
+      "return-map",
+      "discrete-dynamics"
+    ],
+    "content": "## Basic Idea\n\nFor a **time-periodic** system $\\dot{x} = f(t, x)$ with $f(t+T, x) = f(t, x)$, the **Poincaré map** is:\n$$P(x) = \\phi(T, x)$$\n\nwhere $\\phi(t, x)$ is the solution starting at $x$ at time $0$. Thus $P$ advances a point by one period.\n\n## Fixed Points as Periodic Orbits\n\n**Key fact**: $P(x^*) = x^*$ if and only if the solution $\\phi(t, x^*)$ is periodic with period $T$.\n\nProof: If $P(x^*) = x^*$, then $\\phi(T, x^*) = x^*$. By uniqueness of solutions (and periodicity of $f$), $\\phi(t+T, x^*) = \\phi(t, x^*)$ for all $t$, so the solution is periodic.\n\n## Autonomous Systems with Section\n\nFor an autonomous system $\\dot{x} = f(x)$, we choose a **Poincaré section** $\\Sigma$ (a hyperplane transverse to the flow). The return map $P: \\Sigma \\to \\Sigma$ assigns to each point on $\\Sigma$ the next intersection of its trajectory with $\\Sigma$. Periodic orbits correspond to fixed points of $P$.\n\n## Advantage\n\nReduces the study of periodic orbits (infinite-dimensional problem) to fixed points of a map (finite-dimensional discrete dynamics).\n\n## Example\n\nFor $\\dot{x} = \\sin(2\\pi t) - x$ (1D forced), the Poincaré map $P(x) = \\phi(1, x)$ is a map of the real line. Fixed points $P(x^*) = x^*$ correspond to periodic solutions of period 1.",
+    "related": [
+      "poincare-map",
+      "periodic-solution-definition"
+    ],
+    "source": ""
+  },
+  {
+    "id": "periodic-solution-definition",
+    "title": "Periodic Solutions & Periodic Orbits",
+    "domain": "Dynamical Systems",
+    "tags": [
+      "periodicity",
+      "periodic-orbit",
+      "minimal-period"
+    ],
+    "content": "## Definition\n\nA **periodic solution** of $\\dot{x} = f(t, x)$ is a solution $\\phi(t)$ such that $\\phi(t+T) = \\phi(t)$ for all $t$ and some $T > 0$.\n\nThe smallest such $T > 0$ is called the **period**. The set of points $\\{\\phi(t) : t \\in [0, T)\\}$ is called a **periodic orbit** or **limit cycle**.\n\n## For Time-Periodic Systems\n\nIf $f(t+T_0, x) = f(t, x)$ (system has period $T_0$), then a **period-1 solution** satisfies $\\phi(t + T_0) = \\phi(t)$ for all $t$. More generally, a **period-$n$ solution** has period $nT_0$.\n\n## For Autonomous Systems\n\nA periodic orbit is a closed curve in the phase space. The period depends on the initial condition (unless all orbits are periodic).\n\n## Stability of Periodic Orbits\n\nA periodic orbit is:\n- **Stable** if nearby solutions remain close to it.\n- **Asymptotically stable** if nearby solutions converge to it as $t \\to \\infty$.\n- **Attracting** (or **attractor**) if there is a neighborhood such that all solutions in it converge to the orbit.\n\nStability is determined by the Poincaré map's fixed point stability: if $|P'(x^*)| < 1$, the orbit is asymptotically stable.\n\n## Examples\n\n- Limit cycles in oscillatory systems (e.g., van der Pol oscillator).\n- Periodic orbits in celestial mechanics (e.g., Kepler orbits for planets).\n- Traveling waves in spatially-extended systems.",
+    "related": [
+      "poincare-map-intro",
+      "poincare-map"
+    ],
+    "source": ""
+  },
+  {
+    "id": "poincare-section",
+    "title": "Poincaré Sections & Transversality",
+    "domain": "Dynamical Systems",
+    "tags": [
+      "transversal-hyperplane",
+      "codimension-one",
+      "return-map"
+    ],
+    "content": "## Poincaré Section\n\nFor an autonomous system $\\dot{x} = f(x)$ in $\\mathbb{R}^n$, a **Poincaré section** $\\Sigma$ is a smooth $(n-1)$-dimensional submanifold such that:\n1. The vector field $f(x)$ is **transverse** to $\\Sigma$: $f(x) \\not\\perp T_x\\Sigma$ for all $x \\in \\Sigma$.\n2. The section is generally chosen as a hyperplane (e.g., $\\{x : x_1 = c\\}$ for constant $c$).\n\nTransversality ensures that trajectories cross $\\Sigma$ (and don't slide along it).\n\n## Return Map\n\nFor $x \\in \\Sigma$, the **return map** $P(x)$ is the next intersection of the forward trajectory with $\\Sigma$:\n$$P(x) = \\phi(\\tau(x), x)$$\nwhere $\\tau(x)$ is the first time $t > 0$ for which $\\phi(t, x) \\in \\Sigma$ again.\n\n## Periodic Orbit as Fixed Point\n\nA periodic orbit passing through $x^* \\in \\Sigma$ corresponds to a fixed point $P(x^*) = x^*$ of the return map.\n\n## Example\n\nFor the 3D Lorenz system, a common Poincaré section is the plane $\\{(x, y, z) : z = r - 1\\}$. Return times to this plane create a 1D map that exhibits chaotic behavior.\n\n## Advantages\n\n- Reduces dimension by 1 (dimension of dynamics = $n - 1$).\n- Captures essential dynamics without explicit time evolution.\n- Can detect periodic orbits and bifurcations via map analysis.",
+    "related": [
+      "poincare-map-intro",
+      "transversal-hyperplane"
+    ],
+    "source": ""
+  },
+  {
+    "id": "bifurcation-poincare",
+    "title": "Bifurcations of Periodic Orbits via Poincaré Maps",
+    "domain": "Dynamical Systems",
+    "tags": [
+      "period-doubling",
+      "saddle-node-bifurcation",
+      "Hopf-bifurcation"
+    ],
+    "content": "## Bifurcation of Fixed Points of $P$\n\nAs a parameter $\\mu$ varies, fixed points of the Poincaré map $P_\\mu$ can appear, disappear, or change stability. These correspond to bifurcations of periodic orbits.\n\n## Common Bifurcations\n\n### Saddle-Node (Fold) Bifurcation\n- Two fixed points collide when $P'(x^*, \\mu_c) = 1$.\n- One periodic orbit is created (or destroyed) as $\\mu$ crosses $\\mu_c$.\n\n### Period-Doubling Bifurcation\n- Occurs when $P'(x^*, \\mu_c) = -1$.\n- The periodic orbit becomes unstable and a new period-2 orbit (of the original system) is born.\n- Leads to a cascade of period-doubling and eventually chaos (Feigenbaum scenario).\n\n### Transcritical Bifurcation\n- Two fixed points exchange stability.\n- Occurs when $P(x^*, \\mu_c) = x^*$ and $\\frac{\\partial P}{\\partial \\mu}(x^*, \\mu_c) \\neq 0$ with specific conditions.\n\n### Pitchfork Bifurcation\n- One fixed point splits into three (or vice versa).\n- Happens for symmetric systems: $P(-x) = -P(x)$.\n\n## Bifurcation Curves\n\nIn the parameter-space $\\mu$, bifurcation points form curves where $P'(x^*) = \\pm 1$. These curves separate regions of different dynamical behavior.\n\n## Example: Forced Oscillator\n\nFor $\\ddot{x} + \\varepsilon\\dot{x} + x = A\\cos(\\omega t)$, the Poincaré map depends on $(A, \\omega)$. Bifurcation curves show regions with 1, 2, or multiple periodic orbits, and chaotic regions.",
+    "related": [
+      "poincare-map",
+      "qualitative-analysis"
+    ],
+    "source": ""
+  },
+  {
+    "id": "multiplier-stability",
+    "title": "Multipliers & Floquet Theory",
+    "domain": "Dynamical Systems",
+    "tags": [
+      "Floquet-exponent",
+      "monodromy-matrix",
+      "variational-equation"
+    ],
+    "content": "## Multiplier (Floquet Multiplier)\n\nFor a periodic orbit with period $T$, the **multiplier** $\\mu$ is the derivative of the Poincaré map at the fixed point:\n$$\\mu = P'(x^*)$$\n\nIt determines the stability: $|\\mu| < 1$ → stable, $|\\mu| > 1$ → unstable.\n\n## Computation via Variational Equation\n\nThe multiplier is computed from the **first variational equation** along the periodic orbit:\n$$\\dot{\\xi} = J(t)\\xi, \\quad J(t) = \\nabla f(\\phi(t))$$\nwhere $\\phi(t)$ is the periodic solution and $\\xi(0) = e_i$ (basis vector).\n\nThe **monodromy matrix** $M$ satisfies:\n$$\\xi(T) = M\\xi(0)$$\n\nThe eigenvalues of $M$ are the **Floquet multipliers**. For a periodic orbit in an autonomous system, one multiplier equals 1 (corresponding to the tangential direction along the orbit).\n\n## Stability Criterion\n\n**Theorem**: A periodic orbit is asymptotically stable if all Floquet multipliers except the unity one have modulus less than 1.\n\n## Floquet Exponent\n\nThe **Floquet exponent** $\\lambda$ is defined via $\\mu = e^{\\lambda T}$, so $\\lambda = \\frac{1}{T}\\log(\\mu)$. The orbit is stable if Re$(\\lambda) < 0$.\n\n## Example\n\nFor a forced oscillator with periodic orbit of period $T$, compute $\\frac{\\partial \\phi}{\\partial x_0}$ numerically and evaluate at $t = T$. Its eigenvalues are the Floquet multipliers.",
+    "related": [
+      "poincare-map",
+      "qualitative-analysis",
+      "variational-equation"
+    ],
+    "source": ""
+  },
+  {
+    "id": "melnikov-method-orbits",
+    "title": "Melnikov's Method for Periodic Orbits & Homoclinic Orbits",
+    "domain": "Chaotic Dynamics",
+    "tags": [
+      "perturbation-theory",
+      "homoclinic-intersection",
+      "horseshoe"
+    ],
+    "content": "## Melnikov Function for Homoclinic Orbits\n\nConsider a perturbation of an integrable system:\n$$\\dot{x} = f_0(x) + \\varepsilon f_1(t, x)$$\n\nIf the unperturbed system has a **homoclinic orbit** $\\phi_h(t)$ (connecting a saddle to itself), the **Melnikov function** measures the separation of stable and unstable manifolds under perturbation:\n\n$$M(t_0) = \\int_{-\\infty}^{\\infty} \\nabla H(\\phi_h(t)) \\cdot [f_1(t + t_0, \\phi_h(t)) \\times f_0(\\phi_h(t))] dt$$\n\nor in 2D more simply,\n$$M(t_0) = \\int_{-\\infty}^{\\infty} [y_h(t)f_{1x}(t+t_0, x_h(t), y_h(t)) - x_h(t)f_{1y}(t+t_0, x_h(t), y_h(t))] dt$$\n\n## Bifurcation Criterion\n\n**If $M(t_0)$ has a simple zero** (i.e., $M(t_0^*) = 0$ and $M'(t_0^*) \\neq 0$) **for some $t_0^*$, then for sufficiently small $\\varepsilon > 0$, the perturbed system has a transverse homoclinic orbit.**\n\n## Consequence: Chaos\n\nA transverse homoclinic orbit implies the existence of a **Smale horseshoe**, leading to:\n- Infinitely many periodic orbits of all periods.\n- A chaotic invariant set with sensitive dependence on initial conditions.\n\n## For Periodic Orbits\n\nSimilar methods apply: the Melnikov function measures the distance between manifolds and predicts when periodic orbits are created or destroyed.\n\n## Example: Forced Duffing\n\nFor $\\ddot{x} + \\varepsilon\\dot{x} + x - x^3 = F\\cos(\\omega t)$, compute $M(t_0)$ using the unperturbed homoclinic orbit. Regions where $M(t_0) = 0$ predict chaotic motions.",
+    "related": [
+      "poincare-map",
+      "qualitative-analysis"
+    ],
+    "source": ""
+  },
+  {
+    "id": "homoclinic-heteroclinic",
+    "title": "Homoclinic & Heteroclinic Orbits",
+    "domain": "Dynamical Systems",
+    "tags": [
+      "saddle-connection",
+      "manifold-intersection",
+      "separatrix"
+    ],
+    "content": "## Homoclinic Orbit\n\nA **homoclinic orbit** (or **homoclinic connection**) is a solution that approaches the same fixed point (usually a saddle) as $t \\to \\pm\\infty$:\n$$\\lim_{t \\to -\\infty} x(t) = x^*, \\quad \\lim_{t \\to +\\infty} x(t) = x^*$$\n\nGeometrically, it is a trajectory in the stable manifold $W^s(x^*)$ that also lies in the unstable manifold $W^u(x^*)$.\n\n## Heteroclinic Orbit\n\nA **heteroclinic orbit** connects two different fixed points:\n$$\\lim_{t \\to -\\infty} x(t) = x_1^*, \\quad \\lim_{t \\to +\\infty} x(t) = x_2^*$$\n\nIt lies in $W^u(x_1^*) \\cap W^s(x_2^*)$.\n\n## Genericity\n\n- In 1D and 2D systems, homoclinic orbits are **rare** (require special parameter tuning).\n- In higher dimensions, intersections $W^u \\cap W^s$ have codimension 0 (generically transverse).\n\n## Role in Chaos\n\n**Smale–Birkhoff Theorem**: A transverse homoclinic orbit implies the existence of a horseshoe map and chaos. This makes homoclinic orbits important indicators of chaotic behavior.\n\n## Detection via Melnikov\n\nMelnikov's method (see note on Melnikov method) predicts when perturbations create or destroy homoclinic orbits.\n\n## Example: Pendulum with Forcing\n\n$\\ddot{\\theta} + \\sin(\\theta) = \\varepsilon\\cos(\\omega t)$:\n- Unperturbed: homoclinic orbit separates rotations from oscillations.\n- Small perturbation: Melnikov function determines if orbit persists, creating transverse homoclinic intersections and chaos.",
+    "related": [
+      "poincare-map",
+      "melnikov-method-orbits"
+    ],
+    "source": ""
+  },
+  {
+    "id": "ode-existence-uniqueness",
+    "title": "Existence and Uniqueness of Solutions",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "fundamental theorem",
+      "picard-lindelof",
+      "initial value problem"
+    ],
+    "content": "The **Picard–Lindelöf theorem** guarantees existence and uniqueness of solutions to the initial value problem $\\dot{x} = f(t, x)$, $x(t_0) = x_0$ when $f$ is continuous and **locally Lipschitz continuous** in $x$ uniformly in $t$. This means for any compact set $V$ in the domain:\n\n$$L = \\sup_{(t,x) \\neq (t,y) \\in V} \\frac{|f(t,x) - f(t,y)|}{|x - y|} < \\infty$$\n\nThe solution exists at least for $t \\in [t_0, t_0 + T_0]$ where $T_0 = \\min\\{T, \\delta/M\\}$, with $M = \\max |f|$ on a compact neighborhood.",
+    "related": [
+      "first-order-system",
+      "linear-ode"
+    ],
+    "source": ""
+  },
+  {
+    "id": "ode-maximal-solution",
+    "title": "Maximal Solutions and Extensibility",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "blow-up",
+      "finite-time escape",
+      "global solution"
+    ],
+    "content": "For a solution $\\phi(t)$ defined on a maximal interval $(T_-, T_+)$:\n\n- If the solution remains in a **compact set** as $t \\to T_+$, it can be extended beyond $T_+$.\n- If the solution **escapes to infinity** in finite time, no extension exists.\n- Solutions of $|f(t,x)| \\leq M(T) + L(T)|x|$ with $\\int L(t)dt < \\infty$ are **globally defined** for all $t \\geq t_0$.\n\nThe **Wronskian** (or Wronski determinant) determines linear independence: $W(t) \\neq 0$ for some $t$ ensures a fundamental system of solutions.",
+    "related": [
+      "qualitative-analysis",
+      "linear-ode"
+    ],
+    "source": ""
+  },
+  {
+    "id": "ode-picard-iteration",
+    "title": "Picard Iteration and Contraction Principle",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "fixed point",
+      "banach space",
+      "constructive proof"
+    ],
+    "content": "The solution to $\\dot{x} = f(t,x)$, $x(t_0) = x_0$ is the fixed point of the integral operator\n\n$$K(x)(t) = x_0 + \\int_{t_0}^t f(s, x(s))\\, ds$$\n\nThe **Picard iterates** are $x_n(t) = K^n(x_0)(t)$. When $K$ is a **contraction** on a suitable Banach space (e.g., $C([t_0, t_0 + T_0], \\mathbb{R}^n)$ with sup norm), the contraction principle guarantees convergence to a unique solution:\n\n$$\\|K(x) - K(y)\\| \\leq \\theta \\|x - y\\|, \\quad \\theta < 1$$",
+    "related": [
+      "ode-existence-uniqueness",
+      "linear-ode"
+    ],
+    "source": ""
+  },
+  {
+    "id": "ode-super-subsolutions",
+    "title": "Super and Sub Solutions (Barrier Functions)",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "comparison principle",
+      "monotonicity",
+      "qualitative bounds"
+    ],
+    "content": "A **super solution** satisfies $\\dot{x}_+(t) \\geq f(t, x_+(t))$ and a **sub solution** satisfies $\\dot{x}_-(t) \\leq f(t, x_-(t))$.\n\n**Comparison Principle**: If $x_+(t_0) \\geq x(t_0) \\geq x_-(t_0)$ and $f$ is Lipschitz, then\n$$x_+(t) \\geq x(t) \\geq x_-(t) \\quad \\text{for all } t \\geq t_0$$\n\nThis is powerful for proving existence without solving explicitly and for understanding long-time behavior (e.g., convergence to equilibria or blow-up in finite time).",
+    "related": [
+      "qualitative-analysis",
+      "autonomous-equation"
+    ],
+    "source": ""
+  },
+  {
+    "id": "ode-poincare-map-periodic",
+    "title": "Poincaré Map and Periodic Orbits",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "periodic solution",
+      "return map",
+      "bifurcation"
+    ],
+    "content": "For a periodic system $\\dot{x} = f(t,x)$ with period $T$, the **Poincaré map** is\n$$P(x) = \\phi(T, x)$$\nwhere $\\phi(t, x)$ is the solution starting at $x$ at time $t=0$.\n\n**Key facts**:\n- Fixed points of $P$ correspond to periodic solutions\n- If $P$ is differentiable with $P'(x) > 0$ and concave, there are at most two fixed points\n- The **monodromy matrix** $M = P'(x)$ determines stability of the periodic orbit\n- Applications: ecological models (logistic equation with harvesting), RLC circuits, resonance",
+    "related": [
+      "autonomous-equation",
+      "poincare-map"
+    ],
+    "source": ""
+  },
+  {
+    "id": "linear-system-eigenvalue-stability",
+    "title": "Linear Systems: Eigenvalues and Stability",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "matrix exponential",
+      "jordan form",
+      "asymptotic behavior"
+    ],
+    "content": "For the linear system $\\dot{x} = Ax$ with constant matrix $A$:\n\n- Solution: $x(t) = \\exp(tA)x_0$\n- **Asymptotic stability**: All eigenvalues have $\\text{Re}(\\alpha_j) < 0$\n- **Stability**: All eigenvalues have $\\text{Re}(\\alpha_j) \\leq 0$ with geometric multiplicity = algebraic multiplicity for those on the imaginary axis\n- **Decay rate** (asymptotically stable): $|x(t)| \\leq Ce^{-\\alpha t}|x_0|$ where $\\alpha = -\\max_j \\text{Re}(\\alpha_j)$\n\nFor non-diagonalizable systems, use **Jordan canonical form**. Qualitative behavior: sources, sinks, saddles, centers, spirals.",
+    "related": [
+      "linear-ode",
+      "autovalor",
+      "autovetor"
+    ],
+    "source": ""
+  },
+  {
+    "id": "linear-system-fundamental-matrix",
+    "title": "Fundamental Matrix Solution and Principal Solution",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "matrix exponential",
+      "variation of constants",
+      "inhomogeneous system"
+    ],
+    "content": "For $\\dot{x} = A(t)x$, the **principal matrix solution** $\\Pi(t, t_0)$ satisfies:\n$$\\dot{\\Pi}(t, t_0) = A(t)\\Pi(t, t_0), \\quad \\Pi(t_0, t_0) = \\mathbb{I}$$\n\nKey properties:\n- $\\Pi(t, t_1)\\Pi(t_1, t_0) = \\Pi(t, t_0)$ (semigroup)\n- $\\Pi(t_0, t) = \\Pi(t, t_0)^{-1}$\n- General solution: $x(t) = \\Pi(t, t_0)x_0$\n\nFor **inhomogeneous system** $\\dot{x} = A(t)x + g(t)$:\n$$x(t) = \\Pi(t, t_0)x_0 + \\int_{t_0}^t \\Pi(t, s)g(s)\\,ds$$\n\n**Abel's identity** (Liouville's formula): $\\det(\\Pi(t, t_0)) = \\exp\\left(\\int_{t_0}^t \\text{tr}(A(s))\\,ds\\right)$",
+    "related": [
+      "linear-ode",
+      "operador-linear"
+    ],
+    "source": ""
+  },
+  {
+    "id": "floquet-theory-periodic-systems",
+    "title": "Floquet Theory for Periodic Linear Systems",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "floquet exponent",
+      "monodromy matrix",
+      "characteristic multiplier"
+    ],
+    "content": "For $\\dot{x} = A(t)x$ with $A(t + T) = A(t)$ (period $T$):\n\n$$\\Pi(t, t_0) = P(t, t_0) \\exp((t - t_0)Q(t_0))$$\n\nwhere:\n- $P(t, t_0)$ is periodic with period $T$: $P(t + T, t_0) = P(t, t_0)$\n- **Monodromy matrix**: $M(t_0) = \\Pi(t_0 + T, t_0)$\n- **Floquet multipliers**: eigenvalues $\\rho_j$ of $M(t_0)$\n- **Floquet exponents**: $\\gamma_j$ satisfying $\\rho_j = e^{T\\gamma_j}$\n\n**Stability**:\n- **Asymptotically stable** if all $|\\rho_j| < 1$ (i.e., $\\text{Re}(\\gamma_j) < 0$)\n- **Stable** if all $|\\rho_j| \\leq 1$ with equality implying geometric = algebraic multiplicity\n\n**Hill's equation** $\\ddot{x} + q(t)x = 0$ with $q(t + T) = q(t)$: stable iff $|\\Delta| < 1$ where $\\Delta = \\frac{1}{2}\\text{tr}(M)$.",
+    "related": [
+      "linear-ode",
+      "poincare-map"
+    ],
+    "source": ""
+  },
+  {
+    "id": "bernoulli-riccati-classification",
+    "title": "Bernoulli and Riccati Equations",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "nonlinear-to-linear",
+      "transformation",
+      "solvable equations"
+    ],
+    "content": "**Bernoulli equation**: $\\dot{x} = f(t)x + g(t)x^n$ with $n \\neq 0, 1$\n\nTransformation: Let $y = x^{1-n}$, then\n$$\\dot{y} = (1-n)f(t)y + (1-n)g(t)$$\nwhich is linear.\n\n**Riccati equation**: $\\dot{x} = f(t)x + g(t)x^2 + h(t)$\n\nIf a particular solution $x_p(t)$ is known, let $y = \\frac{1}{x - x_p}$ to get the linear equation\n$$\\dot{y} = -(f(t) + 2x_p(t)g(t))y - g(t)$$\n\nThese transformations show that many nonlinear equations reduce to linear ones after a suitable change of variables.",
+    "related": [
+      "bernoulli-equation",
+      "riccati-equation",
+      "linear-ode"
+    ],
+    "source": ""
+  },
+  {
+    "id": "perturbation-asymptotic-stability",
+    "title": "Perturbation of Stable Systems",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "robustness",
+      "persistence of stability",
+      "linearization"
+    ],
+    "content": "**Theorem**: If $\\dot{x} = Ax$ is asymptotically stable (all $\\text{Re}(\\alpha_j) < 0$) and $B(t)$ satisfies\n$$\\lim_{t \\to \\infty} \\|B(t)\\| = 0$$\nthen $\\dot{x} = (A + B(t))x$ is also asymptotically stable, with decay rate:\n$$|x(t)| \\leq Ce^{-(\\alpha - \\epsilon)t}|x_0|$$\nfor any $\\epsilon < \\alpha = -\\max_j \\text{Re}(\\alpha_j)$.\n\n**Consequence** (Hartman–Grobman nearby): If $f(x_0) = 0$ and all eigenvalues of $Df(x_0)$ have $\\text{Re}(\\alpha_j) < 0$, then $x_0$ is an asymptotically stable fixed point of $\\dot{x} = f(x)$ (for nearby initial conditions).\n\nThis justifies linearization for understanding stability near equilibria.",
+    "related": [
+      "linear-ode",
+      "qualitative-analysis"
+    ],
+    "source": ""
+  },
+  {
+    "id": "matrix-exponential-jordan",
+    "title": "Matrix Exponential and Jordan Canonical Form",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "matrix function",
+      "generalized eigenvector",
+      "jordan block"
+    ],
+    "content": "The **matrix exponential** is defined by the convergent series\n$$\\exp(A) = \\sum_{j=0}^\\infty \\frac{A^j}{j!}$$\n\nKey properties:\n- If $[A, B] = 0$ (commute), then $\\exp(A + B) = \\exp(A)\\exp(B)$\n- $\\det(\\exp(A)) = \\exp(\\text{tr}(A))$\n- $\\exp(A)$ and $A$ have the same eigenvectors; if $Au = \\alpha u$, then $\\exp(A)u = e^\\alpha u$\n\n**Jordan canonical form**: Any matrix can be transformed to block diagonal form with **Jordan blocks**\n$$J = \\begin{pmatrix} \\alpha & 1 & & \\\\ & \\alpha & \\ddots & \\\\ & & \\ddots & 1 \\\\ & & & \\alpha \\end{pmatrix}$$\n\nFor a block, $\\exp(J) = e^\\alpha \\sum_{k=0}^{n-1} \\frac{N^k}{k!}$ where $N$ is the nilpotent part.",
+    "related": [
+      "autovalor",
+      "autovetor",
+      "diagonalizacao"
+    ],
+    "source": ""
+  },
+  {
+    "id": "rlc-circuit-resonance",
+    "title": "RLC Circuit and Resonance",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "application",
+      "forced oscillation",
+      "impedance"
+    ],
+    "content": "An RLC circuit with resistance $R$, inductance $L$, capacitance $C$, and voltage $V(t)$ obeys\n$$L\\ddot{I} + R\\dot{I} + \\frac{1}{C}I = \\dot{V}(t)$$\n\nFor sinusoidal forcing $V(t) = V_0\\cos(\\omega t)$:\n- **Complex impedance**: $Z(\\omega) = R + i(L\\omega - 1/(C\\omega))$\n- **Resonance frequency**: $\\omega_0 = 1/\\sqrt{LC}$ (current amplitude maximized when impedance is minimized)\n- Current amplitude: $|I(\\omega)| = |V_0|/|Z(\\omega)|$\n\nDamping regimes:\n- **Overdamped** ($R > 2\\sqrt{L/C}$): Exponential decay\n- **Critically damped** ($R = 2\\sqrt{L/C}$): Fastest decay without oscillation  \n- **Underdamped** ($R < 2\\sqrt{L/C}$): Oscillatory decay with period $T = 2\\pi/\\beta$, $\\beta = \\sqrt{\\omega_0^2 - \\eta^2}$, $\\eta = R/(2L)$",
+    "related": [
+      "linear-ode",
+      "poincare-map-periodic"
+    ],
+    "source": ""
+  },
+  {
+    "id": "growall-inequality-dependence",
+    "title": "Grönwall Inequality and Continuous Dependence",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "estimate",
+      "stability",
+      "perturbation bounds"
+    ],
+    "content": "**Grönwall's inequality** (generalized): If\n$$\\psi(t) \\leq \\alpha(t) + \\int_0^t \\beta(s)\\psi(s)\\,ds$$\nwith $\\alpha, \\beta$ continuous and $\\beta \\geq 0$, then\n$$\\psi(t) \\leq \\alpha(t) + \\int_0^t \\alpha(s)\\beta(s)\\exp\\left(\\int_s^t \\beta(r)\\,dr\\right)ds$$\n\n**Corollary** (monotone case): If $\\alpha(t)$ is nondecreasing,\n$$\\psi(t) \\leq \\alpha(t)\\exp\\left(\\int_0^t \\beta(s)\\,ds\\right)$$\n\n**Application to continuous dependence**: If $x(t)$ and $y(t)$ solve $\\dot{x} = f(t,x)$ and $\\dot{y} = f(t,y)$ respectively, with $f$ Lipschitz constant $L$, then\n$$|x(t) - y(t)| \\leq |x(t_0) - y(t_0)|\\exp(L(t - t_0))$$\n\nShows solutions depend continuously on initial conditions with exponential sensitivity.",
+    "related": [
+      "ode-existence-uniqueness",
+      "linear-ode"
+    ],
+    "source": ""
+  },
+  {
+    "id": "euler-method-numerical",
+    "title": "Euler Method and Numerical Integration",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "numerical analysis",
+      "convergence",
+      "discretization"
+    ],
+    "content": "The **Euler method** for $\\dot{x} = f(t, x)$ with step size $h$:\n$$x_{n+1} = x_n + hf(t_n, x_n), \\quad t_n = t_0 + nh$$\n\nwith linear interpolation between points.\n\n**Convergence** (Arzelà–Ascoli theorem): If $f$ is continuous and bounded by $M$, the Euler approximations converge uniformly to a solution as $h \\to 0$.\n\n**Higher-order methods**:\n- **Heun's method** (error $O(h^3)$ per step):\n$$x_{n+1} = x_n + \\frac{h}{2}(f(t_n, x_n) + f(t_{n+1}, y_n)), \\quad y_n = x_n + hf(t_n, x_n)$$\n\n- **Runge–Kutta (4th order)** (error $O(h^5)$ per step): Uses weighted average of slopes at 4 points within each interval.\n\nMore efficient than Euler but requires more function evaluations.",
+    "related": [
+      "ode-existence-uniqueness",
+      "peano-theorem"
+    ],
+    "source": ""
+  },
+  {
+    "id": "separation-of-variables",
+    "title": "Separation of Variables for Separable Equations",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "solution method",
+      "first-order",
+      "exact form"
+    ],
+    "content": "A **separable equation** has the form\n$$\\dot{x} = f(x)g(t)$$\n\nSolution method:\n1. Rewrite as $\\frac{dx}{f(x)} = g(t)\\,dt$\n2. Integrate: $\\int \\frac{dx}{f(x)} = \\int g(t)\\,dt + C$\n3. Solve for $x(t)$ if possible (implicitly defined by $F(x(t)) = G(t) + C$)\n\nImplicit form: If $F(x) = \\int \\frac{dy}{f(y)}$ and $G(t) = \\int g(t)\\,dt$, then solution satisfies\n$$F(x(t)) = G(t) + C$$\n\n**Existence and uniqueness**: If $f(x_0) \\neq 0$, a unique solution exists in a neighborhood of $t_0$. The solution may have **finite-time blow-up** if the integral diverges:\n$$T_+ = \\lim_{x \\to x_2} \\int_{x_0}^x \\frac{dy}{f(y)} < \\infty$$",
+    "related": [
+      "bernoulli-equation",
+      "riccati-equation"
+    ],
+    "source": ""
+  },
+  {
+    "id": "lyapunov-function",
+    "title": "Lyapunov Functions and Stability",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "energy method",
+      "stability criterion",
+      "nonlinear"
+    ],
+    "content": "A **Lyapunov function** for an equilibrium $x^* = 0$ of $\\dot{x} = f(x)$ is a smooth function $V(x)$ such that:\n- $V(0) = 0$ and $V(x) > 0$ for $x \\neq 0$ (positive definite)\n- $\\dot{V}(x) = \\nabla V \\cdot f(x) \\leq 0$ (decreases along solutions)\n\n**Stability theorems**:\n- If $\\dot{V} \\leq 0$, then $x = 0$ is **stable** (solutions remain nearby)\n- If $\\dot{V} < 0$ for $x \\neq 0$, then $x = 0$ is **asymptotically stable** (solutions converge)\n- If $\\dot{V} > 0$, then $x = 0$ is **unstable**\n\n**Application**: For $\\dot{x} = Ax + g(x)$ where $A$ is a Hurwitz matrix (all eigenvalues have negative real part), choosing $V(x) = |x|^2/2$ gives asymptotic stability if $g$ is a small Lipschitz perturbation.\n\nAdvantage: Works for nonlinear systems without explicitly solving.",
+    "related": [
+      "linear-ode",
+      "qualitative-analysis"
+    ],
+    "source": ""
+  },
+  {
+    "id": "matrix-exponential-note",
+    "title": "Matrix Exponential and Linear Autonomous Systems",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "linear-algebra",
+      "matrix-exponential",
+      "stability"
+    ],
+    "content": "## Definition\n\nFor an $n\\times n$ matrix $A$ the **matrix exponential** is\n$$\\exp(A)=\\sum_{j=0}^{\\infty}\\frac{A^j}{j!}.$$\nThis series converges absolutely in the matrix norm for every $A$.\n\n## Solution Formula\n\nThe unique solution of $\\dot{x}=Ax$, $x(0)=x_0$ is\n$$x(t)=e^{tA}x_0.$$\n\n## Computing via Jordan Form\n\nWrite $A=UJU^{-1}$. Then $e^{tA}=U e^{tJ} U^{-1}$. For a Jordan block $J=\\alpha I+N$:\n$$e^{tJ}=e^{\\alpha t}\\begin{pmatrix}1&t&\\frac{t^2}{2!}&\\cdots\\\\&1&t&\\cdots\\\\&&\\ddots&\\\\&&&1\\end{pmatrix}.$$\n\n## Stability Classification (2D)\n\n| Eigenvalues | Phase portrait | Stability |\n|---|---|---|\n| $\\lambda_1,\\lambda_2<0$ real | Node (sink) | Asymp. stable |\n| $\\lambda_1,\\lambda_2>0$ real | Node (source) | Unstable |\n| $\\lambda_1<0<\\lambda_2$ | Saddle | Unstable |\n| $\\alpha\\pm i\\omega$, $\\alpha<0$ | Spiral sink | Asymp. stable |\n| $\\pm i\\omega$ | Center | Stable |\n\n## Key Facts\n\n- $\\det(e^A)=e^{\\operatorname{tr}(A)}$\n- $e^{A+B}=e^A e^B$ iff $[A,B]=0$\n- Asymptotically stable iff all $\\operatorname{Re}(\\alpha_j)<0$ (Hurwitz matrix)",
+    "related": [
+      "floquet-note",
+      "stable-manifold-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "floquet-note",
+    "title": "Floquet Theory for Periodic Linear Systems",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "periodic",
+      "floquet",
+      "stability",
+      "monodromy"
+    ],
+    "content": "## Setting\n\nConsider $\\dot{x}=A(t)x$ with $A(t+T)=A(t)$.\n\n## Monodromy Matrix\n\nThe **monodromy matrix** at $t_0$ is\n$$M(t_0)=\\Pi(t_0+T,t_0).$$\nIts eigenvalues $\\rho_j$ are **Floquet multipliers**; the numbers $\\gamma_j=\\frac{1}{T}\\log\\rho_j$ are **Floquet exponents**.\n\n## Floquet's Theorem\n\nThe principal matrix solution decomposes as\n$$\\Pi(t,t_0)=P(t,t_0)e^{(t-t_0)Q(t_0)},$$\nwhere $P(\\cdot,t_0)$ is $T$-periodic and $P(t_0,t_0)=I$, and $e^{TQ(t_0)}=M(t_0)$.\n\n## Stability Criteria\n\n- **Asymptotically stable**: all $|\\rho_j|<1$ (equivalently all $\\operatorname{Re}(\\gamma_j)<0$).\n- **Stable**: all $|\\rho_j|\\le 1$ with algebraic=geometric multiplicity when $|\\rho_j|=1$.\n- **Unstable**: some $|\\rho_j|>1$.\n\n## Hill's Equation\n\nFor $\\ddot{x}+q(t)x=0$ the stability condition simplifies: stable iff $|\\Delta|<1$ where $\\Delta=\\operatorname{tr}(M)/2$.\n\n## Liouville's Formula\n\n$$\\det M(t_0)=\\exp\\!\\left(\\int_0^T\\operatorname{tr}(A(s))\\,ds\\right)>0.$$",
+    "related": [
+      "matrix-exponential-note",
+      "stable-manifold-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "stable-manifold-note",
+    "title": "Stable and Unstable Manifolds near Fixed Points",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "stable-manifold",
+      "unstable-manifold",
+      "hartman-grobman",
+      "hyperbolic"
+    ],
+    "content": "## Hyperbolic Fixed Points\n\nA fixed point $x^*$ of $\\dot{x}=f(x)$ is **hyperbolic** if no eigenvalue of $A=Df(x^*)$ has zero real part.\n\n## Invariant Manifolds\n\nFor a hyperbolic fixed point (wlog $x^*=0$):\n- **Stable manifold**: $W^s=\\{x_0:\\phi(t,x_0)\\to 0 \\text{ as }t\\to+\\infty\\}$, $\\dim W^s=$ number of eigenvalues with $\\operatorname{Re}<0$.\n- **Unstable manifold**: $W^u=\\{x_0:\\phi(t,x_0)\\to 0 \\text{ as }t\\to-\\infty\\}$, $\\dim W^u=$ number of eigenvalues with $\\operatorname{Re}>0$.\n\nBoth are smooth manifolds tangent to the corresponding eigenspaces $E^s$, $E^u$ at the fixed point.\n\n## Hartman–Grobman Theorem\n\nNear a hyperbolic fixed point, there exists a homeomorphism that conjugates the nonlinear flow to the linear flow $e^{tA}$. In particular the topological type of the phase portrait is determined by the eigenvalues alone.\n\n## Lyapunov Stability Criterion\n\nIf all eigenvalues of $Df(x^*)$ have negative real part, then $x^*$ is asymptotically stable and there exist $C,\\alpha>0$ and $\\delta>0$ such that\n$$|x(t)|\\le Ce^{-\\alpha t}|x_0|,\\quad |x_0|\\le\\delta.$$",
+    "related": [
+      "matrix-exponential-note",
+      "floquet-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "chebyshev-variance",
+    "title": "Chebyshev's Inequality and Variance",
+    "domain": "Probability Theory",
+    "tags": [
+      "variance",
+      "concentration",
+      "inequality"
+    ],
+    "content": "## Chebyshev's Inequality\n\nFor any random variable $\\xi$ with mean $a=E\\xi$ and variance $\\sigma^2=D\\xi$:\n$$P\\{|\\xi - a| > \\varepsilon\\} \\leq \\frac{\\sigma^2}{\\varepsilon^2}$$\n\n**Proof sketch:** Apply the basic Chebyshev bound $P\\{|\\eta|>\\varepsilon\\}\\leq E\\eta^2/\\varepsilon^2$ to $\\eta=\\xi-a$.\n\n**Key consequence:** For the sample mean $\\bar{\\xi}_n = \\frac{1}{n}\\sum_{k=1}^n \\xi_k$ with i.i.d. summands:\n$$P\\{|\\bar{\\xi}_n - a| > \\varepsilon\\} \\leq \\frac{\\sigma^2}{n\\varepsilon^2} \\to 0$$\nThis is the weak law of large numbers.\n\n**Limitation:** The bound is distribution-free but often loose. For a normal variable, the true probability of $|\\xi-a|>2\\sigma$ is about 0.046, but Chebyshev gives only $\\leq 0.25$.",
+    "related": [
+      "poisson-limit",
+      "bayes-total-prob"
+    ],
+    "source": ""
+  },
+  {
+    "id": "poisson-limit",
+    "title": "Poisson Distribution: Rare Event Limit",
+    "domain": "Probability Theory",
+    "tags": [
+      "poisson",
+      "binomial",
+      "limit",
+      "rare-events"
+    ],
+    "content": "## Poisson as Binomial Limit\n\nIf $p = a/n \\to 0$ with $np = a$ fixed:\n$$C_k^n p^k q^{n-k} \\to \\frac{a^k}{k!}e^{-a}$$\n\n**Poisson PMF:** $P_\\xi(k) = \\frac{a^k}{k!}e^{-a}$, $k=0,1,2,\\ldots$\n\n**Mean and variance:** $E\\xi = D\\xi = a$.\n\n**Generating function:** $F_\\xi(z) = e^{a(z-1)}$.\n\n## Applications\n- Radioactive decay: $a = n_0 p(t)$ alpha particles per second.\n- Raisin bun: each raisin has probability $1/N$ of landing in a given bun.\n- Random flow: Poisson process with density $\\lambda$ gives $P\\{\\xi(t)=k\\}=(\\lambda t)^k e^{-\\lambda t}/k!$.\n\n**Sum of independent Poisson:** If $\\xi_1\\sim\\text{Poisson}(a)$ and $\\xi_2\\sim\\text{Poisson}(a')$ independent, then $\\xi_1+\\xi_2\\sim\\text{Poisson}(a+a')$.",
+    "related": [
+      "chebyshev-variance",
+      "bayes-total-prob"
+    ],
+    "source": ""
+  },
+  {
+    "id": "bayes-total-prob",
+    "title": "Total Probability and Bayes' Rule",
+    "domain": "Probability Theory",
+    "tags": [
+      "conditional-probability",
+      "bayes",
+      "total-probability"
+    ],
+    "content": "## Total Probability Formula\n\nIf $B_1, B_2, \\ldots$ is a full set of mutually exclusive events ($\\bigcup_k B_k = \\Omega$):\n$$P(A) = \\sum_k P(A \\mid B_k) P(B_k)$$\n\n## Bayes' Rule\n\n$$P(B_k \\mid A) = \\frac{P(B_k)P(A \\mid B_k)}{\\sum_j P(B_j)P(A \\mid B_j)}$$\n\nThe $B_k$ are called **hypotheses**, $P(B_k)$ the **prior**, and $P(B_k|A)$ the **posterior**.\n\n## Example: Urn Model\n9 urns: 2W+2B each; 1 urn: 5W+1B. Draw a white ball:\n$$P(\\text{special}|W) = \\frac{\\frac{1}{10}\\cdot\\frac{5}{6}}{\\frac{9}{10}\\cdot\\frac{1}{2}+\\frac{1}{10}\\cdot\\frac{5}{6}} = \\frac{5}{32}$$\n\n## Gambler's Ruin Connection\nTotal probability formula underlies the recursion $p(x)=\\frac{1}{2}[p(x+1)+p(x-1)]$, whose solution is $p(x)=1-x/m$.",
+    "related": [
+      "chebyshev-variance",
+      "poisson-limit"
+    ],
+    "source": ""
+  },
+  {
+    "id": "binomial-mean-variance",
+    "title": "Binomial Mean and Variance",
+    "domain": "Probability Theory",
+    "tags": [
+      "binomial",
+      "expectation",
+      "variance",
+      "bernoulli"
+    ],
+    "content": "## Binomial Random Variable\n\n$\\xi = \\xi_1 + \\cdots + \\xi_n$, where $\\xi_k$ are i.i.d. Bernoulli$(p)$.\n\n**Each summand:** $E\\xi_k = p$, $D\\xi_k = pq$ ($q=1-p$).\n\n**Sum:** By linearity and independence:\n$$E\\xi = np, \\quad D\\xi = npq$$\n\n## Chebyshev Bound for Binomial\n$$P\\{|\\xi - np| > \\varepsilon\\} \\leq \\frac{npq}{\\varepsilon^2}$$\n\n## Normalized Sum\nDefine $S_n^* = (\\xi - np)/\\sqrt{npq}$. By the De Moivre–Laplace theorem:\n$$\\lim_{n\\to\\infty} P\\{x' \\leq S_n^* \\leq x''\\} = \\frac{1}{\\sqrt{2\\pi}}\\int_{x'}^{x''} e^{-x^2/2}dx$$",
+    "related": [
+      "chebyshev-variance",
+      "poisson-limit"
+    ],
+    "source": ""
+  },
+  {
+    "id": "planar-dynamics-note",
+    "title": "Planar Dynamics & Poincaré–Bendixson",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "planar",
+      "limit-cycle",
+      "qualitative"
+    ],
+    "content": "## Key Theorem\n**Poincaré–Bendixson:** Let $\\dot{x}=f(x)$, $f\\in C^1$, $x\\in\\mathbb{R}^2$. If a positive semi-orbit $\\{\\Phi_t(x_0): t\\geq 0\\}$ is contained in a compact set $K$ with only finitely many fixed points, then its $\\omega$-limit set is either a fixed point, a periodic orbit, or a polycycle (union of fixed points and connecting orbits).\n\n## Consequences\n- **Dulac's criterion:** If $\\text{div}(\\rho f)$ has constant sign on a simply connected region, there is no periodic orbit there.\n- **Index theory:** The sum of indices of fixed points inside a periodic orbit equals $+1$.\n\n## Invariant Annulus Trick\nTo prove existence of a limit cycle:\n1. Find an annular region $A$ positively invariant under the flow.\n2. Verify $A$ contains no fixed points.\n3. Poincaré–Bendixson guarantees a periodic orbit in $A$.",
+    "related": [
+      "hamiltonian-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "hamiltonian-note",
+    "title": "Hamiltonian Systems & Complete Integrability",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "hamiltonian",
+      "integrability",
+      "conservation-laws"
+    ],
+    "content": "## Setup\nPhase space $\\mathbb{R}^{2n}$ with coordinates $(q,p)$. Equations of motion:\n$$\\dot{q}_i = \\frac{\\partial H}{\\partial p_i}, \\quad \\dot{p}_i = -\\frac{\\partial H}{\\partial q_i}.$$\n\n## Poisson Bracket\n$$\\{F,G\\} = \\sum_{i=1}^n \\left(\\frac{\\partial F}{\\partial q_i}\\frac{\\partial G}{\\partial p_i} - \\frac{\\partial F}{\\partial p_i}\\frac{\\partial G}{\\partial q_i}\\right).$$\n$F$ is conserved $\\iff \\{F,H\\}=0$.\n\n## Liouville–Arnold Theorem\nIf $F_1=H, F_2,\\ldots, F_n$ are independent and $\\{F_i,F_j\\}=0$ for all $i,j$, then compact connected level sets are $n$-tori and motion is quasi-periodic.\n\n## Kepler Problem\n$H = \\frac{|p|^2}{2m} - \\frac{\\gamma mM}{|q|}$, conserved: $H$ and angular momentum $L$. Orbits are conic sections.",
+    "related": [
+      "planar-dynamics-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "discrete-ds-intro",
+    "title": "Discrete Dynamical Systems: Maps and Orbits",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "discrete",
+      "maps",
+      "fixed-points",
+      "logistic"
+    ],
+    "content": "## Discrete Dynamical Systems\n\nA **discrete dynamical system** is an iterated map $f: I \\to I$. The orbit of $x_0$ is\n$$x_0,\\; f(x_0),\\; f^2(x_0),\\; \\ldots$$\n\n### Fixed and Periodic Points\n- **Fixed point**: $f(x^*) = x^*$.\n- **Period-$n$ point**: $f^n(x^*) = x^*$, $f^k(x^*)\\neq x^*$ for $0<k<n$.\n\n### Stability\nA fixed point $x^*$ is **asymptotically stable** if $|f'(x^*)|<1$ and **unstable** if $|f'(x^*)|>1$.\n\n### Logistic Map\n$$f(x) = rx(1-x), \\quad r \\in (0,4], \\quad x\\in[0,1].$$\nFixed points: $x^*=0$ (unstable for $r>1$) and $x^*=1-1/r$ (stable for $1<r<3$).",
+    "related": [
+      "period-doubling"
+    ],
+    "source": ""
+  },
+  {
+    "id": "period-doubling",
+    "title": "Period-Doubling Cascade and Chaos",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "chaos",
+      "bifurcation",
+      "feigenbaum",
+      "logistic"
+    ],
+    "content": "## Period-Doubling in the Logistic Map\n\nAs $r$ increases:\n| Range | Attractor |\n|---|---|\n| $r<3$ | Stable fixed point |\n| $3 < r < r_2 \\approx 3.449$ | Stable 2-cycle |\n| $r_2 < r < r_3$ | Stable 4-cycle |\n| $r \\to r_\\infty \\approx 3.5699$ | Period-doubling accumulation |\n| $r > r_\\infty$ | Chaotic (with periodic windows) |\n\n### Feigenbaum Universality\nThe ratio $\\delta_n = (r_n - r_{n-1})/(r_{n+1}-r_n) \\to \\delta \\approx 4.6692\\ldots$ universally for unimodal maps.\n\n### Period-3 Implies Chaos (Li–Yorke / Sarkovskii)\nIf $f$ has a period-3 point, it has points of every period.\n\n### Smale Horseshoe\nSymbolic dynamics on two symbols codes the chaotic dynamics near a transversal homoclinic point.",
+    "related": [
+      "discrete-ds-intro",
+      "melnikov-method"
+    ],
+    "source": ""
+  },
+  {
+    "id": "melnikov-method",
+    "title": "Melnikov's Method for Detecting Chaos",
+    "domain": "ODE and Dynamical Systems",
+    "tags": [
+      "chaos",
+      "perturbation",
+      "homoclinic",
+      "Hamiltonian"
+    ],
+    "content": "## Setting\nConsider a periodically perturbed Hamiltonian system:\n$$\\dot{x} = f(x) + \\varepsilon g(x,t), \\quad g(x,t+T)=g(x,t),$$\nwhere the unperturbed system ($\\varepsilon=0$) has a saddle with a homoclinic orbit $q^0(t)$.\n\n## Melnikov Function\n$$M(t_0) = \\int_{-\\infty}^{\\infty} f(q^0(t)) \\wedge g(q^0(t), t+t_0)\\,dt,$$\nwhere $a\\wedge b = a_1 b_2 - a_2 b_1$.\n\n## Chaos Criterion\nIf $M(t_0^*)=0$ and $M'(t_0^*)\\neq 0$ for some $t_0^*$, then $W^s$ and $W^u$ intersect **transversally** for small $\\varepsilon>0$.\n\nBy the **Smale–Birkhoff theorem**, this implies a Smale horseshoe and hence:\n- Countably infinite periodic orbits of all periods.\n- Sensitive dependence on initial conditions.\n\n## Duffing Example\n$\\ddot{x}-x+x^3 = \\varepsilon(\\gamma\\cos\\omega t - \\delta\\dot{x})$:\n$$M(t_0) = \\gamma\\pi\\omega\\,\\operatorname{sech}\\!\\left(\\frac{\\pi\\omega}{2}\\right)\\cos(\\omega t_0) - \\frac{4\\delta}{3}.$$\nChaos when $\\gamma/\\delta > \\frac{4}{3\\pi\\omega}\\cosh\\!\\left(\\frac{\\pi\\omega}{2}\\right)$.",
+    "related": [
+      "period-doubling",
+      "discrete-ds-intro"
+    ],
+    "source": ""
   }
 ]

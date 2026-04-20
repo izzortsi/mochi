@@ -1,15 +1,42 @@
 {
-  "xp": 35,
-  "streak": 0,
-  "best_streak": 0,
-  "last_completed": null,
+  "xp": 57,
+  "streak": 1,
+  "best_streak": 1,
+  "last_completed": "2026-04-19",
   "completed_tasks": {
-    "c1-d1-bronze-0": true,
-    "c1-d1-silver-1": true
+    "c5-d1-bronze-0": true,
+    "c3-d1-bronze-0": true
+  },
+  "completed_phases": {
+    "c5-d1-bronze-0": {
+      "prime": true,
+      "core": true,
+      "retrieval": true,
+      "elaborate": true,
+      "check": true
+    },
+    "c3-d1-bronze-0": {
+      "prime": true,
+      "core": true,
+      "retrieval": true,
+      "elaborate": true,
+      "check": true
+    },
+    "c4-d1-bronze-0": {
+      "prime": true
+    }
   },
   "day_tiers": {
-    "1.1": "silver"
+    "5.1": "gold",
+    "3.1": "bronze"
   },
   "generated_tasks": [],
-  "attempts": []
+  "attempts": [
+    {
+      "card-uid": "c3-d1-bronze-0",
+      "verdict": "partial",
+      "comment": "O usuário identificou corretamente que os autovalores são complexos da forma 7 ± 3i, mas inicialmente errou ao escrever apenas 7 - 3i sem incluir o par conjugado 7 + 3i. Com auxílio chegou à resposta correta.",
+      "timestamp": "2026-04-19T22:23:44.534016"
+    }
+  ]
 }
