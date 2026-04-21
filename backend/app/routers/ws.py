@@ -65,6 +65,7 @@ def dispatch(tool: str, args: dict):
         "get-progress": _get_progress,
         "record-tutor-note": _record_tutor_note,
         "get-tutor-notes": _get_tutor_notes,
+        "add-note": _add_note,
     }
     handler = handlers.get(tool)
     if not handler:
@@ -421,6 +422,48 @@ def _get_progress(_args):
         "streak": progress.streak,
         "best-streak": progress.best_streak,
     }
+
+
+def _add_note(args):
+    """Create a permanent zettelkasten note (shows up in /notes graph + list).
+    Distinct from record-tutor-note, which jots a transient one-liner against
+    a specific card. Use this when an insight is worth keeping across cards
+    and surfacing in the knowledge base."""
+    from app.models import Note
+
+    note_id = (args.get("noteId") or args.get("note-id", "")).strip()
+    title = (args.get("title") or "").strip()
+    content = (args.get("content") or "").strip()
+    if not note_id or not title:
+        raise ValueError("note-id and title required")
+
+    domain = (args.get("domain") or "").strip()
+    tags_raw = args.get("tags") or []
+    tags = [t.strip() for t in tags_raw if isinstance(t, str) and t.strip()]
+    related_raw = args.get("related") or []
+    related = [r.strip() for r in related_raw if isinstance(r, str) and r.strip()]
+    source = (args.get("source") or "tutor").strip()
+
+    notes = store.load_notes()
+    if any(n.id == note_id for n in notes):
+        raise ValueError(f"note id already exists: {note_id}")
+
+    note = Note(
+        id=note_id, title=title, content=content,
+        domain=domain, tags=tags, related=related, source=source,
+    )
+    notes.append(note)
+
+    # Mirror reverse links so the new note appears in each related note's bag.
+    if related:
+        by_id = {n.id: n for n in notes}
+        for rid in related:
+            r = by_id.get(rid)
+            if r and note_id not in r.related:
+                r.related.append(note_id)
+
+    store.save_notes(notes)
+    return {"ok": True, "id": note_id}
 
 
 def _find_course(courses, course_id):
