@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { ontology } from "@/lib/ontology";
 import type { NotesGraphData, NoteSummary } from "@/lib/types";
 import { NotesGraph } from "@/components/NotesGraph";
-import { Tutor } from "@/components/Tutor";
+import { useSetTutorContext } from "@/lib/tutor-context";
 
 const NOTES_SCOPE_COURSE_ID = 0;
 
@@ -72,9 +72,15 @@ export default function NotesPage() {
       })()
     : graphData;
 
-  if (error && !graphData) return <div className="opacity-50">{error}</div>;
-
   const pageContext = buildNotesListContext(notes, domains, filter);
+  useSetTutorContext({
+    courseId: NOTES_SCOPE_COURSE_ID,
+    pageContext,
+    title: "Knowledge base",
+    placeholder: "Ask about a note, search for a concept, or request a connection…",
+  });
+
+  if (error && !graphData) return <div className="opacity-50">{error}</div>;
 
   return (
     <div className="mx-[calc(50%-50vw)] w-screen px-4 pr-[26rem]">
@@ -140,12 +146,6 @@ export default function NotesPage() {
         </div>
       )}
 
-      <Tutor
-        courseId={NOTES_SCOPE_COURSE_ID}
-        pageContext={pageContext}
-        title="Knowledge base"
-        placeholder="Ask about a note, search for a concept, or request a connection…"
-      />
     </div>
   );
 }

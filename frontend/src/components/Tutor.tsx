@@ -7,6 +7,7 @@ import { runLlmTurn } from "@/lib/llm";
 import { validateAndEncode, type ToolName } from "@/lib/tools";
 import { WsClient } from "@/lib/ws";
 import { api } from "@/lib/api";
+import { useTutorContext } from "@/lib/tutor-context";
 import type { ChatMessage, ConnectionStatus } from "@/lib/types";
 import { MathText } from "./MathText";
 import { MarkdownContent } from "./MarkdownContent";
@@ -29,26 +30,11 @@ function summarizeToolError(raw: string): string {
   return raw.length > 200 ? raw.slice(0, 200) + "…" : raw;
 }
 
-export interface TutorProps {
-  /** The chat thread to read/write. Use 0 as a reserved "notes-scope" thread. */
-  courseId: number;
-  /** System-prompt addendum describing what the user is currently looking at. */
-  pageContext: string;
-  /** Called after a tool call completes; e.g. to refresh progress state. */
-  onToolCall?: (toolName: string, ok: boolean) => void;
-  /** Panel title. Defaults to "Tutor". */
-  title?: string;
-  /** Textarea placeholder. */
-  placeholder?: string;
-}
-
-export function Tutor({
-  courseId,
-  pageContext,
-  onToolCall,
-  title = "Tutor",
-  placeholder = "Ask a question, request a hint, or share a thought…",
-}: TutorProps) {
+/* Mounted once at the layout root. Reads scope (courseId, pageContext, etc.)
+ * from TutorContext — pages call useSetTutorContext({...}) to update it. */
+export function Tutor() {
+  const { courseId, pageContext, onToolCall, title, placeholder, visible } =
+    useTutorContext();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -191,6 +177,8 @@ export function Tutor({
     status === "connected" ? "bg-emerald-500" :
     status === "connecting" ? "bg-amber-500" :
     "bg-stone-600";
+
+  if (!visible) return null;
 
   return (
     <div

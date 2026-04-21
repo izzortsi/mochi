@@ -6,7 +6,7 @@ import { ChevronLeft } from "lucide-react";
 import { ontology } from "@/lib/ontology";
 import type { NoteDetail } from "@/lib/types";
 import { MarkdownContent } from "@/components/MarkdownContent";
-import { Tutor } from "@/components/Tutor";
+import { useSetTutorContext } from "@/lib/tutor-context";
 
 const NOTES_SCOPE_COURSE_ID = 0;
 
@@ -43,12 +43,19 @@ export default function NotePage() {
     ontology.fetchNote(noteId).then(setNote).catch(() => setNote(null));
   }, [noteId]);
 
+  const pageContext = note ? buildNoteContext(note) : "";
+  const titleSuffix = note ? note.title.slice(0, 30) + (note.title.length > 30 ? "…" : "") : "loading";
+  useSetTutorContext({
+    courseId: NOTES_SCOPE_COURSE_ID,
+    pageContext,
+    title: `Notes · ${titleSuffix}`,
+    placeholder: "Ask about this note, request a clarification, or connect to another concept…",
+  });
+
   if (!note) return <div className="opacity-50">loading…</div>;
 
-  const pageContext = buildNoteContext(note);
-
   return (
-    <div className="pr-[26rem]">
+    <div>
       <Link href="/notes" className="text-xs opacity-50 hover:opacity-100 flex items-center gap-1">
         <ChevronLeft className="w-3 h-3" /> knowledge base
       </Link>
@@ -91,12 +98,6 @@ export default function NotePage() {
         <div className="mt-6 text-xs opacity-40">Source: {note.source}</div>
       )}
 
-      <Tutor
-        courseId={NOTES_SCOPE_COURSE_ID}
-        pageContext={pageContext}
-        title={`Notes · ${note.title.slice(0, 30)}${note.title.length > 30 ? "…" : ""}`}
-        placeholder="Ask about this note, request a clarification, or connect to another concept…"
-      />
     </div>
   );
 }

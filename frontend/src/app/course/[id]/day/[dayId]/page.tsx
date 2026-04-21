@@ -54,7 +54,7 @@ export default function DayDetail() {
   const minDay = Math.min(...course.days.map(d => d.id));
 
   return (
-    <div className="pr-[26rem]">
+    <div>
       <div className="mb-4">
         <button onClick={() => router.push(`/course/${courseId}`)} className="text-[10px] uppercase tracking-wider font-mono opacity-50 hover:opacity-100 flex items-center gap-1">
           <ChevronLeft className="w-3 h-3" /> {course.title}

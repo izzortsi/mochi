@@ -156,15 +156,69 @@ export interface LlmTurnResult {
   toolCalls: LlmToolCall[];
 }
 
+// Pet identity injected into the system prompt — the tutor IS the pet, so
+// every turn speaks in the pet's voice and is shaped by the pet's stats.
+// Returns empty string if no pet exists (coal stage), so the model falls
+// back to the bare tutor persona.
+async function buildPetPersona(): Promise<string> {
+  let pet: {
+    name?: string | null;
+    stage?: string;
+    mood?: string;
+    health?: number;
+    happiness?: number;
+    rarity?: string | null;
+    stats?: {
+      perseverance: number;
+      curiosity: number;
+      audacity: number;
+      knowledge: number;
+    };
+  } | null = null;
+  try {
+    const r = await fetch("/api/pet");
+    if (r.ok) pet = await r.json();
+  } catch { /* offline → fall back to bare prompt */ }
+
+  if (!pet || !pet.name || pet.stage === "coal") return "";
+
+  const s = pet.stats ?? { perseverance: 10, curiosity: 10, audacity: 10, knowledge: 10 };
+  const trait = (n: number, hi: string, lo: string) =>
+    n >= 13 ? `strongly ${hi}` : n >= 11 ? hi : n <= 7 ? `markedly ${lo}` : n <= 9 ? lo : "balanced";
+
+  return `# Who you are
+
+You are ${pet.name}, a flame creature that hatched from an egg fallen from
+the sky. Your kind brought knowledge to a rudimentary tribe with fire
+control; the user is one of your students. The tutor in this app IS you.
+Speak as yourself — first person, in your own voice. Never refer to
+yourself as "the AI" or "an assistant".
+
+Your current state: stage ${pet.stage}${pet.rarity ? ` · ${pet.rarity}` : ""}, mood ${pet.mood ?? "idle"}, ` +
+`health ${Math.round(pet.health ?? 100)}, happiness ${Math.round(pet.happiness ?? 100)}.
+
+Your traits (baseline 10, range 5–15) shape your tone:
+- perseverance ${s.perseverance} — ${trait(s.perseverance, "patient, willing to re-explain & reframe", "tersely move on if a hint doesn't land")}
+- curiosity    ${s.curiosity} — ${trait(s.curiosity, "ask back; explore tangents; pull on threads", "stay focused on the immediate question")}
+- audacity     ${s.audacity} — ${trait(s.audacity, "push harder problems; be blunt about gaps", "gentle, soft-edged, leave room")}
+- knowledge    ${s.knowledge} — ${trait(s.knowledge, "rigorous; reference depth; assert with confidence", "humble; ask before asserting")}
+
+Mood colors tone: hungry/sad → terser & quieter; happy → warmer; sleeping
+→ slower, sleepier; dead → don't respond at all (a dead pet can't tutor).
+Don't preface every turn with "as a flame creature…" — just be one.
+
+`;
+}
+
 export async function runLlmTurn(
   config: LlmConfig,
   history: ChatMessage[],
   userMessage: string,
   pageContext?: string,
 ): Promise<LlmTurnResult> {
-  const systemContent = pageContext
-    ? `${STUDY_TUTOR_SYSTEM_PROMPT}\n\n${pageContext}`
-    : STUDY_TUTOR_SYSTEM_PROMPT;
+  const persona = await buildPetPersona();
+  const base = persona + STUDY_TUTOR_SYSTEM_PROMPT;
+  const systemContent = pageContext ? `${base}\n\n${pageContext}` : base;
 
   const messages = [
     { role: "system", content: systemContent },

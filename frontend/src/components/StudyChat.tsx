@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import type { Course, DayView, UserProgress, TutorNote } from "@/lib/types";
-import { Tutor } from "./Tutor";
+import { useSetTutorContext } from "@/lib/tutor-context";
 
 function buildPageContext(
   course: Course,
@@ -54,33 +54,34 @@ interface Props {
   onProgressChanged: () => void;
 }
 
+/* Day-level chat: registers the rich card-aware context with the global
+ * Tutor instead of mounting its own. Renders nothing — the Tutor is in the
+ * layout. */
 export function StudyChat({ course, day, progress, onProgressChanged }: Props) {
   const [notesByCard, setNotesByCard] = useState<Record<string, TutorNote[]>>({});
 
-  const refetchNotes = () => {
+  const refetchNotes = useCallback(() => {
     api.memory.fetchTutorNotes().then((resp) => {
       const byCard: Record<string, TutorNote[]> = {};
       for (const n of resp.notes) (byCard[n.cardUid] ||= []).push(n);
       setNotesByCard(byCard);
     }).catch(() => {});
-  };
+  }, []);
 
-  useEffect(refetchNotes, [course.id]);
+  useEffect(() => { refetchNotes(); }, [course.id, refetchNotes]);
 
   const pageContext = buildPageContext(course, day, progress, notesByCard);
 
-  const onToolCall = (toolName: string, ok: boolean) => {
-    if (!ok) return;
-    if (toolName === "mark-task-complete") onProgressChanged();
-    if (toolName === "record-tutor-note") refetchNotes();
-  };
+  useSetTutorContext({
+    courseId: course.id,
+    pageContext,
+    placeholder: "Ask for a hint, grade your attempt, or request a similar problem…",
+    onToolCall: (toolName, ok) => {
+      if (!ok) return;
+      if (toolName === "mark-task-complete") onProgressChanged();
+      if (toolName === "record-tutor-note") refetchNotes();
+    },
+  });
 
-  return (
-    <Tutor
-      courseId={course.id}
-      pageContext={pageContext}
-      onToolCall={onToolCall}
-      placeholder="Ask for a hint, grade your attempt, or request a similar problem…"
-    />
-  );
+  return null;
 }

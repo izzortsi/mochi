@@ -3,9 +3,12 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { IntroScene } from "@/components/IntroScene";
+import { useSetTutorContext } from "@/lib/tutor-context";
 
 export default function IntroPage() {
   const router = useRouter();
+  // The intro is a full-screen splash; hide the docked tutor here.
+  useSetTutorContext({ visible: false });
 
   // Any key or click goes to the courses page.
   useEffect(() => {
