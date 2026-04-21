@@ -145,220 +145,243 @@ def _tip(style: str, level: int) -> str:
 # ---------------------------------------------------------------------------
 
 
-def _smoke_frame() -> list[str]:
-    """Shared 'dead' frame — a curl of smoke."""
-    return _pad([
-        "",
-        "",
-        _row("~ ~"),
-        _row(". ~ ."),
-        _row(" . . "),
-        _row("  ~  "),
-        "",
-        "",
-        "",
-        _row(". . ."),
-        "",
-        "",
-    ])
+def _smoke_frame(variant: int = 0) -> list[str]:
+    """Shared 'dead' frame — drifting smoke trail above charred remains.
+    Three variants animate the smoke rising upward (each frame, the wisp
+    pattern shifts up one row and a new wisp appears at the bottom)."""
+    smoke_rows = [
+        # Variants 0..2 — same wisp shapes, different vertical phase.
+        ["'  .  '", " ` . ` ", "  ~ ~  ", " ~ . ~ ", "'  ~  '", " .   . "],
+        [" ` . ` ", "  ~ ~  ", " ~ . ~ ", "'  ~  '", " .   . ", "       "],
+        ["  ~ ~  ", " ~ . ~ ", "'  ~  '", " .   . ", "       ", "       "],
+    ]
+    rows = ["" for _ in range(12)]
+    for i, content in enumerate(smoke_rows[variant % 3]):
+        rows[i] = _row(content) if content.strip() else ""
+    rows[7] = _row(". + . + .")
+    rows[8] = _row(" +  +  + ")
+    rows[9] = _row("  =====  ")
+    rows[10] = _row(" /     \\ ")
+    rows[11] = _row("==========")
+    return _pad(rows)
 
 
-def _sleep_zzz(rows_prefix: int) -> str:
-    """Zzz marker inserted at the given row count from top."""
-    return _row("Zzz")
+# Per-mood face glyphs. The pet's unique `core` shows through as the eye
+# only on idle (so identity is visible at rest); other moods override.
+# `variant` index alternates eye/mouth glyphs across animation frames so the
+# pet appears to blink, chew, twinkle, or drift instead of staying frozen.
+def _eyes(mood: str, core: str, variant: int = 0) -> str:
+    if mood == "happy":    return ["^", "*"][variant % 2]    # twinkle
+    if mood == "eating":   return ["O", "o"][variant % 2]    # blink mid-chew
+    if mood == "sleeping": return ["-", "_"][variant % 2]    # eye lids droop
+    if mood == "dead":     return "+"
+    # Idle: subtle blink — show core glyph mostly, half-closed every other frame
+    return [core[:1], "."][variant % 2]
+
+
+def _mouth(mood: str, variant: int = 0) -> str:
+    if mood == "happy":    return ["v", "U"][variant % 2]    # smile widens
+    if mood == "eating":   return ["w", "u"][variant % 2]    # chew open/close
+    if mood == "sleeping": return "_"
+    return "_"
+
+
+def _spark_phase(sparks: str, variant: int) -> str:
+    """Shift / mirror sparks per-variant so the floating particles drift."""
+    if not sparks:
+        return ""
+    if variant % 2 == 0:
+        return sparks
+    return sparks[::-1]
 
 
 def _spark_frame(mood: str, core: str, flame: str,
-                 sparks: str, aura: str) -> list[str]:
-    """Tiny ember — barely a flicker near the bottom."""
+                 sparks: str, aura: str, variant: int = 0) -> list[str]:
+    """Tiny ember — a 4-row flicker. Just a face peeking out of a wisp."""
     if mood == "dead":
-        return _smoke_frame()
+        return _smoke_frame(variant)
 
-    c = core[:1]
+    eye = _eyes(mood, core, variant)
+    mou = _mouth(mood, variant)
+    sps = _spark_phase(sparks, variant)
     rows: list[str] = ["" for _ in range(12)]
 
     if mood == "sleeping":
-        rows[6] = _row("zz")
-        rows[8] = _row(_tip(flame, 1))
-        rows[9] = _row(f"(-  -)")
-        rows[10] = _row("'-'")
+        rows[6] = _row(["z Z z", "Z z Z"][variant % 2])
+        rows[7] = _row(",'`,")
+        rows[8] = _row(f"({eye}_{eye})")
+        rows[9] = _row(" `-' ")
         return _pad(rows)
 
-    # Sparks float above (only visible when happy or rare sparks)
-    if sparks and mood == "happy":
-        rows[6] = _row(sparks)
-    elif sparks and mood == "idle":
-        rows[7] = _row(sparks[:3])
+    # Top decoration
+    if mood == "happy" and sps:
+        rows[5] = _row(sps[:7])
+    elif mood == "eating":
+        rows[6] = _row([". + .", " + . +"][variant % 2])
 
-    tip = _tip(flame, 1)
-    rows[8] = _row(tip)
-    if mood == "eating":
-        rows[9] = _row(f"({c}w{c})")
-    elif mood == "happy":
-        rows[9] = _row(f"({c}^{c})")
-    else:
-        rows[9] = _row(f"({c} {c})")
-    rows[10] = _row("'-'")
+    # Tiny flame tip — alternate width for breathing effect
+    rows[7] = _row(_tip(flame, 1 if variant % 2 == 0 else 1))
+    # Face — eyes around the mouth
+    rows[8] = _row(f"({eye} {mou} {eye})")
+    # Wisp base
+    rows[9] = _row(" `,_,' ")
+
     if aura:
-        rows[11] = _row(aura[:9])
+        rows[10] = _row(aura[:9])
     return _pad(rows)
 
 
 def _emberling_frame(mood: str, core: str, flame: str,
-                     sparks: str, aura: str) -> list[str]:
-    """Small flame with a visible body."""
+                     sparks: str, aura: str, variant: int = 0) -> list[str]:
+    """Small flame creature — flame body curving around a face."""
     if mood == "dead":
-        return _smoke_frame()
+        return _smoke_frame(variant)
 
-    c = core[:1]
+    eye = _eyes(mood, core, variant)
+    mou = _mouth(mood, variant)
+    sps = _spark_phase(sparks, variant)
     rows: list[str] = ["" for _ in range(12)]
 
     if mood == "sleeping":
-        rows[4] = _row("Zzz")
-        rows[5] = _row(_tip(flame, 1))
-        rows[6] = _row(_tip(flame, 2))
-        rows[7] = _row(f"(-  -)")
-        rows[8] = _row(" \\_/ ")
-        rows[9] = _row("  |  ")
-        rows[10] = _row("vvvvv")
+        rows[3] = _row(["z Z z", "Z z Z"][variant % 2])
+        rows[4] = _row(_tip(flame, 1))
+        rows[5] = _row(",'.`,")
+        rows[6] = _row(f",( {eye}_{eye} ),")
+        rows[7] = _row(" `,_,' ")
+        rows[8] = _row("   |   ")
+        rows[9] = _row(" .===. ")
         return _pad(rows)
 
-    if sparks:
-        rows[3] = _row(sparks)
+    # Top sparks (alternate row by variant for drift)
+    if sps and mood == "happy":
+        rows[2 if variant % 2 == 0 else 1] = _row(sps[:9])
+    elif sps and mood == "idle":
+        rows[3 if variant % 2 == 0 else 2] = _row(sps[:5])
+    elif mood == "eating":
+        rows[3] = _row([". + .", " + . +"][variant % 2])
 
     rows[4] = _row(_tip(flame, 1))
-    rows[5] = _row(_tip(flame, 2))
+    rows[5] = _row(",'.`,")               # narrowing flame collar
+    rows[6] = _row(f",( {eye} {mou} {eye} ),")  # face inside flame
+    rows[7] = _row(" `,___,' ")           # bottom of flame body
+    rows[8] = _row("   |   ")             # neck
+    # Feet glow alternates on variant
+    rows[9] = _row([" .===. ", " *===* "][variant % 2])
 
-    if mood == "eating":
-        rows[6] = _row(f"({c} w {c})")
-        rows[7] = _row(" \\O/ ")
-    elif mood == "happy":
-        rows[6] = _row(f"({c} ^ {c})")
-        rows[7] = _row(" \\*/ ")
-    else:
-        rows[6] = _row(f"({c}   {c})")
-        rows[7] = _row(" \\_/ ")
-
-    rows[8] = _row("  |  ")
-    rows[9] = _row(" /|\\ ")
-    rows[10] = _row("vvvvv")
     if aura:
-        rows[11] = _row(aura[:13])
+        rows[10] = _row(aura[:13])
     return _pad(rows)
 
 
 def _ember_frame(mood: str, core: str, flame: str,
-                 sparks: str, aura: str) -> list[str]:
-    """Medium ember — distinct body with base."""
+                 sparks: str, aura: str, variant: int = 0) -> list[str]:
+    """Medium ember — bigger face inside a layered flame, with legs."""
     if mood == "dead":
-        return _smoke_frame()
+        return _smoke_frame(variant)
 
-    paired_core = _core_chars(core, paired=True)
+    eye = _eyes(mood, core, variant)
+    mou = _mouth(mood, variant)
+    sps = _spark_phase(sparks, variant)
     rows: list[str] = ["" for _ in range(12)]
 
     if mood == "sleeping":
-        rows[1] = _row("Zzz")
-        rows[3] = _row(_tip(flame, 1))
-        rows[4] = _row(_tip(flame, 2))
-        rows[5] = _row(_tip(flame, 3))
-        rows[6] = _row("(-   -)")
-        rows[7] = _row(" \\___/ ")
-        rows[8] = _row("   |   ")
-        rows[9] = _row("  /|\\  ")
-        rows[10] = _row(" /_|_\\ ")
-        rows[11] = _row("vvvvvvv")
+        rows[1] = _row(["z Z z", "Z z Z"][variant % 2])
+        rows[2] = _row(_tip(flame, 1))
+        rows[3] = _row(_tip(flame, 2))
+        rows[4] = _row(",-'`'-,")
+        rows[5] = _row(f"( {eye} _ {eye} )")
+        rows[6] = _row(" \\ ___ / ")
+        rows[7] = _row("  `,_,'  ")
+        rows[8] = _row("    |    ")
+        rows[9] = _row("   /|\\   ")
+        rows[10] = _row("  /_|_\\  ")
+        rows[11] = _row("  =====  ")
         return _pad(rows)
 
-    if sparks:
-        rows[0] = _row(sparks)
+    # Top sparks (drift between two rows per variant)
+    if sps and mood == "happy":
+        rows[0 if variant % 2 == 0 else 1] = _row(sps[:11])
+    elif sps and mood == "idle":
+        rows[1 if variant % 2 == 0 else 0] = _row(sps[:7])
+    elif mood == "eating":
+        rows[1] = _row([". + . + .", " + . + . "][variant % 2])
 
-    rows[1] = _row(_tip(flame, 1))
-    rows[2] = _row(_tip(flame, 2))
-    rows[3] = _row(_tip(flame, 3))
+    rows[2] = _row(_tip(flame, 1))
+    rows[3] = _row(_tip(flame, 2))
+    rows[4] = _row(",-'`'-,")  # flame shoulders curving in
+    # Face row + flame outline that hugs it
+    rows[5] = _row(f"( {eye} {mou} {eye} )")
+    rows[6] = _row(" \\.___./ ")           # rounded chin / flame fold
+    rows[7] = _row("  `,_,'  ")           # base of flame body
+    # Body
+    rows[8] = _row("    |    ")           # waist
+    rows[9] = _row("   /|\\   ")           # arms / inner flames
+    rows[10] = _row("  /_|_\\  ")          # legs
+    # Feet alternate
+    rows[11] = _row(["  =====  ", "  ~===~  "][variant % 2])
 
-    if mood == "eating":
-        rows[4] = _row(f" .{paired_core}. ")
-        rows[5] = _row(f"( {paired_core} )")
-        rows[6] = _row(" \\ W / ")
-    elif mood == "happy":
-        rows[4] = _row(f" *{paired_core}* ")
-        rows[5] = _row(f"( {paired_core} )")
-        rows[6] = _row(" \\ v / ")
-    else:
-        rows[4] = _row(f"  {paired_core}  ")
-        rows[5] = _row(f"( {paired_core} )")
-        rows[6] = _row(" \\ _ / ")
-
-    rows[7] = _row("  \\_/  ")
-    rows[8] = _row("   |   ")
-    rows[9] = _row("  /|\\  ")
-    rows[10] = _row(" /_|_\\ ")
-    rows[11] = _row("vvvvvvv")
     if aura:
-        # Overlay aura on the last row if it fits, otherwise skip
-        pass
+        # Overlay aura over the feet line if it fits
+        a = aura[:11]
+        rows[11] = _row(a if len(a) >= 5 else rows[11])
     return _pad(rows)
 
 
 def _fire_frame(mood: str, core: str, flame: str,
-                sparks: str, aura: str) -> list[str]:
-    """Full bonfire — tall, with logs and aura."""
+                sparks: str, aura: str, variant: int = 0) -> list[str]:
+    """Full bonfire — tall body, crown of flames, broad logs at the base."""
     if mood == "dead":
-        return _smoke_frame()
+        return _smoke_frame(variant)
 
-    paired_core = _core_chars(core, paired=True)
+    eye = _eyes(mood, core, variant)
+    mou = _mouth(mood, variant)
+    sps = _spark_phase(sparks, variant)
     rows: list[str] = ["" for _ in range(12)]
 
     if mood == "sleeping":
-        rows[0] = _row("Zzz")
-        rows[1] = _row(_tip(flame, 1))
-        rows[2] = _row(_tip(flame, 2))
-        rows[3] = _row(_tip(flame, 3))
-        rows[4] = _row(" .   . ")
-        rows[5] = _row(" (- -) ")
-        rows[6] = _row("  \\-/  ")
-        rows[7] = _row(" /   \\ ")
-        rows[8] = _row(" \\___/ ")
-        rows[9] = _row("|--|--| ")
-        rows[10] = _row("[======]")
-        rows[11] = _row("'------'")
+        rows[0] = _row(["z Z z", "Z z Z"][variant % 2])
+        rows[1] = _row(_tip(flame, 2))
+        rows[2] = _row(_tip(flame, 3))
+        rows[3] = _row(" .  ,  . ")
+        rows[4] = _row(",-'```'-,")
+        rows[5] = _row(f"( {eye}  _  {eye} )")
+        rows[6] = _row(" \\.___./ ")
+        rows[7] = _row("  `\\_/'  ")
+        rows[8] = _row(" __|||__ ")
+        rows[9] = _row("[==|||==]")
+        rows[10] = _row("[========]")
+        rows[11] = _row("'.________.'")
         return _pad(rows)
 
-    if sparks:
-        rows[0] = _row(sparks)
+    # Top sparks (alternate row)
+    if sps and mood == "happy":
+        rows[0 if variant % 2 == 0 else 1] = _row(sps[:13])
+    elif sps:
+        rows[0] = _row(sps[:9])
 
     rows[1] = _row(_tip(flame, 2))
     rows[2] = _row(_tip(flame, 3))
 
-    # Crown of small flames around the main body
+    # Crown alternates between two patterns per variant
     if mood == "happy":
-        rows[3] = _row("*. .*. .*")
+        rows[3] = _row(["*'. * .'*", "'.* * *.'"][variant % 2])
     elif mood == "eating":
-        rows[3] = _row(". .*. .")
+        rows[3] = _row([". * + * .", " * . + . *"][variant % 2])
     else:
-        rows[3] = _row(" . * . ")
+        rows[3] = _row([" .  ,  . ", " ,  .  , "][variant % 2])
 
-    if mood == "eating":
-        rows[4] = _row(f"* {paired_core} *")
-        rows[5] = _row(f" ( {paired_core} ) ")
-        rows[6] = _row("  \\ W /  ")
-    elif mood == "happy":
-        rows[4] = _row(f"* {paired_core} *")
-        rows[5] = _row(f" ( {paired_core} ) ")
-        rows[6] = _row("  \\^v^/  ")
-    else:
-        rows[4] = _row(f"  {paired_core}  ")
-        rows[5] = _row(f" ( {paired_core} ) ")
-        rows[6] = _row("  \\ v /  ")
-
-    rows[7] = _row("   \\_/   ")
-    rows[8] = _row("  /|||\\  ")
-    rows[9] = _row("|--|-|--|")
-    rows[10] = _row("[========]")
+    rows[4] = _row(",-'```'-,")              # flame shoulders
+    rows[5] = _row(f"( {eye}  {mou}  {eye} )") # roomier face for the big stage
+    rows[6] = _row(" \\.___./ ")              # chin / flame fold
+    rows[7] = _row("  `\\_/'  ")              # neck
+    rows[8] = _row(" __|||__ ")              # smoldering core base
+    # Logs flicker on variant — middle gap shifts
+    rows[9] = _row(["[==|||==]", "[=|||||=]"][variant % 2])
+    rows[10] = _row("[========]")            # lower logs
     if aura:
         rows[11] = _row(aura[:17])
     else:
-        rows[11] = _row("'--------'")
+        rows[11] = _row("'.________.'")
     return _pad(rows)
 
 
@@ -415,22 +438,43 @@ def roll_parts() -> dict:
     }
 
 
-def render(stage: str, parts: dict) -> dict[str, list[str]]:
-    """Render all 5 mood frames for a given stage + parts bag."""
+# How many animation frames each mood loops through. Dead drifts longest
+# (3-frame smoke rise); other moods alternate two variants for breath/blink.
+MOOD_FRAME_COUNT = {
+    "idle":     2,
+    "happy":    2,
+    "eating":   2,
+    "sleeping": 2,
+    "dead":     3,
+}
+
+
+def render(stage: str, parts: dict) -> dict[str, list[list[str]]]:
+    """Render every mood's animation as a list of frame variants.
+
+    Return shape: { mood -> [frame0, frame1, ...] } where each frame is a
+    12-row list of 20-char strings. The frontend cycles through frames on a
+    fixed tick to give the pet visible motion (blink, chew, drift, breath).
+    """
     builder = STAGE_FRAME_BUILDERS.get(stage, _spark_frame)
-    return {
-        mood: builder(
-            mood,
-            parts.get("core", "o"),
-            parts.get("flame", "plain"),
-            parts.get("sparks", ""),
-            parts.get("aura", ""),
-        )
-        for mood in ("idle", "happy", "eating", "sleeping", "dead")
-    }
+    out: dict[str, list[list[str]]] = {}
+    for mood in ("idle", "happy", "eating", "sleeping", "dead"):
+        n = MOOD_FRAME_COUNT.get(mood, 1)
+        out[mood] = [
+            builder(
+                mood,
+                parts.get("core", "o"),
+                parts.get("flame", "plain"),
+                parts.get("sparks", ""),
+                parts.get("aura", ""),
+                v,
+            )
+            for v in range(n)
+        ]
+    return out
 
 
-async def generate_art(stage: str = "spark") -> tuple[dict[str, list[str]], dict]:
+async def generate_art(stage: str = "spark") -> tuple[dict[str, list[list[str]]], dict]:
     """Roll fresh parts and render for the given stage.
 
     Returns (art, parts). Caller persists parts so later stage transitions
@@ -440,6 +484,6 @@ async def generate_art(stage: str = "spark") -> tuple[dict[str, list[str]], dict
     return render(stage, parts), parts
 
 
-def rerender(stage: str, parts: dict) -> dict[str, list[str]]:
+def rerender(stage: str, parts: dict) -> dict[str, list[list[str]]]:
     """Re-render existing parts at a new stage (identity-preserving growth)."""
     return render(stage, parts)

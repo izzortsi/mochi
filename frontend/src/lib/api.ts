@@ -117,9 +117,12 @@ export const api = {
           const text = await r.text();
           throw new Error(text.slice(0, 200));
         }
-        return camelizeKeys<{ ok: boolean; happiness: number; health: number }>(
-          await r.json(),
-        );
+        return camelizeKeys<{
+          ok: boolean;
+          happiness: number;
+          health: number;
+          quote: string | null;
+        }>(await r.json());
       }),
 };
 

@@ -1,7 +1,13 @@
 "use client";
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { api, camelizeKeys } from "@/lib/api";
+
+// Each mood is a list of frame variants (the pet animates by cycling them).
+// Pre-multi-frame pets had `string[]` per mood; the migration in the backend
+// re-renders any such pets, but we keep a runtime guard in `pickFrame` too.
+type Frame = string[];
+type MoodArt = Frame[] | Frame; // legacy single-frame still tolerated
 
 interface PetState {
   id: string | null;
@@ -10,11 +16,18 @@ interface PetState {
   health: number;
   happiness: number;
   mood: string;
-  art: Record<string, string[]>;
+  art: Record<string, MoodArt>;
   died?: string | null;
   born?: string | null;
   lastFed?: string | null;
   totalXpEarned?: number;
+  rehatchTokens?: number;
+  stats?: {
+    perseverance: number;
+    curiosity: number;
+    audacity: number;
+    knowledge: number;
+  };
 }
 
 const MOOD_COLORS: Record<string, string> = {
@@ -100,29 +113,56 @@ const REACTIONS: Record<Reaction, {
   },
 };
 
-function pickFrame(art: Record<string, string[]>, mood: string, tick: number): string[] {
-  let frame: string[];
-  if (mood === "dead") frame = art.dead?.length ? art.dead : art.idle || [];
-  else if (mood === "waiting") frame = art.idle || [];
-  else if (mood === "sleeping") frame = art.sleeping?.length ? art.sleeping : art.idle || [];
-  else if (mood === "eating") frame = art.eating?.length ? art.eating : art.idle || [];
-  else if (mood === "happy" || mood === "idle") {
-    const frames = [art.idle, art.happy];
-    frame = frames[tick % 2]?.length ? frames[tick % 2] : art.idle || [];
-  } else {
-    frame = art.idle || [];
-  }
-  return trimBlankLines(frame);
+// Normalize a mood entry to a list of frames. Tolerates both the new
+// `string[][]` shape and legacy `string[]` (treats it as a single frame).
+function asFrames(entry: MoodArt | undefined): Frame[] {
+  if (!entry || (Array.isArray(entry) && entry.length === 0)) return [];
+  // Legacy: array of strings → wrap as one frame.
+  if (typeof (entry as Frame)[0] === "string") return [entry as Frame];
+  return entry as Frame[];
 }
 
-function trimBlankLines(rows: string[]): string[] {
-  // Drop leading/trailing all-whitespace rows so the pet takes as much
-  // vertical space as its actual silhouette, not the 12-row canvas.
-  let start = 0;
-  while (start < rows.length && rows[start].trim() === "") start++;
-  let end = rows.length;
-  while (end > start && rows[end - 1].trim() === "") end--;
-  return rows.slice(start, end);
+// Compute the inclusive [start, endExclusive) row range that is non-blank
+// in *any* frame of *any* mood. We use this as a stable trim window so the
+// pet's rendered height doesn't change across animation frames or mood
+// transitions — without a stable window the header would reflow every tick
+// (different variants put sparks on different rows), cascading into the
+// Tutor panel via the ResizeObserver. Stage transitions still recompute it.
+function computeStableBounds(art: Record<string, MoodArt>): { start: number; end: number } {
+  let start = Number.POSITIVE_INFINITY;
+  let end = -1;
+  for (const entry of Object.values(art ?? {})) {
+    for (const frame of asFrames(entry)) {
+      for (let i = 0; i < frame.length; i++) {
+        if (frame[i].trim() !== "") {
+          if (i < start) start = i;
+          if (i > end) end = i;
+        }
+      }
+    }
+  }
+  if (end < 0) return { start: 0, end: 0 };
+  return { start: start === Number.POSITIVE_INFINITY ? 0 : start, end: end + 1 };
+}
+
+function pickFrame(
+  art: Record<string, MoodArt>,
+  mood: string,
+  tick: number,
+  bounds: { start: number; end: number },
+): string[] {
+  // Map UI moods to which mood-art bucket to draw from.
+  const sourceMood =
+    mood === "waiting" ? "idle" :
+    mood === "hungry" || mood === "sad" || mood === "desperate" ? "idle" :
+    mood;
+
+  let frames = asFrames(art[sourceMood]);
+  if (!frames.length) frames = asFrames(art.idle);
+  if (!frames.length) return [];
+
+  const frame = frames[tick % frames.length] ?? frames[0];
+  return frame.slice(bounds.start, bounds.end);
 }
 
 async function fetchPet(): Promise<PetState> {
@@ -142,6 +182,19 @@ async function hatchPet(name: string): Promise<{ ok: boolean; name: string }> {
     throw new Error(text.slice(0, 300));
   }
   return camelizeKeys<{ ok: boolean; name: string }>(await res.json());
+}
+
+async function rehatchPet(): Promise<{ ok: boolean; rehatchTokens: number }> {
+  const res = await fetch("/api/pet/rehatch", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: "{}",
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text.slice(0, 300));
+  }
+  return camelizeKeys<{ ok: boolean; rehatchTokens: number }>(await res.json());
 }
 
 function healthGradient(hp: number): { background: string; boxShadow: string } {
@@ -165,10 +218,14 @@ export function PetCreature() {
   const [showHatch, setShowHatch] = useState(false);
   const [hatchName, setHatchName] = useState("");
   const [hatching, setHatching] = useState(false);
+  const [rerolling, setRerolling] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [reaction, setReaction] = useState<Reaction | null>(null);
   const [heartKey, setHeartKey] = useState(0);
   const [petStatus, setPetStatus] = useState<"ok" | "cooldown" | null>(null);
+  const [quote, setQuote] = useState<string | null>(null);
+  const [quoteKey, setQuoteKey] = useState(0);
+  const quoteTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const reactionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const statusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -184,7 +241,7 @@ export function PetCreature() {
   }, [refresh]);
 
   useEffect(() => {
-    const frameInterval = setInterval(() => setTick(t => t + 1), 3000);
+    const frameInterval = setInterval(() => setTick(t => t + 1), 800);
     return () => clearInterval(frameInterval);
   }, []);
 
@@ -192,15 +249,25 @@ export function PetCreature() {
     return () => {
       if (reactionTimerRef.current) clearTimeout(reactionTimerRef.current);
       if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
+      if (quoteTimerRef.current) clearTimeout(quoteTimerRef.current);
     };
   }, []);
+
+  // Stable bounding box across all moods × variants for this art bag —
+  // recomputes only when the art object reference changes (stage transition
+  // or rehatch), not every animation tick. MUST be declared before any
+  // early-return so the hook order stays consistent across renders.
+  const bounds = useMemo(
+    () => pet ? computeStableBounds(pet.art) : { start: 0, end: 0 },
+    [pet?.art],
+  );
 
   if (!pet) return null;
 
   const isCoal = pet.stage === "coal";
   const isDead = !!pet.died || pet.mood === "dead";
   const colorClass = MOOD_COLORS[pet.mood] || "text-gray-300";
-  const frame = pickFrame(pet.art, pet.mood, tick);
+  const frame = pickFrame(pet.art, pet.mood, tick, bounds);
   const anim = MOOD_ANIM[pet.mood] || MOOD_ANIM.idle;
 
   const stageLabel = pet.stage?.charAt(0).toUpperCase() + pet.stage?.slice(1);
@@ -226,6 +293,22 @@ export function PetCreature() {
     }
   };
 
+  const handleRehatch = async () => {
+    if (rerolling) return;
+    const remaining = pet?.rehatchTokens ?? 0;
+    if (remaining <= 0) return;
+    if (!confirm(`Re-roll the pet's appearance? (${remaining} re-roll${remaining === 1 ? "" : "s"} left, irreversible)`)) return;
+    setRerolling(true);
+    try {
+      await rehatchPet();
+      refresh();
+    } catch {
+      // best-effort; refresh will surface real state next tick
+    } finally {
+      setRerolling(false);
+    }
+  };
+
   const handleClick = () => {
     if (isCoal || isDead) {
       setShowHatch(true);
@@ -244,9 +327,18 @@ export function PetCreature() {
     e.preventDefault(); // suppress the browser context menu
     if (isCoal || isDead) return;
     try {
-      await api.petPet();
+      const resp = await api.petPet();
       setPetStatus("ok");
-      setHeartKey((k) => k + 1); // remount the heart so animation restarts
+      if (resp.quote) {
+        // Pet "speaks" via Haiku — show its line for ~6s. Falls back to the
+        // floating heart if the LLM is unavailable / returned nothing.
+        setQuote(resp.quote);
+        setQuoteKey((k) => k + 1);
+        if (quoteTimerRef.current) clearTimeout(quoteTimerRef.current);
+        quoteTimerRef.current = setTimeout(() => setQuote(null), 6000);
+      } else {
+        setHeartKey((k) => k + 1);
+      }
       refresh();
     } catch {
       setPetStatus("cooldown");
@@ -288,7 +380,20 @@ export function PetCreature() {
           </pre>
         </motion.div>
         <AnimatePresence>
-          {petStatus === "ok" && (
+          {quote && (
+            <motion.div
+              key={`quote-${quoteKey}`}
+              initial={{ opacity: 0, y: 4, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -4, transition: { duration: 0.5 } }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="absolute left-1/2 -top-2 -translate-x-1/2 -translate-y-full max-w-[260px] text-[11px] italic font-display text-amber-200/90 px-2.5 py-1 rounded-md bg-black/85 border border-amber-900/60 shadow-[0_0_12px_rgba(251,146,60,0.25)] pointer-events-none whitespace-pre-wrap text-center leading-tight"
+              style={{ textShadow: "0 0 6px rgba(251,146,60,0.4)" }}
+            >
+              {quote}
+            </motion.div>
+          )}
+          {!quote && petStatus === "ok" && (
             <motion.div
               key={`heart-${heartKey}`}
               initial={{ opacity: 0, y: 0, scale: 0.6 }}
@@ -374,6 +479,27 @@ export function PetCreature() {
               </div>
             )}
           </div>
+          {!isDead && (pet.rehatchTokens ?? 0) > 0 && (
+            <button
+              onClick={handleRehatch}
+              disabled={rerolling}
+              title="Re-roll the pet's appearance and stats. Keeps name, XP, and HP."
+              className="self-start mt-0.5 text-[9px] uppercase tracking-wider font-mono px-1.5 py-0.5 rounded border border-violet-700/40 bg-violet-900/20 text-violet-200 hover:border-violet-500 hover:bg-violet-900/40 disabled:opacity-30"
+            >
+              {rerolling ? "rerolling…" : `↻ re-roll · ${pet.rehatchTokens}`}
+            </button>
+          )}
+          {pet.stats && (
+            <div
+              className="grid grid-cols-2 gap-x-2 gap-y-0.5 text-[9px] font-mono opacity-70 mt-0.5"
+              title="perseverance · curiosity · audacity · knowledge"
+            >
+              <span><span className="opacity-50">PER</span> {pet.stats.perseverance}</span>
+              <span><span className="opacity-50">CUR</span> {pet.stats.curiosity}</span>
+              <span><span className="opacity-50">AUD</span> {pet.stats.audacity}</span>
+              <span><span className="opacity-50">KNO</span> {pet.stats.knowledge}</span>
+            </div>
+          )}
           {pet.totalXpEarned != null && (
             <span className="text-[9px] opacity-40">{pet.totalXpEarned} XP</span>
           )}
