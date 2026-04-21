@@ -184,10 +184,21 @@ export function Tutor({
     }
   };
 
+  // Pairs with the sticky header from Header.tsx: the panel docks flush to
+  // the right + bottom edges and tucks directly under the header's border,
+  // reading as one continuous HUD surface instead of a floating card.
+  const statusDot =
+    status === "connected" ? "bg-emerald-500" :
+    status === "connecting" ? "bg-amber-500" :
+    "bg-stone-600";
+
   return (
-    <div className="fixed right-4 bottom-4 top-[140px] w-96 flex flex-col rounded-xl border border-[#2a2a2a] bg-[#000000]/95 backdrop-blur">
-      <div className="px-4 py-2 border-b border-[#1a1a1a] flex items-center justify-between gap-2">
-        <span className="font-display">{title}</span>
+    <div
+      className="fixed right-0 bottom-0 w-96 flex flex-col border-t border-l border-[#1a1a1a] bg-black/95 backdrop-blur z-30 rounded-tl-lg"
+      style={{ top: "var(--hud-h, 102px)" }}
+    >
+      <div className="px-3 py-2 border-b border-[#1a1a1a] flex items-center justify-between gap-2">
+        <span className="font-display text-sm tracking-wide">{title}</span>
         <div className="flex items-center gap-3">
           <Link
             href="/memory"
@@ -198,12 +209,16 @@ export function Tutor({
             <Database className="w-3 h-3" />
             memory
           </Link>
-          <span className="text-[10px] uppercase tracking-wider font-mono opacity-40">
+          <span
+            className="text-[10px] uppercase tracking-wider font-mono opacity-60 flex items-center gap-1.5"
+            title={`connection: ${status}`}
+          >
+            <span className={`w-1.5 h-1.5 rounded-full ${statusDot}`} />
             {status}
           </span>
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto px-3 py-2 space-y-3">
+      <div className="flex-1 overflow-y-auto px-3 py-3 space-y-3">
         {(messages ?? []).map((m, i) => (
           <div key={i} className="text-sm">
             <div className="text-[10px] uppercase tracking-wider font-mono opacity-40 mb-1">
@@ -227,14 +242,19 @@ export function Tutor({
       </div>
       <div className="border-t border-[#1a1a1a] p-2 flex gap-2">
         <textarea
-          className="flex-1 bg-[#050505] border border-[#1a1a1a] rounded px-2 py-1 text-sm resize-none"
+          className="flex-1 bg-[#050505] border border-[#1a1a1a] rounded px-2 py-1 text-sm resize-none outline-none focus:border-[#2a2a2a]"
           rows={2}
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
           placeholder={placeholder}
         />
-        <button onClick={send} disabled={busy} className="px-2 disabled:opacity-30">
+        <button
+          onClick={send}
+          disabled={busy}
+          className="px-2 disabled:opacity-30 text-neutral-300 hover:text-neutral-100"
+          title="send"
+        >
           <Send className="w-4 h-4" />
         </button>
       </div>

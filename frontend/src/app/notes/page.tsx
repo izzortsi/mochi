@@ -77,7 +77,7 @@ export default function NotesPage() {
   const pageContext = buildNotesListContext(notes, domains, filter);
 
   return (
-    <div className="pr-[26rem]">
+    <div className="mx-[calc(50%-50vw)] w-screen px-4 pr-[26rem]">
       <h1 className="font-display text-3xl mb-2">Knowledge Base</h1>
       <p className="text-sm opacity-60 mb-4">Atomic notes extracted from your courses. Click a node to read.</p>
 

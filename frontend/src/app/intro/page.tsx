@@ -25,7 +25,7 @@ export default function IntroPage() {
       </div>
       <div className="text-center">
         <h1 className="font-display text-4xl text-neutral-100 tracking-wide mb-2">
-          study plan
+          mochi
         </h1>
         <p className="text-[11px] uppercase tracking-[0.3em] font-mono opacity-60 text-neutral-400 mb-6">
           we keep the fire going
