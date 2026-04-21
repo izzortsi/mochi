@@ -243,6 +243,30 @@
       "content": "[elaborate-eval · c3-d1-gold-2 / e1]\nprompt: Explique por que o auto-espaço para um autovalor é um subespaço vetorial.\nattempt: o auto-espaço pra um autovalor é o núcleo de uma transformação linear, que é um espaço vetorial\nverdict: adequate\nfeedback: O estudante acertou o ponto central: o auto-espaço de λ é o núcleo de (T − λI), e núcleos de transformações lineares são subespaços — isso captura a essência da prova. Porém, falta desenvolver por que o núcleo é subespaço (fechado sob adição e multiplicação por escalar, e contém o vetor nulo), o que é justamente a parte que demonstra a afirmação, não apenas a renomeia.",
       "tool_name": "elaborate-eval",
       "timestamp": "2026-04-20T18:25:23.125Z"
+    },
+    {
+      "role": "tool",
+      "content": "[retrieval-eval · c3-d2-silver-0 / r1]\nprompt: Como você calcula as coordenadas de um vetor em uma base ortonormal?\nattempt: combinaçao linear de vetores unitarios ortogonais\nverdict: partial\nfeedback: Você identificou corretamente que o vetor é expresso como combinação linear dos vetores da base ortonormal, mas não mencionou o ponto central: os coeficientes são obtidos pelos produtos internos $c_i = \\vec{u} \\cdot \\vec{v}_i$.",
+      "tool_name": "retrieval-eval",
+      "timestamp": "2026-04-21T04:49:27.883Z"
+    },
+    {
+      "role": "tool",
+      "content": "[retrieval-eval · c3-d2-silver-0 / r2]\nprompt: Por que esse método funciona para bases ortonormais mas não para bases gerais?\nattempt:  Principalmente pela ortogonalizade.\nverdict: partial\nfeedback: Você identificou corretamente que a ortogonalidade é a chave, mas faltou explicar o mecanismo: que $\\vec{v}_i \\cdot \\vec{v}_j = \\delta_{ij}$ elimina os termos cruzados e normaliza, simplificando a álgebra.",
+      "tool_name": "retrieval-eval",
+      "timestamp": "2026-04-21T04:49:45.645Z"
+    },
+    {
+      "role": "user",
+      "content": "Hi",
+      "tool_name": null,
+      "timestamp": "2026-04-21T04:51:31.799Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Hey. Ready to work through chain rule today? We've got two silvers and a gold on the board — pick one, or I can point you at whichever looks spiciest.",
+      "tool_name": null,
+      "timestamp": "2026-04-21T04:51:34.419Z"
     }
   ],
   "7": [
