@@ -6058,5 +6058,1894 @@
         "operador-simetrico"
       ]
     ]
+  },
+  {
+    "id": 7,
+    "title": "Real Mathematical Analysis",
+    "slug": "real-mathematical-analysis",
+    "phases": [
+      {
+        "num": 1,
+        "title": "Foundations: Sets, Logic, and Real Numbers"
+      },
+      {
+        "num": 2,
+        "title": "Construction and Completeness of R"
+      },
+      {
+        "num": 3,
+        "title": "Euclidean Space and Cardinality"
+      },
+      {
+        "num": 4,
+        "title": "Metric Space Topology"
+      },
+      {
+        "num": 5,
+        "title": "Differentiation of Functions of a Real Variable"
+      },
+      {
+        "num": 6,
+        "title": "Riemann Integration"
+      },
+      {
+        "num": 7,
+        "title": "Function Spaces and Uniform Convergence"
+      }
+    ],
+    "days": [
+      {
+        "id": 1,
+        "phase": 1,
+        "title": "Sets, Classes, and Equivalence Relations",
+        "icon": "*",
+        "summary": "Vocabulary of set theory: membership, subsets, unions, intersections, classes, and equivalence relations.",
+        "key_insight": "A set's elements are not the same kind of object as a class's members — distinguish $x \\in A$ from $A \\in \\mathcal{C}$.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Show that if $A\\subset B$ and $B\\subset C$ then $A\\subset C$, and give an example of a class $\\mathcal{C}$ whose members are all subsets of $\\mathbb{N}$.",
+            "detail": "A set is a collection of elements; $x\\in A$ means $x$ belongs to $A$. $A\\subset B$ when every member of $A$ is in $B$. A class is a collection of sets. An equivalence relation $\\sim$ is reflexive, symmetric, transitive, and partitions a set into equivalence classes.",
+            "concepts": [
+              "set",
+              "subset",
+              "equivalence-relation"
+            ],
+            "notes": [
+              "set-basics",
+              "equivalence-relation-note"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Master the set-theoretic vocabulary underpinning all of analysis.",
+                "prior_knowledge": "Informal notion of collections and membership from school mathematics."
+              },
+              "core": {
+                "exposition": "A set is a collection of elements; $x\\in A$ means $x$ belongs to $A$. $A\\subset B$ when every member of $A$ is in $B$. A class is a collection of sets. An equivalence relation $\\sim$ is reflexive, symmetric, transitive, and partitions a set into equivalence classes.",
+                "worked_example": "Let $S=\\mathbb{Z}$ and $a\\sim b \\iff a-b$ is even. Check: $a-a=0$ even (reflexive); $a-b$ even $\\Rightarrow b-a$ even (symmetric); $a-b,b-c$ even $\\Rightarrow a-c$ even (transitive). Classes: $[0]$=evens, $[1]$=odds.",
+                "problem": "Show that if $A\\subset B$ and $B\\subset C$ then $A\\subset C$, and give an example of a class $\\mathcal{C}$ whose members are all subsets of $\\mathbb{N}$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the three axioms defining an equivalence relation.",
+                    "answer": "Reflexive ($s\\sim s$), symmetric ($s\\sim s'\\Rightarrow s'\\sim s$), transitive ($s\\sim s'\\sim s''\\Rightarrow s\\sim s''$).",
+                    "concept": "equivalence-relation"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "How do you prove two sets $A$ and $B$ are equal?",
+                    "answer": "Show each element of $A$ belongs to $B$ and each element of $B$ belongs to $A$ (mutual inclusion).",
+                    "concept": "set"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain in your own words why the singleton $\\{1\\}$ is a subset of $\\mathbb{N}$ but $1$ is not a subset of $\\mathbb{N}$."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Define an equivalence relation on $\\mathbb{R}^2$ and describe its equivalence classes geometrically.",
+                "rubric": "Definition satisfies all three axioms and classes are correctly identified as geometric loci."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "phase": 1,
+        "title": "Logic, Quantifiers, and Proof",
+        "icon": "*",
+        "summary": "Proper use of $\\forall$, $\\exists$, negation, implication, and proof by contradiction.",
+        "key_insight": "Quantifier order matters: $\\forall x\\,\\exists y$ and $\\exists y\\,\\forall x$ say different things.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Negate: $\\forall n\\in\\mathbb{N},\\ \\exists p\\in P$ such that $p>n$.",
+            "detail": "Place quantifiers first, assertion last. Negation swaps $\\forall\\leftrightarrow\\exists$ and negates the assertion. $\\neg(a\\Rightarrow b)\\equiv a\\land\\neg b$. Proof by contradiction: assume $\\neg b$ and hypothesis $a$, derive a contradiction.",
+            "concepts": [
+              "quantifier",
+              "proof-by-contradiction"
+            ],
+            "notes": [
+              "quantifiers-note",
+              "contradiction-note"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Write rigorous mathematical statements and proofs by contradiction.",
+                "prior_knowledge": "Basic English logic: 'and', 'or', 'implies'."
+              },
+              "core": {
+                "exposition": "Place quantifiers first, assertion last. Negation swaps $\\forall\\leftrightarrow\\exists$ and negates the assertion. $\\neg(a\\Rightarrow b)\\equiv a\\land\\neg b$. Proof by contradiction: assume $\\neg b$ and hypothesis $a$, derive a contradiction.",
+                "worked_example": "Euclid: suppose primes are finite $\\{p_1,\\dots,p_m\\}$. Let $N=p_1\\cdots p_m$. Then $N+1$ has remainder 1 with each $p_i$, yet must factor into primes — contradiction. Hence primes are infinite.",
+                "problem": "Negate: $\\forall n\\in\\mathbb{N},\\ \\exists p\\in P$ such that $p>n$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What is the contrapositive of $a\\Rightarrow b$?",
+                    "answer": "$\\neg b \\Rightarrow \\neg a$; it is logically equivalent to the original implication.",
+                    "concept": "quantifier"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "How do you negate a statement of the form $\\forall x\\,\\exists y\\,P(x,y)$?",
+                    "answer": "$\\exists x\\,\\forall y\\,\\neg P(x,y)$: swap each quantifier and negate the assertion.",
+                    "concept": "quantifier"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why switching the order of $\\forall$ and $\\exists$ in 'for every $n$ there exists a prime $p>n$' changes the statement's truth value."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove by contradiction that $\\sqrt{3}\\notin\\mathbb{Q}$.",
+                "rubric": "Correctly assumes $\\sqrt{3}=p/q$ in lowest terms and derives divisibility contradiction."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "phase": 2,
+        "title": "Dedekind Cuts and the Construction of R",
+        "icon": "*",
+        "summary": "Building real numbers as cuts in the rationals to fill gaps like $\\sqrt{2}$.",
+        "key_insight": "A real number is a place where the rational line can be cut: $x=A|B$ with $A$ having no largest element.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Show that $\\mathbb{Q}$ is incomplete by proving no $r\\in\\mathbb{Q}$ satisfies $r^2=2$.",
+            "detail": "A cut in $\\mathbb{Q}$ is a pair $A|B$ with $A\\cup B=\\mathbb{Q}$, both nonempty, disjoint, every $a\\in A$ less than every $b\\in B$, and $A$ has no largest element. $\\mathbb{R}$ is the class of all cuts. A rational $c$ corresponds to the cut at $c$.",
+            "concepts": [
+              "dedekind-cut",
+              "rational-numbers",
+              "real-numbers"
+            ],
+            "notes": [
+              "dedekind-cut-note",
+              "q-incomplete-note"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Define real numbers rigorously as Dedekind cuts of $\\mathbb{Q}$.",
+                "prior_knowledge": "Arithmetic and order in $\\mathbb{Q}$; irrationality of $\\sqrt{2}$."
+              },
+              "core": {
+                "exposition": "A cut in $\\mathbb{Q}$ is a pair $A|B$ with $A\\cup B=\\mathbb{Q}$, both nonempty, disjoint, every $a\\in A$ less than every $b\\in B$, and $A$ has no largest element. $\\mathbb{R}$ is the class of all cuts. A rational $c$ corresponds to the cut at $c$.",
+                "worked_example": "Cut for $\\sqrt{2}$: $A=\\{r\\in\\mathbb{Q}: r\\le 0 \\text{ or } r^2<2\\}$, $B=\\{r\\in\\mathbb{Q}: r>0 \\text{ and } r^2\\ge 2\\}$. $A$ has no largest since between any $r^2<2$ and $2$ lies another rational square.",
+                "problem": "Show that $\\mathbb{Q}$ is incomplete by proving no $r\\in\\mathbb{Q}$ satisfies $r^2=2$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "List the three defining properties of a Dedekind cut $A|B$.",
+                    "answer": "(a) $A\\cup B=\\mathbb{Q}$, both nonempty, disjoint; (b) $a<b$ for all $a\\in A,b\\in B$; (c) $A$ has no largest element.",
+                    "concept": "dedekind-cut"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "When is a cut called 'rational'?",
+                    "answer": "When $B$ contains a smallest element $c\\in\\mathbb{Q}$; we write $c^*$ for this cut.",
+                    "concept": "dedekind-cut"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why is the condition that $A$ has no largest element necessary? What would go wrong without it?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Describe the cut representing the rational number $3$ and verify each axiom.",
+                "rubric": "Correctly gives $A=\\{r<3\\}$, $B=\\{r\\ge 3\\}$ and checks all three cut properties."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "phase": 2,
+        "title": "Least Upper Bound Property and Completeness",
+        "icon": "*",
+        "summary": "$\\mathbb{R}$ is a complete ordered field: every nonempty bounded-above subset has a supremum.",
+        "key_insight": "The LUB property is the single axiom distinguishing $\\mathbb{R}$ from $\\mathbb{Q}$ and drives every deep theorem of analysis.",
+        "cards": [
+          {
+            "tier": "gold",
+            "task_index": 0,
+            "text": "Use LUB to prove that every Cauchy sequence in $\\mathbb{R}$ is bounded and converges.",
+            "detail": "LUB property: every nonempty $S\\subset\\mathbb{R}$ bounded above has a least upper bound $\\sup S\\in\\mathbb{R}$. Proof via cuts: take $C=\\bigcup A$ over cuts in $\\mathcal{C}$. $\\mathbb{R}$ is also Cauchy-complete: every Cauchy sequence converges.",
+            "concepts": [
+              "least-upper-bound",
+              "complete-ordered-field",
+              "cauchy-sequence"
+            ],
+            "notes": [
+              "lub-property-note",
+              "cauchy-complete-note",
+              "triangle-inequality-note"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "State and use the LUB property; relate it to Cauchy completeness.",
+                "prior_knowledge": "Dedekind cuts; order on $\\mathbb{R}$."
+              },
+              "core": {
+                "exposition": "LUB property: every nonempty $S\\subset\\mathbb{R}$ bounded above has a least upper bound $\\sup S\\in\\mathbb{R}$. Proof via cuts: take $C=\\bigcup A$ over cuts in $\\mathcal{C}$. $\\mathbb{R}$ is also Cauchy-complete: every Cauchy sequence converges.",
+                "worked_example": "Let $S=\\{1-1/n:n\\in\\mathbb{N}\\}$. Each element $<1$, so $1$ is an upper bound. Any $M<1$ fails since for $n$ large, $1-1/n>M$. Hence $\\sup S=1$, though $1\\notin S$.",
+                "problem": "Use LUB to prove that every Cauchy sequence in $\\mathbb{R}$ is bounded and converges."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the Least Upper Bound property of $\\mathbb{R}$.",
+                    "answer": "Every nonempty subset $S\\subset\\mathbb{R}$ that is bounded above has a least upper bound $\\sup S\\in\\mathbb{R}$.",
+                    "concept": "least-upper-bound"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "State the triangle inequality for real numbers.",
+                    "answer": "$|x+y|\\le|x|+|y|$ for all $x,y\\in\\mathbb{R}$.",
+                    "concept": "complete-ordered-field"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why $\\mathbb{Q}$ fails the LUB property, using the set $\\{r\\in\\mathbb{Q}:r^2<2\\}$ as illustration."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove: if $a_n\\to b$ then $(a_n)$ is Cauchy. Then explain why the converse also holds in $\\mathbb{R}$.",
+                "rubric": "Forward direction uses triangle inequality with $\\epsilon/2$; converse cites Cauchy completeness theorem."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "phase": 3,
+        "title": "Euclidean Space and Cauchy-Schwarz",
+        "icon": "*",
+        "summary": "Vectors in R^m, inner products, and the Cauchy-Schwarz inequality.",
+        "key_insight": "The discriminant trick turns a nonnegative quadratic into the Cauchy-Schwarz inequality, valid in any inner product space.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Compute $\\langle x,y\\rangle$ and $|x-y|$ for $x=(1,0,1)$, $y=(2,1,0)$.",
+            "detail": "R^m is the set of ordered m-tuples of reals. The dot product $\\langle x, y\\rangle = \\sum x_i y_i$ is bilinear, symmetric, and positive definite. The Euclidean norm is $|x| = \\sqrt{\\langle x,x\\rangle}$.",
+            "concepts": [
+              "euclidean-space",
+              "inner-product"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Recall the structure of R^m with its dot product.",
+                "prior_knowledge": "Vectors, coordinates, and basic algebra in R^2 and R^3."
+              },
+              "core": {
+                "exposition": "R^m is the set of ordered m-tuples of reals. The dot product $\\langle x, y\\rangle = \\sum x_i y_i$ is bilinear, symmetric, and positive definite. The Euclidean norm is $|x| = \\sqrt{\\langle x,x\\rangle}$.",
+                "worked_example": "For $x=(1,2,2)$: $\\langle x,x\\rangle = 1+4+4=9$, so $|x|=3$.",
+                "problem": "Compute $\\langle x,y\\rangle$ and $|x-y|$ for $x=(1,0,1)$, $y=(2,1,0)$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the three defining properties of an inner product.",
+                    "answer": "Bilinearity, symmetry, and positive definiteness ($\\langle x,x\\rangle \\geq 0$ with equality iff $x=0$).",
+                    "concept": "inner-product"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "How is the Euclidean norm defined from the dot product?",
+                    "answer": "$|x|=\\sqrt{\\langle x,x\\rangle}$.",
+                    "concept": "euclidean-space"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why does positive definiteness require $\\langle x,x\\rangle=0$ only when $x=0$, rather than just $\\geq 0$?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Verify bilinearity of the dot product in R^3 with a concrete example.",
+                "rubric": "Shows $\\langle x, y+cz\\rangle = \\langle x,y\\rangle + c\\langle x,z\\rangle$ via coordinates."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Use Cauchy-Schwarz to show $(a+b+c)^2 \\leq 3(a^2+b^2+c^2)$.",
+            "detail": "Consider $Q(t)=\\langle x+ty,x+ty\\rangle = |x|^2+2t\\langle x,y\\rangle+t^2|y|^2 \\geq 0$. A nonnegative quadratic has discriminant $\\leq 0$: $4\\langle x,y\\rangle^2 - 4|x|^2|y|^2 \\leq 0$, giving $|\\langle x,y\\rangle| \\leq |x||y|$.",
+            "concepts": [
+              "cauchy-schwarz",
+              "triangle-inequality"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Prove Cauchy-Schwarz via the discriminant trick.",
+                "prior_knowledge": "Inner product properties and quadratic formula."
+              },
+              "core": {
+                "exposition": "Consider $Q(t)=\\langle x+ty,x+ty\\rangle = |x|^2+2t\\langle x,y\\rangle+t^2|y|^2 \\geq 0$. A nonnegative quadratic has discriminant $\\leq 0$: $4\\langle x,y\\rangle^2 - 4|x|^2|y|^2 \\leq 0$, giving $|\\langle x,y\\rangle| \\leq |x||y|$.",
+                "worked_example": "From Cauchy-Schwarz: $|x+y|^2 = |x|^2+2\\langle x,y\\rangle+|y|^2 \\leq (|x|+|y|)^2$, proving triangle inequality.",
+                "problem": "Use Cauchy-Schwarz to show $(a+b+c)^2 \\leq 3(a^2+b^2+c^2)$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Why does $Q(t)\\geq 0$ imply $b^2-4ac\\leq 0$?",
+                    "answer": "If discriminant were positive, $Q$ would have two real roots and be negative between them.",
+                    "concept": "cauchy-schwarz"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "State the triangle inequality for norms.",
+                    "answer": "$|x+y| \\leq |x|+|y|$.",
+                    "concept": "triangle-inequality"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why does the discriminant proof of Cauchy-Schwarz work in any inner product space, even infinite-dimensional?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Apply Cauchy-Schwarz to continuous functions $f,g$ on $[a,b]$ with $\\langle f,g\\rangle = \\int_a^b fg$.",
+                "rubric": "Correctly states integral form $|\\int fg|\\leq\\sqrt{\\int f^2}\\sqrt{\\int g^2}$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "phase": 3,
+        "title": "Cardinality: Countable vs Uncountable",
+        "icon": "*",
+        "summary": "Bijections, countability, and Cantor's diagonal argument.",
+        "key_insight": "R is strictly larger than N: Cantor's diagonal produces a real not in any proposed enumeration.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Exhibit a bijection between $\\mathbb{N}$ and the set of even naturals.",
+            "detail": "A set S is denumerable if there is a bijection $\\mathbb{N}\\to S$; equivalently S can be listed. Countable = finite or denumerable. Two sets have equal cardinality iff there is a bijection between them.",
+            "concepts": [
+              "bijection",
+              "countable-set"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Distinguish finite, denumerable, countable, and uncountable sets.",
+                "prior_knowledge": "Functions as maps, injections, and surjections."
+              },
+              "core": {
+                "exposition": "A set S is denumerable if there is a bijection $\\mathbb{N}\\to S$; equivalently S can be listed. Countable = finite or denumerable. Two sets have equal cardinality iff there is a bijection between them.",
+                "worked_example": "$\\mathbb{N}\\times\\mathbb{N}$ is denumerable: walk along counter-diagonals to list $(1,1),(2,1),(1,2),(3,1),(2,2),\\ldots$.",
+                "problem": "Exhibit a bijection between $\\mathbb{N}$ and the set of even naturals."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What does it mean for S to be denumerable?",
+                    "answer": "There exists a bijection $\\mathbb{N}\\to S$; equivalently, S can be listed as $s_1,s_2,\\ldots$ without repetition.",
+                    "concept": "countable-set"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why is Q countable?",
+                    "answer": "Q is a denumerable union of denumerable sets $A_q=\\{p/q:p\\in\\mathbb{Z}\\}$, and such a union is countable.",
+                    "concept": "countable-set"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why is the 'countable union of countable sets is countable' result not circular — what does it really use?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove $\\mathbb{Z}$ is denumerable by exhibiting an explicit bijection with $\\mathbb{N}$.",
+                "rubric": "Gives a formula like $0,1,-1,2,-2,\\ldots$ and argues it is a bijection."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Why must we avoid choosing $y_i=9$ in the diagonal construction?",
+            "detail": "Suppose $f:\\mathbb{N}\\to\\mathbb{R}$ were a bijection. List each $f(n)$ by its decimal expansion. Construct $y=0.y_1y_2\\ldots$ with each $y_i$ differing from the i-th diagonal digit $x_{ii}$ (avoiding 9). Then $y\\neq f(n)$ for every n — contradiction.",
+            "concepts": [
+              "uncountable-set",
+              "cantor-diagonal"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Prove R is uncountable via Cantor's diagonal method.",
+                "prior_knowledge": "Decimal expansions and bijections."
+              },
+              "core": {
+                "exposition": "Suppose $f:\\mathbb{N}\\to\\mathbb{R}$ were a bijection. List each $f(n)$ by its decimal expansion. Construct $y=0.y_1y_2\\ldots$ with each $y_i$ differing from the i-th diagonal digit $x_{ii}$ (avoiding 9). Then $y\\neq f(n)$ for every n — contradiction.",
+                "worked_example": "If $f(1)=0.1234\\ldots$, $f(2)=0.5678\\ldots$, choose $y_1\\neq 1$, $y_2\\neq 6$, etc.; then $y$ differs from each $f(n)$ in position n.",
+                "problem": "Why must we avoid choosing $y_i=9$ in the diagonal construction?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What contradiction does the diagonal element produce?",
+                    "answer": "The constructed y cannot equal any f(n), so f was not surjective, contradicting the assumption that R is denumerable.",
+                    "concept": "cantor-diagonal"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why is $(a,b)$ uncountable?",
+                    "answer": "It bijects with R via a stretching map, and R is uncountable.",
+                    "concept": "uncountable-set"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "How does the diagonal argument generalize to show the power set of any set has strictly greater cardinality than the set itself?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove the set of irrationals is uncountable.",
+                "rubric": "Uses R = Q ∪ (R∖Q); since R uncountable and Q countable, R∖Q must be uncountable."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "phase": 4,
+        "title": "Metric Spaces and Continuity",
+        "icon": "*",
+        "summary": "Metrics, convergent sequences, and the sequential/ε-δ definitions of continuity.",
+        "key_insight": "A function is continuous iff it preserves sequential convergence — equivalently, the ε-δ condition holds.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Prove limits are unique: if $p_n\\to p$ and $p_n\\to p'$ then $p=p'$.",
+            "detail": "A metric on M is $d:M\\times M\\to\\mathbb{R}$ satisfying positivity, symmetry, and triangle inequality. A sequence $(p_n)$ converges to p if $\\forall\\epsilon>0\\,\\exists N$ such that $n\\geq N\\Rightarrow d(p_n,p)<\\epsilon$.",
+            "concepts": [
+              "metric-space",
+              "convergent-sequence"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Define metric space and sequence convergence.",
+                "prior_knowledge": "Euclidean distance and absolute value."
+              },
+              "core": {
+                "exposition": "A metric on M is $d:M\\times M\\to\\mathbb{R}$ satisfying positivity, symmetry, and triangle inequality. A sequence $(p_n)$ converges to p if $\\forall\\epsilon>0\\,\\exists N$ such that $n\\geq N\\Rightarrow d(p_n,p)<\\epsilon$.",
+                "worked_example": "In R, $p_n=1/n\\to 0$: given $\\epsilon>0$, take $N>1/\\epsilon$; then $n\\geq N$ gives $|1/n|<\\epsilon$.",
+                "problem": "Prove limits are unique: if $p_n\\to p$ and $p_n\\to p'$ then $p=p'$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "List the three metric axioms.",
+                    "answer": "Positive definiteness ($d\\geq 0$, =0 iff equal), symmetry, and triangle inequality.",
+                    "concept": "metric-space"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What is the discrete metric?",
+                    "answer": "$d(x,y)=1$ if $x\\neq y$ and 0 if $x=y$; it is a valid metric on any set.",
+                    "concept": "metric-space"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why does the triangle inequality force d to be nonnegative (even if we only assumed d(x,x)=0 and symmetry)?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Verify that the taxicab metric $d_{sum}(x,y)=|x_1-y_1|+|x_2-y_2|$ on R^2 satisfies the triangle inequality.",
+                "rubric": "Applies R-triangle inequality coordinatewise and adds."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Show that if f and g are continuous, so is $g\\circ f$.",
+            "detail": "$f:M\\to N$ is continuous iff $p_n\\to p$ implies $f(p_n)\\to f(p)$. Equivalently: $\\forall\\epsilon>0\\,\\forall p\\,\\exists\\delta>0$ such that $d_M(x,p)<\\delta\\Rightarrow d_N(fx,fp)<\\epsilon$.",
+            "concepts": [
+              "continuous-function",
+              "epsilon-delta"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Connect sequential and ε-δ definitions of continuity.",
+                "prior_knowledge": "Metric spaces and convergent sequences."
+              },
+              "core": {
+                "exposition": "$f:M\\to N$ is continuous iff $p_n\\to p$ implies $f(p_n)\\to f(p)$. Equivalently: $\\forall\\epsilon>0\\,\\forall p\\,\\exists\\delta>0$ such that $d_M(x,p)<\\delta\\Rightarrow d_N(fx,fp)<\\epsilon$.",
+                "worked_example": "$f(x)=x^2$ at $p=2$: need $|x^2-4|<\\epsilon$. Take $\\delta=\\min(1,\\epsilon/5)$; then $|x-2|<\\delta$ gives $|x+2|\\leq 5$ so $|x^2-4|<5\\delta\\leq\\epsilon$.",
+                "problem": "Show that if f and g are continuous, so is $g\\circ f$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Why does sequential continuity imply ε-δ continuity?",
+                    "answer": "If ε-δ failed at p, we'd get $x_n\\to p$ with $d(fx_n,fp)\\geq\\epsilon$, contradicting sequential continuity.",
+                    "concept": "continuous-function"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Give a continuous bijection that is NOT a homeomorphism.",
+                    "answer": "$f:[0,2\\pi)\\to S^1$, $f(x)=(\\cos x,\\sin x)$: continuous bijection but $f^{-1}$ is discontinuous at $(1,0)$.",
+                    "concept": "continuous-function"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why can the δ in the ε-δ definition depend on the point p but uniform continuity forbids this dependence?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove $f(x)=1/x$ is continuous on $(0,\\infty)$ but not uniformly continuous there.",
+                "rubric": "ε-δ proof with δ depending on p; shows δ must shrink near 0."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "phase": 4,
+        "title": "Topology, Compactness, and Completeness",
+        "icon": "*",
+        "summary": "Open and closed sets, topological characterization of continuity, and sequential compactness.",
+        "key_insight": "Continuity, compactness, and completeness can all be expressed purely through open sets and convergent subsequences — freeing analysis from specific formulas.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Prove that the intersection of two open sets is open using the r-neighborhood definition.",
+            "detail": "A set U is open if each $p\\in U$ has some $M_r p\\subset U$. A set is closed iff it contains all its limits; equivalently its complement is open. $f$ is continuous iff the preimage of every open set is open (equivalently, preimage of closed is closed).",
+            "concepts": [
+              "open-set",
+              "closed-set",
+              "topology"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Characterize continuity via open/closed sets.",
+                "prior_knowledge": "Metric spaces and sequential convergence."
+              },
+              "core": {
+                "exposition": "A set U is open if each $p\\in U$ has some $M_r p\\subset U$. A set is closed iff it contains all its limits; equivalently its complement is open. $f$ is continuous iff the preimage of every open set is open (equivalently, preimage of closed is closed).",
+                "worked_example": "$f(x,y)=x^2+y^2+2$: preimage of the open interval $(3,6)$ is the open annulus $\\{1<\\sqrt{x^2+y^2}<2\\}$.",
+                "problem": "Prove that the intersection of two open sets is open using the r-neighborhood definition."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Name the three axioms of a topology.",
+                    "answer": "Closed under arbitrary unions, closed under finite intersections, and contains ∅ and M.",
+                    "concept": "topology"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why is $f$ continuous iff $f^{pre}(U)$ is open for all open U?",
+                    "answer": "This is equivalent to the ε-δ condition: ε-neighborhoods of f(p) pull back to δ-neighborhoods of p.",
+                    "concept": "open-set"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why are sets typically 'ajar' — neither open nor closed — and what makes ∅ and M both clopen?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Show that continuous functions need not send open sets to open sets.",
+                "rubric": "Gives example like $x\\mapsto x^2$ sending $(-1,1)$ to $[0,1)$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Exhibit a Cauchy sequence in Q that does not converge in Q.",
+            "detail": "A⊂M is (sequentially) compact if every sequence in A has a subsequence converging in A. Compact ⇒ closed and bounded. M is complete if every Cauchy sequence converges. R^m is complete; $[a,b]$ is compact.",
+            "concepts": [
+              "compactness",
+              "completeness",
+              "cauchy-sequence"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Understand sequential compactness and completeness.",
+                "prior_knowledge": "Subsequences, closed and bounded sets, Cauchy sequences."
+              },
+              "core": {
+                "exposition": "A⊂M is (sequentially) compact if every sequence in A has a subsequence converging in A. Compact ⇒ closed and bounded. M is complete if every Cauchy sequence converges. R^m is complete; $[a,b]$ is compact.",
+                "worked_example": "$[a,b]$ compact: given $(x_n)\\subset[a,b]$, let $C=\\{x:x_n<x$ only finitely often$\\}$. Then $c=\\sup C\\in[a,b]$ is a subsequential limit.",
+                "problem": "Exhibit a Cauchy sequence in Q that does not converge in Q."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Why must a compact set be bounded?",
+                    "answer": "Otherwise pick $a_n$ with $d(p,a_n)\\geq n$; no subsequence can converge since distances blow up.",
+                    "concept": "compactness"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Is completeness a topological property?",
+                    "answer": "No: R and $(-1,1)$ are homeomorphic but R is complete while $(-1,1)$ is not.",
+                    "concept": "completeness"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why does the least upper bound property of R drive both the compactness of [a,b] and the completeness of R?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove every closed subset of a complete metric space is itself complete.",
+                "rubric": "Cauchy sequence in closed A converges in M to some p; closedness gives p∈A."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "phase": 5,
+        "title": "Differentiation Rules and the Mean Value Theorem",
+        "icon": "*",
+        "summary": "Derivative as limit of differential quotients; product, quotient, chain rules; MVT and its consequences.",
+        "key_insight": "The Mean Value Theorem is the bridge between local (derivative) and global (difference) information.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Compute the derivative of f(x)=x³ from the definition.",
+            "detail": "f is differentiable at x if the limit of (f(t)-f(x))/(t-x) exists as t→x. Differentiability implies continuity. Sum, product (Leibniz), quotient, and chain rules follow from manipulating difference quotients.",
+            "concepts": [
+              "derivada"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Recall the definition of the derivative and basic rules.",
+                "prior_knowledge": "Limits and continuity from Chapter 2."
+              },
+              "core": {
+                "exposition": "f is differentiable at x if the limit of (f(t)-f(x))/(t-x) exists as t→x. Differentiability implies continuity. Sum, product (Leibniz), quotient, and chain rules follow from manipulating difference quotients.",
+                "worked_example": "For f(x)=x², (f(t)-f(x))/(t-x) = t+x → 2x. So f'(x)=2x.",
+                "problem": "Compute the derivative of f(x)=x³ from the definition."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the Leibniz (product) rule.",
+                    "answer": "(fg)'(x) = f'(x)g(x) + f(x)g'(x).",
+                    "concept": "derivada"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why does differentiability imply continuity?",
+                    "answer": "If Δf/Δx has a finite limit as Δx→0, then Δf→0, which is continuity.",
+                    "concept": "derivada"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain in your own words why the chain rule's naive cancellation proof is flawed, and how to fix it."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove the quotient rule from the product and chain rules.",
+                "rubric": "Correct use of rules with g≠0 hypothesis."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Use MVT to show if f'≡0 on (a,b) then f is constant.",
+            "detail": "MVT: if f is continuous on [a,b] and differentiable on (a,b), there is θ∈(a,b) with f(b)-f(a) = f'(θ)(b-a). Proof: apply Lemma 4 (interior extrema have f'=0) to φ(x)=f(x)-S(x-a).",
+            "concepts": [
+              "derivada",
+              "mean-value-theorem"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Master the MVT and its ratio form.",
+                "prior_knowledge": "Extreme Value Theorem on [a,b]."
+              },
+              "core": {
+                "exposition": "MVT: if f is continuous on [a,b] and differentiable on (a,b), there is θ∈(a,b) with f(b)-f(a) = f'(θ)(b-a). Proof: apply Lemma 4 (interior extrema have f'=0) to φ(x)=f(x)-S(x-a).",
+                "worked_example": "f(x)=x² on [0,2]: f(2)-f(0)=4=f'(θ)·2, so f'(θ)=2, giving θ=1.",
+                "problem": "Use MVT to show if f'≡0 on (a,b) then f is constant."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the Ratio Mean Value Theorem.",
+                    "answer": "For f,g continuous on [a,b], differentiable on (a,b): Δf·g'(θ) = Δg·f'(θ) for some θ∈(a,b).",
+                    "concept": "mean-value-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why must φ in the MVT proof attain a max or min at an interior point?",
+                    "answer": "φ has equal values at endpoints a,b, so its extremum on the compact [a,b] occurs at some interior θ.",
+                    "concept": "mean-value-theorem"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain how the MVT transforms local derivative info into global Lipschitz estimates."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove: if |f'|≤M on (a,b) then |f(t)-f(x)|≤M|t-x|.",
+                "rubric": "Apply MVT on [x,t] correctly."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Show that a derivative cannot have a jump discontinuity.",
+            "detail": "Theorem 8: the derivative f' has the intermediate value property, even if f' is discontinuous. Proof uses the sliding secant method and IVT for continuous slope functions.",
+            "concepts": [
+              "derivada",
+              "darboux-continuity"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Understand Darboux's theorem on derivatives.",
+                "prior_knowledge": "MVT and IVT."
+              },
+              "core": {
+                "exposition": "Theorem 8: the derivative f' has the intermediate value property, even if f' is discontinuous. Proof uses the sliding secant method and IVT for continuous slope functions.",
+                "worked_example": "f(x)=x²sin(1/x) for x>0, f(0)=0: f'(0)=0 exists but f' is discontinuous at 0 (oscillates with amplitude ~1).",
+                "problem": "Show that a derivative cannot have a jump discontinuity."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What does Darboux's theorem say about f'?",
+                    "answer": "f' has the intermediate value property, so it cannot have jump discontinuities.",
+                    "concept": "darboux-continuity"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Give an example of a differentiable f whose f' is discontinuous.",
+                    "answer": "f(x)=x²sin(1/x) for x≠0, f(0)=0; f'(0)=0 but f' oscillates near 0.",
+                    "concept": "derivada"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why does the sliding secant construction produce a secant with any intermediate slope?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Can every function with the intermediate value property be a derivative? Explain.",
+                "rubric": "Note that derivatives are Darboux-continuous but not conversely in general."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "phase": 5,
+        "title": "Higher Derivatives, Taylor Approximation, and Smoothness Classes",
+        "icon": "*",
+        "summary": "C^r classes, analytic vs smooth, Taylor polynomial with Lagrange remainder.",
+        "key_insight": "Smooth ≠ analytic: the function e^{-1/x} is smooth but not analytic at 0.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Compute the 2nd order Taylor polynomial of e^x at x=0.",
+            "detail": "f^(r) = (f^(r-1))'. f is of class C^r if f^(r) is continuous. C^∞ = smooth. C^ω = analytic (locally a convergent power series). Taylor polynomial at x: P(h) = Σ f^(k)(x) h^k/k! for k=0..r.",
+            "concepts": [
+              "derivada",
+              "taylor-polynomial"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Define higher derivatives and C^r classes.",
+                "prior_knowledge": "First derivative."
+              },
+              "core": {
+                "exposition": "f^(r) = (f^(r-1))'. f is of class C^r if f^(r) is continuous. C^∞ = smooth. C^ω = analytic (locally a convergent power series). Taylor polynomial at x: P(h) = Σ f^(k)(x) h^k/k! for k=0..r.",
+                "worked_example": "For f(x)=sin x at x=0: P₃(h) = h - h³/6, since f'(0)=1, f''(0)=0, f'''(0)=-1.",
+                "problem": "Compute the 2nd order Taylor polynomial of e^x at x=0."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Define C^r class.",
+                    "answer": "f is C^r if f is r-times differentiable and f^(r) is continuous.",
+                    "concept": "derivada"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What are the coefficients of the Taylor polynomial?",
+                    "answer": "a_k = f^(k)(x)/k!.",
+                    "concept": "taylor-polynomial"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why C^0 ⊃ C^1 ⊃ ... ⊃ C^∞ with all inclusions strict."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Give an example of a C^1 but not C^2 function.",
+                "rubric": "f(x)=x|x| works: f'(x)=2|x| is continuous but not differentiable at 0."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Bound the error in approximating cos(0.1) by 1 - (0.1)²/2.",
+            "detail": "If f is (r+1)-times differentiable, then R(h)=f(x+h)-P(h) = f^(r+1)(θ) h^(r+1)/(r+1)! for some θ between x and x+h. Also R(h)/h^r → 0 (r-th order flatness).",
+            "concepts": [
+              "taylor-polynomial"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Prove Taylor's theorem with Lagrange remainder.",
+                "prior_knowledge": "MVT, iterated differentiation."
+              },
+              "core": {
+                "exposition": "If f is (r+1)-times differentiable, then R(h)=f(x+h)-P(h) = f^(r+1)(θ) h^(r+1)/(r+1)! for some θ between x and x+h. Also R(h)/h^r → 0 (r-th order flatness).",
+                "worked_example": "For f=e^x at 0, |R_r(h)| ≤ e^|h| |h|^(r+1)/(r+1)! → 0, so the Taylor series converges to e^x everywhere.",
+                "problem": "Bound the error in approximating cos(0.1) by 1 - (0.1)²/2."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the Lagrange form of the Taylor remainder.",
+                    "answer": "R(h) = f^(r+1)(θ) h^(r+1)/(r+1)! for some θ between x and x+h.",
+                    "concept": "taylor-polynomial"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What does 'P approximates f to order r' mean?",
+                    "answer": "R(h)/h^r → 0 as h → 0.",
+                    "concept": "taylor-polynomial"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why the Taylor polynomial is the unique polynomial of degree ≤r with r-th order flat remainder."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Use Taylor's theorem to estimate sin(0.2) and bound the error.",
+                "rubric": "Must give numerical estimate and error bound via Lagrange form."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Show that the sum of e(x) and e(1-x) is a smooth bump supported on [0,1].",
+            "detail": "e(x) = e^{-1/x} for x>0, 0 for x≤0, is smooth with e^(r)(0)=0 for all r. Its Taylor series at 0 converges to 0, not e(x). So e is not analytic at 0. Analytic functions are uniquely determined by their Taylor coefficients; smooth ones need not be.",
+            "concepts": [
+              "taylor-polynomial",
+              "analytic-function"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Understand the gap between smooth and analytic.",
+                "prior_knowledge": "Taylor series convergence."
+              },
+              "core": {
+                "exposition": "e(x) = e^{-1/x} for x>0, 0 for x≤0, is smooth with e^(r)(0)=0 for all r. Its Taylor series at 0 converges to 0, not e(x). So e is not analytic at 0. Analytic functions are uniquely determined by their Taylor coefficients; smooth ones need not be.",
+                "worked_example": "e(h)/h^r → 0 for every r, using L'Hôpital iteratively. But e(h)>0 for h>0, while its Taylor series sums to 0.",
+                "problem": "Show that the sum of e(x) and e(1-x) is a smooth bump supported on [0,1]."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Why is e(x)=e^{-1/x} (x>0) smooth but not analytic at 0?",
+                    "answer": "All derivatives e^(r)(0)=0, so Taylor series is identically 0, but e(x)>0 for x>0.",
+                    "concept": "analytic-function"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What does uniqueness of power series expansion mean?",
+                    "answer": "If f is analytic, its Taylor coefficients a_r = f^(r)(x)/r! are uniquely determined.",
+                    "concept": "analytic-function"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Describe how e(x) allows construction of smooth partitions of unity."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove that e(x) is C^∞ on all of R.",
+                "rubric": "Induction on r using L'Hôpital to show each e^(r) extends continuously with value 0 at 0."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "phase": 6,
+        "title": "Riemann and Darboux Integrals",
+        "icon": "*",
+        "summary": "Partition pairs, Riemann sums, upper/lower sums; equivalence of Riemann and Darboux integrability.",
+        "key_insight": "Riemann = Darboux: fineness of partition forces upper and lower sums to agree.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Compute ∫₀¹ x² dx using Riemann sums with uniform partition.",
+            "detail": "A partition pair (P,T) has P={x_0<...<x_n} and sample points t_i∈[x_{i-1},x_i]. Riemann sum R(f,P,T)=Σ f(t_i)Δx_i. f is Riemann integrable with integral I if R→I as mesh P→0, uniformly in T.",
+            "concepts": [
+              "riemann-integral"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Define Riemann sum and integral.",
+                "prior_knowledge": "Partitions of [a,b]."
+              },
+              "core": {
+                "exposition": "A partition pair (P,T) has P={x_0<...<x_n} and sample points t_i∈[x_{i-1},x_i]. Riemann sum R(f,P,T)=Σ f(t_i)Δx_i. f is Riemann integrable with integral I if R→I as mesh P→0, uniformly in T.",
+                "worked_example": "f(x)=x on [0,1], uniform partition of size n, t_i = x_i: R = Σ(i/n)(1/n) = (n+1)/(2n) → 1/2.",
+                "problem": "Compute ∫₀¹ x² dx using Riemann sums with uniform partition."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What is the mesh of a partition?",
+                    "answer": "The length of the largest subinterval [x_{i-1},x_i].",
+                    "concept": "riemann-integral"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why must a Riemann integrable function be bounded?",
+                    "answer": "On any subinterval we can choose sample points making f arbitrarily large, breaking |R-I|<ε if f were unbounded.",
+                    "concept": "riemann-integral"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why Riemann sums approximate area under the graph."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove that constant functions are Riemann integrable.",
+                "rubric": "Every Riemann sum of f≡k on [a,b] equals k(b-a)."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Use Riemann's criterion to show every continuous f on [a,b] is integrable.",
+            "detail": "Lower sum L(f,P)=Σm_iΔx_i, upper sum U(f,P)=ΣM_iΔx_i. Lower/upper integrals: sup L, inf U. f is Darboux integrable if these agree. Riemann ⇔ Darboux, and all three integrals coincide.",
+            "concepts": [
+              "riemann-integral",
+              "darboux-integral"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Relate Darboux and Riemann integrability.",
+                "prior_knowledge": "Inf and sup, refinement of partitions."
+              },
+              "core": {
+                "exposition": "Lower sum L(f,P)=Σm_iΔx_i, upper sum U(f,P)=ΣM_iΔx_i. Lower/upper integrals: sup L, inf U. f is Darboux integrable if these agree. Riemann ⇔ Darboux, and all three integrals coincide.",
+                "worked_example": "For any partition, L≤R≤U. Refining P increases L, decreases U (Refinement Principle).",
+                "problem": "Use Riemann's criterion to show every continuous f on [a,b] is integrable."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State Riemann's Integrability Criterion.",
+                    "answer": "A bounded f is Riemann integrable iff ∀ε>0 ∃P with U(f,P)-L(f,P)<ε.",
+                    "concept": "riemann-integral"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why is χ_Q not Riemann integrable on [0,1]?",
+                    "answer": "Every L=0 and every U=1, so U-L=1≠0.",
+                    "concept": "darboux-integral"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain the role of the common refinement P*=P∪P' in comparing sums."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Show that monotone functions on [a,b] are Riemann integrable.",
+                "rubric": "Use that for monotone f, U-L telescopes into (f(b)-f(a))·mesh(P)."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Show the Sandwich Principle: if g≤f≤h are integrable with ∫(h-g)<ε, then f is integrable.",
+            "detail": "Riemann⇒Darboux: given R→I, pick samples making R near L and near U separately, forcing I=I_lower=I_upper. Darboux⇒Riemann: given partition P_1 with U_1-L_1<ε/3, any P with small enough mesh has its sums near P* = P∪P_1 sums, yielding U(f,P)-L(f,P)<ε.",
+            "concepts": [
+              "riemann-integral",
+              "darboux-integral"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Prove Riemann-Darboux equivalence.",
+                "prior_knowledge": "Both definitions and refinement principle."
+              },
+              "core": {
+                "exposition": "Riemann⇒Darboux: given R→I, pick samples making R near L and near U separately, forcing I=I_lower=I_upper. Darboux⇒Riemann: given partition P_1 with U_1-L_1<ε/3, any P with small enough mesh has its sums near P* = P∪P_1 sums, yielding U(f,P)-L(f,P)<ε.",
+                "worked_example": "Number of P-intervals 'contaminated' by P_1 points is ≤ n_1-1, each of length ≤δ. Their contribution to U-U* is ≤2M n_1 δ<ε/3.",
+                "problem": "Show the Sandwich Principle: if g≤f≤h are integrable with ∫(h-g)<ε, then f is integrable."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What is the 'contamination' argument in the Darboux⇒Riemann proof?",
+                    "answer": "P* adds at most n_1-1 points to P, splitting only a few P-intervals; the resulting sum difference is bounded by 2M·n_1·mesh(P).",
+                    "concept": "riemann-integral"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why is the infimum of upper sums always ≥ supremum of lower sums?",
+                    "answer": "Via common refinement: L(f,P)≤L(f,P*)≤U(f,P*)≤U(f,P') for any P,P'.",
+                    "concept": "darboux-integral"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why is the Darboux formulation often easier to work with than the Riemann one?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Use Riemann's criterion to prove the product of integrable functions is integrable.",
+                "rubric": "Bound |fg(t)-fg(s)| using boundedness of f,g and control U-L for fg via that for f and g."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "phase": 6,
+        "title": "Riemann-Lebesgue Theorem and the Fundamental Theorem of Calculus",
+        "icon": "*",
+        "summary": "Zero sets, a.e. continuity, characterization of Riemann integrability; FTC in indefinite-integral and antiderivative forms.",
+        "key_insight": "A bounded function is Riemann integrable iff its discontinuities form a zero set.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Show the middle-thirds Cantor set C is a zero set.",
+            "detail": "Z⊂R is a zero set if ∀ε>0 it has a countable open interval covering with total length ≤ε. Countable sets, the Cantor set, and subsets of zero sets are zero sets. 'Almost everywhere' means 'except on a zero set'.",
+            "concepts": [
+              "zero-set",
+              "riemann-integral"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Understand zero sets and 'almost everywhere'.",
+                "prior_knowledge": "Countable unions, open coverings."
+              },
+              "core": {
+                "exposition": "Z⊂R is a zero set if ∀ε>0 it has a countable open interval covering with total length ≤ε. Countable sets, the Cantor set, and subsets of zero sets are zero sets. 'Almost everywhere' means 'except on a zero set'.",
+                "worked_example": "Q is a zero set: enumerate {q_n}, cover q_n by (q_n-ε/2^(n+1), q_n+ε/2^(n+1)); total length ≤ε.",
+                "problem": "Show the middle-thirds Cantor set C is a zero set."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Define zero set.",
+                    "answer": "A set Z such that for every ε>0 there is a countable cover by open intervals with total length ≤ε.",
+                    "concept": "zero-set"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Is every countable set a zero set?",
+                    "answer": "Yes: use the ε/2^n trick to cover each point with an interval of length ε/2^n.",
+                    "concept": "zero-set"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why [0,1] is NOT a zero set (intuitively)."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove a countable union of zero sets is a zero set.",
+                "rubric": "Use ε/2^j covering for the j-th set."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Prove every bounded piecewise continuous function is Riemann integrable.",
+            "detail": "Theorem: f:[a,b]→R is Riemann integrable iff f is bounded and its discontinuity set D is a zero set. D = ∪D_k where D_k = {x: osc_x(f)≥1/k}. Control U-L via 'bad' intervals (those meeting D_k): their total length can be made <ε by covering D_k.",
+            "concepts": [
+              "zero-set",
+              "riemann-integral"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "State and apply the Riemann-Lebesgue theorem.",
+                "prior_knowledge": "Zero sets, oscillation osc_x(f)."
+              },
+              "core": {
+                "exposition": "Theorem: f:[a,b]→R is Riemann integrable iff f is bounded and its discontinuity set D is a zero set. D = ∪D_k where D_k = {x: osc_x(f)≥1/k}. Control U-L via 'bad' intervals (those meeting D_k): their total length can be made <ε by covering D_k.",
+                "worked_example": "The rational ruler function f(p/q)=1/q (lowest terms), f(irrational)=0: discontinuous only at Q, which is a zero set, so f is integrable with integral 0.",
+                "problem": "Prove every bounded piecewise continuous function is Riemann integrable."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the Riemann-Lebesgue characterization of integrability.",
+                    "answer": "f is Riemann integrable iff f is bounded and continuous almost everywhere.",
+                    "concept": "riemann-integral"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What is osc_x(f)?",
+                    "answer": "lim_{r→0} diam f([x-r,x+r]); equals 0 iff f continuous at x.",
+                    "concept": "riemann-integral"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why does controlling the measure of D_k suffice to control U-L?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove that if f∈R and φ is continuous then φ∘f∈R.",
+                "rubric": "D(φ∘f)⊂D(f), which is a zero set."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Show that if f∈R is ≥0 with ∫_a^b f = 0, then f=0 at every continuity point.",
+            "detail": "FTC v1: if f∈R, F(x)=∫_a^x f is continuous, and F'(x)=f(x) at every continuity point of f. FTC v2 (Antiderivative): if G'=f everywhere and f∈R, then G(x)=∫_a^x f + G(a). Proof of v2: telescope G(x)-G(a) via MVT into a Riemann sum for f.",
+            "concepts": [
+              "riemann-integral",
+              "fundamental-theorem-calculus"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Prove the two versions of FTC.",
+                "prior_knowledge": "Riemann integrability, continuity."
+              },
+              "core": {
+                "exposition": "FTC v1: if f∈R, F(x)=∫_a^x f is continuous, and F'(x)=f(x) at every continuity point of f. FTC v2 (Antiderivative): if G'=f everywhere and f∈R, then G(x)=∫_a^x f + G(a). Proof of v2: telescope G(x)-G(a) via MVT into a Riemann sum for f.",
+                "worked_example": "log x = ∫_1^x dt/t is differentiable with (log x)' = 1/x for x>0, by FTC v1.",
+                "problem": "Show that if f∈R is ≥0 with ∫_a^b f = 0, then f=0 at every continuity point."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State FTC v1 (indefinite integral form).",
+                    "answer": "If f∈R, F(x)=∫_a^x f is continuous, and F'(x)=f(x) wherever f is continuous.",
+                    "concept": "fundamental-theorem-calculus"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Does an antiderivative G of f∈R always equal F+C? Why?",
+                    "answer": "Yes: G(x)-G(a) equals a Riemann sum for f by MVT, which converges to ∫_a^x f.",
+                    "concept": "fundamental-theorem-calculus"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain the Devil's staircase: H'=0 a.e. yet H is not constant. Why doesn't this violate FTC?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove Integration by Substitution for a C¹ diffeomorphism g.",
+                "rubric": "Use Riemann sums with x_k from [c,d] and y_k=g(x_k), and MVT to match g(x_k)-g(x_{k-1})=g'(t_k)Δx_k."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "phase": 7,
+        "title": "Spaces of Functions and Uniform Convergence",
+        "icon": "*",
+        "summary": "Treat functions as points in a metric space; study uniform convergence and its interaction with continuity, differentiation, and integration.",
+        "key_insight": "A sequence of functions can itself converge — but pointwise convergence is too weak; uniform convergence is the right notion to preserve continuity.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Does $f_n(x)=x/n$ converge uniformly on $[0,1]$?",
+            "detail": "On $C([a,b],\\mathbb{R})$, define $d(f,g)=\\sup_{x\\in[a,b]}|f(x)-g(x)|$. This is a metric. Convergence $f_n\\to f$ in this metric is called uniform convergence.",
+            "concepts": [
+              "metric-space",
+              "continuous-function"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Recall how a set of functions can be made into a metric space.",
+                "prior_knowledge": "Metric spaces and the sup norm."
+              },
+              "core": {
+                "exposition": "On $C([a,b],\\mathbb{R})$, define $d(f,g)=\\sup_{x\\in[a,b]}|f(x)-g(x)|$. This is a metric. Convergence $f_n\\to f$ in this metric is called uniform convergence.",
+                "worked_example": "On $[0,1]$, $f_n(x)=x^n$ converges pointwise to $f(x)=0$ for $x<1$, $f(1)=1$. Since $\\sup|f_n-f|=1$, it does NOT converge uniformly.",
+                "problem": "Does $f_n(x)=x/n$ converge uniformly on $[0,1]$?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Define uniform convergence of $f_n$ to $f$ on a set $X$.",
+                    "answer": "$\\forall\\epsilon>0\\ \\exists N$ such that $n\\geq N \\Rightarrow |f_n(x)-f(x)|<\\epsilon$ for ALL $x\\in X$ simultaneously.",
+                    "concept": "continuous-function"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What metric on $C([a,b],\\mathbb{R})$ corresponds to uniform convergence?",
+                    "answer": "The sup metric $d(f,g)=\\sup|f(x)-g(x)|$.",
+                    "concept": "metric-space"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain in your own words why pointwise convergence does not guarantee that the limit function is continuous."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Give an example of $f_n\\to f$ pointwise on $[0,1]$ with each $f_n$ continuous but $f$ discontinuous.",
+                "rubric": "Must exhibit a concrete sequence (e.g., $x^n$) and identify the discontinuity of the pointwise limit."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Where in the proof does uniform (vs pointwise) convergence get used?",
+            "detail": "If $f_n\\to f$ uniformly and each $f_n$ is continuous, then $f$ is continuous. The proof splits $|f(x)-f(x_0)|$ into three pieces: $|f(x)-f_n(x)|$, $|f_n(x)-f_n(x_0)|$, $|f_n(x_0)-f(x_0)|$, each less than $\\epsilon/3$.",
+            "concepts": [
+              "continuous-function",
+              "convergent-sequence"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Prove that uniform limits of continuous functions are continuous.",
+                "prior_knowledge": "Uniform convergence and $\\epsilon/3$ arguments."
+              },
+              "core": {
+                "exposition": "If $f_n\\to f$ uniformly and each $f_n$ is continuous, then $f$ is continuous. The proof splits $|f(x)-f(x_0)|$ into three pieces: $|f(x)-f_n(x)|$, $|f_n(x)-f_n(x_0)|$, $|f_n(x_0)-f(x_0)|$, each less than $\\epsilon/3$.",
+                "worked_example": "Choose $N$ so $\\sup|f_n-f|<\\epsilon/3$. Fix $n=N$. By continuity of $f_N$ at $x_0$, pick $\\delta$ so $|x-x_0|<\\delta \\Rightarrow |f_N(x)-f_N(x_0)|<\\epsilon/3$. Sum the three terms.",
+                "problem": "Where in the proof does uniform (vs pointwise) convergence get used?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the theorem: uniform limit of continuous functions is ___.",
+                    "answer": "Continuous.",
+                    "concept": "continuous-function"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why is the $\\epsilon/3$ trick needed?",
+                    "answer": "To split the total error into a uniform-convergence part (two terms) and a continuity part (one term), each controlled separately.",
+                    "concept": "convergent-sequence"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why the proof fails for pointwise convergence: which step collapses?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove that $C([a,b],\\mathbb{R})$ with the sup metric is complete.",
+                "rubric": "Must use Cauchy in sup-norm $\\Rightarrow$ pointwise Cauchy $\\Rightarrow$ pointwise limit $f$; then show $f_n\\to f$ uniformly and $f$ continuous."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "If $f_n'\\to g$ uniformly and $f_n(x_0)\\to c$, show $f_n\\to f$ with $f'=g$.",
+            "detail": "If $f_n\\to f$ uniformly on $[a,b]$ and each $f_n$ is Riemann integrable, then $\\int_a^b f_n \\to \\int_a^b f$. For derivatives, uniform convergence of $f_n$ is NOT enough — one needs uniform convergence of $f_n'$ plus convergence at one point.",
+            "concepts": [
+              "continuous-function",
+              "riemann-integral",
+              "derivada"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Understand when uniform convergence commutes with integration and differentiation.",
+                "prior_knowledge": "Riemann integral and differentiation theorems."
+              },
+              "core": {
+                "exposition": "If $f_n\\to f$ uniformly on $[a,b]$ and each $f_n$ is Riemann integrable, then $\\int_a^b f_n \\to \\int_a^b f$. For derivatives, uniform convergence of $f_n$ is NOT enough — one needs uniform convergence of $f_n'$ plus convergence at one point.",
+                "worked_example": "$f_n(x)=\\sin(nx)/\\sqrt{n}$ on $[0,1]$: $f_n\\to 0$ uniformly, but $f_n'(x)=\\sqrt{n}\\cos(nx)$ diverges. So uniform convergence of $f_n$ alone cannot pass to derivatives.",
+                "problem": "If $f_n'\\to g$ uniformly and $f_n(x_0)\\to c$, show $f_n\\to f$ with $f'=g$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Does uniform convergence commute with integration?",
+                    "answer": "Yes, for Riemann integrable $f_n$ on $[a,b]$: $\\int f_n \\to \\int f$.",
+                    "concept": "riemann-integral"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What extra hypothesis is needed to pass to derivatives?",
+                    "answer": "Uniform convergence of the derivative sequence $f_n'$, plus convergence at some point.",
+                    "concept": "derivada"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why is differentiation more delicate than integration under uniform limits? Give a geometric explanation."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Construct a sequence $f_n\\to 0$ uniformly on $[0,1]$ with $f_n'(1/2)\\to\\infty$.",
+                "rubric": "Example like $f_n(x)=\\sin(n^2 x)/n$ suffices; must verify uniform convergence and derivative blowup."
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "concepts": [
+      {
+        "id": "set",
+        "label": "Set"
+      },
+      {
+        "id": "subset",
+        "label": "Subset"
+      },
+      {
+        "id": "equivalence-relation",
+        "label": "Equivalence Relation"
+      },
+      {
+        "id": "quantifier",
+        "label": "Quantifier"
+      },
+      {
+        "id": "proof-by-contradiction",
+        "label": "Proof by Contradiction"
+      },
+      {
+        "id": "dedekind-cut",
+        "label": "Dedekind Cut"
+      },
+      {
+        "id": "rational-numbers",
+        "label": "Rational Numbers"
+      },
+      {
+        "id": "real-numbers",
+        "label": "Real Numbers"
+      },
+      {
+        "id": "least-upper-bound",
+        "label": "Least Upper Bound"
+      },
+      {
+        "id": "complete-ordered-field",
+        "label": "Complete Ordered Field"
+      },
+      {
+        "id": "cauchy-sequence",
+        "label": "Cauchy Sequence"
+      },
+      {
+        "id": "euclidean-space",
+        "label": "Euclidean Space R^m"
+      },
+      {
+        "id": "inner-product",
+        "label": "Inner Product"
+      },
+      {
+        "id": "cauchy-schwarz",
+        "label": "Cauchy-Schwarz Inequality"
+      },
+      {
+        "id": "triangle-inequality",
+        "label": "Triangle Inequality"
+      },
+      {
+        "id": "bijection",
+        "label": "Bijection"
+      },
+      {
+        "id": "countable-set",
+        "label": "Countable Set"
+      },
+      {
+        "id": "uncountable-set",
+        "label": "Uncountable Set"
+      },
+      {
+        "id": "cantor-diagonal",
+        "label": "Cantor Diagonal Argument"
+      },
+      {
+        "id": "metric-space",
+        "label": "Metric Space"
+      },
+      {
+        "id": "convergent-sequence",
+        "label": "Convergent Sequence"
+      },
+      {
+        "id": "continuous-function",
+        "label": "Continuous Function"
+      },
+      {
+        "id": "epsilon-delta",
+        "label": "ε-δ Condition"
+      },
+      {
+        "id": "open-set",
+        "label": "Open Set"
+      },
+      {
+        "id": "closed-set",
+        "label": "Closed Set"
+      },
+      {
+        "id": "topology",
+        "label": "Topology"
+      },
+      {
+        "id": "compactness",
+        "label": "Sequential Compactness"
+      },
+      {
+        "id": "completeness",
+        "label": "Completeness"
+      },
+      {
+        "id": "mean-value-theorem",
+        "label": "Mean Value Theorem"
+      },
+      {
+        "id": "darboux-continuity",
+        "label": "Darboux Continuity (IVP for derivatives)"
+      },
+      {
+        "id": "taylor-polynomial",
+        "label": "Taylor Polynomial and Remainder"
+      },
+      {
+        "id": "analytic-function",
+        "label": "Analytic Function"
+      },
+      {
+        "id": "riemann-integral",
+        "label": "Riemann Integral"
+      },
+      {
+        "id": "darboux-integral",
+        "label": "Darboux Integral"
+      },
+      {
+        "id": "zero-set",
+        "label": "Zero Set (Measure Zero)"
+      },
+      {
+        "id": "fundamental-theorem-calculus",
+        "label": "Fundamental Theorem of Calculus"
+      },
+      {
+        "id": "uniform-convergence",
+        "label": "Uniform Convergence"
+      },
+      {
+        "id": "function-space",
+        "label": "Function Space"
+      },
+      {
+        "id": "sup-norm",
+        "label": "Sup Norm"
+      }
+    ],
+    "prereqs": [
+      [
+        "subset",
+        "set"
+      ],
+      [
+        "equivalence-relation",
+        "set"
+      ],
+      [
+        "quantifier",
+        "set"
+      ],
+      [
+        "proof-by-contradiction",
+        "quantifier"
+      ],
+      [
+        "dedekind-cut",
+        "rational-numbers"
+      ],
+      [
+        "dedekind-cut",
+        "subset"
+      ],
+      [
+        "real-numbers",
+        "dedekind-cut"
+      ],
+      [
+        "least-upper-bound",
+        "real-numbers"
+      ],
+      [
+        "complete-ordered-field",
+        "least-upper-bound"
+      ],
+      [
+        "cauchy-sequence",
+        "real-numbers"
+      ],
+      [
+        "complete-ordered-field",
+        "cauchy-sequence"
+      ],
+      [
+        "euclidean-space",
+        "real-numbers"
+      ],
+      [
+        "inner-product",
+        "euclidean-space"
+      ],
+      [
+        "cauchy-schwarz",
+        "inner-product"
+      ],
+      [
+        "triangle-inequality",
+        "cauchy-schwarz"
+      ],
+      [
+        "countable-set",
+        "bijection"
+      ],
+      [
+        "uncountable-set",
+        "countable-set"
+      ],
+      [
+        "cantor-diagonal",
+        "uncountable-set"
+      ],
+      [
+        "metric-space",
+        "triangle-inequality"
+      ],
+      [
+        "convergent-sequence",
+        "metric-space"
+      ],
+      [
+        "continuous-function",
+        "convergent-sequence"
+      ],
+      [
+        "epsilon-delta",
+        "continuous-function"
+      ],
+      [
+        "open-set",
+        "metric-space"
+      ],
+      [
+        "closed-set",
+        "convergent-sequence"
+      ],
+      [
+        "topology",
+        "open-set"
+      ],
+      [
+        "topology",
+        "closed-set"
+      ],
+      [
+        "compactness",
+        "convergent-sequence"
+      ],
+      [
+        "completeness",
+        "cauchy-sequence"
+      ],
+      [
+        "completeness",
+        "convergent-sequence"
+      ],
+      [
+        "mean-value-theorem",
+        "derivada"
+      ],
+      [
+        "mean-value-theorem",
+        "continuous-function"
+      ],
+      [
+        "darboux-continuity",
+        "derivada"
+      ],
+      [
+        "darboux-continuity",
+        "mean-value-theorem"
+      ],
+      [
+        "taylor-polynomial",
+        "derivada"
+      ],
+      [
+        "taylor-polynomial",
+        "mean-value-theorem"
+      ],
+      [
+        "analytic-function",
+        "taylor-polynomial"
+      ],
+      [
+        "riemann-integral",
+        "continuous-function"
+      ],
+      [
+        "riemann-integral",
+        "compactness"
+      ],
+      [
+        "darboux-integral",
+        "riemann-integral"
+      ],
+      [
+        "darboux-integral",
+        "least-upper-bound"
+      ],
+      [
+        "zero-set",
+        "countable-set"
+      ],
+      [
+        "fundamental-theorem-calculus",
+        "riemann-integral"
+      ],
+      [
+        "fundamental-theorem-calculus",
+        "mean-value-theorem"
+      ],
+      [
+        "fundamental-theorem-calculus",
+        "derivada"
+      ],
+      [
+        "uniform-convergence",
+        "convergent-sequence"
+      ],
+      [
+        "uniform-convergence",
+        "continuous-function"
+      ],
+      [
+        "function-space",
+        "metric-space"
+      ],
+      [
+        "sup-norm",
+        "function-space"
+      ],
+      [
+        "uniform-convergence",
+        "sup-norm"
+      ]
+    ]
   }
 ]

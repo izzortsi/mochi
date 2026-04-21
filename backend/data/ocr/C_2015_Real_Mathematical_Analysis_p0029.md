@@ -1,0 +1,17 @@
+Next, suppose we try the same cut construction in $\mathbb{R}$ that we did in $\mathbb{Q}$. Are there gaps in $\mathbb{R}$ that can be detected by cutting $\mathbb{R}$ with scissors? The natural definition of a cut in $\mathbb{R}$ is a division $\mathcal{A}|\mathcal{B}$, where $\mathcal{A}$ and $\mathcal{B}$ are disjoint, nonempty subcollections of $\mathbb{R}$ with $\mathcal{A} \cup \mathcal{B} = \mathbb{R}$, and $a < b$ for all $a \in \mathcal{A}$ and $b \in \mathcal{B}$. Further, $\mathcal{A}$ contains no largest element. Each $b \in \mathcal{B}$ is an upper bound for $\mathcal{A}$. Therefore $y = \text{l.u.b.}(\mathcal{A})$ exists and $a \leq y \leq b$ for all $a \in \mathcal{A}$ and $b \in \mathcal{B}$. By trichotomy,
+
+$$\mathcal{A}|\mathcal{B} = \{x \in \mathbb{R} : x < y\} \mid \{x \in \mathbb{R} : x \geq y\}.$$
+
+In other words, $\mathbb{R}$ has no gaps. Every cut in $\mathbb{R}$ occurs exactly at a real number.
+
+Allied to the existence of $\mathbb{R}$ is its uniqueness. Any complete ordered field $\mathbb{F}$ containing $\mathbb{Q}$ as an ordered subfield corresponds to $\mathbb{R}$ in a way preserving all the ordered field structure. To see this, take any $\varphi \in \mathbb{F}$ and associate to it the cut $A|B$ where
+
+$$A = \{r \in \mathbb{Q} : r < \varphi \text{ in } \mathbb{F}\} \quad B = \text{the rest of } \mathbb{Q}.$$
+
+This correspondence makes $\mathbb{F}$ equivalent to $\mathbb{R}$.
+
+**Upshot** The real number system $\mathbb{R}$ exists and it satisfies the properties of a complete ordered field. The properties are not assumed as axioms, but are proved by logically analyzing the Dedekind construction of $\mathbb{R}$. Having gone through all this cut rigmarole, we must remark that it is a rare working mathematician who actually thinks of $\mathbb{R}$ as a complete ordered field or as the set of all cuts in $\mathbb{Q}$. Rather, he or she thinks of $\mathbb{R}$ as points on the $x$-axis, just as in calculus. You too should picture $\mathbb{R}$ this way, the only benefit of the cut derivation being that you should now unhesitatingly accept the least upper bound property of $\mathbb{R}$ as a true fact.
+
+**Note** $\pm \infty$ are not real numbers, since $\mathbb{Q}|\emptyset$ and $\emptyset|\mathbb{Q}$ are not cuts. Although some mathematicians think of $\mathbb{R}$ together with $-\infty$ and $+\infty$ as an “extended real number system,” it is simpler to leave well enough alone and just deal with $\mathbb{R}$ itself. Nevertheless, it is convenient to write expressions like “$x \to \infty$” to indicate that a real variable $x$ grows larger and larger without bound.
+
+If $S$ is a nonempty subset of $\mathbb{R}$ then its **supremum** is its least upper bound when $S$ is bounded above and is said to be $+\infty$ otherwise; its **infimum** is its greatest lower bound when $S$ is bounded below and is said to be $-\infty$ otherwise. (In Exercise 19 you are asked to invent the notion of greatest lower bound.) By definition the supremum of the empty set is $-\infty$. This is reasonable, considering that every real number, no matter how negative, is an upper bound for $\emptyset$, and the least upper bound should be as far leftward as possible, namely $-\infty$. Similarly, the infimum of the empty set is $+\infty$. We write $\sup S$ and inf $S$ for the supremum and infimum of $S$.

@@ -1,5 +1,5 @@
 {
-  "xp": 100,
+  "xp": 154,
   "streak": 2,
   "best_streak": 2,
   "last_completed": "2026-04-20",
@@ -8,7 +8,8 @@
     "c3-d1-bronze-0": true,
     "c3-d1-silver-1": true,
     "c4-d1-bronze-0": true,
-    "c4-d2-bronze-0": true
+    "c4-d2-bronze-0": true,
+    "c3-d1-gold-2": true
   },
   "completed_phases": {
     "c5-d1-bronze-0": {
@@ -45,13 +46,47 @@
       "retrieval": true,
       "elaborate": true,
       "check": true
+    },
+    "c3-d1-gold-2": {
+      "prime": true,
+      "core": true,
+      "retrieval": true,
+      "elaborate": true,
+      "check": true
+    },
+    "c6-d1-bronze-0": {
+      "prime": false,
+      "core": false,
+      "retrieval": false,
+      "elaborate": false,
+      "check": false
+    },
+    "c6-d1-silver-1": {
+      "prime": false,
+      "core": false,
+      "retrieval": false,
+      "elaborate": false,
+      "check": false
+    },
+    "c3-d2-silver-0": {
+      "prime": false,
+      "core": false,
+      "retrieval": false,
+      "elaborate": false,
+      "check": false
+    },
+    "c7-d1-bronze-0": {
+      "prime": true,
+      "core": true
     }
   },
   "day_tiers": {
     "5.1": "gold",
-    "3.1": "silver",
+    "3.1": "gold",
     "4.1": "gold",
-    "4.2": "bronze"
+    "4.2": "bronze",
+    "6.1": "none",
+    "3.2": "bronze"
   },
   "generated_tasks": [],
   "attempts": [
@@ -66,6 +101,12 @@
       "verdict": "correct",
       "comment": "Correctly classified all three ODEs: order, linearity, autonomy, scalar vs system.",
       "timestamp": "2026-04-20T10:10:45.993954"
+    },
+    {
+      "card-uid": "c3-d1-gold-2",
+      "verdict": "correct",
+      "comment": "Autovetores corretos: [1,1] para λ=4 e [1,-1] para λ=-2, formando uma base de R².",
+      "timestamp": "2026-04-20T15:13:18.595343"
     }
   ]
 }

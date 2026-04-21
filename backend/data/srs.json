@@ -6,9 +6,9 @@
     "prompt": "State the classical probability formula for equiprobable outcomes.",
     "answer": "$P(A) = N(A)/N$, where $N(A)$ is favorable outcomes and $N$ is total outcomes.",
     "concept": "probability",
-    "box": 1,
-    "due": "2026-04-19",
-    "last_reviewed": null,
+    "box": 2,
+    "due": "2026-04-23",
+    "last_reviewed": "2026-04-20",
     "lapses": 0
   },
   "c5-d1-bronze-0::r2": {
@@ -18,9 +18,9 @@
     "prompt": "What does relative frequency converge to, and what is the limiting definition?",
     "answer": "Relative frequency $n(A)/n$ converges to probability $P(A) = \\lim_{n \\to \\infty} n(A)/n$.",
     "concept": "relative-frequency",
-    "box": 1,
-    "due": "2026-04-19",
-    "last_reviewed": null,
+    "box": 2,
+    "due": "2026-04-23",
+    "last_reviewed": "2026-04-20",
     "lapses": 0
   },
   "c3-d1-bronze-0::r1": {
@@ -30,9 +30,9 @@
     "prompt": "O que é o polinômio característico de uma matriz?",
     "answer": "$\\det(A - \\lambda I)$; suas raízes são os autovalores.",
     "concept": "autovalor",
-    "box": 1,
-    "due": "2026-04-19",
-    "last_reviewed": null,
+    "box": 2,
+    "due": "2026-04-23",
+    "last_reviewed": "2026-04-20",
     "lapses": 0
   },
   "c3-d1-bronze-0::r2": {
@@ -42,9 +42,9 @@
     "prompt": "Para uma matriz triangular, como você encontra rapidamente os autovalores?",
     "answer": "São exatamente os elementos da diagonal principal.",
     "concept": "autovalor",
-    "box": 1,
-    "due": "2026-04-19",
-    "last_reviewed": null,
+    "box": 2,
+    "due": "2026-04-23",
+    "last_reviewed": "2026-04-20",
     "lapses": 0
   },
   "c3-d1-silver-1::r1": {
@@ -55,9 +55,9 @@
     "answer": "Todos os autovalores são distintos.",
     "concept": "diagonalizacao",
     "box": 1,
-    "due": "2026-04-20",
-    "last_reviewed": null,
-    "lapses": 0
+    "due": "2026-04-21",
+    "last_reviewed": "2026-04-20",
+    "lapses": 1
   },
   "c3-d1-silver-1::r2": {
     "id": "c3-d1-silver-1::r2",
@@ -66,9 +66,9 @@
     "prompt": "Toda matriz simétrica é diagonalizável. Por quê?",
     "answer": "Porque o Teorema Espectral garante uma base ortonormal de autovetores.",
     "concept": "diagonalizacao",
-    "box": 1,
-    "due": "2026-04-20",
-    "last_reviewed": null,
+    "box": 2,
+    "due": "2026-04-23",
+    "last_reviewed": "2026-04-20",
     "lapses": 0
   },
   "c4-d1-bronze-0::r1": {
@@ -78,9 +78,9 @@
     "prompt": "Why is it useful to convert Newton's second-order equation into a first-order system?",
     "answer": "A first-order system is better suited for theoretical analysis and can represent the same dynamics with both $x$ and $v$ as independent variables.",
     "concept": "newtons-equations",
-    "box": 1,
-    "due": "2026-04-20",
-    "last_reviewed": null,
+    "box": 2,
+    "due": "2026-04-23",
+    "last_reviewed": "2026-04-20",
     "lapses": 0
   },
   "c4-d1-bronze-0::r2": {
@@ -90,9 +90,9 @@
     "prompt": "What does the initial condition $(x(0), v(0))$ determine for a particle under constant force?",
     "answer": "It uniquely determines the entire trajectory past and future via $x(t) = x(0) + v(0)t - \\frac{g}{2}t^2$.",
     "concept": "newtons-equations",
-    "box": 1,
-    "due": "2026-04-20",
-    "last_reviewed": null,
+    "box": 2,
+    "due": "2026-04-23",
+    "last_reviewed": "2026-04-20",
     "lapses": 0
   },
   "c4-d2-bronze-0::r1": {
@@ -102,9 +102,9 @@
     "prompt": "What is the order of $\\ddot{x} + 3\\dot{x} + 2x = \\sin(t)$?",
     "answer": "Order 2, since the highest derivative is $\\ddot{x}$.",
     "concept": "ode-classification",
-    "box": 1,
-    "due": "2026-04-20",
-    "last_reviewed": null,
+    "box": 2,
+    "due": "2026-04-23",
+    "last_reviewed": "2026-04-20",
     "lapses": 0
   },
   "c4-d2-bronze-0::r2": {
@@ -114,6 +114,102 @@
     "prompt": "Is $\\dot{x} = \\sin(x) + t$ linear?",
     "answer": "No, because $\\sin(x)$ is nonlinear in $x$.",
     "concept": "ode-classification",
+    "box": 2,
+    "due": "2026-04-23",
+    "last_reviewed": "2026-04-20",
+    "lapses": 0
+  },
+  "c3-d1-gold-2::r1": {
+    "id": "c3-d1-gold-2::r1",
+    "card_uid": "c3-d1-gold-2",
+    "prompt_id": "r1",
+    "prompt": "Como você encontra os autovetores de uma matriz $A$ para um autovalor $\\lambda$?",
+    "answer": "Resolvendo o sistema $(A - \\lambda I)\\vec{v} = \\vec{0}$.",
+    "concept": "autovetor",
+    "box": 2,
+    "due": "2026-04-23",
+    "last_reviewed": "2026-04-20",
+    "lapses": 0
+  },
+  "c3-d1-gold-2::r2": {
+    "id": "c3-d1-gold-2::r2",
+    "card_uid": "c3-d1-gold-2",
+    "prompt_id": "r2",
+    "prompt": "Autovetores de autovalores distintos são sempre linearmente independentes?",
+    "answer": "Sim, este é um resultado fundamental da álgebra linear.",
+    "concept": "autovetor",
+    "box": 2,
+    "due": "2026-04-23",
+    "last_reviewed": "2026-04-20",
+    "lapses": 0
+  },
+  "c6-d1-bronze-0::r1": {
+    "id": "c6-d1-bronze-0::r1",
+    "card_uid": "c6-d1-bronze-0",
+    "prompt_id": "r1",
+    "prompt": "Qual é a condição necessária e suficiente para que um operador linear $f$ com matriz $T$ seja inversível?",
+    "answer": "$\\det T \\neq 0$. Nesse caso a matriz de $f^{-1}$ é $T^{-1}$.",
+    "concept": "operador-inversivel",
+    "box": 2,
+    "due": "2026-04-23",
+    "last_reviewed": "2026-04-20",
+    "lapses": 0
+  },
+  "c6-d1-bronze-0::r2": {
+    "id": "c6-d1-bronze-0::r2",
+    "card_uid": "c6-d1-bronze-0",
+    "prompt_id": "r2",
+    "prompt": "Se $f\\circ f^{-1} = I$, o que isso significa geometricamente?",
+    "answer": "$f^{-1}$ desfaz a ação de $f$: todo vetor transformado é devolvido à sua posição original.",
+    "concept": "operador-linear",
+    "box": 2,
+    "due": "2026-04-23",
+    "last_reviewed": "2026-04-20",
+    "lapses": 0
+  },
+  "c6-d1-silver-1::r1": {
+    "id": "c6-d1-silver-1::r1",
+    "card_uid": "c6-d1-silver-1",
+    "prompt_id": "r1",
+    "prompt": "Como se usa $T^{-1}$ para encontrar $v$ tal que $f(v)=w$?",
+    "answer": "Calcula-se $v=T^{-1}w$, pois $f(v)=Tv=w$ implica $v=T^{-1}w$.",
+    "concept": "operador-inversivel",
+    "box": 1,
+    "due": "2026-04-20",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c6-d1-silver-1::r2": {
+    "id": "c6-d1-silver-1::r2",
+    "card_uid": "c6-d1-silver-1",
+    "prompt_id": "r2",
+    "prompt": "Se $f$ não é inversível e $f(v)=w$, a equação pode ter solução?",
+    "answer": "Sim, pode ter zero ou infinitas soluções, mas não existe $f^{-1}$ definido globalmente.",
+    "concept": "operador-inversivel",
+    "box": 1,
+    "due": "2026-04-20",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c3-d2-silver-0::r1": {
+    "id": "c3-d2-silver-0::r1",
+    "card_uid": "c3-d2-silver-0",
+    "prompt_id": "r1",
+    "prompt": "Como você calcula as coordenadas de um vetor em uma base ortonormal?",
+    "answer": "Usando produtos internos: $c_i = \\vec{u} \\cdot \\vec{v}_i$.",
+    "concept": "operador-linear",
+    "box": 1,
+    "due": "2026-04-20",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c3-d2-silver-0::r2": {
+    "id": "c3-d2-silver-0::r2",
+    "card_uid": "c3-d2-silver-0",
+    "prompt_id": "r2",
+    "prompt": "Por que esse método funciona para bases ortonormais mas não para bases gerais?",
+    "answer": "Porque $\\vec{v}_i \\cdot \\vec{v}_j = \\delta_{ij}$ (1 se $i=j$, 0 caso contrário), simplificando a álgebra.",
+    "concept": "operador-linear",
     "box": 1,
     "due": "2026-04-20",
     "last_reviewed": null,

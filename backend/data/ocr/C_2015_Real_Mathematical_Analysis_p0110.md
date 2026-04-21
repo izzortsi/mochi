@@ -1,0 +1,7 @@
+A covering $\mathcal{U}$ of $A$ is also called a **cover** of $A$. The members of $\mathcal{U}$ are **not** called covers. Instead, you could call them **scraps** or **patches**. Imagine the covering as a patchwork quilt that covers a bed, the quilt being sewn together from overlapping scraps of cloth. See Figure 46.
+
+**Figure 46** A covering of $A$ by eight scraps. The set $A$ is cross-hatched. The scraps are two discs, two rectangles, two ellipses, a pentagon, and a triangle. Each point of $A$ belongs to at least one scrap.
+
+The mere existence of a finite open covering of $A$ is trivial and utterly worthless. Every set $A$ has such a covering, namely the single open set $M$. Rather, for $A$ to be covering compact, each and every open covering of $A$ must reduce to a finite subcovering of $A$. Deciding directly whether this is so is daunting. How could you hope to verify the finite reducibility of all open coverings of $A$? There are so many of them. For this reason we concentrated on sequential compactness; it is relatively easy to check by inspection whether every sequence in a set has a convergent subsequence.
+
+To check that a set is not covering compact it suffices to find an open covering which fails to reduce to a finite subcovering. Occasionally this is simple. For example,

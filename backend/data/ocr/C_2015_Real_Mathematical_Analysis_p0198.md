@@ -1,0 +1,7 @@
+Each $\omega_i$ is 0, 1, or 2. If $x \in C$, the standard Cantor set constructed in Chapter 2, then $x$ has a unique expansion in which each $\omega_i$ equals 0 or 2. The function $H$ sends $x \in C$ to
+
+$$H(x) = \sum_{i=1}^{\infty} \frac{\omega_i/2}{2^i}.$$
+
+$H$ has equal values at the endpoints of the discarded gap intervals and so we extend $H$ to them by letting it be constant on each. This accounts for the steps in its graph.
+
+There are two things to check – the definition of $H$ makes sense and $H$ has the properties asserted. Continuity of the map $H : C \to [0,1]$ is simple. As we showed in Chapter 2, $C$ is the nested intersection $\bigcap C^n$ where $C^n$ is the disjoint union of $2^n$ intervals of length $1/3^n$, the endpoints of which are fractions with denominator $3^n$. Between the intervals $C_\alpha$ in $C^n$ there are open discarded intervals of length $\geq 1/3^n$. Let $\epsilon > 0$ be given, choose $n$ with $1/2^n < \epsilon$, and take $\delta = 1/3^n$. If $x, x' \in C$ have $|x - x'| < \delta = 1/3^n$ then they lie in a common interval $C_\alpha$ in $C^n$. For the distance between different intervals $C_\alpha$, $C_\beta$ in $C^n$ is at least $1/3^n$. Therefore the base-3 expansion of $x$ and $x'$ agree for the first $n$ terms, which implies $|H(x) - H(x')| \leq \sum_{j=n+1}^{\infty} 1/2^j < \epsilon$ and gives continuity on $C$.

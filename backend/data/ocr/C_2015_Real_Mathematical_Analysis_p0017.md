@@ -1,0 +1,10 @@
+Clearly it is worth examining closely and critically the most basic notion of mathematics, that of proof. On the other hand, it is important to bear in mind that all distinctions and niceties about what precisely constitutes a proof are mere quibbles compared to the enormous gap between any generally accepted version of a proof and the notion of a convincing argument. Compare Euclid, with all his flaws to the most eminent of the ancient exponents of the convincing argument – Aristotle. Much of Aristotle’s reasoning was brilliant, and he certainly convinced most thoughtful people for over a thousand years. In some cases his analyses were exactly right, but in others, such as heavy objects falling faster than light ones, they turned out to be totally wrong. In contrast, there is not to my knowledge a single theorem stated in Euclid’s *Elements* that in the course of two thousand years turned out to be false. That is quite an astonishing record, and an extraordinary validation of proof over convincing argument.
+
+Here are some guidelines for writing a rigorous mathematical proof. See also Exercise 0.
+
+1. Name each object that appears in your proof. (For instance, you might begin your proof with a phrase, “Consider a set $X$, and elements $x, y$ that belong to $X$,” etc.)
+2. Draw a diagram that captures how these objects relate, and extract logical statements from it. Quantifiers precede the objects quantified; see below.
+3. Become confident that the mathematical assertion you are trying to prove is really true before trying to write down a proof of it. If there a specific function involved – say $\sin x^\alpha$ – draw the graph of the function for a few values of $\alpha$ before starting any $\epsilon, \delta$ analysis. Belief first and proof second.
+4. Proceed step by step, each step depending on the hypotheses, previously proved theorems, or previous steps in your proof.
+5. Check for “rigor”: All cases have been considered, all details have been tied down, and circular reasoning has been avoided.
+6. Before you sign off on the proof, check for counterexamples and any implicit assumptions you made that could invalidate your reasoning.

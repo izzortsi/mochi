@@ -1,0 +1,3 @@
+51. Read *Flatland* by Edwin Abbott. Try to imagine a Flatlander using color to visualize 3-space.
+
+52. Can you visualize a 4-dimensional cube – its vertices, edges, and faces? [Hint: It may be easier (and equivalent) to picture a 4-dimensional parallelepiped whose eight red vertices have xyz-coordinates that differ from the xyz-coordinates of its eight colorless vertices. It is a 4-dimensional version of a rectangle or parallelogram whose edges are not parallel to the coordinate axes.]

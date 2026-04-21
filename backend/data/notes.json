@@ -2153,5 +2153,1029 @@
       "stationary-distribution"
     ],
     "source": ""
+  },
+  {
+    "id": "rnn-bottleneck",
+    "title": "The Sequential Bottleneck of RNNs",
+    "domain": "Deep Learning",
+    "tags": [
+      "rnn",
+      "parallelism",
+      "sequence-modeling"
+    ],
+    "content": "## The Sequential Bottleneck of RNNs\n\nRecurrent neural networks compute hidden states as $h_t = f(h_{t-1}, x_t)$. This recurrence is the source of their power—they can maintain a summary of arbitrarily long history—but also their fundamental limitation.\n\n### Why Parallelism Is Impossible\n\nBecause $h_t$ depends on $h_{t-1}$, all $n$ time steps must be computed sequentially. This means:\n- Training on a length-$n$ sequence requires $O(n)$ sequential operations\n- GPU parallelism cannot be exploited within a single training example\n- Longer sequences create harder memory constraints for batching\n\n### Long-Range Dependency Problem\n\nFor two positions $i$ and $j$ far apart, gradients must flow through $|i-j|$ nonlinear transformations. Vanishing (or exploding) gradients make this increasingly unreliable. LSTM and GRU partially address this but do not eliminate the $O(n)$ path length.\n\n### Comparison\n\n| Model | Sequential Ops | Max Path Length |\n|-------|---------------|----------------|\n| RNN/LSTM | $O(n)$ | $O(n)$ |\n| Self-Attention | $O(1)$ | $O(1)$ |\n\nSelf-attention replaces this sequential dependency with direct pairwise interactions between all positions.",
+    "related": [
+      "transformer-motivation",
+      "scaled-dot-product-attention-note",
+      "complexity-comparison-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "transformer-motivation",
+    "title": "Motivation for the Transformer",
+    "domain": "Deep Learning",
+    "tags": [
+      "transformer",
+      "attention",
+      "nlp"
+    ],
+    "content": "## Motivation for the Transformer\n\nPrior to 2017, the best sequence transduction models combined:\n1. **RNN encoder-decoder** for the main computation\n2. **Attention mechanism** as an add-on for alignment\n\nThe Transformer (Vaswani et al., 2017) asks: *what if attention alone is sufficient?*\n\n### Key Claims\n\n- Recurrence and convolution are not necessary for state-of-the-art translation\n- A model based purely on attention is more parallelizable\n- Such a model trains faster and achieves better results\n\n### Evidence\n\n- 28.4 BLEU on WMT 2014 EN-DE (beats all prior ensembles)\n- 41.8 BLEU on WMT 2014 EN-FR (new single-model state-of-the-art)\n- Trained in 3.5 days on 8 GPUs vs. weeks for prior models\n- Generalizes to constituency parsing without task-specific modifications",
+    "related": [
+      "rnn-bottleneck",
+      "transformer-architecture-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "scaled-dot-product-attention-note",
+    "title": "Scaled Dot-Product Attention",
+    "domain": "Deep Learning",
+    "tags": [
+      "attention",
+      "transformer",
+      "softmax"
+    ],
+    "content": "## Scaled Dot-Product Attention\n\nAttention maps a query $q$ to an output by computing weighted values, where weights reflect query-key similarity.\n\n### Formula\n\n$$\\text{Attention}(Q, K, V) = \\text{softmax}\\!\\left(\\frac{QK^T}{\\sqrt{d_k}}\\right)V$$\n\n- $Q \\in \\mathbb{R}^{n \\times d_k}$: queries\n- $K \\in \\mathbb{R}^{m \\times d_k}$: keys\n- $V \\in \\mathbb{R}^{m \\times d_v}$: values\n\n### Why Scale by $\\sqrt{d_k}$?\n\nIf $q$ and $k$ are random vectors with mean 0 and unit variance, their dot product $q \\cdot k = \\sum_{i=1}^{d_k} q_i k_i$ has variance $d_k$. For large $d_k$, this pushes softmax inputs into saturation regions with near-zero gradients.\n\nDividing by $\\sqrt{d_k}$ restores variance to 1.\n\n### Variants\n\n| Type | Compatibility Function | Notes |\n|------|----------------------|-------|\n| Additive | $\\text{FFN}([q;k])$ | Slightly better for large $d_k$ without scaling |\n| Dot-product (scaled) | $qk^T/\\sqrt{d_k}$ | Faster, uses optimized matrix multiplication |\n\n### Masking\n\nFor autoregressive generation, set illegal positions to $-\\infty$ before softmax, yielding attention weight $\\approx 0$.",
+    "related": [
+      "multi-head-attention-note",
+      "causal-masking-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "multi-head-attention-note",
+    "title": "Multi-Head Attention",
+    "domain": "Deep Learning",
+    "tags": [
+      "attention",
+      "transformer",
+      "representation"
+    ],
+    "content": "## Multi-Head Attention\n\nInstead of one attention function over the full $d_{\\text{model}}$-dimensional space, multi-head attention projects queries, keys, and values into $h$ lower-dimensional subspaces.\n\n### Formula\n\n$$\\text{MultiHead}(Q, K, V) = \\text{Concat}(\\text{head}_1, \\ldots, \\text{head}_h)\\, W^O$$\n$$\\text{head}_i = \\text{Attention}(QW_i^Q,\\, KW_i^K,\\, VW_i^V)$$\n\n### Parameter Matrices (base model: $d_{\\text{model}}=512$, $h=8$, $d_k=d_v=64$)\n\n| Matrix | Shape | Role |\n|--------|-------|------|\n| $W_i^Q$ | $\\mathbb{R}^{512 \\times 64}$ | Project queries |\n| $W_i^K$ | $\\mathbb{R}^{512 \\times 64}$ | Project keys |\n| $W_i^V$ | $\\mathbb{R}^{512 \\times 64}$ | Project values |\n| $W^O$ | $\\mathbb{R}^{512 \\times 512}$ | Project concatenated output |\n\n### Advantages\n\n1. **Specialization**: different heads learn syntactic, semantic, coreference roles\n2. **Same cost**: $h$ heads of $d_k=d_{\\text{model}}/h$ ≈ one head of $d_{\\text{model}}$\n3. **Richer representations**: averaging across one head suppresses multi-faceted information\n\n### Three Uses in Transformer\n\n- **Encoder self-attention**: all positions attend to each other\n- **Decoder masked self-attention**: positions attend to previous positions only\n- **Encoder-decoder cross-attention**: decoder queries attend to encoder key-values",
+    "related": [
+      "scaled-dot-product-attention-note",
+      "transformer-architecture-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "transformer-architecture-note",
+    "title": "Transformer Architecture Overview",
+    "domain": "Deep Learning",
+    "tags": [
+      "transformer",
+      "encoder",
+      "decoder",
+      "architecture"
+    ],
+    "content": "## Transformer Architecture\n\nThe Transformer is an encoder-decoder model that replaces recurrence and convolution entirely with stacked attention and feed-forward layers.\n\n### Encoder\n\n$N=6$ identical layers, each with:\n1. Multi-head self-attention\n2. Position-wise FFN\n\nEach sub-layer: $\\text{LayerNorm}(x + \\text{Sublayer}(x))$\n\nAll outputs: $d_{\\text{model}} = 512$\n\n### Decoder\n\n$N=6$ identical layers, each with:\n1. **Masked** multi-head self-attention (causal)\n2. Multi-head cross-attention over encoder output\n3. Position-wise FFN\n\nSame residual + LayerNorm structure.\n\n### Hyperparameters (Base / Big)\n\n| Param | Base | Big |\n|-------|------|-----|\n| $N$ | 6 | 6 |\n| $d_{\\text{model}}$ | 512 | 1024 |\n| $d_{ff}$ | 2048 | 4096 |\n| $h$ | 8 | 16 |\n| $P_{drop}$ | 0.1 | 0.3 |\n\n### Shared Weights\n\nThe two embedding matrices and pre-softmax linear transformation share weights, scaled by $\\sqrt{d_{\\text{model}}}$ in embeddings.",
+    "related": [
+      "multi-head-attention-note",
+      "causal-masking-note",
+      "positional-encoding-note",
+      "position-wise-ffn-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "causal-masking-note",
+    "title": "Causal Masking in the Decoder",
+    "domain": "Deep Learning",
+    "tags": [
+      "autoregressive",
+      "masking",
+      "decoder"
+    ],
+    "content": "## Causal Masking\n\nThe Transformer decoder must be **autoregressive**: when predicting position $i$, it may only use positions $1, \\ldots, i-1$ (plus encoder output). During training all positions are processed in parallel, so future tokens must be hidden.\n\n### Implementation\n\nBefore the softmax in decoder self-attention, add a mask $M$ where:\n$$M_{ij} = \\begin{cases} 0 & j \\leq i \\\\ -\\infty & j > i \\end{cases}$$\n\nThen $\\text{softmax}((QK^T/\\sqrt{d_k}) + M)$ assigns weight $\\approx 0$ to all future positions.\n\n### Why $-\\infty$?\n\n$e^{-\\infty} = 0$, so masked positions contribute nothing to the weighted sum. This is simpler than actually removing those positions and enables batched computation.\n\n### Connection to Autoregression\n\nAt inference, the decoder generates token $y_t$ then feeds it back as input for $y_{t+1}$. The mask ensures training and inference are consistent.",
+    "related": [
+      "scaled-dot-product-attention-note",
+      "transformer-architecture-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "positional-encoding-note",
+    "title": "Sinusoidal Positional Encoding",
+    "domain": "Deep Learning",
+    "tags": [
+      "positional-encoding",
+      "transformer",
+      "sequence-order"
+    ],
+    "content": "## Sinusoidal Positional Encoding\n\nThe Transformer has no recurrence or convolution to implicitly track position. Positional encodings are added to token embeddings to inject order information.\n\n### Formula\n\n$$PE_{(pos, 2i)} = \\sin\\!\\left(\\frac{pos}{10000^{2i/d_{\\text{model}}}}\\right)$$\n$$PE_{(pos, 2i+1)} = \\cos\\!\\left(\\frac{pos}{10000^{2i/d_{\\text{model}}}}\\right)$$\n\n- $pos$: position in sequence\n- $i$: dimension index ($0 \\leq i < d_{\\text{model}}/2$)\n\n### Properties\n\n1. **Unique fingerprint**: each position gets a unique $d_{\\text{model}}$-dimensional vector\n2. **Geometric wavelengths**: from $2\\pi$ (high-freq dim) to $10000 \\cdot 2\\pi$ (low-freq dim)\n3. **Relative position linearity**: $PE_{pos+k}$ is a linear transformation of $PE_{pos}$, facilitating relative attention\n4. **Extrapolation**: sinusoids are defined for all positions, enabling longer sequences at inference than seen during training\n\n### Learned vs. Sinusoidal\n\nExperiments (Table 3, row E) showed nearly identical results; sinusoidal was chosen for its extrapolation property.",
+    "related": [
+      "transformer-architecture-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "position-wise-ffn-note",
+    "title": "Position-wise Feed-Forward Network",
+    "domain": "Deep Learning",
+    "tags": [
+      "ffn",
+      "transformer",
+      "relu"
+    ],
+    "content": "## Position-wise Feed-Forward Network\n\nEach encoder and decoder layer contains a fully connected feed-forward network applied **identically and independently** to each position.\n\n### Formula\n\n$$\\text{FFN}(x) = \\max(0,\\, xW_1 + b_1)\\,W_2 + b_2$$\n\n- $W_1 \\in \\mathbb{R}^{512 \\times 2048}$, $W_2 \\in \\mathbb{R}^{2048 \\times 512}$\n- Inner dimension $d_{ff} = 2048$ (4× expansion)\n\n### Role in the Model\n\n- Attention aggregates information **across** positions\n- FFN transforms each position's representation **independently**\n- Together they form a complete \"read-transform-write\" cycle per layer\n\n### Equivalence\n\nApplying the same linear layer to each position independently is equivalent to a convolution with kernel size 1. This framing explains the $O(1)$ sequential operations.\n\n### Parameter Count\n\nPer sub-layer: $512 \\times 2048 + 2048 \\times 512 \\approx 2M$ parameters (weights only).",
+    "related": [
+      "transformer-architecture-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "complexity-comparison-note",
+    "title": "Complexity Comparison: Self-Attention vs. RNN vs. CNN",
+    "domain": "Deep Learning",
+    "tags": [
+      "complexity",
+      "self-attention",
+      "rnn",
+      "cnn",
+      "parallelism"
+    ],
+    "content": "## Complexity Comparison\n\nThree axes for evaluating sequence layer types:\n\n| Layer Type | Complexity/Layer | Sequential Ops | Max Path Length |\n|------------|-----------------|---------------|----------------|\n| Self-Attention | $O(n^2 d)$ | $O(1)$ | $O(1)$ |\n| Recurrent | $O(n d^2)$ | $O(n)$ | $O(n)$ |\n| Convolutional | $O(k n d^2)$ | $O(1)$ | $O(\\log_k n)$ |\n| Self-Attn (restricted) | $O(r n d)$ | $O(1)$ | $O(n/r)$ |\n\n$n$ = sequence length, $d$ = dimension, $k$ = kernel size, $r$ = neighborhood size.\n\n### When is Self-Attention Faster?\n\nSelf-attention ($O(n^2 d)$) beats recurrent ($O(nd^2)$) when $n < d$. For WMT sentence representations, $n \\approx 25 \\ll d = 512$—self-attention wins by ~20×.\n\n### Long-Sequence Concern\n\nFor very long sequences ($n \\gg d$), restricted self-attention ($r \\ll n$) reduces cost to $O(rnd)$ at the expense of increasing path length to $O(n/r)$.\n\n### Interpretability Bonus\n\nAttention weights are human-readable: visualizations show heads specializing in syntax, coreference, and semantics.",
+    "related": [
+      "rnn-bottleneck",
+      "scaled-dot-product-attention-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "transformer-training-note",
+    "title": "Transformer Training Details",
+    "domain": "Deep Learning",
+    "tags": [
+      "training",
+      "optimizer",
+      "regularization",
+      "bleu"
+    ],
+    "content": "## Transformer Training Details\n\n### Optimizer\n\nAdam with $\\beta_1=0.9$, $\\beta_2=0.98$, $\\epsilon=10^{-9}$.\n\n**Warmup learning rate schedule:**\n$$\\text{lrate} = d_{\\text{model}}^{-0.5} \\cdot \\min(\\text{step}^{-0.5},\\; \\text{step} \\cdot \\text{warmup\\_steps}^{-1.5})$$\n\nLinear increase for first 4000 steps, then decay as $\\propto \\text{step}^{-0.5}$.\n\n### Regularization\n\n1. **Residual dropout** ($P_{drop}=0.1$): after each sub-layer, before residual add\n2. **Embedding dropout**: applied to sum of embeddings + positional encodings\n3. **Label smoothing** ($\\epsilon_{ls}=0.1$): distributes $0.1$ probability mass uniformly across vocabulary, reducing overconfidence; hurts perplexity, improves accuracy and BLEU\n\n### Inference\n\n- Beam search: beam size 4, length penalty $\\alpha=0.6$\n- Output length limit: input length + 50\n- Model averaging: last 5 checkpoints (base) or last 20 (big)\n\n### Results\n\n| Task | BLEU | Training |\n|------|------|----------|\n| WMT EN-DE (big) | 28.4 | 3.5 days, 8 P100 GPUs |\n| WMT EN-FR (big) | 41.8 | 3.5 days, 8 P100 GPUs |\n\nBig model surpasses all prior ensembles on EN-DE at 1/10 the training cost.",
+    "related": [
+      "transformer-architecture-note",
+      "complexity-comparison-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "real-number-system",
+    "title": "The Real Number System",
+    "domain": "Real Analysis",
+    "tags": [
+      "foundations",
+      "completeness",
+      "ordered-field"
+    ],
+    "content": "## The Real Number System\n\nThe real numbers $\\mathbb{R}$ form a **complete ordered field**. Every ordered field contains a copy of $\\mathbb{Q}$, but $\\mathbb{R}$ is characterized by its **completeness**: every non-empty subset bounded above has a least upper bound (supremum).\n\n### Ordered Field Axioms\n- Addition and multiplication satisfy the usual field axioms.\n- There is a total order $\\leq$ compatible with the field operations.\n\n### Completeness (LUB Property)\n$$\\text{If } S \\subseteq \\mathbb{R},\\ S \\neq \\emptyset,\\ S \\text{ bounded above} \\Rightarrow \\sup S \\in \\mathbb{R}.$$\n\nThis single axiom distinguishes $\\mathbb{R}$ from $\\mathbb{Q}$. For example, $\\{q\\in\\mathbb{Q}: q^2 < 2\\}$ is bounded above in $\\mathbb{Q}$ but has no rational supremum.\n\n### Consequences\n- **Archimedean property**: $\\forall x\\in\\mathbb{R}, \\exists n\\in\\mathbb{N}: n > x$.\n- **Density of $\\mathbb{Q}$**: between any two reals lies a rational.\n- **$\\mathbb{R}$ is uncountable** (Cantor's diagonal argument).",
+    "related": [
+      "dedekind-cut",
+      "archimedean-property",
+      "cantor-diagonal-argument"
+    ],
+    "source": ""
+  },
+  {
+    "id": "dedekind-cut",
+    "title": "Dedekind Cuts",
+    "domain": "Real Analysis",
+    "tags": [
+      "foundations",
+      "construction",
+      "completeness"
+    ],
+    "content": "## Dedekind Cuts\n\nA **Dedekind cut** is a partition $(A, B)$ of $\\mathbb{Q}$ satisfying:\n1. $A \\neq \\emptyset$ and $B \\neq \\emptyset$.\n2. If $a \\in A$ and $b \\in B$ then $a < b$.\n3. $A$ has no maximum element.\n\nEach such cut represents a real number. The set of all cuts, ordered by $A_1 \\leq A_2 \\iff A_1 \\subseteq A_2$, forms a complete ordered field isomorphic to $\\mathbb{R}$.\n\n### Example: $\\sqrt{2}$\n$$A = \\{q \\in \\mathbb{Q} : q < 0 \\text{ or } q^2 < 2\\}, \\quad B = \\mathbb{Q} \\setminus A.$$\n\nNo rational in $A$ is a maximum (between any $q$ with $q^2 < 2$ and $\\sqrt{2}$ lies another rational). The cut corresponds to the irrational $\\sqrt{2}$.\n\n### Arithmetic on Cuts\nAddition: $(A_1, B_1) + (A_2, B_2) = (\\{a_1+a_2\\}, \\ldots)$. Multiplication is defined for positive cuts analogously. The completeness of this system is then verified directly.",
+    "related": [
+      "real-number-system"
+    ],
+    "source": ""
+  },
+  {
+    "id": "archimedean-property",
+    "title": "Archimedean Property",
+    "domain": "Real Analysis",
+    "tags": [
+      "foundations",
+      "real-numbers"
+    ],
+    "content": "## Archimedean Property\n\n**Statement**: For every $x \\in \\mathbb{R}$ there exists $n \\in \\mathbb{N}$ with $n > x$.\n\n**Proof** (from LUB property): Suppose $\\mathbb{N}$ is bounded above. Then $s = \\sup \\mathbb{N}$ exists. But $s - 1 < n \\leq s$ for some $n \\in \\mathbb{N}$, giving $n+1 > s$, contradicting $s = \\sup \\mathbb{N}$.\n\n### Corollaries\n- For any $\\epsilon > 0$, $\\exists n \\in \\mathbb{N}$ with $1/n < \\epsilon$.\n- $\\inf\\{1/n : n \\in \\mathbb{N}\\} = 0$.\n- **Density of $\\mathbb{Q}$**: for any $a < b$ in $\\mathbb{R}$, $\\exists p/q \\in \\mathbb{Q}$ with $a < p/q < b$.\n\n### Non-Archimedean Example\nThe field of formal Laurent series $\\mathbb{R}((t))$ is ordered but non-Archimedean: $1/t > n$ for every $n \\in \\mathbb{N}$.",
+    "related": [
+      "real-number-system"
+    ],
+    "source": ""
+  },
+  {
+    "id": "cardinality",
+    "title": "Cardinality",
+    "domain": "Real Analysis",
+    "tags": [
+      "set-theory",
+      "infinite-sets",
+      "bijection"
+    ],
+    "content": "## Cardinality\n\nTwo sets $A$ and $B$ have the same **cardinality** ($|A|=|B|$) if there exists a bijection $f: A \\to B$.\n\n### Finite, Countable, Uncountable\n- **Finite**: $|A| = n$ for some $n \\in \\mathbb{N}$.\n- **Countably infinite**: $|A| = |\\mathbb{N}|$.\n- **Countable**: finite or countably infinite.\n- **Uncountable**: not countable.\n\n### Key Facts\n- $|\\mathbb{Z}| = |\\mathbb{Q}| = |\\mathbb{N}|$ (all countable).\n- $|\\mathbb{R}| = |\\mathcal{P}(\\mathbb{N})| = 2^{\\aleph_0}$ (uncountable).\n- A countable union of countable sets is countable.\n\n### Schröder–Bernstein Theorem\nIf there exist injections $A \\hookrightarrow B$ and $B \\hookrightarrow A$, then $|A|=|B|$.",
+    "related": [
+      "countable-uncountable",
+      "cantor-diagonal-argument"
+    ],
+    "source": ""
+  },
+  {
+    "id": "countable-uncountable",
+    "title": "Countable and Uncountable Sets",
+    "domain": "Real Analysis",
+    "tags": [
+      "set-theory",
+      "countability"
+    ],
+    "content": "## Countable and Uncountable Sets\n\n### Countable Sets\nA set is **countable** if it admits an injection into $\\mathbb{N}$. Examples:\n- $\\mathbb{Z}$: interleave positives and negatives — $0,1,-1,2,-2,\\ldots$\n- $\\mathbb{Q}$: diagonal enumeration of the grid $\\mathbb{Z}\\times\\mathbb{N}^+$.\n- Any finite union or countable union of countable sets.\n\n### Uncountable Sets\nBy Cantor's diagonal argument, $[0,1]$ (and hence $\\mathbb{R}$) is uncountable. Also $\\mathcal{P}(\\mathbb{N}) \\cong \\{0,1\\}^{\\mathbb{N}}$ is uncountable.\n\n### Cantor–Bernstein\nIf $A \\leq B$ and $B \\leq A$ in cardinality, then $A \\cong B$. This allows proving $|(0,1)| = |\\mathbb{R}|$ via $\\tan: (-\\pi/2,\\pi/2)\\to\\mathbb{R}$.",
+    "related": [
+      "cardinality",
+      "cantor-diagonal-argument"
+    ],
+    "source": ""
+  },
+  {
+    "id": "cantor-diagonal-argument",
+    "title": "Cantor's Diagonal Argument",
+    "domain": "Real Analysis",
+    "tags": [
+      "set-theory",
+      "uncountability"
+    ],
+    "content": "## Cantor's Diagonal Argument\n\n**Theorem**: $[0,1]$ is uncountable.\n\n**Proof**: Let $f: \\mathbb{N} \\to [0,1]$ be any function. Write decimal expansions $f(n) = 0.d_{n1}d_{n2}d_{n3}\\ldots$ Define\n$$x = 0.x_1 x_2 x_3 \\ldots \\quad \\text{where } x_n = \\begin{cases} 2 & d_{nn} \\neq 2 \\\\ 3 & d_{nn} = 2 \\end{cases}$$\n(avoiding 0 and 9 to prevent dual representations). Then $x \\neq f(n)$ for all $n$ (they differ in the $n$-th decimal place), so $f$ is not surjective. Since $f$ was arbitrary, no surjection $\\mathbb{N} \\to [0,1]$ exists. $\\square$\n\n### Variant: $\\mathcal{P}(\\mathbb{N})$ is Uncountable\nFor any $f: \\mathbb{N} \\to \\mathcal{P}(\\mathbb{N})$, the set $D = \\{n : n \\notin f(n)\\}$ satisfies $D \\neq f(n)$ for all $n$.",
+    "related": [
+      "cardinality",
+      "countable-uncountable"
+    ],
+    "source": ""
+  },
+  {
+    "id": "metric-space",
+    "title": "Metric Spaces",
+    "domain": "Real Analysis",
+    "tags": [
+      "topology",
+      "metric",
+      "distance"
+    ],
+    "content": "## Metric Spaces\n\nA **metric space** is a pair $(M, d)$ where $d: M \\times M \\to [0,\\infty)$ satisfies:\n1. **Positive-definiteness**: $d(x,y) = 0 \\iff x = y$.\n2. **Symmetry**: $d(x,y) = d(y,x)$.\n3. **Triangle inequality**: $d(x,z) \\leq d(x,y) + d(y,z)$.\n\n### Examples\n- $\\mathbb{R}^n$ with Euclidean, $\\ell^1$, $\\ell^\\infty$ metrics.\n- $C([a,b])$ with $d(f,g) = \\sup|f-g|$ (sup-metric).\n- Discrete metric: $d(x,y) = \\mathbf{1}_{x \\neq y}$.\n\n### Open Balls\n$$B_r(p) = \\{x \\in M : d(x,p) < r\\}.$$\n\n### Topology from a Metric\nOpen sets, convergence, continuity, and compactness all derive from $d$.",
+    "related": [
+      "open-closed-sets",
+      "convergence-metric",
+      "cauchy-sequence"
+    ],
+    "source": ""
+  },
+  {
+    "id": "open-closed-sets",
+    "title": "Open and Closed Sets",
+    "domain": "Real Analysis",
+    "tags": [
+      "topology",
+      "open",
+      "closed"
+    ],
+    "content": "## Open and Closed Sets\n\nIn a metric space $(M,d)$:\n- $U \\subseteq M$ is **open** if $\\forall x \\in U, \\exists r > 0: B_r(x) \\subseteq U$.\n- $F \\subseteq M$ is **closed** if $M \\setminus F$ is open, equivalently if $F$ contains all its limit points.\n\n### Topology Axioms\n- Arbitrary unions of open sets are open.\n- Finite intersections of open sets are open.\n- $\\emptyset$ and $M$ are open.\n\n### Closure and Interior\n- $\\overline{A}$ = smallest closed set containing $A$ = $A \\cup $ limit points of $A$.\n- $A^\\circ$ = largest open set contained in $A$.\n\n### Examples in $\\mathbb{R}$\n- $(a,b)$ is open; $[a,b]$ is closed; $(a,b]$ is neither.\n- $\\mathbb{Q}$ is neither open nor closed in $\\mathbb{R}$.",
+    "related": [
+      "metric-space",
+      "compactness",
+      "connectedness"
+    ],
+    "source": ""
+  },
+  {
+    "id": "convergence-metric",
+    "title": "Convergence in Metric Spaces",
+    "domain": "Real Analysis",
+    "tags": [
+      "sequences",
+      "convergence",
+      "metric-space"
+    ],
+    "content": "## Convergence in Metric Spaces\n\nA sequence $(x_n)$ in $(M,d)$ **converges** to $x \\in M$ if\n$$\\forall \\epsilon > 0,\\ \\exists N \\in \\mathbb{N}:\\ n > N \\Rightarrow d(x_n, x) < \\epsilon.$$\n\n### Properties\n- Limits are unique in a metric space.\n- $x_n \\to x \\iff d(x_n, x) \\to 0$ in $\\mathbb{R}$.\n- $x \\in \\overline{A} \\iff$ some sequence in $A$ converges to $x$.\n\n### Comparison with Cauchy\nEvery convergent sequence is Cauchy. The converse holds iff the space is **complete**.\n\n### Subsequences\nIf $x_n \\to x$, every subsequence also converges to $x$. In a compact space, every sequence has a convergent subsequence (Bolzano–Weierstrass).",
+    "related": [
+      "metric-space",
+      "cauchy-sequence",
+      "compactness"
+    ],
+    "source": ""
+  },
+  {
+    "id": "cauchy-sequence",
+    "title": "Cauchy Sequences and Completeness",
+    "domain": "Real Analysis",
+    "tags": [
+      "sequences",
+      "completeness",
+      "cauchy"
+    ],
+    "content": "## Cauchy Sequences and Completeness\n\nA sequence $(x_n)$ in $(M,d)$ is **Cauchy** if\n$$\\forall \\epsilon > 0,\\ \\exists N:\\ m,n > N \\Rightarrow d(x_m, x_n) < \\epsilon.$$\n\n$(M,d)$ is **complete** if every Cauchy sequence in $M$ converges to a point in $M$.\n\n### Key Facts\n- Convergent $\\Rightarrow$ Cauchy (always).\n- Cauchy $\\Rightarrow$ Convergent only in complete spaces.\n- $\\mathbb{R}$ and $\\mathbb{R}^n$ are complete; $\\mathbb{Q}$ is not.\n- $C([a,b])$ with the sup-metric is complete.\n\n### Completion\nEvery metric space has a **completion** $\\tilde{M}$ (unique up to isometry): the set of equivalence classes of Cauchy sequences. $\\mathbb{R}$ is the completion of $\\mathbb{Q}$.\n\n### Baire Category Theorem\nA complete metric space is not a countable union of nowhere-dense sets.",
+    "related": [
+      "convergence-metric",
+      "baire-category-theorem"
+    ],
+    "source": ""
+  },
+  {
+    "id": "compactness",
+    "title": "Compactness",
+    "domain": "Real Analysis",
+    "tags": [
+      "topology",
+      "compactness",
+      "open-cover"
+    ],
+    "content": "## Compactness\n\nA metric space $K$ is **compact** if every open cover of $K$ has a finite subcover.\n\n### Equivalent Characterizations (in metric spaces)\n1. Every sequence in $K$ has a convergent subsequence (**sequential compactness**).\n2. $K$ is complete and **totally bounded** ($\\forall\\epsilon>0$, finitely many $\\epsilon$-balls cover $K$).\n3. **In $\\mathbb{R}^n$**: $K$ is closed and bounded (Heine–Borel).\n\n### Key Theorems\n- **Extreme Value Theorem**: a continuous $f: K \\to \\mathbb{R}$ on compact $K$ attains its sup and inf.\n- **Uniform continuity**: continuous on compact $\\Rightarrow$ uniformly continuous.\n- Compact subsets of Hausdorff spaces are closed.\n\n### Example\n$[a,b] \\subset \\mathbb{R}$ is compact; $(a,b)$ is not (cover by $(a+1/n, b)$).",
+    "related": [
+      "open-closed-sets",
+      "heine-borel-theorem",
+      "uniform-continuity"
+    ],
+    "source": ""
+  },
+  {
+    "id": "heine-borel-theorem",
+    "title": "Heine–Borel Theorem",
+    "domain": "Real Analysis",
+    "tags": [
+      "compactness",
+      "closed",
+      "bounded"
+    ],
+    "content": "## Heine–Borel Theorem\n\n**Theorem**: A subset $K \\subseteq \\mathbb{R}^n$ is compact if and only if it is closed and bounded.\n\n### Proof Sketch ($n=1$)\n($\\Rightarrow$) Compact sets are always closed (in Hausdorff spaces) and bounded (else uncountable cover by unit balls has no finite subcover).\n\n($\\Leftarrow$) $[a,b]$ is compact: given any open cover, use the **Lebesgue number** $\\lambda > 0$ (every set of diameter $< \\lambda$ lies in some cover element); partition $[a,b]$ into intervals of length $< \\lambda$.\n\n### Failure in Infinite Dimensions\nIn $\\ell^2$, the closed unit ball is closed and bounded but **not compact** (the sequence $e_n$ of standard basis vectors has no convergent subsequence).",
+    "related": [
+      "compactness",
+      "open-closed-sets"
+    ],
+    "source": ""
+  },
+  {
+    "id": "connectedness",
+    "title": "Connectedness",
+    "domain": "Real Analysis",
+    "tags": [
+      "topology",
+      "connectedness",
+      "interval"
+    ],
+    "content": "## Connectedness\n\nA metric space $X$ is **connected** if it cannot be written as $U \\cup V$ with $U, V$ disjoint, non-empty, and open.\n\n### Connected Subsets of $\\mathbb{R}$\nA subset $S \\subseteq \\mathbb{R}$ is connected **if and only if** it is an interval (including rays and all of $\\mathbb{R}$).\n\n### Path Connectedness\n$X$ is **path-connected** if any two points can be joined by a continuous path. Path-connected $\\Rightarrow$ connected; the converse fails in general (topologist's sine curve).\n\n### Intermediate Value Theorem\nIf $f: X \\to \\mathbb{R}$ is continuous and $X$ is connected, then $f(X)$ is an interval. In particular, if $f(a) < c < f(b)$ then $f(x) = c$ for some $x$.\n\n### Proof of IVT\nSuppose $f(a)<c<f(b)$. The sets $f^{-1}((-\\infty,c))$ and $f^{-1}((c,\\infty))$ are open and their union misses the point where $f=c$; connectedness forces $f$ to hit $c$.",
+    "related": [
+      "open-closed-sets",
+      "intermediate-value-theorem"
+    ],
+    "source": ""
+  },
+  {
+    "id": "intermediate-value-theorem",
+    "title": "Intermediate Value Theorem",
+    "domain": "Real Analysis",
+    "tags": [
+      "continuity",
+      "connectedness",
+      "IVT"
+    ],
+    "content": "## Intermediate Value Theorem\n\n**Theorem**: Let $f: [a,b] \\to \\mathbb{R}$ be continuous. If $f(a) < c < f(b)$ (or $f(b) < c < f(a)$), then there exists $x \\in (a,b)$ with $f(x) = c$.\n\n### Topological Proof\nContinuous images of connected sets are connected. $[a,b]$ is connected; hence $f([a,b])$ is a connected subset of $\\mathbb{R}$, i.e., an interval. Since $f(a)$ and $f(b)$ are in this interval, so is every value between them.\n\n### Applications\n- Existence of roots: if $f(a)<0<f(b)$, then $f$ has a root in $(a,b)$.\n- Fixed-point theorem on $[0,1]$: if $f:[0,1]\\to[0,1]$ continuous, then $f(x)=x$ for some $x$ (apply IVT to $g=f-\\mathrm{id}$).\n\n### Failure Without Continuity\n$f(x) = \\text{sign}(x)$ on $[-1,1]$ skips every value in $(-1,0)\\cup(0,1)$.",
+    "related": [
+      "connectedness",
+      "continuity"
+    ],
+    "source": ""
+  },
+  {
+    "id": "cantor-set",
+    "title": "The Cantor Set",
+    "domain": "Real Analysis",
+    "tags": [
+      "topology",
+      "cantor",
+      "measure-zero",
+      "perfect-set"
+    ],
+    "content": "## The Cantor Set\n\n### Construction\nDefine $C_0 = [0,1]$, $C_1 = [0,1/3]\\cup[2/3,1]$ (remove middle third), and inductively $C_n$ by removing middle thirds of each interval in $C_{n-1}$. Set\n$$C = \\bigcap_{n=0}^\\infty C_n.$$\n\n### Ternary Characterization\n$$C = \\left\\{\\sum_{n=1}^\\infty \\frac{a_n}{3^n} : a_n \\in \\{0,2\\}\\right\\}.$$\n\n### Properties\n| Property | Value |\n|---|---|\n| Closed | Yes (intersection of closed sets) |\n| Perfect | Yes (every point is a limit point) |\n| Nowhere dense | Yes (contains no open interval) |\n| Measure | 0 |\n| Cardinality | $2^{\\aleph_0}$ (uncountable) |\n\n### Bijection with $[0,1]$\nMap $a_n \\mapsto a_n/2 \\in \\{0,1\\}$ to get a surjection $C \\to [0,1]$; the Cantor function (Devil's staircase) extends this to a continuous map.",
+    "related": [
+      "measure-zero",
+      "baire-category-theorem",
+      "open-closed-sets"
+    ],
+    "source": ""
+  },
+  {
+    "id": "baire-category-theorem",
+    "title": "Baire Category Theorem",
+    "domain": "Real Analysis",
+    "tags": [
+      "completeness",
+      "topology",
+      "category"
+    ],
+    "content": "## Baire Category Theorem\n\n**Theorem**: A complete metric space $(M,d)$ is **not** a countable union of nowhere-dense sets.\n\nEquivalently: a countable intersection of dense open sets is dense.\n\n### Proof Sketch\nSuppose $M = \\bigcup_{n=1}^\\infty E_n$ with each $E_n$ nowhere dense. Start with any open ball $B_1$. Since $E_1$ is nowhere dense, $B_1 \\setminus \\overline{E_1}$ is non-empty; choose a closed ball $\\overline{B}_2 \\subset B_1 \\setminus \\overline{E_1}$ with $\\text{rad}(B_2) < 1/2$. Repeat: $\\overline{B}_{n+1} \\subset B_n \\setminus \\overline{E_n}$, $\\text{rad} \\to 0$. Centers form a Cauchy sequence converging to some $x \\in \\bigcap \\overline{B}_n \\subseteq M \\setminus \\bigcup E_n$. Contradiction.\n\n### Applications\n- $\\mathbb{R}$ is uncountable (each $\\{r\\}$ is nowhere dense).\n- $C([0,1])$ contains a dense $G_\\delta$ of nowhere-differentiable functions.\n- Uniform boundedness principle in functional analysis.",
+    "related": [
+      "cauchy-sequence",
+      "cantor-set"
+    ],
+    "source": ""
+  },
+  {
+    "id": "series-convergence",
+    "title": "Series Convergence",
+    "domain": "Real Analysis",
+    "tags": [
+      "series",
+      "convergence",
+      "tests"
+    ],
+    "content": "## Series Convergence\n\nThe series $\\sum_{n=1}^\\infty a_n$ **converges** if the partial sums $S_N = \\sum_{n=1}^N a_n$ converge. It **diverges** otherwise.\n\n### Necessary Condition\n$a_n \\to 0$ is necessary but not sufficient (e.g., $\\sum 1/n$ diverges).\n\n### Tests\n| Test | Condition | Conclusion |\n|---|---|---|\n| Comparison | $0 \\leq a_n \\leq b_n$, $\\sum b_n < \\infty$ | $\\sum a_n < \\infty$ |\n| Ratio | $\\limsup|a_{n+1}/a_n| < 1$ | abs. convergent |\n| Root | $\\limsup|a_n|^{1/n} < 1$ | abs. convergent |\n| Leibniz | $b_n \\searrow 0$ | $\\sum(-1)^n b_n$ converges |\n\n### Absolute vs. Conditional\n- **Absolutely convergent**: $\\sum|a_n|<\\infty$ (implies convergent).\n- **Conditionally convergent**: converges but $\\sum|a_n|=\\infty$.\n- **Riemann rearrangement**: any conditionally convergent series can be rearranged to converge to any $L \\in \\mathbb{R}$ or $\\pm\\infty$.",
+    "related": [
+      "absolute-convergence",
+      "uniform-vs-pointwise"
+    ],
+    "source": ""
+  },
+  {
+    "id": "uniform-vs-pointwise",
+    "title": "Uniform vs. Pointwise Convergence",
+    "domain": "Real Analysis",
+    "tags": [
+      "sequences-of-functions",
+      "uniform-convergence",
+      "continuity"
+    ],
+    "content": "## Uniform vs. Pointwise Convergence\n\nLet $f_n: E \\to \\mathbb{R}$.\n\n**Pointwise convergence**: $f_n \\to f$ pointwise if $\\forall x \\in E, \\forall\\epsilon>0, \\exists N(x,\\epsilon)$ such that $n>N \\Rightarrow |f_n(x)-f(x)| < \\epsilon$.\n\n**Uniform convergence**: $f_n \\to f$ uniformly if $\\forall\\epsilon>0, \\exists N(\\epsilon)$ (same for all $x$) such that $n>N \\Rightarrow |f_n(x)-f(x)| < \\epsilon$, i.e., $\\sup_{x\\in E}|f_n(x)-f(x)| \\to 0$.\n\n### Uniform $\\Rightarrow$ Pointwise, not conversely.\n\n### Theorems under Uniform Convergence\n- Continuity is preserved: if each $f_n$ is continuous, so is $f$.\n- Integration commutes: $\\int_a^b f_n \\to \\int_a^b f$.\n- Differentiation: if $f_n \\to f$ pointwise, $f_n'$ continuous, and $f_n' \\to g$ uniformly, then $f' = g$.\n\n### Classic Counterexample\n$f_n(x) = x^n$ on $[0,1]$: pointwise limit is $\\mathbf{1}_{\\{1\\}}$, discontinuous. Not uniform since $\\sup|f_n-f| = 1$.",
+    "related": [
+      "series-convergence",
+      "uniform-convergence-theorems"
+    ],
+    "source": ""
+  },
+  {
+    "id": "uniform-convergence-theorems",
+    "title": "Theorems on Uniform Convergence",
+    "domain": "Real Analysis",
+    "tags": [
+      "uniform-convergence",
+      "integration",
+      "differentiation"
+    ],
+    "content": "## Theorems on Uniform Convergence\n\n### Continuity Preserved\n**Theorem**: If $f_n \\to f$ uniformly on $E$ and each $f_n$ is continuous at $p \\in E$, then $f$ is continuous at $p$.\n\n**Proof**: $|f(x)-f(p)| \\leq |f(x)-f_n(x)| + |f_n(x)-f_n(p)| + |f_n(p)-f(p)|$. Choose $n$ large (first and third terms $< \\epsilon/3$), then $\\delta$ small (middle term $< \\epsilon/3$).\n\n### Integral Commutes\n**Theorem**: $f_n \\to f$ uniformly on $[a,b]$, each $f_n$ integrable $\\Rightarrow$ $\\int_a^b f_n \\to \\int_a^b f$.\n\n**Proof**: $\\left|\\int f_n - \\int f\\right| \\leq \\int|f_n - f| \\leq (b-a)\\|f_n-f\\|_\\infty \\to 0$.\n\n### Weierstrass M-Test\nIf $|f_n(x)| \\leq M_n$ for all $x$ and $\\sum M_n < \\infty$, then $\\sum f_n$ converges uniformly and absolutely.",
+    "related": [
+      "uniform-vs-pointwise"
+    ],
+    "source": ""
+  },
+  {
+    "id": "continuity",
+    "title": "Continuity",
+    "domain": "Real Analysis",
+    "tags": [
+      "continuity",
+      "epsilon-delta",
+      "limits"
+    ],
+    "content": "## Continuity\n\n$f: (M,d_M) \\to (N,d_N)$ is **continuous at $p$** if\n$$\\forall \\epsilon > 0,\\ \\exists \\delta > 0:\\ d_M(x,p) < \\delta \\Rightarrow d_N(f(x),f(p)) < \\epsilon.$$\n\n### Equivalent Characterizations\n- Sequential: $x_n \\to p \\Rightarrow f(x_n) \\to f(p)$.\n- Topological: preimages of open sets are open.\n- Closed-set version: preimages of closed sets are closed.\n\n### Operations Preserving Continuity\nSums, products, compositions, and quotients (where denominator $\\neq 0$) of continuous functions are continuous.\n\n### Global Properties\n- Continuous image of a compact set is compact.\n- Continuous image of a connected set is connected.\n- Continuous $f: K \\to \\mathbb{R}$ on compact $K$ attains its maximum and minimum (EVT).",
+    "related": [
+      "uniform-continuity",
+      "intermediate-value-theorem",
+      "compactness"
+    ],
+    "source": ""
+  },
+  {
+    "id": "uniform-continuity",
+    "title": "Uniform Continuity",
+    "domain": "Real Analysis",
+    "tags": [
+      "continuity",
+      "uniform",
+      "compact"
+    ],
+    "content": "## Uniform Continuity\n\n$f: M \\to N$ is **uniformly continuous** if\n$$\\forall \\epsilon > 0,\\ \\exists \\delta > 0:\\ d(x,y) < \\delta \\Rightarrow d(f(x),f(y)) < \\epsilon.$$\n(Same $\\delta$ works for all pairs.)\n\n### Heine–Cantor Theorem\nIf $f: K \\to N$ is continuous and $K$ is compact, then $f$ is uniformly continuous.\n\n**Proof**: For each $x$, let $\\delta_x$ be the $\\delta$ for $\\epsilon/2$. Balls $\\{B_{\\delta_x/2}(x)\\}$ cover $K$; extract finite subcover with centers $x_1,\\ldots,x_k$. Set $\\delta = \\min \\delta_{x_i}/2$. For $d(x,y)<\\delta$, find $x_i$ with $d(x,x_i)<\\delta_{x_i}/2$; then $d(f(x),f(y)) < \\epsilon$.\n\n### Non-Example\n$f(x) = 1/x$ on $(0,1]$: points $1/n$ and $1/(n+1)$ are close, but $f$ values differ by $1$.",
+    "related": [
+      "continuity",
+      "compactness"
+    ],
+    "source": ""
+  },
+  {
+    "id": "derivative-definition",
+    "title": "The Derivative",
+    "domain": "Real Analysis",
+    "tags": [
+      "differentiation",
+      "derivative",
+      "linearization"
+    ],
+    "content": "## The Derivative\n\n$f: (a,b) \\to \\mathbb{R}$ is **differentiable at $x_0$** if\n$$f'(x_0) = \\lim_{h \\to 0} \\frac{f(x_0+h) - f(x_0)}{h}$$\nexists. Geometrically, $f'(x_0)$ is the slope of the tangent line; analytically, $f(x_0+h) = f(x_0) + f'(x_0)h + o(h)$.\n\n### Differentiable $\\Rightarrow$ Continuous\nIf $f'(x_0)$ exists, then $f$ is continuous at $x_0$.\n\n### Differentiation Rules\n- Linearity, product rule, quotient rule, chain rule.\n\n### Higher Derivatives\n$f \\in C^n(a,b)$ means $f$ is $n$ times continuously differentiable. $C^\\infty$ functions are **smooth**; **analytic** functions equal their Taylor series.",
+    "related": [
+      "mean-value-theorem",
+      "taylor-theorem"
+    ],
+    "source": ""
+  },
+  {
+    "id": "mean-value-theorem",
+    "title": "Mean Value Theorem",
+    "domain": "Real Analysis",
+    "tags": [
+      "differentiation",
+      "MVT",
+      "rolle"
+    ],
+    "content": "## Mean Value Theorem\n\n**Rolle's Theorem**: If $f:[a,b]\\to\\mathbb{R}$ is continuous on $[a,b]$, differentiable on $(a,b)$, and $f(a)=f(b)$, then $\\exists c \\in (a,b): f'(c)=0$.\n\n**Proof**: By EVT, $f$ attains its max or min at some $c \\in (a,b)$ (otherwise $f$ is constant). At such $c$, $f'(c)=0$ by the sign of difference quotients.\n\n**Mean Value Theorem**: Under the same hypotheses (without $f(a)=f(b)$),\n$$\\exists c \\in (a,b):\\ f'(c) = \\frac{f(b)-f(a)}{b-a}.$$\n\n**Proof**: Apply Rolle to $g(x) = f(x) - \\frac{f(b)-f(a)}{b-a}(x-a)$.\n\n### Corollaries\n- $f'\\equiv 0 \\Rightarrow f$ constant.\n- $f'>0 \\Rightarrow f$ strictly increasing.\n- $|f'|\\leq M \\Rightarrow |f(x)-f(y)| \\leq M|x-y|$ (Lipschitz).",
+    "related": [
+      "derivative-definition",
+      "taylor-theorem"
+    ],
+    "source": ""
+  },
+  {
+    "id": "taylor-theorem",
+    "title": "Taylor's Theorem",
+    "domain": "Real Analysis",
+    "tags": [
+      "differentiation",
+      "taylor",
+      "approximation",
+      "remainder"
+    ],
+    "content": "## Taylor's Theorem\n\n**Theorem**: Let $f$ be $(n+1)$-times differentiable on $(a,b)$, $x_0 \\in (a,b)$. Then for $x \\in (a,b)$:\n$$f(x) = \\sum_{k=0}^n \\frac{f^{(k)}(x_0)}{k!}(x-x_0)^k + R_n(x).$$\n\n**Lagrange Remainder**:\n$$R_n(x) = \\frac{f^{(n+1)}(c)}{(n+1)!}(x-x_0)^{n+1}$$\nfor some $c$ strictly between $x_0$ and $x$.\n\n### Proof Idea\nApply the Generalized MVT (or integrate by parts $n$ times) to reduce $R_n$ to the Lagrange form.\n\n### Convergence to $f$\nThe Taylor series $\\sum \\frac{f^{(k)}(x_0)}{k!}(x-x_0)^k$ converges to $f(x)$ iff $R_n(x) \\to 0$.\n\n### Non-Analytic Example\n$f(x) = e^{-1/x^2}$ ($f(0)=0$): all derivatives at 0 are 0, so the Taylor series is $0 \\neq f(x)$ for $x \\neq 0$.",
+    "related": [
+      "derivative-definition",
+      "mean-value-theorem",
+      "power-series"
+    ],
+    "source": ""
+  },
+  {
+    "id": "riemann-integral",
+    "title": "The Riemann Integral",
+    "domain": "Real Analysis",
+    "tags": [
+      "integration",
+      "riemann",
+      "darboux"
+    ],
+    "content": "## The Riemann Integral\n\n### Darboux Approach\nFor a bounded $f:[a,b]\\to\\mathbb{R}$ and partition $P = \\{a=x_0<x_1<\\cdots<x_n=b\\}$:\n$$L(f,P) = \\sum_{i=1}^n \\inf_{[x_{i-1},x_i]} f \\cdot \\Delta x_i, \\quad U(f,P) = \\sum_{i=1}^n \\sup_{[x_{i-1},x_i]} f \\cdot \\Delta x_i.$$\n\n$f$ is **Riemann integrable** iff $\\sup_P L(f,P) = \\inf_P U(f,P)$; the common value is $\\int_a^b f$.\n\n### Integrability Criterion\n$f$ is integrable iff $\\forall\\epsilon>0, \\exists P: U(f,P)-L(f,P)<\\epsilon$.\n\n### Lebesgue's Theorem\nA bounded $f$ on $[a,b]$ is Riemann integrable $\\iff$ its discontinuity set has **measure zero**.\n\n### Fundamental Theorem of Calculus\n1. If $f$ is continuous on $[a,b]$ then $F(x)=\\int_a^x f$ is differentiable and $F'=f$.\n2. If $f$ is integrable and $F'=f$ then $\\int_a^b f = F(b)-F(a)$.",
+    "related": [
+      "darboux-sums",
+      "measure-zero",
+      "continuity"
+    ],
+    "source": ""
+  },
+  {
+    "id": "darboux-sums",
+    "title": "Darboux Sums",
+    "domain": "Real Analysis",
+    "tags": [
+      "integration",
+      "darboux",
+      "partition"
+    ],
+    "content": "## Darboux Sums\n\nGiven a bounded function $f:[a,b]\\to\\mathbb{R}$ and a partition $P$, define:\n$$m_i = \\inf_{x\\in[x_{i-1},x_i]} f(x), \\quad M_i = \\sup_{x\\in[x_{i-1},x_i]} f(x).$$\n\n$$L(f,P) = \\sum_i m_i(x_i - x_{i-1}), \\quad U(f,P) = \\sum_i M_i(x_i - x_{i-1}).$$\n\n### Monotonicity\n- Refining $P$ increases $L$ and decreases $U$.\n- $L(f,P) \\leq U(f,Q)$ for any two partitions $P,Q$.\n\n### Lower and Upper Integrals\n$$\\underline{\\int_a^b} f = \\sup_P L(f,P), \\quad \\overline{\\int_a^b} f = \\inf_P U(f,P).$$\n\nAlways $\\underline{\\int} \\leq \\overline{\\int}$; equality defines Riemann integrability.",
+    "related": [
+      "riemann-integral"
+    ],
+    "source": ""
+  },
+  {
+    "id": "power-series",
+    "title": "Power Series",
+    "domain": "Real Analysis",
+    "tags": [
+      "power-series",
+      "radius-of-convergence",
+      "analytic"
+    ],
+    "content": "## Power Series\n\nA **power series** centered at $c$ is $\\sum_{n=0}^\\infty a_n (x-c)^n$.\n\n### Radius of Convergence\nThe series converges absolutely for $|x-c|<R$ and diverges for $|x-c|>R$, where\n$$R = \\frac{1}{\\limsup_{n\\to\\infty}|a_n|^{1/n}} \\quad \\text{(Cauchy–Hadamard).}$$\n\nAlternatively, $R = \\lim |a_n/a_{n+1}|$ when the limit exists.\n\n### Inside the Disk\nOn any closed sub-interval $[c-r,c+r]$ with $r<R$, convergence is **uniform**. Therefore:\n- The sum is **continuous** on $(c-R, c+R)$.\n- **Term-by-term differentiation and integration** are valid.\n- The differentiated series has the same radius $R$.\n\n### Analytic Functions\n$f$ is **real analytic** on $(a,b)$ if every $x_0\\in(a,b)$ has a neighborhood where $f$ equals a power series.",
+    "related": [
+      "radius-of-convergence",
+      "taylor-theorem",
+      "uniform-convergence-theorems"
+    ],
+    "source": ""
+  },
+  {
+    "id": "radius-of-convergence",
+    "title": "Radius of Convergence",
+    "domain": "Real Analysis",
+    "tags": [
+      "power-series",
+      "convergence",
+      "cauchy-hadamard"
+    ],
+    "content": "## Radius of Convergence\n\nFor $\\sum a_n x^n$, the **radius of convergence** is\n$$R = \\frac{1}{\\limsup_{n\\to\\infty} |a_n|^{1/n}}.$$\n(Set $R=\\infty$ if $\\limsup=0$, $R=0$ if $\\limsup=\\infty$.)\n\n### Ratio Formula\nIf $\\lim_{n\\to\\infty}|a_{n+1}/a_n| = L$, then $R = 1/L$.\n\n### Examples\n| Series | $R$ |\n|---|---|\n| $\\sum x^n$ | 1 |\n| $\\sum x^n/n!$ | $\\infty$ |\n| $\\sum n! x^n$ | 0 |\n| $\\sum x^n/n$ | 1 |\n\n### Behavior at the Boundary\nAt $|x|=R$, behavior must be checked separately for each series.",
+    "related": [
+      "power-series"
+    ],
+    "source": ""
+  },
+  {
+    "id": "lebesgue-measure-intro",
+    "title": "Introduction to Lebesgue Measure",
+    "domain": "Real Analysis",
+    "tags": [
+      "measure-theory",
+      "lebesgue",
+      "integration"
+    ],
+    "content": "## Introduction to Lebesgue Measure\n\nLebesgue measure $\\mu$ on $\\mathbb{R}$ extends the notion of length:\n- $\\mu([a,b]) = b-a$.\n- **Countable additivity**: $\\mu(\\bigcup_n E_n) = \\sum_n \\mu(E_n)$ for disjoint measurable sets.\n\n### Measurable Sets\nThe Borel $\\sigma$-algebra is generated by open sets. Lebesgue measurable sets are Borel sets plus sets differing from Borel by null sets.\n\n### Measure Zero\nA set $E$ has **measure zero** if $\\mu(E)=0$, equivalently if $\\forall\\epsilon>0$, $E$ is covered by intervals of total length $<\\epsilon$.\n\n### Lebesgue vs. Riemann\nThe Lebesgue integral extends the Riemann integral: every Riemann integrable function is Lebesgue integrable, with equal values. Lebesgue integrable functions can have much larger discontinuity sets.",
+    "related": [
+      "measure-zero",
+      "riemann-integral"
+    ],
+    "source": ""
+  },
+  {
+    "id": "measure-zero",
+    "title": "Sets of Measure Zero",
+    "domain": "Real Analysis",
+    "tags": [
+      "measure",
+      "null-set",
+      "countable"
+    ],
+    "content": "## Sets of Measure Zero\n\nA set $E \\subseteq \\mathbb{R}$ has **measure zero** if for every $\\epsilon > 0$ there exist open intervals $I_1, I_2, \\ldots$ with\n$$E \\subseteq \\bigcup_{n=1}^\\infty I_n \\quad \\text{and} \\quad \\sum_{n=1}^\\infty |I_n| < \\epsilon.$$\n\n### Examples\n- Every finite set: cover each point by interval of length $\\epsilon/n$.\n- $\\mathbb{Q}\\cap[0,1]$: enumerate $\\{q_n\\}$, cover $q_n$ by $(q_n-\\epsilon/2^{n+1}, q_n+\\epsilon/2^{n+1})$.\n- The Cantor set $C$: measure zero, yet uncountable.\n\n### Properties\n- Countable union of measure-zero sets has measure zero.\n- Every countable set has measure zero.\n- Measure zero $\\not\\Rightarrow$ countable (Cantor set).\n\n### Role in Integration\nBy Lebesgue's criterion, a bounded function is Riemann integrable iff it is continuous **almost everywhere** (except on a set of measure zero).",
+    "related": [
+      "lebesgue-measure-intro",
+      "cantor-set",
+      "riemann-integral"
+    ],
+    "source": ""
+  },
+  {
+    "id": "completeness-axiom",
+    "title": "Completeness (LUB Property)",
+    "domain": "real-analysis",
+    "tags": [
+      "foundations"
+    ],
+    "content": "The **least-upper-bound property** states: every nonempty subset of $\\mathbb{R}$ with an upper bound has a least upper bound (supremum) in $\\mathbb{R}$. This property distinguishes $\\mathbb{R}$ from $\\mathbb{Q}$ (the set $\\{q\\in\\mathbb{Q}: q^2<2\\}$ has no rational supremum) and underlies virtually every existence theorem in analysis (IVT, extreme value theorem, convergence of monotone bounded sequences).",
+    "related": [
+      "dedekind-cut"
+    ],
+    "source": ""
+  },
+  {
+    "id": "countability",
+    "title": "Countability",
+    "domain": "set-theory",
+    "tags": [
+      "cardinality"
+    ],
+    "content": "A set $S$ is **countable** if there is an injection $S\\hookrightarrow\\mathbb{N}$. Finite sets are countable; so are $\\mathbb{Z}$ and $\\mathbb{Q}$. Countable unions of countable sets are countable. The power set $\\mathcal{P}(\\mathbb{N})$ and $\\mathbb{R}$ are **not** countable, by Cantor's diagonal argument.",
+    "related": [
+      "cantor-diagonal-argument"
+    ],
+    "source": ""
+  },
+  {
+    "id": "open-and-closed-sets",
+    "title": "Open and Closed Sets",
+    "domain": "topology",
+    "tags": [
+      "topology"
+    ],
+    "content": "$U\\subset M$ is **open** if every $p\\in U$ has some $B_r(p)\\subset U$. $F$ is **closed** iff $F^c$ is open, iff $F$ contains all its limit points. Arbitrary unions and finite intersections of opens are open; finite unions and arbitrary intersections of closed sets are closed. Both $\\emptyset$ and $M$ are clopen.",
+    "related": [
+      "metric-space"
+    ],
+    "source": ""
+  },
+  {
+    "id": "lebesgue-criterion",
+    "title": "Lebesgue's Integrability Criterion",
+    "domain": "real-analysis",
+    "tags": [
+      "integration",
+      "measure"
+    ],
+    "content": "A bounded function $f:[a,b]\\to\\mathbb{R}$ is **Riemann integrable iff its set of discontinuities has Lebesgue measure zero**. 'Measure zero' means: for every $\\varepsilon>0$ the set can be covered by countably many intervals of total length $<\\varepsilon$. This explains why monotone functions (countably many discontinuities) are integrable while Dirichlet (discontinuous everywhere) is not.",
+    "related": [
+      "riemann-integral",
+      "lebesgue-measure"
+    ],
+    "source": ""
+  },
+  {
+    "id": "uniform-convergence",
+    "title": "Uniform Convergence",
+    "domain": "real-analysis",
+    "tags": [
+      "convergence"
+    ],
+    "content": "$f_n\\to f$ **uniformly** on $X$ if $\\sup_{x\\in X}|f_n(x)-f(x)|\\to 0$. Under this hypothesis: (a) continuity passes to the limit; (b) $\\int f_n\\to\\int f$ on compact intervals; (c) with an extra hypothesis on $f_n'$, the limit is differentiable with $f'=\\lim f_n'$. **Weierstrass M-test**: $\\sum f_n$ converges uniformly if $|f_n|\\le M_n$ with $\\sum M_n<\\infty$.",
+    "related": [
+      "interchange-of-limits"
+    ],
+    "source": ""
+  },
+  {
+    "id": "interchange-of-limits",
+    "title": "Interchange of Limit Operations",
+    "domain": "real-analysis",
+    "tags": [
+      "convergence"
+    ],
+    "content": "When can we swap limits with integrals, sums, or derivatives? Key sufficient conditions: uniform convergence (Riemann setting); monotone/dominated convergence (Lebesgue setting); absolute convergence (Fubini for series). Pointwise convergence alone is typically not enough — $f_n=n\\mathbf{1}_{(0,1/n)}$ is the canonical counter-example.",
+    "related": [
+      "uniform-convergence"
+    ],
+    "source": ""
+  },
+  {
+    "id": "arzela-ascoli",
+    "title": "Arzelà–Ascoli Theorem",
+    "domain": "functional-analysis",
+    "tags": [
+      "compactness"
+    ],
+    "content": "**Arzelà–Ascoli**: A subset $\\mathcal{F}\\subset C(K,\\mathbb{R})$ with $K$ compact metric is precompact (has compact closure) iff it is (i) **uniformly bounded** and (ii) **equicontinuous** — a single $\\delta$ works for every $f\\in\\mathcal{F}$. This is the main compactness tool in spaces of continuous functions and underlies existence proofs for ODEs (Peano) and PDEs.",
+    "related": [
+      "stone-weierstrass"
+    ],
+    "source": ""
+  },
+  {
+    "id": "stone-weierstrass",
+    "title": "Stone–Weierstrass Theorem",
+    "domain": "functional-analysis",
+    "tags": [
+      "approximation"
+    ],
+    "content": "**Stone–Weierstrass**: Let $K$ be a compact Hausdorff space and $\\mathcal{A}\\subset C(K,\\mathbb{R})$ a subalgebra containing the constants and separating points. Then $\\mathcal{A}$ is **dense** in $C(K,\\mathbb{R})$. Corollaries: polynomials are dense in $C[a,b]$ (Weierstrass approximation); trigonometric polynomials are dense in $C(S^1)$.",
+    "related": [
+      "arzela-ascoli"
+    ],
+    "source": ""
+  },
+  {
+    "id": "total-derivative",
+    "title": "Total Derivative",
+    "domain": "real-analysis",
+    "tags": [
+      "calculus",
+      "multivariable"
+    ],
+    "content": "$f:U\\subset\\mathbb{R}^n\\to\\mathbb{R}^m$ is **differentiable at $p$** if there is a linear map $Df(p):\\mathbb{R}^n\\to\\mathbb{R}^m$ with $f(p+h)=f(p)+Df(p)h+o(|h|)$. The matrix of $Df(p)$ is the Jacobian $[\\partial f_i/\\partial x_j]$. Continuous partials on an open set $\\Rightarrow$ differentiable ($C^1$).",
+    "related": [
+      "chain-rule-multivariable"
+    ],
+    "source": ""
+  },
+  {
+    "id": "chain-rule-multivariable",
+    "title": "Chain Rule (Multivariable)",
+    "domain": "real-analysis",
+    "tags": [
+      "calculus",
+      "multivariable"
+    ],
+    "content": "If $f$ is differentiable at $p$ and $g$ is differentiable at $f(p)$, then $g\\circ f$ is differentiable at $p$ with $D(g\\circ f)(p)=Dg(f(p))\\circ Df(p)$. In matrix terms, Jacobians multiply. The proof is a careful bookkeeping of $o(|h|)$ errors.",
+    "related": [
+      "total-derivative"
+    ],
+    "source": ""
+  },
+  {
+    "id": "inverse-function-theorem",
+    "title": "Inverse Function Theorem",
+    "domain": "real-analysis",
+    "tags": [
+      "calculus",
+      "multivariable"
+    ],
+    "content": "**IFT**: Let $f:U\\to\\mathbb{R}^n$ be $C^1$ and suppose $Df(p)$ is invertible. Then there exist open neighborhoods $V\\ni p$ and $W\\ni f(p)$ such that $f:V\\to W$ is a $C^1$ diffeomorphism, and $D(f^{-1})(f(p))=Df(p)^{-1}$. Proof uses the contraction mapping theorem applied to $T_y(x)=x+Df(p)^{-1}(y-f(x))$.",
+    "related": [
+      "implicit-function-theorem"
+    ],
+    "source": ""
+  },
+  {
+    "id": "implicit-function-theorem",
+    "title": "Implicit Function Theorem",
+    "domain": "real-analysis",
+    "tags": [
+      "calculus",
+      "multivariable"
+    ],
+    "content": "**ImFT**: If $F:U\\subset\\mathbb{R}^n\\times\\mathbb{R}^m\\to\\mathbb{R}^m$ is $C^1$, $F(a,b)=0$, and $\\partial_y F(a,b)$ is invertible, then near $(a,b)$ the equation $F(x,y)=0$ defines a $C^1$ function $y=g(x)$ with $g(a)=b$. Derived from IFT applied to $(x,y)\\mapsto(x,F(x,y))$.",
+    "related": [
+      "inverse-function-theorem"
+    ],
+    "source": ""
+  },
+  {
+    "id": "lebesgue-measure",
+    "title": "Lebesgue Measure",
+    "domain": "measure-theory",
+    "tags": [
+      "measure"
+    ],
+    "content": "The **Lebesgue outer measure** of $E\\subset\\mathbb{R}^n$ is $m^*(E)=\\inf\\sum\\operatorname{vol}(I_k)$ over countable covers by boxes. $E$ is **measurable** (Carathéodory) if $m^*(A)=m^*(A\\cap E)+m^*(A\\cap E^c)$ for every test set $A$. Measurable sets form a $\\sigma$-algebra containing all Borel sets; $m^*$ restricted there is **Lebesgue measure $m$**, countably additive.",
+    "related": [
+      "lebesgue-integral"
+    ],
+    "source": ""
+  },
+  {
+    "id": "lebesgue-integral",
+    "title": "Lebesgue Integral",
+    "domain": "measure-theory",
+    "tags": [
+      "integration"
+    ],
+    "content": "For a measurable simple function $\\varphi=\\sum c_i\\mathbf{1}_{E_i}$, define $\\int\\varphi=\\sum c_i m(E_i)$. Extend to nonnegative measurable $f$ by $\\int f=\\sup\\{\\int\\varphi:0\\le\\varphi\\le f\\}$, and to general $f$ via $f=f^+-f^-$. Every Riemann integrable function is Lebesgue integrable with the same value, but the Lebesgue class is strictly larger (e.g., Dirichlet's function is Lebesgue integrable).",
+    "related": [
+      "lebesgue-measure",
+      "dominated-convergence-theorem"
+    ],
+    "source": ""
+  },
+  {
+    "id": "dominated-convergence-theorem",
+    "title": "Dominated Convergence Theorem",
+    "domain": "measure-theory",
+    "tags": [
+      "integration",
+      "convergence"
+    ],
+    "content": "**DCT**: Suppose $f_n\\to f$ a.e. and there exists integrable $g$ with $|f_n|\\le g$ a.e. for all $n$. Then $f$ is integrable and $\\int f_n\\to\\int f$ (in fact $\\int|f_n-f|\\to 0$). DCT, together with the Monotone Convergence Theorem and Fatou's lemma, forms the trio of convergence results that make Lebesgue theory far more flexible than Riemann's.",
+    "related": [
+      "lebesgue-integral"
+    ],
+    "source": ""
+  },
+  {
+    "id": "set-basics",
+    "title": "Sets, Classes, and Membership",
+    "domain": "Foundations",
+    "tags": [
+      "set-theory",
+      "foundations"
+    ],
+    "content": "A **set** is a collection of elements; we write $x\\in A$ to mean $x$ is a member of $A$. Standard sets: $\\mathbb{N}$ (naturals $1,2,3,\\dots$), $\\mathbb{Z}$ (integers), $\\mathbb{Q}$ (rationals).\n\n$A\\subset B$ means every member of $A$ belongs to $B$. Two sets are equal iff each is a subset of the other — this is the standard proof technique.\n\nOperations: $A\\cup B$ (union), $A\\cap B$ (intersection), $A\\setminus B$ (difference), $A\\triangle B$ (symmetric difference).\n\nA **class** is a collection of sets. Note the distinction: the singleton $\\{1\\}$ is a *subset* of $\\mathbb{N}$, while $\\{1\\}$ could be a *member* of a class of subsets of $\\mathbb{N}$.",
+    "related": [
+      "equivalence-relation-note",
+      "quantifiers-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "equivalence-relation-note",
+    "title": "Equivalence Relations and Classes",
+    "domain": "Foundations",
+    "tags": [
+      "set-theory",
+      "equivalence"
+    ],
+    "content": "An **equivalence relation** on $S$ is a binary relation $\\sim$ satisfying for all $s,s',s''\\in S$:\n\n1. **Reflexive:** $s\\sim s$.\n2. **Symmetric:** $s\\sim s' \\Rightarrow s'\\sim s$.\n3. **Transitive:** $s\\sim s'$ and $s'\\sim s'' \\Rightarrow s\\sim s''$.\n\nAn equivalence relation partitions $S$ into disjoint **equivalence classes** $[s]=\\{s'\\in S: s'\\sim s\\}$. Any $s\\in[s]$ is a **representative** of its class.\n\n*Example:* Congruence mod $n$ on $\\mathbb{Z}$: $a\\sim b \\iff n\\mid(a-b)$. Equivalence classes are the residue classes $[0],[1],\\dots,[n-1]$.",
+    "related": [
+      "set-basics"
+    ],
+    "source": ""
+  },
+  {
+    "id": "quantifiers-note",
+    "title": "Quantifiers and Mathematical Grammar",
+    "domain": "Logic",
+    "tags": [
+      "logic",
+      "proof-writing"
+    ],
+    "content": "The quantifiers $\\forall$ ('for each') and $\\exists$ ('there exists') must come **first** in a mathematical sentence, followed by the assertion.\n\n**Order matters.** Compare:\n- $\\forall n\\in\\mathbb{N}\\ \\exists p\\in P\\ (p>n)$ — TRUE (there are arbitrarily large primes).\n- $\\exists p\\in P\\ \\forall n\\in\\mathbb{N}\\ (p>n)$ — FALSE (no prime exceeds all naturals).\n\n**Negation rule:** swap $\\forall\\leftrightarrow\\exists$, keep the order, and negate the final assertion:\n$$\\neg(\\forall x\\ \\exists y\\ P(x,y)) \\equiv \\exists x\\ \\forall y\\ \\neg P(x,y).$$\n\n**Implication facts:**\n- $a\\Rightarrow b \\equiv \\neg a \\lor b \\equiv (\\neg b \\Rightarrow \\neg a)$ (contrapositive).\n- $\\neg(a\\Rightarrow b) \\equiv a \\land \\neg b$.\n\nIn mathematics, 'or' is always inclusive.",
+    "related": [
+      "contradiction-note",
+      "set-basics"
+    ],
+    "source": ""
+  },
+  {
+    "id": "contradiction-note",
+    "title": "Proof by Contradiction",
+    "domain": "Logic",
+    "tags": [
+      "proof",
+      "logic"
+    ],
+    "content": "To prove $a\\Rightarrow b$ by contradiction: assume $a$ and $\\neg b$, derive a statement contradicting a known fact.\n\n**Classic example (Euclid):** The set $P$ of primes is infinite.\n\n*Proof.* Suppose not. Then $P=\\{p_1,\\dots,p_m\\}$ is finite. Let $N=p_1 p_2\\cdots p_m$. Each $p_i$ divides $N$, so $p_i$ does **not** divide $N+1$ (remainder is 1). But $N+1\\ge 2$ must factor into primes — yet no $p_i$ divides it. Contradiction. $\\square$\n\n**Key logical fact:** $\\neg(a\\Rightarrow b) \\equiv a\\land\\neg b$, which is why we assume both $a$ and $\\neg b$ to reach the contradiction.",
+    "related": [
+      "quantifiers-note",
+      "q-incomplete-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "q-incomplete-note",
+    "title": "The Rationals Are Incomplete",
+    "domain": "Analysis",
+    "tags": [
+      "rationals",
+      "irrationality"
+    ],
+    "content": "**Theorem.** No rational $r=p/q$ satisfies $r^2=2$.\n\n*Proof.* Assume $p,q$ share no common factor. If $p$ is odd, then $p^2$ is odd but $2q^2$ is even, contradiction. If $p$ is even, write $p=2k$; then $p^2=4k^2=2q^2$ gives $q^2=2k^2$, so $q$ is even, contradicting coprimality. $\\square$\n\nThus $\\sqrt{2}$ is a 'gap' in $\\mathbb{Q}$: the set $\\{r\\in\\mathbb{Q}:r^2<2\\}$ is bounded above (e.g., by 2) yet has no rational least upper bound. This is precisely what motivates the construction of $\\mathbb{R}$.",
+    "related": [
+      "contradiction-note",
+      "dedekind-cut-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "dedekind-cut-note",
+    "title": "Dedekind Cuts",
+    "domain": "Analysis",
+    "tags": [
+      "real-numbers",
+      "construction"
+    ],
+    "content": "A **Dedekind cut** in $\\mathbb{Q}$ is a pair $A|B$ with:\n\n(a) $A\\cup B=\\mathbb{Q}$, $A\\neq\\emptyset$, $B\\neq\\emptyset$, $A\\cap B=\\emptyset$.\n(b) $a<b$ whenever $a\\in A$, $b\\in B$.\n(c) $A$ has no largest element.\n\n**Definition.** A real number is a cut in $\\mathbb{Q}$.\n\n*Rational cut:* for $c\\in\\mathbb{Q}$, $c^* = \\{r<c\\}\\mid\\{r\\ge c\\}$. This embeds $\\mathbb{Q}\\subset\\mathbb{R}$.\n\n*Irrational example:* $\\sqrt{2}$ corresponds to $A=\\{r\\le 0 \\text{ or } r^2<2\\}$, $B=\\{r>0,\\ r^2\\ge 2\\}$. Here $B$ has no smallest element, so the cut is *not* rational.\n\nOrder: $A|B \\le C|D \\iff A\\subset C$. Arithmetic (addition, multiplication) is defined elementwise, with care around negatives.",
+    "related": [
+      "q-incomplete-note",
+      "lub-property-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "lub-property-note",
+    "title": "Least Upper Bound Property",
+    "domain": "Analysis",
+    "tags": [
+      "completeness",
+      "supremum"
+    ],
+    "content": "An **upper bound** for $S\\subset\\mathbb{R}$ is $M$ with $s\\le M$ for all $s\\in S$. The **least upper bound** (supremum) $\\sup S$ is an upper bound smaller than every other upper bound.\n\n**LUB Property.** Every nonempty $S\\subset\\mathbb{R}$ that is bounded above has $\\sup S\\in\\mathbb{R}$.\n\n*Proof using cuts:* given a collection $\\mathcal{C}$ of cuts bounded above, take $C=\\bigcup_{A|B\\in\\mathcal{C}} A$ and let $D$ be its complement in $\\mathbb{Q}$. Then $C|D$ is a cut and is the supremum.\n\nConventions: $\\sup\\emptyset=-\\infty$, $\\inf\\emptyset=+\\infty$; if $S$ is unbounded above, $\\sup S=+\\infty$.\n\nThe LUB property is the defining feature distinguishing $\\mathbb{R}$ from $\\mathbb{Q}$, and it drives essentially every deep theorem in analysis (IVT, compactness, convergence of Cauchy sequences).",
+    "related": [
+      "dedekind-cut-note",
+      "cauchy-complete-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "cauchy-complete-note",
+    "title": "Cauchy Completeness of R",
+    "domain": "Analysis",
+    "tags": [
+      "sequences",
+      "completeness"
+    ],
+    "content": "A sequence $(a_n)$ in $\\mathbb{R}$ **converges** to $b$ if\n$$\\forall \\epsilon>0\\ \\exists N\\ \\forall n\\ge N:\\ |a_n-b|<\\epsilon.$$\n\nIt is a **Cauchy sequence** if\n$$\\forall\\epsilon>0\\ \\exists N\\ \\forall n,k\\ge N:\\ |a_n-a_k|<\\epsilon.$$\n\nEvery convergent sequence is Cauchy (triangle inequality with $\\epsilon/2$).\n\n**Theorem.** $\\mathbb{R}$ is Cauchy-complete: every Cauchy sequence converges.\n\n*Sketch.* A Cauchy sequence is bounded. Define $X=\\{x\\in\\mathbb{R}: a_n\\ge x \\text{ for infinitely many } n\\}$. $X$ is nonempty and bounded above, so $b=\\sup X$ exists by LUB, and one shows $a_n\\to b$.\n\nThis is the second sense of completeness, equivalent to LUB for ordered fields.",
+    "related": [
+      "lub-property-note",
+      "triangle-inequality-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "triangle-inequality-note",
+    "title": "Absolute Value and the Triangle Inequality",
+    "domain": "Analysis",
+    "tags": [
+      "absolute-value",
+      "inequality"
+    ],
+    "content": "For $x\\in\\mathbb{R}$, $|x|=x$ if $x\\ge 0$ and $|x|=-x$ otherwise. Thus $x\\le|x|$ and $-x\\le|x|$.\n\n**Triangle Inequality.** For all $x,y\\in\\mathbb{R}$,\n$$|x+y|\\le|x|+|y|.$$\n\n*Proof.* Adding $y$ to $x\\le|x|$ and $-y$ to $-x\\le|x|$ gives $x+y\\le|x|+|y|$ and $-(x+y)\\le|x|+|y|$. Since $|x+y|$ equals one of these, the inequality holds. $\\square$\n\n**Reverse triangle inequality.** $||x|-|y||\\le|x-y|$.\n\nThese are used constantly in $\\epsilon$–$\\delta$ arguments to split distances.",
+    "related": [
+      "cauchy-complete-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "cauchy-schwarz-discriminant",
+    "title": "The Discriminant Proof of Cauchy-Schwarz",
+    "domain": "Real Analysis",
+    "tags": [
+      "inequality",
+      "inner-product"
+    ],
+    "content": "The elegant proof: for any $x,y$ in an inner product space, define $Q(t)=\\langle x+ty,x+ty\\rangle\\geq 0$. Expanding: $Q(t)=|y|^2 t^2+2\\langle x,y\\rangle t+|x|^2$. Since $Q\\geq 0$ everywhere, its discriminant is $\\leq 0$: $4\\langle x,y\\rangle^2-4|x|^2|y|^2\\leq 0$. Taking square roots: $|\\langle x,y\\rangle|\\leq|x||y|$. This argument uses only inner product axioms, so it works in any inner product space — including infinite-dimensional function spaces like $C([a,b])$ with $\\langle f,g\\rangle=\\int fg$.",
+    "related": [],
+    "source": ""
+  },
+  {
+    "id": "cantor-diagonal-method",
+    "title": "Cantor's Diagonal Argument",
+    "domain": "Real Analysis",
+    "tags": [
+      "cardinality",
+      "proof-technique"
+    ],
+    "content": "To show R is uncountable: suppose $f:\\mathbb{N}\\to\\mathbb{R}$ were a bijection. Write each $f(n)=N_n.x_{n1}x_{n2}x_{n3}\\ldots$ in decimal. Construct $y=0.y_1y_2\\ldots$ where each $y_i\\neq x_{ii}$ and $y_i\\neq 9$. Then $y$ differs from $f(n)$ in the n-th decimal position for every n, so $y\\notin\\text{range}(f)$ — contradicting surjectivity. The exclusion of 9 avoids the non-uniqueness of decimal representations (e.g., 0.999...=1). The method generalizes: for any set S, the power set $\\mathcal{P}(S)$ has strictly greater cardinality than S.",
+    "related": [],
+    "source": ""
+  },
+  {
+    "id": "continuity-equivalences",
+    "title": "Four Equivalent Definitions of Continuity",
+    "domain": "Real Analysis",
+    "tags": [
+      "topology",
+      "continuity"
+    ],
+    "content": "For $f:M\\to N$ between metric spaces, the following are equivalent:\n\n1. **ε-δ**: $\\forall p\\,\\forall\\epsilon>0\\,\\exists\\delta>0$ such that $d(x,p)<\\delta\\Rightarrow d(fx,fp)<\\epsilon$.\n2. **Sequential**: $p_n\\to p$ implies $f(p_n)\\to f(p)$.\n3. **Closed set**: $f^{pre}(K)$ is closed in M whenever K is closed in N.\n4. **Open set**: $f^{pre}(U)$ is open in M whenever U is open in N.\n\nThe open set condition is purely topological — it makes sense without any metric. This is the definition used in general topology. Note: continuous maps need not send open sets to open sets (e.g., $x\\mapsto x^2$ sends $(-1,1)$ to $[0,1)$).",
+    "related": [
+      "cauchy-schwarz-discriminant"
+    ],
+    "source": ""
   }
 ]

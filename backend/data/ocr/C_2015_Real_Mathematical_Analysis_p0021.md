@@ -1,0 +1,13 @@
+would follow from $P$ being finite. In fact if $P$ were† finite then it would consist of $m$ numbers $p_1, \ldots, p_m$. Their product $N = 2 \cdot 3 \cdot 5 \cdots p_m$ would be evenly divisible (i.e., remainder 0 after division) by each $p_i$ and therefore $N + 1$ would be evenly divisible by no prime (the remainder of $p_i$ divided into $N + 1$ would always be 1), which would contradict the fact that every integer $\geq 2$ can be factored as a product of primes. (The latter fact has nothing to do with $P$ being finite or not.) Since the supposition that $P$ is finite led to a contradiction of a known fact, prime factorization, the supposition was incorrect, and $P$ is, after all, infinite.
+
+Aficionados of logic will note our heavy use here of the “law of the excluded middle,” to wit, that a mathematically meaningful statement is either true or false. The possibilities that it is neither true nor false, or that it is both true and false, are excluded.
+
+Notation The symbol $\frac{1}{2}$ indicates a contradiction. It is used when writing a proof in longhand.
+
+Metaphor and Analogy
+
+In high school English, you are taught that a metaphor is a figure of speech in which one idea or word is substituted for another to suggest a likeness or similarity. This can occur very simply as in “The ship plows the sea.” Or it can be less direct, as in “His lawyers dropped the ball.” What give a metaphor its power and pleasure are the secondary suggestions of similarity. Not only did the lawyers make a mistake, but it was their own fault, and, like an athlete who has dropped a ball, they could not follow through with their next legal action. A secondary implication is that their enterprise was just a game.
+
+Often a metaphor associates something abstract to something concrete, as “Life is a journey.” The preservation of inference from the concrete to the abstract in this metaphor suggests that like a journey, life has a beginning and an end, it progresses in one direction, it may have stops and detours, ups and downs, etc. The beauty of a metaphor is that hidden in a simple sentence like “Life is a journey” lurk a great many parallels, waiting to be uncovered by the thoughtful mind.
+
+†In English grammar, the subjunctive mode indicates doubt, and I have written Euclid’s proof in that form – “if $P$ were finite” instead of “if $P$ is finite,” “each prime would divide $N$ evenly,” instead of “each prime divides $N$ evenly,” etc. At first it seems like a fine idea to write all arguments by contradiction in the subjunctive mode, clearly exhibiting their impermanence. Soon, however, the subjunctive and conditional language becomes ridiculously stilted and archaic. For consistency then, as much as possible, use the present tense.

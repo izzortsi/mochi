@@ -1,0 +1,15 @@
+The $(\epsilon, \delta)$-Condition
+
+The following theorem presents the more familiar (but equivalent!) definition of continuity using $\epsilon$ and $\delta$. It corresponds to the definition given in Chapter 1 for real-valued functions of a real variable.
+
+4 Theorem $f : M \to N$ is continuous if and only if it satisfies the $(\epsilon, \delta)$-condition: For each $\epsilon > 0$ and each $p \in M$ there exists $\delta > 0$ such that if $x \in M$ and $d_M(x, p) < \delta$ then $d_N(fx, fp) < \epsilon$.
+
+Proof Suppose that $f$ is continuous. It preserves sequential convergence. From the supposition that $f$ fails to satisfy the $(\epsilon, \delta)$-condition at some $p \in M$ we will derive a contradiction. If the $(\epsilon, \delta)$-condition fails at $p$ then there exists $\epsilon > 0$ such that for each $\delta > 0$ there is a point $x$ with $d(x, p) < \delta$ and $d(fx, fp) \geq \epsilon$. Taking $\delta = 1/n$ we get a sequence $(x_n)$ with $d(x_n, p) < 1/n$ and $d(f(x_n), fp) \geq \epsilon$, which contradicts preservation of sequential convergence. For $x_n \to p$ but $f(x_n)$ does not converge to $fp$, which contradicts the fact that $f$ preserves sequential convergence. Since the supposition that $f$ fails to satisfy the $(\epsilon, \delta)$-condition leads to a contradiction, $f$ actually does satisfy the $(\epsilon, \delta)$-condition.
+
+To check the converse, suppose that $f$ satisfies the $(\epsilon, \delta)$-condition at $p$. For each sequence $(x_n)$ in $M$ that converges to $p$ we must show $f(x_n) \to fp$ in $N$ as $n \to \infty$. Let $\epsilon > 0$ be given. There is $\delta > 0$ such that $d_M(x, p) < \delta \Rightarrow d_N(fx, fp) < \epsilon$. Convergence of $x_n$ to $p$ implies there is an integer $K$ such that for all $n \geq K$ we have $d_M(x_n, p) < \delta$, and therefore $d_N(f(x_n), fp) < \epsilon$. That is, $f(x_n) \to fp$ as $n \to \infty$. See also Exercise 13.
+
+3 The Topology of a Metric Space
+
+Now we come to two basic concepts in a metric space theory – closedness and openness. Let $M$ be a metric space and let $S$ be a subset of $M$. A point $p \in M$ is a limit of $S$ if there exists a sequence $(p_n)$ in $S$ that converges to it.†
+
+†A limit of $S$ is also sometimes called a limit point of $S$. Take care though: Some mathematicians require that a limit point of $S$ be the limit of a sequence of distinct points of $S$. They would say that a finite set has no limit points. We will not adopt their point of view. Another word used in this context, especially by the French, is “adherence.” A point $p$ adheres to the set $S$ if and only if $p$ is a limit of $S$. In more general circumstances, limits are defined using “nets” instead of sequences. They are like “uncountable sequences.” You can read more about nets in graduate-level topology books such as Topology by James Munkres.

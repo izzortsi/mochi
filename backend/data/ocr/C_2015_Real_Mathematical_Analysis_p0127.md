@@ -1,0 +1,15 @@
+Proof of Theorem 78 Let $M \subset \mathbb{R}$ be a Cantor space. We will find a homeomorphism $\tau : \mathbb{R} \to \mathbb{R}$ sending $C$ to $M$. Lemma 79 leads to Cantor divisions $\mathcal{M}_k$ such that the convex hulls of the pieces in each $\mathcal{M}_k$ are disjoint. With respect to the left/right order of $\mathbb{R}$, label these pieces in the same way that the Cantor middle third intervals are labeled: $L_0$ and $L_2$ in $\mathcal{M}_1$ are the left and right pieces of $M$, $L_{00}$ and $L_{02}$ are the left and right pieces of $L_0$, and so on. Then the homeomorphism $\sigma : C \to M$ constructed in Theorems 70 and 73 is automatically monotone increasing. Extend $\sigma$ across the gap intervals affinely as was done in the proof of Theorem 72, and extend it to $\mathbb{R} \setminus [0,1]$ in any affine increasing fashion such that $\tau(0) = \sigma(0)$ and $\tau(1) = \sigma(1)$. Then $\tau : \mathbb{R} \to \mathbb{R}$ extends $\sigma$ to $\mathbb{R}$. The monotonicity of $\sigma$ implies that $\tau$ is one-to-one, while the continuity of $\sigma$ implies that $\tau$ is continuous. $\tau : \mathbb{R} \to \mathbb{R}$ is a homeomorphism that carries $C$ onto $M$.
+
+If $M' \subset \mathbb{R}$ is a second Cantor space and $\tau' : \mathbb{R} \to \mathbb{R}$ is a homeomorphism that sends $C$ onto $M'$ then $\tau' \circ \tau^{-1}$ is a homeomorphism of $\mathbb{R}$ that sends $M$ onto $M'$. □
+
+As an example, one may construct a Cantor set in $\mathbb{R}$ by removing from $[0,1]$ its middle third, then removing from each of the remaining intervals nine symmetrically placed subintervals; then removing from each of the remaining twenty intervals, four asymmetrically placed subintervals; and so forth. In the limit (if the lengths of the remaining intervals tend to zero) we get a nonstandard Cantor set $M$. According to Theorem 78, there is a homeomorphism of $\mathbb{R}$ to itself sending the standard Cantor set $C$ onto $M$.
+
+Another example is the fat Cantor set mentioned on page 108. It too is ambiently homeomorphic to $C$.
+
+Theorem Every two Cantor spaces in $\mathbb{R}^2$ are ambiently homeomorphic.
+
+We do not prove this theorem here. The key step is to show $M$ has a dyadic disc partition. That is, $M$ can be divided into a dyadic number of Cantor pieces, each piece contained in the interior of a small topological disc $D_i$, the $D_i$ being mutually disjoint. (A topological disc is any homeomorph of the closed unit disc $B^2$. Smallness refers to diam $D_i$.) The proofs I know of the existence of such dyadic partitions are tricky cut-and-paste arguments and are beyond the scope of this book. See Moise’s book, Geometric Topology in Dimensions 2 and 3 and also Exercise 138.
+
+Antoine’s Necklace
+
+A Cantor space $M \subset \mathbb{R}^m$ is tame if there is an ambient homeomorphism $h : \mathbb{R}^m \to \mathbb{R}^m$ that carries the standard Cantor set $C$ (imagined to lie on the $x_1$-axis

@@ -1,0 +1,7 @@
+in $\mathbb{R}^m$ onto $M$. If $M$ is not tame it is wild. Cantor spaces contained in the line or plane are tame. In 3-space, however, there are wild ones, Cantor sets $A$ so badly embedded in $\mathbb{R}^3$ that they act like curves. It is the lack of a “ball dyadic partition lemma” that causes the problem.
+
+The first wild Cantor set was discovered by Louis Antoine, and is known as Antoine’s Necklace. The construction involves the solid torus or anchor ring, which is homeomorphic to the Cartesian product $B^2 \times S^1$. It is easy to imagine a necklace of solid tori: Take an ordinary steel chain and modify it so its first and last links are also linked. See Figure 56.
+
+**Figure 56** A necklace of twenty solid tori
+
+Antoine’s construction then goes like this. Draw a solid torus $A^0$. Interior to $A^0$, draw a necklace $A^1$ of several small solid tori, and make the necklace encircle the hole of $A^0$. Repeat the construction on each solid torus $T$ comprising $A^1$. That is, interior to each $T$, draw a necklace of very small solid tori so that it encircles the hole of $T$. The result is a set $A^2 \subset A^1$ which is a necklace of necklaces. In Figure 56, $A^2$ would consist of 400 solid tori. Continue indefinitely, producing a nested decreasing sequence $A^0 \supset A^1 \supset A^2 \supset \ldots$. The set $A^n$ is compact and consists of a large number $(20^n)$ of extremely small solid tori arranged in a hierarchy of necklaces. It is an $n^{\text{th}}$ order necklace. The intersection $A = \bigcap A^n$ is a Cantor space, since it is
