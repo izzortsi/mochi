@@ -1,13 +1,27 @@
 "use client";
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { api, camelizeKeys } from "@/lib/api";
+import { api, camelizeKeys, PET_REFRESH_EVENT } from "@/lib/api";
 
 // Each mood is a list of frame variants (the pet animates by cycling them).
 // Pre-multi-frame pets had `string[]` per mood; the migration in the backend
 // re-renders any such pets, but we keep a runtime guard in `pickFrame` too.
 type Frame = string[];
 type MoodArt = Frame[] | Frame; // legacy single-frame still tolerated
+
+// Floating chips above the pet: HP / JOY / XP gains, plus stage evolution.
+type FloatingKind = "hp" | "joy" | "xp" | "evolve";
+interface FloatingDelta { id: number; kind: FloatingKind; text: string; }
+
+const FLOATING_STYLES: Record<FloatingKind, string> = {
+  hp:     "text-emerald-300 border-emerald-700/50",
+  joy:    "text-pink-300 border-pink-700/50",
+  xp:     "text-amber-300 border-amber-700/50",
+  evolve: "text-yellow-200 border-yellow-600/60",
+};
+
+let _floatId = 0;
+function nextFloatId(): number { return ++_floatId; }
 
 interface PetState {
   id: string | null;
@@ -226,6 +240,12 @@ export function PetCreature() {
   const [quote, setQuote] = useState<string | null>(null);
   const [quoteKey, setQuoteKey] = useState(0);
   const quoteTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [showRerollConfirm, setShowRerollConfirm] = useState(false);
+  // Floating "+N HP" / "+N JOY" / "+N XP" / EVOLVED chips that rise above
+  // the pet whenever the deltas land — gamification feedback so studying
+  // visibly feeds the creature.
+  const [floats, setFloats] = useState<FloatingDelta[]>([]);
+  const prevPetRef = useRef<PetState | null>(null);
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const reactionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const statusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -236,9 +256,62 @@ export function PetCreature() {
 
   useEffect(() => {
     refresh();
-    pollingRef.current = setInterval(refresh, 60000);
-    return () => { if (pollingRef.current) clearInterval(pollingRef.current); };
+    // Slow background poll keeps mood/decay in sync; immediate refreshes
+    // come from the PET_REFRESH_EVENT below (fired by api.complete /
+    // completePhase right after the user feeds their pet via studying).
+    pollingRef.current = setInterval(refresh, 30000);
+    const onFeed = () => refresh();
+    window.addEventListener(PET_REFRESH_EVENT, onFeed);
+    return () => {
+      if (pollingRef.current) clearInterval(pollingRef.current);
+      window.removeEventListener(PET_REFRESH_EVENT, onFeed);
+    };
   }, [refresh]);
+
+  // Diff incoming pet state vs the last seen; float gains as chips. Only
+  // POSITIVE deltas — decay is silent so the pet doesn't constantly nag.
+  useEffect(() => {
+    const prev = prevPetRef.current;
+    prevPetRef.current = pet;
+    if (!pet || !prev || prev.id !== pet.id) return;
+
+    const additions: FloatingDelta[] = [];
+    const dHp  = Math.round((pet.health    ?? 0) - (prev.health    ?? 0));
+    const dJoy = Math.round((pet.happiness ?? 0) - (prev.happiness ?? 0));
+    const dXp  = Math.round((pet.totalXpEarned ?? 0) - (prev.totalXpEarned ?? 0));
+    if (dXp  >= 1) additions.push({ id: nextFloatId(), kind: "xp",  text: `+${dXp} XP`  });
+    if (dHp  >= 1) additions.push({ id: nextFloatId(), kind: "hp",  text: `+${dHp} HP`  });
+    if (dJoy >= 1) additions.push({ id: nextFloatId(), kind: "joy", text: `+${dJoy} JOY` });
+    if (prev.stage !== pet.stage && pet.stage !== "coal") {
+      additions.push({ id: nextFloatId(), kind: "evolve", text: `→ ${pet.stage}` });
+      // Surface the per-stat growth granted by the backend's evolve_stats
+      // helper. Only fires on stage transitions so re-roll variance stays
+      // silent (re-rolls swap stats, evolution adds them).
+      if (prev.stats && pet.stats) {
+        const labels: Record<keyof NonNullable<PetState["stats"]>, string> = {
+          perseverance: "PER",
+          curiosity: "CUR",
+          audacity: "AUD",
+          knowledge: "KNO",
+        };
+        for (const k of Object.keys(labels) as (keyof typeof labels)[]) {
+          const before = prev.stats[k];
+          const after = pet.stats[k];
+          const dStat = after - before;
+          if (dStat >= 1) {
+            additions.push({ id: nextFloatId(), kind: "evolve", text: `+${dStat} ${labels[k]}` });
+          }
+        }
+      }
+    }
+    if (additions.length === 0) return;
+    setFloats(curr => [...curr, ...additions]);
+    // Auto-expire each chip ~2.4s after it's added (matches the rise+fade
+    // animation duration on the rendered side).
+    for (const f of additions) {
+      setTimeout(() => setFloats(curr => curr.filter(x => x.id !== f.id)), 2400);
+    }
+  }, [pet]);
 
   useEffect(() => {
     const frameInterval = setInterval(() => setTick(t => t + 1), 800);
@@ -293,11 +366,16 @@ export function PetCreature() {
     }
   };
 
-  const handleRehatch = async () => {
+  // Click on the re-roll button → open in-app confirm modal.
+  const requestRehatch = () => {
     if (rerolling) return;
-    const remaining = pet?.rehatchTokens ?? 0;
-    if (remaining <= 0) return;
-    if (!confirm(`Re-roll the pet's appearance? (${remaining} re-roll${remaining === 1 ? "" : "s"} left, irreversible)`)) return;
+    if ((pet?.rehatchTokens ?? 0) <= 0) return;
+    setShowRerollConfirm(true);
+  };
+
+  // User confirmed in the modal → spend the token.
+  const confirmRehatch = async () => {
+    setShowRerollConfirm(false);
     setRerolling(true);
     try {
       await rehatchPet();
@@ -415,10 +493,52 @@ export function PetCreature() {
               zzz
             </motion.div>
           )}
+          {/* Floating gain chips. Multiple stack vertically by index so two
+              deltas arriving at the same tick don't overlap each other. */}
+          {floats.map((f, i) => (
+            <motion.div
+              key={f.id}
+              initial={{ opacity: 0, y: 0, scale: 0.7 }}
+              animate={{ opacity: [0, 1, 1, 0], y: -38 - i * 14, scale: [0.7, 1, 1, 0.95] }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 2.2, ease: "easeOut" }}
+              className={`absolute left-1/2 -top-2 -translate-x-1/2 px-1.5 py-0.5 rounded border bg-black/85 text-[10px] font-mono uppercase tracking-wider pointer-events-none ${FLOATING_STYLES[f.kind]}`}
+              style={{ textShadow: "0 0 6px currentColor" }}
+            >
+              {f.text}
+            </motion.div>
+          ))}
         </AnimatePresence>
       </motion.div>
 
-      {!isCoal && (
+      {!isCoal && isDead && (
+        <motion.div
+          className="flex flex-col gap-1 min-w-[140px] px-2 py-1.5 rounded border border-red-800/60 bg-red-950/30"
+          animate={{ boxShadow: [
+            "0 0 4px rgba(220,38,38,0.25)",
+            "0 0 14px rgba(220,38,38,0.55)",
+            "0 0 4px rgba(220,38,38,0.25)",
+          ] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <div className="flex items-baseline gap-2">
+            <span className="text-[11px] font-semibold text-red-200">
+              {pet.name ?? "your pet"} died
+            </span>
+          </div>
+          <span className="text-[9px] opacity-60 font-mono">
+            {pet.totalXpEarned != null ? `${pet.totalXpEarned} XP earned` : ""}
+          </span>
+          <button
+            onClick={() => setShowHatch(true)}
+            className="self-start text-[10px] uppercase tracking-wider font-mono px-2 py-1 rounded border border-amber-700/60 bg-amber-900/30 text-amber-100 hover:border-amber-500 hover:bg-amber-800/50"
+          >
+            ↻ hatch new
+          </button>
+        </motion.div>
+      )}
+
+      {!isCoal && !isDead && (
         <div className="flex flex-col gap-0.5 min-w-[100px]">
           {pet.name && (
             <span
@@ -481,7 +601,7 @@ export function PetCreature() {
           </div>
           {!isDead && (pet.rehatchTokens ?? 0) > 0 && (
             <button
-              onClick={handleRehatch}
+              onClick={requestRehatch}
               disabled={rerolling}
               title="Re-roll the pet's appearance and stats. Keeps name, XP, and HP."
               className="self-start mt-0.5 text-[9px] uppercase tracking-wider font-mono px-1.5 py-0.5 rounded border border-violet-700/40 bg-violet-900/20 text-violet-200 hover:border-violet-500 hover:bg-violet-900/40 disabled:opacity-30"
@@ -547,6 +667,75 @@ export function PetCreature() {
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                 >{hatching ? "generating..." : "Hatch!"}</motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showRerollConfirm && pet && (
+          <motion.div
+            className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
+            onClick={() => setShowRerollConfirm(false)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <motion.div
+              className="bg-[#0c0c0c] border border-violet-900/60 rounded-xl p-6 w-[22rem] overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+              initial={{ scale: 0.92, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.92, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div
+                className="h-0.5 w-full -mt-6 -mx-6 mb-5"
+                style={{ background: "linear-gradient(90deg, #6d28d9, #c084fc, #f59e0b)" }}
+              />
+              <h2 className="font-display text-xl mb-1">Re-roll {pet.name}?</h2>
+              <p className="text-xs opacity-60 font-mono mb-4">
+                {pet.rehatchTokens} re-roll{pet.rehatchTokens === 1 ? "" : "s"} left · this is irreversible
+              </p>
+              <div className="text-[11px] font-mono space-y-2 mb-5">
+                <div>
+                  <span className="text-emerald-400 uppercase tracking-wider">keeps</span>
+                  <span className="opacity-70 ml-2">name · stage · XP · HP · joy</span>
+                </div>
+                <div>
+                  <span className="text-violet-300 uppercase tracking-wider">re-rolls</span>
+                  <span className="opacity-70 ml-2">parts · hue · rarity · 4 stats</span>
+                </div>
+                {pet.stats && (
+                  <div className="pt-2 mt-2 border-t border-[#1a1a1a]">
+                    <div className="opacity-50 text-[10px] uppercase tracking-wider mb-1">current stats</div>
+                    <div className="grid grid-cols-2 gap-x-3 gap-y-0.5 opacity-80">
+                      <span><span className="opacity-50">PER</span> {pet.stats.perseverance}</span>
+                      <span><span className="opacity-50">CUR</span> {pet.stats.curiosity}</span>
+                      <span><span className="opacity-50">AUD</span> {pet.stats.audacity}</span>
+                      <span><span className="opacity-50">KNO</span> {pet.stats.knowledge}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="flex justify-end gap-2">
+                <button
+                  onClick={() => setShowRerollConfirm(false)}
+                  className="px-3 py-2 rounded bg-[#1a1a1a] hover:bg-[#2a2a2a] text-sm"
+                >
+                  Cancel
+                </button>
+                <motion.button
+                  onClick={confirmRehatch}
+                  disabled={rerolling}
+                  className="px-3 py-2 rounded bg-violet-700 hover:bg-violet-600 disabled:opacity-30 text-sm"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  ↻ Re-roll
+                </motion.button>
               </div>
             </motion.div>
           </motion.div>

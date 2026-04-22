@@ -313,6 +313,11 @@ def _apply_feed(
         pet["stage"] = new_stage
         if new_stage != old_stage and pet.get("parts"):
             pet["art"] = pet_art.render(new_stage, pet["parts"])
+            # Evolution rewards stat growth — distributed toward the
+            # lowest-rolled stats so the pet rounds out as it matures.
+            pet["stats"] = pet_stats.evolve_stats(
+                pet.get("stats") or pet_stats.baseline_stats()
+            )
     return pet
 
 

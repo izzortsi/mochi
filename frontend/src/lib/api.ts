@@ -56,14 +56,26 @@ async function deletePath<T>(path: string): Promise<T> {
   return camelizeKeys<T>(await res.json());
 }
 
+// Fired by completion endpoints so the PetCreature in the HUD refreshes
+// without waiting for its 30-60s poll. Listeners diff the new pet state
+// against the previous and float the deltas as gamification feedback.
+export const PET_REFRESH_EVENT = "pet-refresh";
+function emitPetRefresh() {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent(PET_REFRESH_EVENT));
+  }
+}
+
 export const api = {
   fetchProgress: () => getJson<UserProgress>("/api/progress"),
   complete: (cardUid: CardUid) =>
-    postJson<UserProgress>("/api/progress/complete", { "card-uid": cardUid }),
+    postJson<UserProgress>("/api/progress/complete", { "card-uid": cardUid })
+      .then((r) => { emitPetRefresh(); return r; }),
   uncomplete: (cardUid: CardUid) =>
     postJson<UserProgress>("/api/progress/uncomplete", { "card-uid": cardUid }),
   completePhase: (cardUid: CardUid, phase: PhaseName) =>
-    postJson<UserProgress>("/api/progress/complete-phase", { "card-uid": cardUid, phase }),
+    postJson<UserProgress>("/api/progress/complete-phase", { "card-uid": cardUid, phase })
+      .then((r) => { emitPetRefresh(); return r; }),
   uncompletePhase: (cardUid: CardUid, phase: PhaseName) =>
     postJson<UserProgress>("/api/progress/uncomplete-phase", { "card-uid": cardUid, phase }),
   deleteCard: (cardUid: CardUid) =>

@@ -48,3 +48,36 @@ def roll_stats() -> dict[str, int]:
 def baseline_stats() -> dict[str, int]:
     """Default block — used when a pet record predates the stat system."""
     return {k: BASELINE for k in STAT_KEYS}
+
+
+# Bonus points distributed each time the pet evolves to a new stage.
+# Three stage transitions (spark → emberling → ember → fire) deliver
+# 3 × EVOLUTION_BONUS_POINTS additional points across the pet's lifetime,
+# layering on top of the rolled 40-point base.
+EVOLUTION_BONUS_POINTS = 4
+
+# Hard ceiling for stats post-evolution. Higher than the roll cap so growth
+# is real, but bounded so a fully-evolved pet doesn't go to absurd numbers.
+STAT_MAX_EVOLVED = 25
+
+
+def evolve_stats(stats: dict[str, int]) -> dict[str, int]:
+    """Apply one stage's worth of stat growth.
+
+    Distributes EVOLUTION_BONUS_POINTS, weighted toward the lowest-rolled
+    stat — so lopsided pets gradually catch up rather than compound their
+    weaknesses. Caps at STAT_MAX_EVOLVED per stat to keep numbers readable.
+    """
+    new_stats = {k: int(stats.get(k, BASELINE)) for k in STAT_KEYS}
+    for _ in range(EVOLUTION_BONUS_POINTS):
+        # Pick from the lowest tier (within 2 of the minimum) so growth
+        # smooths the spread.
+        min_val = min(new_stats[k] for k in STAT_KEYS)
+        candidates = [k for k in STAT_KEYS
+                      if new_stats[k] <= min_val + 2 and new_stats[k] < STAT_MAX_EVOLVED]
+        if not candidates:
+            # Everything's at the ceiling.
+            break
+        chosen = random.choice(candidates)
+        new_stats[chosen] += 1
+    return new_stats
