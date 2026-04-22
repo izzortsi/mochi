@@ -1,0 +1,7 @@
+Proof As above, it is no great loss of generality to assume $n = k = 1$ and $E$ is contained in the unit square. Suppose that $E$ is measurable and $m(E_x) = 0$ for almost every $x$. We claim $mE = 0$.
+
+Let $Z = \{x : E_x$ is not a zero set\}. $Z$ is a zero set. The slices $E_x$ for which $E_x$ is not a zero set are contained in $Z \times \mathbb{R}$ which, as proved above, is a zero set in $\mathbb{R}^2$. Then $E \setminus (Z \times \mathbb{R})$ is measurable, has the same measure as $E$, and so it is no loss of generality to assume that every slice $E_x$ is a zero set.
+
+It suffices to show that the inner measure of $E$ is zero. For measurability implies $m_*E = m^*E$. Let $K$ be any compact subset of $E$ and let $\epsilon > 0$ be given. The slice $K_x$ is compact and it has slice measure zero. Therefore it has an open neighborhood $V(x)$ such that $m(V(x)) < \epsilon$. Compactness of $K$ implies that for all $x'$ near $x$ we have $K_{x'} \subset V(x)$. For otherwise there is a sequence $(x_n, y_n)$ in $K$ with $(x_n, y_n) \to (x, y)$ and $y \notin K_x$. Closedness of $K$ implies $(x, y) \in K$, so $y \in K_x$, a contradiction. Hence if $U(x)$ is small then for all $x' \in U(x)$ we have $x' \times K_{x'} \subset W(x) = U(x) \times V(x)$. See Figure 142.
+
+Figure 142 The open set $V(x)$ contains the slice $K_x$ and has small measure. If $x'$ lies in a small enough neighborhood $U(x)$ of $x$ then the set $x' \times K_{x'}$ lies in $W(x) = U(x) \times V(x)$. These sets $x' \times K_{x'}$ are shown in the enlarged picture as vertical segments in $K$.

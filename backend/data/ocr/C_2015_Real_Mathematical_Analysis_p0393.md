@@ -1,0 +1,1 @@
+Figure 135 A deformation of the Arctic Circle that reverses its orientation.

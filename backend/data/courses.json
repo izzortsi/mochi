@@ -6091,6 +6091,26 @@
       {
         "num": 7,
         "title": "Function Spaces and Uniform Convergence"
+      },
+      {
+        "num": 8,
+        "title": "Multivariable Calculus"
+      },
+      {
+        "num": 9,
+        "title": "Ordinary Differential Equations and Dynamics"
+      },
+      {
+        "num": 10,
+        "title": "Measure, Integration, and Capstone"
+      },
+      {
+        "num": 11,
+        "title": "Lebesgue Measure and Integration"
+      },
+      {
+        "num": 12,
+        "title": "Classical Analysis Extension"
       }
     ],
     "days": [
@@ -7266,6 +7286,56 @@
                 "rubric": "Bound |fg(t)-fg(s)| using boundedness of f,g and control U-L for fg via that for f and g."
               }
             }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Show that $f(x)=\\chi_{\\mathbb{Q}\\cap[0,1]}$ is not Riemann integrable.",
+            "detail": "Riemann's criterion: $f$ is integrable iff $\\forall\\epsilon>0$ there is a partition $P$ with $U(f,P)-L(f,P)<\\epsilon$. Refinement only narrows the gap.",
+            "concepts": [
+              "riemann-integral",
+              "darboux-integral"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Use Riemann's Integrability Criterion on concrete bounded functions.",
+                "prior_knowledge": "$U(f,P)-L(f,P)$ and partition refinement."
+              },
+              "core": {
+                "exposition": "Riemann's criterion: $f$ is integrable iff $\\forall\\epsilon>0$ there is a partition $P$ with $U(f,P)-L(f,P)<\\epsilon$. Refinement only narrows the gap.",
+                "worked_example": "Continuous $f$ on $[a,b]$ is uniformly continuous, so choose $\\delta$ with $|t-s|<\\delta\\Rightarrow|f(t)-f(s)|<\\epsilon/(b-a)$; any partition with mesh $<\\delta$ gives $U-L<\\epsilon$.",
+                "problem": "Show that $f(x)=\\chi_{\\mathbb{Q}\\cap[0,1]}$ is not Riemann integrable."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State Riemann's integrability criterion.",
+                    "answer": "$f$ bounded is integrable iff for every $\\epsilon>0$ some partition $P$ satisfies $U(f,P)-L(f,P)<\\epsilon$.",
+                    "concept": "riemann-integral"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What does refining a partition do to $L$ and $U$?",
+                    "answer": "$L$ can only increase; $U$ can only decrease.",
+                    "concept": "darboux-integral"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why $\\chi_{\\mathbb{Q}}$ fails Riemann integrability but seems like it 'should' have integral zero."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove every monotone $f:[a,b]\\to\\mathbb{R}$ is Riemann integrable.",
+                "rubric": "Bound $U-L$ by $(f(b)-f(a))\\cdot\\text{mesh}(P)$ via telescoping."
+              }
+            }
           }
         ]
       },
@@ -7424,6 +7494,56 @@
               "check": {
                 "prompt": "Prove Integration by Substitution for a C¹ diffeomorphism g.",
                 "rubric": "Use Riemann sums with x_k from [c,d] and y_k=g(x_k), and MVT to match g(x_k)-g(x_{k-1})=g'(t_k)Δx_k."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Decide whether the characteristic function of the standard Cantor set is Riemann integrable.",
+            "detail": "Theorem: bounded $f:[a,b]\\to\\mathbb{R}$ is Riemann integrable iff its discontinuity set $D$ is a zero set. Equivalently $f$ is continuous almost everywhere.",
+            "concepts": [
+              "zero-set",
+              "riemann-integral"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Apply the Riemann-Lebesgue Theorem to decide integrability.",
+                "prior_knowledge": "Zero set = countable cover by intervals of arbitrarily small total length."
+              },
+              "core": {
+                "exposition": "Theorem: bounded $f:[a,b]\\to\\mathbb{R}$ is Riemann integrable iff its discontinuity set $D$ is a zero set. Equivalently $f$ is continuous almost everywhere.",
+                "worked_example": "The rational ruler function $f(p/q)=1/q$, $f(\\text{irr})=0$ is discontinuous exactly on $\\mathbb{Q}$, a zero set, hence Riemann integrable with integral 0.",
+                "problem": "Decide whether the characteristic function of the standard Cantor set is Riemann integrable."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Why is every countable set a zero set?",
+                    "answer": "Cover the $n$-th point by an interval of length $\\epsilon/2^n$; total length $\\epsilon$.",
+                    "concept": "zero-set"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "State Riemann-Lebesgue for integrability.",
+                    "answer": "A bounded $f$ on $[a,b]$ is Riemann integrable iff its discontinuity set has measure zero.",
+                    "concept": "riemann-integral"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why the fat Cantor set's characteristic function is NOT Riemann integrable, despite the Cantor set itself having empty interior."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove: if $f,g\\in\\mathcal{R}[a,b]$ then $fg\\in\\mathcal{R}[a,b]$.",
+                "rubric": "Note $D(fg)\\subset D(f)\\cup D(g)$; union of zero sets is zero; apply R-L."
               }
             }
           }
@@ -7587,6 +7707,3365 @@
                 "rubric": "Example like $f_n(x)=\\sin(n^2 x)/n$ suffices; must verify uniform convergence and derivative blowup."
               }
             }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Show the 'growing steeple' $f_n$ (height $n$, base $[0,2/n]$) converges pointwise to 0 but not uniformly.",
+            "detail": "$f_n\\rightrightarrows f$ on $[a,b]$ means $\\|f_n-f\\|_{\\sup}\\to 0$. Uniform convergence preserves continuity; pointwise does not.",
+            "concepts": [
+              "uniform-convergence",
+              "sup-norm"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Distinguish pointwise from uniform convergence and use the sup-norm.",
+                "prior_knowledge": "Sequences of real numbers and $\\epsilon$-$N$ definition."
+              },
+              "core": {
+                "exposition": "$f_n\\rightrightarrows f$ on $[a,b]$ means $\\|f_n-f\\|_{\\sup}\\to 0$. Uniform convergence preserves continuity; pointwise does not.",
+                "worked_example": "$f_n(x)=x^n$ on $[0,1]$: pointwise limit is $0$ for $x<1$, $1$ at $x=1$; not continuous so convergence is not uniform.",
+                "problem": "Show the 'growing steeple' $f_n$ (height $n$, base $[0,2/n]$) converges pointwise to 0 but not uniformly."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Define uniform convergence in terms of the sup-norm.",
+                    "answer": "$\\|f_n-f\\|_{\\sup}=\\sup_x|f_n(x)-f(x)|\\to 0$ as $n\\to\\infty$.",
+                    "concept": "uniform-convergence"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why is $(C^0[a,b],\\|\\cdot\\|_{\\sup})$ complete?",
+                    "answer": "Cauchy sequences converge pointwise to a limit, and uniform Cauchyness forces the limit to be continuous, so the limit lies in $C^0$.",
+                    "concept": "sup-norm"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain the geometric 'tube' picture of uniform convergence."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove: if each $f_n\\in\\mathcal{R}[a,b]$ and $f_n\\rightrightarrows f$ then $f\\in\\mathcal{R}$ and $\\int f_n\\to\\int f$.",
+                "rubric": "Use Riemann-Lebesgue on discontinuities plus the sup-norm estimate on the integrals."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "phase": 4,
+        "title": "Connectedness and Path-Connectedness",
+        "icon": "*",
+        "summary": "Connected sets, intermediate value theorem generalization, and path connectedness.",
+        "key_insight": "A connected space admits no nontrivial clopen subset; path-connected ⇒ connected, but not conversely.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Show that $[0,1] \\cup [2,3]$ is disconnected.",
+            "detail": "$M$ is disconnected if $M = A \\sqcup A^c$ with both proper and clopen. Otherwise connected. Continuous images of connected sets are connected; $\\mathbb{R}$ is connected, yielding the intermediate value theorem.",
+            "concepts": [
+              "connected-space",
+              "path-connected"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Recall definitions of connectedness and separation.",
+                "prior_knowledge": "Clopen sets and subspace topology."
+              },
+              "core": {
+                "exposition": "$M$ is disconnected if $M = A \\sqcup A^c$ with both proper and clopen. Otherwise connected. Continuous images of connected sets are connected; $\\mathbb{R}$ is connected, yielding the intermediate value theorem.",
+                "worked_example": "$\\mathbb{R}$ is connected: if $U \\subset \\mathbb{R}$ is nonempty clopen, pick $p \\in U$ and use sup of $\\{x : [p,x] \\subset U\\}$ to show $U = \\mathbb{R}$.",
+                "problem": "Show that $[0,1] \\cup [2,3]$ is disconnected."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Define disconnectedness of a metric space.",
+                    "answer": "$M$ is disconnected if it has a proper clopen subset, equivalently a separation $M = A \\sqcup B$ into disjoint nonempty open sets.",
+                    "concept": "connected-space"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "State the generalized intermediate value theorem.",
+                    "answer": "A continuous real-valued function on a connected space takes all intermediate values between any two of its values.",
+                    "concept": "connected-space"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why does connectedness of $\\mathbb{R}$ imply the classical IVT?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove: if $M$ is connected and $f: M \\to \\mathbb{Z}$ is continuous then $f$ is constant.",
+                "rubric": "Use that $\\mathbb{Z}$ is totally disconnected; preimages of points are clopen."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Prove every convex subset of $\\mathbb{R}^m$ is path-connected.",
+            "detail": "A path from $p$ to $q$ in $M$ is a continuous $f:[a,b]\\to M$ with $f(a)=p$, $f(b)=q$. $M$ is path-connected if any two points are joined by a path. Path-connected ⇒ connected.",
+            "concepts": [
+              "path-connected",
+              "connected-space"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Relate path-connectedness to connectedness.",
+                "prior_knowledge": "Continuous maps from $[a,b]$."
+              },
+              "core": {
+                "exposition": "A path from $p$ to $q$ in $M$ is a continuous $f:[a,b]\\to M$ with $f(a)=p$, $f(b)=q$. $M$ is path-connected if any two points are joined by a path. Path-connected ⇒ connected.",
+                "worked_example": "The topologist's sine curve $\\{(x,\\sin(1/x)):0<x\\leq1\\}\\cup\\{0\\}\\times[-1,1]$ is connected (closure of a connected set) but not path-connected.",
+                "problem": "Prove every convex subset of $\\mathbb{R}^m$ is path-connected."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Does connected imply path-connected?",
+                    "answer": "No. The topologist's sine curve is connected but not path-connected.",
+                    "concept": "path-connected"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why is a union of connected sets sharing a common point connected?",
+                    "answer": "If the union had a separation $A\\sqcup A^c$, the common point lies in one part, forcing each connected piece into that part, contradicting properness.",
+                    "concept": "connected-space"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why open connected subsets of $\\mathbb{R}^m$ are path-connected."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove that the continuous image of a path-connected space is path-connected.",
+                "rubric": "Compose a path in domain with the continuous map to get a path in image."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "phase": 7,
+        "title": "Equicontinuity and the Arzelà–Ascoli Theorem",
+        "icon": "*",
+        "summary": "Compactness in C^0 requires equicontinuity; Arzelà–Ascoli characterizes relatively compact families of continuous functions.",
+        "key_insight": "In infinite-dimensional function spaces, closed + bounded ≠ compact. Equicontinuity is the missing ingredient.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Show that $\\{x^n : n\\in\\mathbb{N}\\}$ on $[0,1]$ is NOT equicontinuous.",
+            "detail": "A family $\\mathcal{E}\\subset C^0([a,b],\\mathbb{R})$ is equicontinuous if $\\forall\\epsilon>0\\ \\exists\\delta>0$ such that for all $f\\in\\mathcal{E}$ and $|s-t|<\\delta$, $|f(s)-f(t)|<\\epsilon$. The key is that $\\delta$ is independent of $f$.",
+            "concepts": [
+              "equicontinuity"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Define equicontinuity of a family of functions.",
+                "prior_knowledge": "Uniform continuity and sup norm on $C^0[a,b]$."
+              },
+              "core": {
+                "exposition": "A family $\\mathcal{E}\\subset C^0([a,b],\\mathbb{R})$ is equicontinuous if $\\forall\\epsilon>0\\ \\exists\\delta>0$ such that for all $f\\in\\mathcal{E}$ and $|s-t|<\\delta$, $|f(s)-f(t)|<\\epsilon$. The key is that $\\delta$ is independent of $f$.",
+                "worked_example": "If $f_n$ are differentiable on $[a,b]$ with $|f_n'|\\leq M$, then by MVT $|f_n(s)-f_n(t)|\\leq M|s-t|$, so $\\delta=\\epsilon/M$ works for all $n$.",
+                "problem": "Show that $\\{x^n : n\\in\\mathbb{N}\\}$ on $[0,1]$ is NOT equicontinuous."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What distinguishes equicontinuity from each function being uniformly continuous?",
+                    "answer": "The $\\delta$ works simultaneously for all members of the family, not depending on which function.",
+                    "concept": "equicontinuity"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Give a simple sufficient condition for equicontinuity of a sequence of differentiable functions.",
+                    "answer": "Uniformly bounded derivatives: $|f_n'(x)|\\leq M$ for all $n,x$.",
+                    "concept": "equicontinuity"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why does $x^n$ on $[0,1]$ fail to be equicontinuous despite each being uniformly continuous?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "State equicontinuity in terms of a common modulus of continuity.",
+                "rubric": "All members share a single modulus $\\mu$ with $|f(s)-f(t)|\\leq\\mu(|s-t|)$."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "If $f_n:[0,1]\\to\\mathbb{R}$ are differentiable with $|f_n'|\\leq 1$ and $f_n(0)=0$, show $(f_n)$ has a uniformly convergent subsequence.",
+            "detail": "Arzelà–Ascoli: a bounded, equicontinuous sequence in $C^0([a,b],\\mathbb{R})$ has a uniformly convergent subsequence. Equivalently, $\\mathcal{E}\\subset C^0$ is compact iff closed, bounded, and equicontinuous.",
+            "concepts": [
+              "arzela-ascoli",
+              "equicontinuity"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "State and apply the Arzelà–Ascoli theorem.",
+                "prior_knowledge": "Equicontinuity, uniform convergence, completeness of $C^0$."
+              },
+              "core": {
+                "exposition": "Arzelà–Ascoli: a bounded, equicontinuous sequence in $C^0([a,b],\\mathbb{R})$ has a uniformly convergent subsequence. Equivalently, $\\mathcal{E}\\subset C^0$ is compact iff closed, bounded, and equicontinuous.",
+                "worked_example": "Proof sketch: pick a countable dense $D\\subset[a,b]$, use Bolzano–Weierstrass + diagonal argument to get pointwise convergence on $D$; propagate to uniform convergence via equicontinuity.",
+                "problem": "If $f_n:[0,1]\\to\\mathbb{R}$ are differentiable with $|f_n'|\\leq 1$ and $f_n(0)=0$, show $(f_n)$ has a uniformly convergent subsequence."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the Arzelà–Ascoli theorem.",
+                    "answer": "A bounded equicontinuous sequence in $C^0([a,b],\\mathbb{R})$ has a uniformly convergent subsequence.",
+                    "concept": "arzela-ascoli"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Characterize compact subsets of $C^0([a,b],\\mathbb{R})$.",
+                    "answer": "$\\mathcal{E}$ is compact iff it is closed, bounded, and equicontinuous.",
+                    "concept": "arzela-ascoli"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why is Arzelà–Ascoli the 'Heine–Borel theorem' for function spaces?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Explain why the closed unit ball in $C^0([0,1],\\mathbb{R})$ is not compact.",
+                "rubric": "Exhibit $x^n$ which is bounded but not equicontinuous, hence no uniformly convergent subsequence exists."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Show that if only continuity (not Lipschitz) is assumed, existence still holds via Arzelà–Ascoli (but uniqueness may fail).",
+            "detail": "Picard's theorem: a Lipschitz vector field $F$ on open $U\\subset\\mathbb{R}^m$ produces unique local trajectories. Proof: the integral operator $\\Phi(\\gamma)(t)=p+\\int_0^t F(\\gamma(s))ds$ is a contraction on $C^0([-\\tau,\\tau],\\overline{N_r(p)})$ when $\\tau L<1$.",
+            "concepts": [
+              "arzela-ascoli",
+              "picard-theorem",
+              "equicontinuity"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Apply Arzelà–Ascoli to ODEs and obtain Picard's theorem via contraction.",
+                "prior_knowledge": "Contraction mapping, Lipschitz vector fields."
+              },
+              "core": {
+                "exposition": "Picard's theorem: a Lipschitz vector field $F$ on open $U\\subset\\mathbb{R}^m$ produces unique local trajectories. Proof: the integral operator $\\Phi(\\gamma)(t)=p+\\int_0^t F(\\gamma(s))ds$ is a contraction on $C^0([-\\tau,\\tau],\\overline{N_r(p)})$ when $\\tau L<1$.",
+                "worked_example": "For $F$ with $|F|\\leq M$ and Lipschitz constant $L$, choose $\\tau$ with $\\tau M\\leq r$ and $\\tau L<1$. Then $\\Phi$ maps the complete space of curves into itself and contracts by factor $\\tau L$.",
+                "problem": "Show that if only continuity (not Lipschitz) is assumed, existence still holds via Arzelà–Ascoli (but uniqueness may fail)."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What role does Arzelà–Ascoli play in continuous (non-Lipschitz) ODE existence?",
+                    "answer": "Approximate solutions form an equicontinuous family (bounded derivatives = bounded vector field); extract a subsequence converging uniformly to an actual solution.",
+                    "concept": "picard-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why does Lipschitzness give uniqueness but mere continuity does not?",
+                    "answer": "Lipschitz gives a contraction with unique fixed point. Without it (e.g., $y'=2\\sqrt{|y|}$, $y(0)=0$) multiple solutions exist.",
+                    "concept": "picard-theorem"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Contrast Picard's proof (contraction) with the Peano proof (Arzelà–Ascoli): what is gained and lost?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Outline why a sequence of approximate ODE solutions is equicontinuous.",
+                "rubric": "Bounded vector field bounds derivative of each approximation uniformly; MVT yields common Lipschitz constant, hence equicontinuity."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Show $\\{f_n(x)=\\sin(nx)\\}$ on $[0,1]$ is not equicontinuous and has no uniformly convergent subsequence.",
+            "detail": "Arzelà-Ascoli: a bounded equicontinuous sequence in $C^0([a,b])$ has a uniformly convergent subsequence. Proof: diagonal subsequence on a countable dense set + equicontinuity propagation.",
+            "concepts": [
+              "arzela-ascoli",
+              "equicontinuity"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Extract uniformly convergent subsequences from equicontinuous families.",
+                "prior_knowledge": "Compactness is not automatic in $C^0$; need equicontinuity."
+              },
+              "core": {
+                "exposition": "Arzelà-Ascoli: a bounded equicontinuous sequence in $C^0([a,b])$ has a uniformly convergent subsequence. Proof: diagonal subsequence on a countable dense set + equicontinuity propagation.",
+                "worked_example": "If $f_n:[0,1]\\to\\mathbb{R}$ are differentiable with $|f_n'|\\le M$ and $(f_n(0))$ bounded, MVT gives equicontinuity and boundedness, so a subsequence converges uniformly.",
+                "problem": "Show $\\{f_n(x)=\\sin(nx)\\}$ on $[0,1]$ is not equicontinuous and has no uniformly convergent subsequence."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State equicontinuity of a family $\\mathcal{E}\\subset C^0[a,b]$.",
+                    "answer": "$\\forall\\epsilon>0\\exists\\delta>0$ with $|s-t|<\\delta\\Rightarrow|f(s)-f(t)|<\\epsilon$ for all $f\\in\\mathcal{E}$ simultaneously.",
+                    "concept": "equicontinuity"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What three conditions make a subset of $C^0$ compact?",
+                    "answer": "Closed, bounded, and equicontinuous (Heine-Borel in function space).",
+                    "concept": "arzela-ascoli"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why is mere pointwise boundedness + continuity of each $f_n$ insufficient for a convergent subsequence?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove uniformly bounded derivatives imply equicontinuity via MVT.",
+                "rubric": "Take $\\delta=\\epsilon/M$; $|f_n(s)-f_n(t)|\\le M|s-t|<\\epsilon$ for all $n$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "phase": 7,
+        "title": "Weierstrass and Stone–Weierstrass Approximation",
+        "icon": "*",
+        "summary": "Polynomials are dense in C^0[a,b]; algebras separating points and vanishing nowhere are dense on compact spaces.",
+        "key_insight": "Every continuous function on a compact space can be uniformly approximated by elements of a rich enough algebra.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Show that if $f\\in C^0([a,b],\\mathbb{R})$ and $\\int_a^b f(x)x^n dx=0$ for all $n\\geq 0$, then $f\\equiv 0$.",
+            "detail": "Weierstrass: polynomials are dense in $C^0([a,b],\\mathbb{R})$. For each $f\\in C^0$ and $\\epsilon>0$, there is a polynomial $p$ with $\\|f-p\\|_{\\sup}<\\epsilon$. Bernstein's explicit proof uses $p_n(x)=\\sum\\binom{n}{k}f(k/n)x^k(1-x)^{n-k}$.",
+            "concepts": [
+              "weierstrass-approximation"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "State Weierstrass's polynomial approximation theorem.",
+                "prior_knowledge": "Uniform convergence on $[a,b]$."
+              },
+              "core": {
+                "exposition": "Weierstrass: polynomials are dense in $C^0([a,b],\\mathbb{R})$. For each $f\\in C^0$ and $\\epsilon>0$, there is a polynomial $p$ with $\\|f-p\\|_{\\sup}<\\epsilon$. Bernstein's explicit proof uses $p_n(x)=\\sum\\binom{n}{k}f(k/n)x^k(1-x)^{n-k}$.",
+                "worked_example": "For $f(x)=|x-1/2|$ on $[0,1]$, Bernstein polynomials converge uniformly to $f$, approximating this non-smooth function by smooth polynomials.",
+                "problem": "Show that if $f\\in C^0([a,b],\\mathbb{R})$ and $\\int_a^b f(x)x^n dx=0$ for all $n\\geq 0$, then $f\\equiv 0$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the Weierstrass approximation theorem.",
+                    "answer": "Polynomials are dense in $C^0([a,b],\\mathbb{R})$ under the sup norm.",
+                    "concept": "weierstrass-approximation"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Define Bernstein polynomials of $f$.",
+                    "answer": "$p_n(x)=\\sum_{k=0}^{n}\\binom{n}{k}f(k/n)x^k(1-x)^{n-k}$.",
+                    "concept": "weierstrass-approximation"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why is the Bernstein proof 'probabilistic' in flavor?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Use Weierstrass to show continuous functions on $[a,b]$ are determined by their moments.",
+                "rubric": "If moments agree, polynomial integrals agree, so by density the functions have equal integral against any continuous function, forcing equality."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Show that polynomials in $x$ and $y$ are dense in $C^0([0,1]^2,\\mathbb{R})$.",
+            "detail": "Stone–Weierstrass: if $M$ is compact and $\\mathcal{A}\\subset C^0(M,\\mathbb{R})$ is a subalgebra that separates points and vanishes nowhere, then $\\mathcal{A}$ is dense in $C^0(M,\\mathbb{R})$.",
+            "concepts": [
+              "stone-weierstrass",
+              "weierstrass-approximation"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Generalize Weierstrass to algebras on compact metric spaces.",
+                "prior_knowledge": "Function algebras, point separation."
+              },
+              "core": {
+                "exposition": "Stone–Weierstrass: if $M$ is compact and $\\mathcal{A}\\subset C^0(M,\\mathbb{R})$ is a subalgebra that separates points and vanishes nowhere, then $\\mathcal{A}$ is dense in $C^0(M,\\mathbb{R})$.",
+                "worked_example": "Trigonometric polynomials are dense in $C^0(S^1,\\mathbb{R})$: they form an algebra on the compact circle, separate points, and vanish nowhere.",
+                "problem": "Show that polynomials in $x$ and $y$ are dense in $C^0([0,1]^2,\\mathbb{R})$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the Stone–Weierstrass theorem.",
+                    "answer": "A subalgebra of $C^0(M,\\mathbb{R})$ on a compact metric space $M$ that separates points and vanishes nowhere is dense.",
+                    "concept": "stone-weierstrass"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What does 'vanishing nowhere' mean for an algebra $\\mathcal{A}$?",
+                    "answer": "For every $p\\in M$, there exists $f\\in\\mathcal{A}$ with $f(p)\\neq 0$.",
+                    "concept": "stone-weierstrass"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why are both hypotheses (separation + nowhere vanishing) needed?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove that trigonometric polynomials are dense in $C^0(S^1,\\mathbb{R})$.",
+                "rubric": "Verify the three Stone–Weierstrass hypotheses: algebra, separation (sin/cos distinguish points), nowhere vanishing (constant 1)."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "phase": 7,
+        "title": "Baire Category and Generic Pathology",
+        "icon": "*",
+        "summary": "Complete metric spaces are not thin; typical continuous functions are nowhere differentiable.",
+        "key_insight": "Baire's theorem makes precise the idea that 'most' elements of a complete metric space share surprising pathological properties.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Use Baire to show that $\\mathbb{R}$ is uncountable.",
+            "detail": "A set is thick (residual) if it contains a countable intersection of open-dense sets; its complement is thin (meager). Baire: every thick subset of a complete metric space is dense; a complete nonempty metric space is not thin.",
+            "concepts": [
+              "baire-theorem"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "State Baire's theorem and the concept of thick/thin sets.",
+                "prior_knowledge": "Complete metric spaces, dense sets."
+              },
+              "core": {
+                "exposition": "A set is thick (residual) if it contains a countable intersection of open-dense sets; its complement is thin (meager). Baire: every thick subset of a complete metric space is dense; a complete nonempty metric space is not thin.",
+                "worked_example": "$\\mathbb{R}$ is complete; $\\mathbb{Q}$ is thin (countable union of points). Thus $\\mathbb{R}\\setminus\\mathbb{Q}$ is thick, reflecting that irrationals are 'generic' in $\\mathbb{R}$.",
+                "problem": "Use Baire to show that $\\mathbb{R}$ is uncountable."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State Baire's theorem for complete metric spaces.",
+                    "answer": "A countable intersection of open-dense subsets of a complete metric space is dense; equivalently, the space is not a countable union of nowhere-dense closed sets.",
+                    "concept": "baire-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What does it mean for a property to hold generically in a complete metric space?",
+                    "answer": "The set of points with that property contains a countable intersection of open-dense sets (is thick/residual).",
+                    "concept": "baire-theorem"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why can't a complete metric space be written as a countable union of nowhere-dense closed sets?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Show $\\mathbb{R}$ is uncountable using Baire.",
+                "rubric": "Singletons are nowhere dense closed; if $\\mathbb{R}$ were countable it would be a countable union of such sets, contradicting Baire."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Sketch why $R_n=\\{f:\\exists x\\ \\forall h, |\\Delta f/h|\\leq n\\}$ is closed and nowhere dense in $C^0$.",
+            "detail": "In $C^0([a,b],\\mathbb{R})$, the set of functions differentiable at at least one point is thin (a countable union of nowhere-dense closed sets $R_n$). Hence a generic (residual) continuous function is nowhere differentiable.",
+            "concepts": [
+              "baire-theorem",
+              "nowhere-differentiable"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Apply Baire to show generic continuous functions are nowhere differentiable.",
+                "prior_knowledge": "Baire's theorem, sup norm on $C^0$."
+              },
+              "core": {
+                "exposition": "In $C^0([a,b],\\mathbb{R})$, the set of functions differentiable at at least one point is thin (a countable union of nowhere-dense closed sets $R_n$). Hence a generic (residual) continuous function is nowhere differentiable.",
+                "worked_example": "Weierstrass's explicit example $f(x)=\\sum(3/4)^k\\sigma_0(4^k x)$ is continuous (M-test) but nowhere differentiable; Baire shows this is not exceptional but typical.",
+                "problem": "Sketch why $R_n=\\{f:\\exists x\\ \\forall h, |\\Delta f/h|\\leq n\\}$ is closed and nowhere dense in $C^0$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What does 'generic continuous function' mean in $C^0([a,b],\\mathbb{R})$?",
+                    "answer": "A function in a residual (thick) subset: a countable intersection of open-dense sets.",
+                    "concept": "baire-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why are continuous nowhere-differentiable functions generic, not exceptional?",
+                    "answer": "The set of functions differentiable somewhere is thin (meager) in $C^0$, so its complement is residual—Baire makes this precise.",
+                    "concept": "nowhere-differentiable"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Contrast the existence proof (Weierstrass's example) with the Baire genericity result."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Explain the structural idea: why should the set $R_n$ be nowhere dense?",
+                "rubric": "Near any $f\\in C^0$ one can add a tiny sawtooth with huge slopes, pushing the perturbed function out of $R_n$; this shows $R_n^c$ is dense, i.e., $R_n$ is nowhere dense."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Show the set of monotone continuous functions on $[0,1]$ is meager in $C^0$.",
+            "detail": "In $C^0[a,b]$ the sets $R_n, L_n, G_n$ of functions with a right-/left-slope exceeding $n$ at every point and nonmonotone on $1/n$-intervals are open dense (Weierstrass approximation + sawtooth perturbation). Their intersection is thick.",
+            "concepts": [
+              "baire-theorem",
+              "nowhere-differentiable"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Use Baire category to show generic continuous functions are nowhere differentiable.",
+                "prior_knowledge": "Thick = countable intersection of open dense sets; Baire: thick sets are dense in complete metric spaces."
+              },
+              "core": {
+                "exposition": "In $C^0[a,b]$ the sets $R_n, L_n, G_n$ of functions with a right-/left-slope exceeding $n$ at every point and nonmonotone on $1/n$-intervals are open dense (Weierstrass approximation + sawtooth perturbation). Their intersection is thick.",
+                "worked_example": "Weierstrass: $f(x)=\\sum (3/4)^k\\sigma_0(4^k x)$ (compressed sawtooths). The derivate bound $|\\Delta f/\\Delta x|\\ge (3^n+1)/2$ with $\\delta_n=1/(2\\cdot 4^n)\\to 0$ prevents differentiability.",
+                "problem": "Show the set of monotone continuous functions on $[0,1]$ is meager in $C^0$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State Baire's Theorem in a complete metric space.",
+                    "answer": "A thick set (countable intersection of open dense sets) is dense; equivalently $M$ is not a countable union of nowhere dense closed sets.",
+                    "concept": "baire-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why are trigonometric/polynomial-plus-sawtooth perturbations key to showing $R_n$ is dense?",
+                    "answer": "Polynomials are dense (Weierstrass) and adding a small high-slope sawtooth forces the derivate to exceed $n$ without changing sup-distance.",
+                    "concept": "nowhere-differentiable"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain 'generic continuous function is horrible' in words, and why this is consistent with the existence of smooth functions."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove the set of continuous functions that are differentiable at some point of $[0,1]$ is meager.",
+                "rubric": "Write it as a countable union of closed sets with empty interior using bounds on difference quotients."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "phase": 8,
+        "title": "Linear Algebra Preliminaries for Calculus",
+        "icon": "*",
+        "summary": "Norms, operator norms, continuity of linear maps in finite dimensions.",
+        "key_insight": "All linear maps between finite-dimensional normed spaces are continuous, and isomorphisms are homeomorphisms.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Show that $\\|T\\circ S\\|\\le\\|T\\|\\|S\\|$.",
+            "detail": "The operator norm $\\|T\\| = \\sup\\{|Tv|/|v| : v\\neq 0\\}$ measures maximum stretch. Finiteness of $\\|T\\|$ is equivalent to continuity of $T$, and also to continuity at 0.",
+            "concepts": [
+              "operator-norm",
+              "linear-map-continuity"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Recall the operator norm and its role.",
+                "prior_knowledge": "Linear transformations and norms on vector spaces."
+              },
+              "core": {
+                "exposition": "The operator norm $\\|T\\| = \\sup\\{|Tv|/|v| : v\\neq 0\\}$ measures maximum stretch. Finiteness of $\\|T\\|$ is equivalent to continuity of $T$, and also to continuity at 0.",
+                "worked_example": "If $T:\\mathbb{R}^2\\to\\mathbb{R}$ is $T(x,y)=3x-4y$, then $\\|T\\|=5$ by Cauchy–Schwarz.",
+                "problem": "Show that $\\|T\\circ S\\|\\le\\|T\\|\\|S\\|$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State four equivalent conditions for a linear map between normed spaces.",
+                    "answer": "$\\|T\\|<\\infty$, uniform continuity, continuity, continuity at 0.",
+                    "concept": "linear-map-continuity"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why is every linear $T:\\mathbb{R}^n\\to W$ continuous?",
+                    "answer": "Bound $|Tv|\\le n M|v|$ via the basis, so $\\|T\\|<\\infty$.",
+                    "concept": "operator-norm"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why an isomorphism $\\mathbb{R}^n\\to W$ is automatically a homeomorphism."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove that on a finite-dimensional space, any two norms induce the same topology.",
+                "rubric": "Uses identity map as linear isomorphism plus continuity theorem."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Compute $\\|T\\|$ and conorm for $T(x,y)=(x+y,x-y)$.",
+            "detail": "The conorm of an isomorphism $T$ is the largest $c>0$ with $|Tv|\\ge c|v|$. Then $\\|T^{-1}\\|=1/c$.",
+            "concepts": [
+              "operator-norm",
+              "conorm"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Work with conorm and stretch bounds.",
+                "prior_knowledge": "Operator norm and compactness of the unit sphere."
+              },
+              "core": {
+                "exposition": "The conorm of an isomorphism $T$ is the largest $c>0$ with $|Tv|\\ge c|v|$. Then $\\|T^{-1}\\|=1/c$.",
+                "worked_example": "Diagonal map $T(x,y)=(2x,5y)$ has $\\|T\\|=5$, conorm $2$, $\\|T^{-1}\\|=1/2$.",
+                "problem": "Compute $\\|T\\|$ and conorm for $T(x,y)=(x+y,x-y)$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Define the conorm of a linear map.",
+                    "answer": "$c=\\inf\\{|Tv|/|v|:v\\neq 0\\}$; equals $1/\\|T^{-1}\\|$ when invertible.",
+                    "concept": "conorm"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why does the conorm of an isomorphism exceed 0?",
+                    "answer": "The continuous map $v\\mapsto|Tv|$ on the compact unit sphere misses 0 when $T$ injective.",
+                    "concept": "operator-norm"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "How does the conorm let you control the inverse's Lipschitz constant?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Give the conorm for a $2\\times2$ rotation and explain.",
+                "rubric": "Correct value 1 with justification via isometry."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Show a linear map $T:\\mathbb{R}^n\\to W$ is continuous iff $\\|T\\|<\\infty$ iff it is continuous at $0$.",
+            "detail": "$\\|T\\|=\\sup_{|v|=1}|Tv|$. On finite-dimensional spaces $\\|T\\|<\\infty$, so $T$ is continuous. Submultiplicativity: $\\|T\\circ S\\|\\le\\|T\\|\\|S\\|$.",
+            "concepts": [
+              "operator-norm",
+              "linear-map-continuity"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Compute and bound operator norms of linear maps between normed spaces.",
+                "prior_knowledge": "Norm axioms and $\\sup$ over the unit ball."
+              },
+              "core": {
+                "exposition": "$\\|T\\|=\\sup_{|v|=1}|Tv|$. On finite-dimensional spaces $\\|T\\|<\\infty$, so $T$ is continuous. Submultiplicativity: $\\|T\\circ S\\|\\le\\|T\\|\\|S\\|$.",
+                "worked_example": "For $T=\\begin{bmatrix}2&0\\\\0&3\\end{bmatrix}$ with the Euclidean norm, $\\|T\\|=3$ (attained at $e_2$).",
+                "problem": "Show a linear map $T:\\mathbb{R}^n\\to W$ is continuous iff $\\|T\\|<\\infty$ iff it is continuous at $0$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Why is every linear map $T:\\mathbb{R}^n\\to W$ automatically continuous?",
+                    "answer": "Bound $|Tv|\\le nM|v|$ where $M=\\max|T e_i|$; so $\\|T\\|\\le nM<\\infty$.",
+                    "concept": "linear-map-continuity"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "State submultiplicativity of the operator norm.",
+                    "answer": "$\\|T\\circ S\\|\\le\\|T\\|\\|S\\|$.",
+                    "concept": "operator-norm"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain geometrically why $\\|T\\|$ equals the largest semi-axis of $T(S^{n-1})$."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove that an isomorphism of finite-dimensional normed spaces is a homeomorphism.",
+                "rubric": "Use compactness of $S^{n-1}$ to get a positive lower bound (conorm) on $|Tv|$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "phase": 8,
+        "title": "The Total Derivative and Differentiation Rules",
+        "icon": "*",
+        "summary": "Fréchet derivative, partial derivatives, chain rule, Leibniz rule.",
+        "key_insight": "The derivative at a point is the unique linear map approximating $f$ with sublinear remainder.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Compute $(Df)_p$ for $f(x,y)=x^2+y^3$ at $(1,1)$.",
+            "detail": "$f:U\\to\\mathbb{R}^m$ is differentiable at $p$ if there is a linear $T$ with $f(p+v)=f(p)+Tv+R(v)$ and $R(v)/|v|\\to 0$. Then $T=(Df)_p$ is unique.",
+            "concepts": [
+              "frechet-derivative",
+              "partial-derivative"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "State the definition of the total derivative.",
+                "prior_knowledge": "One-variable differentiation."
+              },
+              "core": {
+                "exposition": "$f:U\\to\\mathbb{R}^m$ is differentiable at $p$ if there is a linear $T$ with $f(p+v)=f(p)+Tv+R(v)$ and $R(v)/|v|\\to 0$. Then $T=(Df)_p$ is unique.",
+                "worked_example": "For $f(x,y)=(xy,x+y)$ at $p=(1,2)$: $(Df)_p=\\begin{pmatrix}2&1\\\\1&1\\end{pmatrix}$.",
+                "problem": "Compute $(Df)_p$ for $f(x,y)=x^2+y^3$ at $(1,1)$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What characterizes the Fréchet derivative uniquely?",
+                    "answer": "Linearity of $T$ plus sublinearity of remainder $R(v)/|v|\\to 0$.",
+                    "concept": "frechet-derivative"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "How are partial derivatives read off $(Df)_p$?",
+                    "answer": "They are the matrix entries $\\partial f_i/\\partial x_j(p)$.",
+                    "concept": "partial-derivative"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why doesn't existence of partials imply differentiability?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "State the theorem: continuous partials imply differentiability.",
+                "rubric": "Full statement with continuity hypothesis."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Differentiate $h(t)=\\langle f(t),f(t)\\rangle$ using Leibniz.",
+            "detail": "Chain rule: $D(g\\circ f)_p=(Dg)_{f(p)}\\circ(Df)_p$. Leibniz: for bilinear $\\beta$, $D\\beta(f,g)(v)=\\beta((Df)v,g)+\\beta(f,(Dg)v)$.",
+            "concepts": [
+              "chain-rule-multi",
+              "leibniz-rule-multi"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Apply chain and Leibniz rules for multivariable maps.",
+                "prior_knowledge": "Total derivative and matrix multiplication."
+              },
+              "core": {
+                "exposition": "Chain rule: $D(g\\circ f)_p=(Dg)_{f(p)}\\circ(Df)_p$. Leibniz: for bilinear $\\beta$, $D\\beta(f,g)(v)=\\beta((Df)v,g)+\\beta(f,(Dg)v)$.",
+                "worked_example": "$f(t)=(t,t^2)$, $g(x,y)=xy$. Then $(g\\circ f)'(t)=3t^2$ matches chain rule.",
+                "problem": "Differentiate $h(t)=\\langle f(t),f(t)\\rangle$ using Leibniz."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Write the Leibniz rule for a bilinear product.",
+                    "answer": "$D\\beta(f,g)(v)=\\beta(Df\\cdot v,g)+\\beta(f,Dg\\cdot v)$.",
+                    "concept": "leibniz-rule-multi"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "State the chain rule in terms of derivative maps.",
+                    "answer": "$D(g\\circ f)_p=(Dg)_{f(p)}\\circ(Df)_p$.",
+                    "concept": "chain-rule-multi"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Sketch the remainder-estimate proof of the chain rule."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Compute the derivative of $f(x)=Ax$ where $A$ is a matrix.",
+                "rubric": "Should equal $A$ itself, noting $T$ is its own derivative."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Use the $C^1$ MVT to bound $|f(q)-f(p)|$ by $\\sup\\|Df\\||q-p|$.",
+            "detail": "For $C^1$ $f$ with $[p,q]\\subset U$: $f(q)-f(p)=T(q-p)$ where $T=\\int_0^1 (Df)_{p+t(q-p)}dt$. Equality form replacing pointwise MVT.",
+            "concepts": [
+              "mean-value-theorem-multi"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Use the $C^1$ mean value theorem with the average derivative.",
+                "prior_knowledge": "Chain rule and integration of vector functions."
+              },
+              "core": {
+                "exposition": "For $C^1$ $f$ with $[p,q]\\subset U$: $f(q)-f(p)=T(q-p)$ where $T=\\int_0^1 (Df)_{p+t(q-p)}dt$. Equality form replacing pointwise MVT.",
+                "worked_example": "For $f(x,y)=(x^2,y^2)$ from $(0,0)$ to $(1,1)$: $T=\\text{diag}(1,1)$; check $f(q)-f(p)=(1,1)$.",
+                "problem": "Use the $C^1$ MVT to bound $|f(q)-f(p)|$ by $\\sup\\|Df\\||q-p|$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the $C^1$ mean value equality.",
+                    "answer": "$f(q)-f(p)=\\int_0^1(Df)_{p+t(q-p)}dt\\,(q-p)$.",
+                    "concept": "mean-value-theorem-multi"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why is pointwise MVT false for vector-valued $f$?",
+                    "answer": "Different components can attain mean value at different points.",
+                    "concept": "mean-value-theorem-multi"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain how the converse direction of the $C^1$ MVT detects $C^1$ regularity."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Show a connected-domain $f$ with $Df\\equiv 0$ is constant.",
+                "rubric": "Open-closed argument using MVT bound."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Show existence of all partial derivatives does not imply differentiability: $f(x,y)=xy/(x^2+y^2)$ at $(0,0)$.",
+            "detail": "$f:U\\to\\mathbb{R}^m$ is differentiable at $p$ if $\\exists T\\in\\mathcal{L}(\\mathbb{R}^n,\\mathbb{R}^m)$ with $f(p+v)=f(p)+T(v)+R(v)$, $R(v)/|v|\\to 0$. Then $T=(Df)_p$ is the Jacobian matrix of partials (if continuous).",
+            "concepts": [
+              "frechet-derivative",
+              "chain-rule-multi"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Identify $(Df)_p$ by the Taylor-remainder criterion and apply the Chain Rule.",
+                "prior_knowledge": "A linear map $T$ with $f(p+v)-f(p)-T(v)=o(|v|)$ is the derivative."
+              },
+              "core": {
+                "exposition": "$f:U\\to\\mathbb{R}^m$ is differentiable at $p$ if $\\exists T\\in\\mathcal{L}(\\mathbb{R}^n,\\mathbb{R}^m)$ with $f(p+v)=f(p)+T(v)+R(v)$, $R(v)/|v|\\to 0$. Then $T=(Df)_p$ is the Jacobian matrix of partials (if continuous).",
+                "worked_example": "$f(x,y)=(xy,x^2+y)$ at $(1,2)$: $(Df)_{(1,2)}=\\begin{bmatrix}2&1\\\\2&1\\end{bmatrix}$.",
+                "problem": "Show existence of all partial derivatives does not imply differentiability: $f(x,y)=xy/(x^2+y^2)$ at $(0,0)$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the Chain Rule for multivariable derivatives.",
+                    "answer": "$(D(g\\circ f))_p=(Dg)_{f(p)}\\circ(Df)_p$.",
+                    "concept": "chain-rule-multi"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What sufficient condition guarantees Fréchet differentiability from partials?",
+                    "answer": "The partial derivatives exist in a neighborhood of $p$ and are continuous at $p$ (i.e., $f$ is $C^1$).",
+                    "concept": "frechet-derivative"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why is the derivative naturally a linear map rather than a number, in contrast to the 1-variable case?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Assume $f,g$ are $C^1$. Derive the Jacobian of $g\\circ f$ from the Chain Rule.",
+                "rubric": "Matrix product of Jacobians; verify by remainder estimation."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "phase": 8,
+        "title": "Higher Derivatives and Smoothness",
+        "icon": "*",
+        "summary": "Second derivative, symmetry of mixed partials, $C^r$ classes.",
+        "key_insight": "The $r$-th derivative is a symmetric $r$-linear map, making mixed partials commute.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Verify symmetry of mixed partials for $f(x,y)=e^{xy}\\sin x$.",
+            "detail": "If $(D^2f)_p$ exists it's a symmetric bilinear form: $(D^2f)_p(v,w)=(D^2f)_p(w,v)$. Hence $\\partial^2f/\\partial x_i\\partial x_j=\\partial^2f/\\partial x_j\\partial x_i$.",
+            "concepts": [
+              "second-derivative-multi",
+              "symmetry-mixed-partials"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Understand the second derivative as a bilinear map.",
+                "prior_knowledge": "First derivative and bilinear maps."
+              },
+              "core": {
+                "exposition": "If $(D^2f)_p$ exists it's a symmetric bilinear form: $(D^2f)_p(v,w)=(D^2f)_p(w,v)$. Hence $\\partial^2f/\\partial x_i\\partial x_j=\\partial^2f/\\partial x_j\\partial x_i$.",
+                "worked_example": "$f(x,y)=x^2y$: $f_{xy}=2x=f_{yx}$.",
+                "problem": "Verify symmetry of mixed partials for $f(x,y)=e^{xy}\\sin x$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the symmetry formula for mixed partials.",
+                    "answer": "If $D^2f$ exists at $p$, $\\partial^2f/\\partial x_i\\partial x_j(p)=\\partial^2f/\\partial x_j\\partial x_i(p)$.",
+                    "concept": "symmetry-mixed-partials"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Give the parallelogram formula used to detect $D^2f$.",
+                    "answer": "$\\Delta(t,v,w)=f(p+tv+tw)-f(p+tv)-f(p+tw)+f(p)$, symmetric in $v,w$, divided by $t^2$ tends to $D^2f_p(v,w)$.",
+                    "concept": "second-derivative-multi"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why does mere existence of both mixed partials not force equality?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Define $C^r$ and show $C^r$ is closed under composition.",
+                "rubric": "Iterated chain rule plus continuity."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Give an example where $f_{xy}(0,0)\\ne f_{yx}(0,0)$; why doesn't this violate the theorem?",
+            "detail": "If $(D^2f)_p$ exists it is a symmetric bilinear map: $(D^2f)_p(v,w)=(D^2f)_p(w,v)$. The signed parallelogram sum $\\Delta(t,v,w)=f(p+tv+tw)-f(p+tv)-f(p+tw)+f(p)$ is symmetric in $v,w$ and $\\Delta/t^2\\to(D^2f)_p(v,w)$.",
+            "concepts": [
+              "second-derivative-multi",
+              "symmetry-mixed-partials"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Understand why the second derivative is a symmetric bilinear form.",
+                "prior_knowledge": "Second-order differentiability at $p$."
+              },
+              "core": {
+                "exposition": "If $(D^2f)_p$ exists it is a symmetric bilinear map: $(D^2f)_p(v,w)=(D^2f)_p(w,v)$. The signed parallelogram sum $\\Delta(t,v,w)=f(p+tv+tw)-f(p+tv)-f(p+tw)+f(p)$ is symmetric in $v,w$ and $\\Delta/t^2\\to(D^2f)_p(v,w)$.",
+                "worked_example": "For $f(x,y)=x^2y$: $\\partial^2 f/\\partial x\\partial y=2x=\\partial^2 f/\\partial y\\partial x$.",
+                "problem": "Give an example where $f_{xy}(0,0)\\ne f_{yx}(0,0)$; why doesn't this violate the theorem?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State symmetry of mixed partials under a sharp hypothesis.",
+                    "answer": "If $D^2f$ exists at $p$ then $\\partial^2f/\\partial x_i\\partial x_j=\\partial^2f/\\partial x_j\\partial x_i$ at $p$.",
+                    "concept": "symmetry-mixed-partials"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What kind of object is $(D^2f)_p$?",
+                    "answer": "A symmetric bilinear form $\\mathbb{R}^n\\times\\mathbb{R}^n\\to\\mathbb{R}^m$.",
+                    "concept": "second-derivative-multi"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why existence of mixed partials alone is not enough for equality."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Show the $r$-th derivative of an $r$-linear function $\\beta(x,\\ldots,x)$ equals $r!\\,\\text{Symm}(\\beta)$.",
+                "rubric": "Differentiate under symmetry; induct on $r$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 21,
+        "phase": 8,
+        "title": "Implicit and Inverse Function Theorems",
+        "icon": "*",
+        "summary": "Solving $f(x,y)=z_0$ locally; when a $C^r$ map is a local diffeomorphism.",
+        "key_insight": "Invertibility of a partial derivative gives a unique local $C^r$ solution via contraction mapping.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Find the implicit derivative $g'(0)$ for $x^3+y^3-3xy=0$ near $(0,0)$ where possible.",
+            "detail": "If $f:U\\to\\mathbb{R}^m$ is $C^r$ and $\\partial f/\\partial y(x_0,y_0)$ is invertible, then locally the level set is the graph of a unique $C^r$ function $y=g(x)$ with $(Dg)_{x_0}=-B^{-1}A$.",
+            "concepts": [
+              "implicit-function-theorem",
+              "contraction-mapping"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "State and justify the implicit function theorem.",
+                "prior_knowledge": "Chain rule and contraction mapping principle."
+              },
+              "core": {
+                "exposition": "If $f:U\\to\\mathbb{R}^m$ is $C^r$ and $\\partial f/\\partial y(x_0,y_0)$ is invertible, then locally the level set is the graph of a unique $C^r$ function $y=g(x)$ with $(Dg)_{x_0}=-B^{-1}A$.",
+                "worked_example": "$f(x,y)=x^2+y^2-1$ near $(0,1)$: $\\partial f/\\partial y=2y\\ne 0$ gives $y=\\sqrt{1-x^2}$.",
+                "problem": "Find the implicit derivative $g'(0)$ for $x^3+y^3-3xy=0$ near $(0,0)$ where possible."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What hypothesis on $\\partial f/\\partial y$ ensures local solvability?",
+                    "answer": "It must be an invertible $m\\times m$ matrix at $(x_0,y_0)$.",
+                    "concept": "implicit-function-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why does contraction mapping arise in the proof?",
+                    "answer": "Rearranging $f(x,y)=z_0$ into a fixed-point form $y=K_x(y)$ with $K_x$ contracting.",
+                    "concept": "contraction-mapping"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why the implicit function is automatically $C^r$."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Derive $(Dg)_x=-B_x^{-1}A_x$ from the chain rule.",
+                "rubric": "Differentiates $f(x,g(x))=z_0$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Show $f(x,y)=(e^x\\cos y,e^x\\sin y)$ is a local diffeomorphism everywhere.",
+            "detail": "If $(Df)_p$ is invertible, apply the implicit theorem to $F(x,y)=f(x)-y$ to get a $C^r$ local inverse $h=f^{-1}$ near $q=f(p)$.",
+            "concepts": [
+              "inverse-function-theorem"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Derive the inverse function theorem from the implicit version.",
+                "prior_knowledge": "Implicit function theorem."
+              },
+              "core": {
+                "exposition": "If $(Df)_p$ is invertible, apply the implicit theorem to $F(x,y)=f(x)-y$ to get a $C^r$ local inverse $h=f^{-1}$ near $q=f(p)$.",
+                "worked_example": "$f(r,\\theta)=(r\\cos\\theta,r\\sin\\theta)$ with $r>0$: Jacobian $=r\\ne 0$, so polar is locally invertible.",
+                "problem": "Show $f(x,y)=(e^x\\cos y,e^x\\sin y)$ is a local diffeomorphism everywhere."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the inverse function theorem.",
+                    "answer": "A $C^r$ map with invertible derivative at $p$ is a $C^r$ diffeomorphism near $p$.",
+                    "concept": "inverse-function-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why is $x\\mapsto x^3$ a homeomorphism but not a diffeomorphism on $\\mathbb{R}$?",
+                    "answer": "Its derivative vanishes at 0, so the inverse fails to be differentiable there.",
+                    "concept": "inverse-function-theorem"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain the 'right inverse is also a left inverse' trick in the proof."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Determine where $f(x,y)=(x^2-y^2,2xy)$ is a local diffeomorphism.",
+                "rubric": "Jacobian $=4(x^2+y^2)$, fails only at origin."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Use IFT to prove the Inverse Function Theorem: if $(Df)_p$ is invertible, $f$ is a local diffeomorphism.",
+            "detail": "If $f(x_0,y_0)=z_0$, $f$ is $C^r$, and $B=\\partial f/\\partial y(x_0,y_0)$ is invertible, then near $(x_0,y_0)$ the level set $\\{f=z_0\\}$ is the graph of a $C^r$ function $y=g(x)$, with $(Dg)_{x_0}=-B^{-1}A$, $A=\\partial f/\\partial x$.",
+            "concepts": [
+              "implicit-function-theorem",
+              "inverse-function-theorem"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Derive the IFT from a contraction argument and the Inverse Function Theorem.",
+                "prior_knowledge": "Invertibility of $\\partial f/\\partial y$ at a point gives local solvability."
+              },
+              "core": {
+                "exposition": "If $f(x_0,y_0)=z_0$, $f$ is $C^r$, and $B=\\partial f/\\partial y(x_0,y_0)$ is invertible, then near $(x_0,y_0)$ the level set $\\{f=z_0\\}$ is the graph of a $C^r$ function $y=g(x)$, with $(Dg)_{x_0}=-B^{-1}A$, $A=\\partial f/\\partial x$.",
+                "worked_example": "$F(x,y)=x^2+y^2-1$ at $(0,1)$: $\\partial F/\\partial y=2$ nonzero, so $y=\\sqrt{1-x^2}$ near $(0,1)$.",
+                "problem": "Use IFT to prove the Inverse Function Theorem: if $(Df)_p$ is invertible, $f$ is a local diffeomorphism."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the conclusion of the IFT regarding smoothness of $g$.",
+                    "answer": "$g$ is $C^r$ whenever $f$ is $C^r$, for $1\\le r\\le\\infty$ (and analytic if $f$ is analytic).",
+                    "concept": "implicit-function-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Give the derivative formula $(Dg)_x$.",
+                    "answer": "$(Dg)_x=-(\\partial f/\\partial y)^{-1}(\\partial f/\\partial x)$ evaluated at $(x,g(x))$.",
+                    "concept": "implicit-function-theorem"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why does the proof set up a contraction map $K_x(y)=-B^{-1}(Ax+R(x,y))$?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Show the IFT and Inverse Function Theorem are equivalent.",
+                "rubric": "Define $F(x,y)=f(x)-y$ and apply IFT to get $h=f^{-1}$ locally."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 22,
+        "phase": 8,
+        "title": "The Rank Theorem",
+        "icon": "*",
+        "summary": "Constant-rank maps are locally $C^r$-equivalent to linear projections.",
+        "key_insight": "Rank is a local invariant: constant-rank maps have a canonical local form via smooth changes of coordinates.",
+        "cards": [
+          {
+            "tier": "gold",
+            "task_index": 0,
+            "text": "Show that a rank-$n$ map (immersion) has image locally diffeomorphic to a disc.",
+            "detail": "If $f:U\\to\\mathbb{R}^m$ has constant rank $k$, then near any point it is $C^r$-equivalent to $(x_1,\\dots,x_n)\\mapsto(x_1,\\dots,x_k,0,\\dots,0)$ via diffeomorphic changes of coordinates.",
+            "concepts": [
+              "rank-theorem",
+              "diffeomorphism"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Understand the canonical form of constant-rank maps.",
+                "prior_knowledge": "Inverse function theorem, linear algebra of rank."
+              },
+              "core": {
+                "exposition": "If $f:U\\to\\mathbb{R}^m$ has constant rank $k$, then near any point it is $C^r$-equivalent to $(x_1,\\dots,x_n)\\mapsto(x_1,\\dots,x_k,0,\\dots,0)$ via diffeomorphic changes of coordinates.",
+                "worked_example": "Radial projection $\\pi(v)=v/|v|$ on $\\mathbb{R}^3\\setminus\\{0\\}$ has constant rank 2; locally a linear projection to a plane.",
+                "problem": "Show that a rank-$n$ map (immersion) has image locally diffeomorphic to a disc."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What is the local model for a constant-rank-$k$ smooth map?",
+                    "answer": "Linear projection $(x,y)\\mapsto(x,0)$ with $x\\in\\mathbb{R}^k$.",
+                    "concept": "rank-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Can rank decrease under small perturbations?",
+                    "answer": "No: rank is lower semicontinuous — it can only go up or stay the same locally.",
+                    "concept": "rank-theorem"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Describe the four-step proof outline of the Rank Theorem."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "For a rank-1 map $f:U\\to\\mathbb{R}$, describe the local structure of level sets.",
+                "rubric": "Level sets form a stack of $(n-1)$-dimensional smooth discs (Corollary 27)."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "If $f$ has rank $n$ at $p$ (immersion), show its image is locally a diffeomorphic $n$-dimensional disc.",
+            "detail": "Rank Theorem: if $f:U\\to\\mathbb{R}^m$ has constant rank $k$ near $p$, then $f$ is locally $C^r$-equivalent (via diffeomorphisms in source and target) to the linear projection $(x_1,\\ldots,x_n)\\mapsto(x_1,\\ldots,x_k,0,\\ldots,0)$.",
+            "concepts": [
+              "rank-theorem",
+              "diffeomorphism"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Recognize constant-rank maps as projections after a change of coordinates.",
+                "prior_knowledge": "Rank is lower semicontinuous; the Inverse Function Theorem."
+              },
+              "core": {
+                "exposition": "Rank Theorem: if $f:U\\to\\mathbb{R}^m$ has constant rank $k$ near $p$, then $f$ is locally $C^r$-equivalent (via diffeomorphisms in source and target) to the linear projection $(x_1,\\ldots,x_n)\\mapsto(x_1,\\ldots,x_k,0,\\ldots,0)$.",
+                "worked_example": "Radial projection $\\pi:\\mathbb{R}^3\\setminus\\{0\\}\\to S^2$, $v\\mapsto v/|v|$ has constant rank 2, locally equivalent to projection to the $(x,y)$-plane.",
+                "problem": "If $f$ has rank $n$ at $p$ (immersion), show its image is locally a diffeomorphic $n$-dimensional disc."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What does 'constant rank $k$' mean and why can't rank decrease nearby?",
+                    "answer": "$\\text{rank}(Df)_x\\equiv k$; a $k\\times k$ minor with nonzero determinant persists under small perturbation.",
+                    "concept": "rank-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "State the 3-step strategy of the Rank Theorem proof.",
+                    "answer": "(1) translate to 0; (2) linear changes of source/target to align kernel/image; (3) use IFT to flatten to a projection.",
+                    "concept": "rank-theorem"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why the conclusion fails if $f$ merely has rank $\\ge k$ without being constant."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Use the Rank Theorem to show level sets of a smooth $f:U\\to\\mathbb{R}$ with $\\nabla f\\ne 0$ form a stack of $(n-1)$-discs.",
+                "rubric": "Constant rank 1 locally; project to a 1D coordinate."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 23,
+        "phase": 9,
+        "title": "Picard's Theorem and ODE Flows",
+        "icon": "*",
+        "summary": "Contraction mapping proof of ODE existence/uniqueness; trajectory flows and the group property.",
+        "key_insight": "An ODE is a vector field; solutions are trajectories tangent to it, produced by contracting an integral operator.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "State the two key inequalities $\\tau$ must satisfy to make $\\Phi$ a self-contraction on the space of curves.",
+            "detail": "Given $x' = F(x)$ with $F$ Lipschitz on $U \\subset \\mathbb{R}^m$, rewrite as $\\gamma(t) = p + \\int_0^t F(\\gamma(s))\\,ds$. Choose $\\tau$ with $\\tau M \\le r$ and $\\tau L < 1$; then $\\Phi: \\gamma \\mapsto p + \\int F \\circ \\gamma$ contracts on $C([-\\tau,\\tau], \\overline{N_r(p)})$.",
+            "concepts": [
+              "picard-theorem",
+              "contraction-mapping"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Recall Picard's local existence/uniqueness theorem.",
+                "prior_knowledge": "Contraction mapping principle in complete metric spaces."
+              },
+              "core": {
+                "exposition": "Given $x' = F(x)$ with $F$ Lipschitz on $U \\subset \\mathbb{R}^m$, rewrite as $\\gamma(t) = p + \\int_0^t F(\\gamma(s))\\,ds$. Choose $\\tau$ with $\\tau M \\le r$ and $\\tau L < 1$; then $\\Phi: \\gamma \\mapsto p + \\int F \\circ \\gamma$ contracts on $C([-\\tau,\\tau], \\overline{N_r(p)})$.",
+                "worked_example": "For $x' = x$, $x(0) = 1$: $\\Phi(\\gamma)(t) = 1 + \\int_0^t \\gamma(s)\\,ds$. Iterating from $\\gamma_0 = 1$ gives $1, 1+t, 1+t+t^2/2, \\dots \\to e^t$.",
+                "problem": "State the two key inequalities $\\tau$ must satisfy to make $\\Phi$ a self-contraction on the space of curves."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Why is Lipschitz continuity of $F$ enough (not $C^1$)?",
+                    "answer": "The contraction estimate $|\\Phi(\\gamma) - \\Phi(\\sigma)| \\le \\tau L \\|\\gamma-\\sigma\\|$ only uses $|F(x)-F(y)| \\le L|x-y|$.",
+                    "concept": "picard-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What metric space is used for the contraction?",
+                    "answer": "Continuous curves $[-\\tau,\\tau] \\to \\overline{N_r(p)}$ with sup metric; it's complete since $\\overline{N_r(p)}$ is closed in $\\mathbb{R}^m$.",
+                    "concept": "contraction-mapping"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why converting the ODE to an integral equation is the crucial move."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove Picard's theorem and identify where Lipschitz is used.",
+                "rubric": "Full credit: integral reformulation, contraction estimate, fixed-point extraction, uniqueness from contraction."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "For $x' = \\sin(xy)$, $y' = \\cos(x+y)$ near $(0,0)$, find an explicit $\\tau$ guaranteeing a solution.",
+            "detail": "For $F: U \\to \\mathbb{R}^m$ of class $C^1$ with $\\|DF\\| \\le L$ on a neighborhood, $F$ is Lipschitz with constant $L$, so Picard applies. The time of existence $\\tau$ shrinks as $L, M$ grow.",
+            "concepts": [
+              "first-order-system",
+              "picard-theorem"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Use Picard's theorem on a specific nonlinear system.",
+                "prior_knowledge": "Lipschitz constants from $C^1$ bounds via MVT."
+              },
+              "core": {
+                "exposition": "For $F: U \\to \\mathbb{R}^m$ of class $C^1$ with $\\|DF\\| \\le L$ on a neighborhood, $F$ is Lipschitz with constant $L$, so Picard applies. The time of existence $\\tau$ shrinks as $L, M$ grow.",
+                "worked_example": "$x' = x^2$, $x(0) = 1$: $M = L = 2$ on $[1/2, 3/2]$, so pick $\\tau < \\min(r/M, 1/L) = 1/4$. Exact solution $x(t) = 1/(1-t)$ confirms local (not global) existence.",
+                "problem": "For $x' = \\sin(xy)$, $y' = \\cos(x+y)$ near $(0,0)$, find an explicit $\\tau$ guaranteeing a solution."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "How does Lipschitz $L$ control existence time?",
+                    "answer": "$\\tau < 1/L$ is required for contraction; larger $L$ forces shorter guaranteed existence.",
+                    "concept": "picard-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Can Picard solutions blow up in finite time?",
+                    "answer": "Yes—$x' = x^2$ with $x(0) = 1$ blows up at $t=1$; Picard only guarantees local existence.",
+                    "concept": "first-order-system"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why doesn't a bounded vector field escape to infinity in finite time?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Given $F$ Lipschitz with $|F| \\le M$, compute explicit $\\tau$ for existence.",
+                "rubric": "Must cite both $\\tau M \\le r$ and $\\tau L < 1$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Prove $\\varphi_t$ is a homeomorphism with inverse $\\varphi_{-t}$.",
+            "detail": "If trajectories exist for all time, the $t$-advance map $\\varphi_t(p) = \\gamma(t,p)$ is well-defined. Both sides of $\\varphi_{t+s}(p) = \\varphi_t(\\varphi_s(p))$ are $F$-trajectories through $\\varphi_s(p)$ at time 0, so uniqueness forces equality.",
+            "concepts": [
+              "picard-theorem"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Derive the flow equation $\\varphi_{t+s} = \\varphi_t \\circ \\varphi_s$.",
+                "prior_knowledge": "Uniqueness of Picard solutions."
+              },
+              "core": {
+                "exposition": "If trajectories exist for all time, the $t$-advance map $\\varphi_t(p) = \\gamma(t,p)$ is well-defined. Both sides of $\\varphi_{t+s}(p) = \\varphi_t(\\varphi_s(p))$ are $F$-trajectories through $\\varphi_s(p)$ at time 0, so uniqueness forces equality.",
+                "worked_example": "$x' = x$ has $\\varphi_t(x_0) = e^t x_0$; check: $\\varphi_{t+s}(x_0) = e^{t+s}x_0 = e^t(e^s x_0) = \\varphi_t(\\varphi_s(x_0))$.",
+                "problem": "Prove $\\varphi_t$ is a homeomorphism with inverse $\\varphi_{-t}$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Why does the flow equation reduce to uniqueness?",
+                    "answer": "Both sides solve the same IVP; Picard uniqueness forces them equal.",
+                    "concept": "picard-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Group homomorphism property of $t \\mapsto \\varphi_t$?",
+                    "answer": "It maps $(\\mathbb{R}, +)$ to self-homeomorphisms of $\\mathbb{R}^m$ under composition.",
+                    "concept": "picard-theorem"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "How does the flow picture unify statics (vector field) and dynamics (motion)?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove the flow map $\\varphi_t$ is continuous in $(t,p)$ jointly.",
+                "rubric": "Use Gronwall-type estimate from contraction iterates."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Apply Picard to $x'=x^2$, $x(0)=1$ and determine the maximal interval of existence.",
+            "detail": "Recast $\\gamma'=F(\\gamma)$, $\\gamma(0)=p$ as the fixed-point equation $\\gamma(t)=p+\\int_0^t F(\\gamma(s))ds$. If $F$ is Lipschitz with constant $L$ and $\\tau L<1$, $\\Phi:\\gamma\\mapsto p+\\int_0^\\cdot F(\\gamma)$ contracts the complete space of continuous curves $[-\\tau,\\tau]\\to\\bar N_r(p)$.",
+            "concepts": [
+              "picard-theorem",
+              "contraction-mapping"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Prove local existence and uniqueness for Lipschitz ODEs.",
+                "prior_knowledge": "Banach contraction principle on a complete metric space."
+              },
+              "core": {
+                "exposition": "Recast $\\gamma'=F(\\gamma)$, $\\gamma(0)=p$ as the fixed-point equation $\\gamma(t)=p+\\int_0^t F(\\gamma(s))ds$. If $F$ is Lipschitz with constant $L$ and $\\tau L<1$, $\\Phi:\\gamma\\mapsto p+\\int_0^\\cdot F(\\gamma)$ contracts the complete space of continuous curves $[-\\tau,\\tau]\\to\\bar N_r(p)$.",
+                "worked_example": "For $x'=x$, $x(0)=1$: iterating $\\Phi$ from $x_0\\equiv 1$ yields Picard iterates $1, 1+t, 1+t+t^2/2,\\ldots\\to e^t$.",
+                "problem": "Apply Picard to $x'=x^2$, $x(0)=1$ and determine the maximal interval of existence."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Why does the integral form convert the ODE into a fixed-point problem?",
+                    "answer": "Continuous fixed points of $\\Phi$ are automatically $C^1$ by the FTC, and satisfy $\\gamma'=F\\circ\\gamma$, $\\gamma(0)=p$.",
+                    "concept": "picard-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Which two estimates make $\\Phi$ a contraction?",
+                    "answer": "$|F(\\gamma)|\\le M$ gives $\\Phi$ sends the ball into itself when $\\tau M\\le r$; Lipschitz $L$ gives contraction factor $\\tau L<1$.",
+                    "concept": "contraction-mapping"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why is uniqueness local only, and what can go wrong globally?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Sketch the proof that Picard iterates form a Cauchy sequence in $C^0([-\\tau,\\tau],\\mathbb{R}^m)$.",
+                "rubric": "Bound $\\|\\Phi^{n+1}-\\Phi^n\\|\\le (\\tau L)^n\\|\\Phi-\\text{id}\\|$; geometric series."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 24,
+        "phase": 9,
+        "title": "Multivariable Calculus: Total Derivative and Chain Rule",
+        "icon": "*",
+        "summary": "Fréchet derivative as linear approximation; partials vs. total derivative; the Chain Rule as composition.",
+        "key_insight": "The derivative is a linear transformation, not a number. Chain rule = composition of derivatives.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Give an example where partials exist but $f$ is not differentiable.",
+            "detail": "$f: U \\subset \\mathbb{R}^n \\to \\mathbb{R}^m$ is differentiable at $p$ if there is a linear $T: \\mathbb{R}^n \\to \\mathbb{R}^m$ with $f(p+v) = f(p) + Tv + R(v)$, $R(v)/|v| \\to 0$. Then $T = (Df)_p$ is represented by the Jacobian matrix of partials.",
+            "concepts": [
+              "frechet-derivative",
+              "partial-derivative"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "State what $(Df)_p$ is and how it relates to partials.",
+                "prior_knowledge": "Single-variable derivative as linear approximation."
+              },
+              "core": {
+                "exposition": "$f: U \\subset \\mathbb{R}^n \\to \\mathbb{R}^m$ is differentiable at $p$ if there is a linear $T: \\mathbb{R}^n \\to \\mathbb{R}^m$ with $f(p+v) = f(p) + Tv + R(v)$, $R(v)/|v| \\to 0$. Then $T = (Df)_p$ is represented by the Jacobian matrix of partials.",
+                "worked_example": "$f(x,y) = (x^2y, x+y)$: $(Df)_{(1,2)}$ has matrix $\\begin{bmatrix} 2xy & x^2 \\\\ 1 & 1\\end{bmatrix}_{(1,2)} = \\begin{bmatrix} 4 & 1 \\\\ 1 & 1\\end{bmatrix}$.",
+                "problem": "Give an example where partials exist but $f$ is not differentiable."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What kind of object is $(Df)_p$?",
+                    "answer": "A linear transformation $\\mathbb{R}^n \\to \\mathbb{R}^m$, not a number or vector.",
+                    "concept": "frechet-derivative"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What's sufficient for differentiability beyond existence of partials?",
+                    "answer": "Continuity of the partials on a neighborhood of $p$.",
+                    "concept": "partial-derivative"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why is the existence of partial derivatives too weak to imply differentiability?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove: continuous partials $\\Rightarrow$ differentiable.",
+                "rubric": "Use MVT on path segments $p \\to p_1 \\to \\dots \\to q$."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Compute the derivative of $h(r,\\theta) = f(r\\cos\\theta, r\\sin\\theta)$ in terms of partials of $f$.",
+            "detail": "The derivative of a composite is the composite of the derivatives. In matrices: Jacobian of $g \\circ f$ = Jacobian of $g$ times Jacobian of $f$.",
+            "concepts": [
+              "chain-rule-multi",
+              "frechet-derivative"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Apply the Chain Rule $D(g \\circ f)_p = (Dg)_{f(p)} \\circ (Df)_p$.",
+                "prior_knowledge": "Matrix multiplication."
+              },
+              "core": {
+                "exposition": "The derivative of a composite is the composite of the derivatives. In matrices: Jacobian of $g \\circ f$ = Jacobian of $g$ times Jacobian of $f$.",
+                "worked_example": "$f(s,t) = (st, s+t)$, $g(x,y) = x^2 + y$. Then $g \\circ f(s,t) = s^2t^2 + s + t$. Check: $(Dg)_{f(s,t)} = [2xy\\ 1]|_{(st, s+t)} = [2st(s+t)\\ 1]$ times $(Df) = \\begin{bmatrix}t & s\\\\1 & 1\\end{bmatrix}$.",
+                "problem": "Compute the derivative of $h(r,\\theta) = f(r\\cos\\theta, r\\sin\\theta)$ in terms of partials of $f$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Why is the Chain Rule 'the derivative of a composite is the composite of derivatives'?",
+                    "answer": "Linear approximations compose: first-order Taylor of $g\\circ f$ at $p$ has linear part $(Dg)_{f(p)}(Df)_p$.",
+                    "concept": "chain-rule-multi"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why must $(Dg)$ be evaluated at $f(p)$, not at $p$?",
+                    "answer": "$g$ acts on the target of $f$; its derivative lives at the image point.",
+                    "concept": "chain-rule-multi"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain Dieudonné's objection to the 'slavish subservience to numerical interpretation' of derivatives."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove the Chain Rule using the sublinear remainder formulation.",
+                "rubric": "Must show $R_{g \\circ f}(v)/|v| \\to 0$ using boundedness of $\\|A\\|$ and Lipschitz of $g$ near $f(p)$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Use the integral MVT to prove: $\\|(Df)_x\\| \\le M$ on convex $U$ implies $|f(q)-f(p)| \\le M|q-p|$.",
+            "detail": "For vector-valued $f$, there is NO $\\theta$ with $f(q)-f(p) = (Df)_\\theta(q-p)$ (example: $t \\mapsto (\\cos t, \\sin t)$). Instead: $f(q)-f(p) = \\left(\\int_0^1 (Df)_{p+t(q-p)}\\,dt\\right)(q-p)$.",
+            "concepts": [
+              "mean-value-theorem-multi",
+              "frechet-derivative"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "State the $C^1$ Mean Value Theorem and contrast with the failed pointwise version.",
+                "prior_knowledge": "MVT in one dimension."
+              },
+              "core": {
+                "exposition": "For vector-valued $f$, there is NO $\\theta$ with $f(q)-f(p) = (Df)_\\theta(q-p)$ (example: $t \\mapsto (\\cos t, \\sin t)$). Instead: $f(q)-f(p) = \\left(\\int_0^1 (Df)_{p+t(q-p)}\\,dt\\right)(q-p)$.",
+                "worked_example": "For $\\gamma(t)=(\\cos t,\\sin t)$, $t\\in[\\pi,2\\pi]$: $\\gamma(2\\pi)-\\gamma(\\pi)=(2,0)$, but no single $\\gamma'(\\theta)=(-\\sin\\theta,\\cos\\theta)$ is a positive multiple of $(2,0)$.",
+                "problem": "Use the integral MVT to prove: $\\|(Df)_x\\| \\le M$ on convex $U$ implies $|f(q)-f(p)| \\le M|q-p|$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Why does the pointwise MVT fail for vector-valued $f$?",
+                    "answer": "Different components attain means at different points; no single $\\theta$ works for all.",
+                    "concept": "mean-value-theorem-multi"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What replaces it?",
+                    "answer": "Average derivative: $f(q)-f(p) = \\left(\\int_0^1 (Df)_{\\sigma(t)}dt\\right)(q-p)$.",
+                    "concept": "mean-value-theorem-multi"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why is the integral form a true equality, not just an inequality?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove the converse: if $f(q)-f(p) = T_{pq}(q-p)$ with $T_{pq}$ continuous in $(p,q)$ and $T_{pp}$ linear, then $f \\in C^1$ with $(Df)_p = T_{pp}$.",
+                "rubric": "Show Taylor remainder $R(v) = (T_{p,p+v}-T_{pp})(v)$ is sublinear."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 25,
+        "phase": 9,
+        "title": "Higher Derivatives, Symmetry, and Taylor",
+        "icon": "*",
+        "summary": "$D^2f$ as bilinear; symmetry of mixed partials; $C^r$ classes and Taylor approximation.",
+        "key_insight": "The second derivative is a symmetric bilinear form—the key geometric fact underlying Taylor expansion.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "State Clairaut's theorem as a consequence of $D^2 f$ symmetry.",
+            "detail": "$Df: U \\to \\mathcal{L}(\\mathbb{R}^n, \\mathbb{R}^m)$ is a map into a vector space; its derivative $(D^2 f)_p: \\mathbb{R}^n \\to \\mathcal{L}$ can be viewed as bilinear $(v,w) \\mapsto (D^2 f)_p(v)(w)$. If $D^2 f$ exists at $p$, it is symmetric: $(D^2f)_p(v,w) = (D^2f)_p(w,v)$.",
+            "concepts": [
+              "second-derivative-multi",
+              "symmetry-mixed-partials"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Understand $(D^2 f)_p$ as a bilinear map and its symmetry.",
+                "prior_knowledge": "First derivative as linear map."
+              },
+              "core": {
+                "exposition": "$Df: U \\to \\mathcal{L}(\\mathbb{R}^n, \\mathbb{R}^m)$ is a map into a vector space; its derivative $(D^2 f)_p: \\mathbb{R}^n \\to \\mathcal{L}$ can be viewed as bilinear $(v,w) \\mapsto (D^2 f)_p(v)(w)$. If $D^2 f$ exists at $p$, it is symmetric: $(D^2f)_p(v,w) = (D^2f)_p(w,v)$.",
+                "worked_example": "For $f(x,y) = x^2y + e^{xy}$: mixed partials $f_{xy} = 2x + e^{xy}(1+xy) = f_{yx}$.",
+                "problem": "State Clairaut's theorem as a consequence of $D^2 f$ symmetry."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Why is $(D^2 f)_p$ bilinear?",
+                    "answer": "It's the derivative of a map into $\\mathcal{L}$, so its value at $v$ is a linear map of $w$; bilinearity in both arguments.",
+                    "concept": "second-derivative-multi"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What's the key identity in the symmetry proof?",
+                    "answer": "$\\Delta(t,v,w) = f(p+tv+tw) - f(p+tv) - f(p+tw) + f(p)$ is symmetric in $v,w$, and $\\Delta/t^2 \\to (D^2f)_p(v,w)$.",
+                    "concept": "symmetry-mixed-partials"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Does mere existence of mixed partials imply they are equal?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove symmetry of $D^2 f$ at a point of differentiability.",
+                "rubric": "Must use symmetric $\\Delta$ and two MVT applications."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Construct a smooth function whose Taylor series at every rational point has radius of convergence 0.",
+            "detail": "$C^\\infty \\neq C^\\omega$: the bump function $e(x) = e^{-1/x}$ for $x>0$, 0 else, is smooth but its Taylor series at 0 is identically 0, so doesn't equal $e(x)$ for $x>0$. Analyticity requires convergence of Taylor series.",
+            "concepts": [
+              "taylor-polynomial",
+              "analytic-function"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Relate $C^r$ smoothness to Taylor polynomials and analyticity.",
+                "prior_knowledge": "Taylor's theorem with Lagrange remainder."
+              },
+              "core": {
+                "exposition": "$C^\\infty \\neq C^\\omega$: the bump function $e(x) = e^{-1/x}$ for $x>0$, 0 else, is smooth but its Taylor series at 0 is identically 0, so doesn't equal $e(x)$ for $x>0$. Analyticity requires convergence of Taylor series.",
+                "worked_example": "$e(h) = e^{-1/h}$ for $h > 0$. All $e^{(r)}(0) = 0$ (by L'Hôpital). Taylor series at 0 is 0 but $e(h) > 0$, so $e$ is not analytic at 0.",
+                "problem": "Construct a smooth function whose Taylor series at every rational point has radius of convergence 0."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Give the hierarchy of smoothness classes.",
+                    "answer": "$C^0 \\supset C^1 \\supset \\dots \\supset C^\\infty \\supset C^\\omega$, all inclusions strict.",
+                    "concept": "analytic-function"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "When does bounded derivative growth imply analyticity?",
+                    "answer": "If $\\limsup (M_r/r!)^{1/r} < \\infty$ on an interval, $f$ is analytic there.",
+                    "concept": "analytic-function"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why is every analytic function smooth, but not vice versa?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove $e(x) = e^{-1/x}$ (for $x > 0$, else 0) is smooth at 0.",
+                "rubric": "Induction plus L'Hôpital for each derivative."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Show $1/(1+x^2)$ has radius of convergence 1 at 0 despite being smooth on $\\mathbb{R}$.",
+            "detail": "A smooth $f$ is analytic iff it has locally bounded derivative growth rate $\\alpha = \\limsup (M_r/r!)^{1/r}$. Proof: if $\\alpha \\sigma < 1$ then Taylor converges uniformly on $[x-\\sigma, x+\\sigma]$.",
+            "concepts": [
+              "taylor-polynomial",
+              "analytic-function"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "State and apply the Analyticity Theorem.",
+                "prior_knowledge": "Taylor remainder in Lagrange form."
+              },
+              "core": {
+                "exposition": "A smooth $f$ is analytic iff it has locally bounded derivative growth rate $\\alpha = \\limsup (M_r/r!)^{1/r}$. Proof: if $\\alpha \\sigma < 1$ then Taylor converges uniformly on $[x-\\sigma, x+\\sigma]$.",
+                "worked_example": "$\\sin x$: $|f^{(r)}(x)| \\le 1$ for all $r,x$, so $\\alpha = 0$ and radius $R = \\infty$. Conclusion: $\\sin x$ is entire.",
+                "problem": "Show $1/(1+x^2)$ has radius of convergence 1 at 0 despite being smooth on $\\mathbb{R}$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Why is the radius of convergence of $1/(1+x^2)$ only 1?",
+                    "answer": "Complex singularities at $\\pm i$ obstruct convergence beyond $|x|=1$.",
+                    "concept": "analytic-function"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Key inequality in Analyticity Theorem?",
+                    "answer": "$|R_{r-1}(h)| \\le (M_r/r!)|h|^r \\le ((\\alpha+\\delta)\\sigma)^r \\to 0$.",
+                    "concept": "taylor-polynomial"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "What is the Identity Theorem for analytic functions and why does it fail for smooth ones?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove: uniformly bounded derivatives $\\Rightarrow$ analytic with $R = \\infty$.",
+                "rubric": "Show $\\alpha = 0$ and apply Theorem 26."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 26,
+        "phase": 10,
+        "title": "Implicit and Inverse Function Theorems",
+        "icon": "*",
+        "summary": "Local solvability via contraction mapping; inverse function theorem as special case of implicit.",
+        "key_insight": "Implicit solving $f(x,y)=c$ for $y=g(x)$ reduces to a contraction when $\\partial f/\\partial y$ is invertible.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Why does the IFT fail at $(1,0)$ for the unit circle?",
+            "detail": "Let $f: U \\subset \\mathbb{R}^n \\times \\mathbb{R}^m \\to \\mathbb{R}^m$ be $C^r$, $f(x_0, y_0) = z_0$, and $B = \\partial f/\\partial y|_{(x_0,y_0)}$ invertible. Then near $(x_0,y_0)$ the locus $f(x,y)=z_0$ is the graph of a unique $C^r$ function $y = g(x)$.",
+            "concepts": [
+              "implicit-function-theorem"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "State the Implicit Function Theorem and its hypothesis.",
+                "prior_knowledge": "Matrix invertibility."
+              },
+              "core": {
+                "exposition": "Let $f: U \\subset \\mathbb{R}^n \\times \\mathbb{R}^m \\to \\mathbb{R}^m$ be $C^r$, $f(x_0, y_0) = z_0$, and $B = \\partial f/\\partial y|_{(x_0,y_0)}$ invertible. Then near $(x_0,y_0)$ the locus $f(x,y)=z_0$ is the graph of a unique $C^r$ function $y = g(x)$.",
+                "worked_example": "$f(x,y) = x^2+y^2-1$ near $(0,1)$: $\\partial f/\\partial y = 2y = 2 \\neq 0$. Local implicit function: $y = \\sqrt{1-x^2}$, $C^\\infty$.",
+                "problem": "Why does the IFT fail at $(1,0)$ for the unit circle?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What's the key hypothesis in the IFT?",
+                    "answer": "Invertibility of $\\partial f/\\partial y$ at the base point.",
+                    "concept": "implicit-function-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What's the proof strategy?",
+                    "answer": "Recast $f(x,y)=0$ as a fixed-point equation $y = K_x(y)$ and show $K_x$ contracts.",
+                    "concept": "implicit-function-theorem"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why can't we just solve $f=0$ algebraically in general?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Verify IFT hypotheses for $e^x + y^3 + xy = 1$ near $(0,0)$.",
+                "rubric": "Compute $\\partial f/\\partial y$ at base point."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Find a $C^\\infty$ bijection $\\mathbb{R} \\to \\mathbb{R}$ whose inverse is not differentiable.",
+            "detail": "If $f: U \\to \\mathbb{R}^m$ is $C^r$ and $(Df)_p$ invertible, then $f$ is a local $C^r$ diffeomorphism. Proof: apply IFT to $F(x,y) = f(x) - y$, giving local right inverse $h$; symmetry argument shows $h$ is also a left inverse.",
+            "concepts": [
+              "inverse-function-theorem",
+              "diffeomorphism"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Deduce the Inverse Function Theorem from the IFT.",
+                "prior_knowledge": "IFT statement."
+              },
+              "core": {
+                "exposition": "If $f: U \\to \\mathbb{R}^m$ is $C^r$ and $(Df)_p$ invertible, then $f$ is a local $C^r$ diffeomorphism. Proof: apply IFT to $F(x,y) = f(x) - y$, giving local right inverse $h$; symmetry argument shows $h$ is also a left inverse.",
+                "worked_example": "$f(x,y) = (e^x\\cos y, e^x\\sin y)$: $Df = \\begin{bmatrix}e^x\\cos y & -e^x\\sin y\\\\e^x\\sin y & e^x\\cos y\\end{bmatrix}$, $\\det = e^{2x} \\neq 0$. Locally invertible everywhere (but not globally—it's $2\\pi$-periodic in $y$).",
+                "problem": "Find a $C^\\infty$ bijection $\\mathbb{R} \\to \\mathbb{R}$ whose inverse is not differentiable."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Why does $(Df)_p$ invertible force $m = n$?",
+                    "answer": "Invertible matrix is square.",
+                    "concept": "inverse-function-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What's a diffeomorphism vs. homeomorphism?",
+                    "answer": "Diffeo: bijection with $C^r$ inverse; homeo: bijection with continuous inverse. Diffeo is stronger.",
+                    "concept": "diffeomorphism"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why is IFT more flexible than IFT in weak-regularity settings?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Show $f(x) = x^3$ is a smooth bijection $\\mathbb{R} \\to \\mathbb{R}$ but not a diffeo.",
+                "rubric": "$(Df)_0 = 0$ not invertible; inverse $y^{1/3}$ not differentiable at 0."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Use Rank Theorem: if rank is constant $n$ at $p$, then $f$ locally embeds $U$ as $n$-dim disc.",
+            "detail": "If $f: U \\to \\mathbb{R}^m$ is $C^r$ with constant rank $k$ near $p$, then locally $f$ is $C^r$-equivalent to the linear projection $(x_1,\\dots,x_n) \\mapsto (x_1,\\dots,x_k,0,\\dots,0)$. Two diffeomorphisms (change of coordinates) linearize $f$.",
+            "concepts": [
+              "rank-theorem",
+              "diffeomorphism"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "State the Rank Theorem and its consequences.",
+                "prior_knowledge": "IFT and linear rank."
+              },
+              "core": {
+                "exposition": "If $f: U \\to \\mathbb{R}^m$ is $C^r$ with constant rank $k$ near $p$, then locally $f$ is $C^r$-equivalent to the linear projection $(x_1,\\dots,x_n) \\mapsto (x_1,\\dots,x_k,0,\\dots,0)$. Two diffeomorphisms (change of coordinates) linearize $f$.",
+                "worked_example": "Radial projection $\\pi: \\mathbb{R}^3 \\setminus 0 \\to S^2$, $v \\mapsto v/|v|$: constant rank 2; locally indistinguishable from linear projection $\\mathbb{R}^3 \\to \\mathbb{R}^2$.",
+                "problem": "Use Rank Theorem: if rank is constant $n$ at $p$, then $f$ locally embeds $U$ as $n$-dim disc."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What is 'C^r equivalent' for maps?",
+                    "answer": "$g = \\beta \\circ f \\circ \\alpha^{-1}$ for diffeomorphisms $\\alpha, \\beta$; commutative diagram.",
+                    "concept": "rank-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why does constant rank matter (vs. just rank $\\ge k$)?",
+                    "answer": "Needed to kill the $\\partial G_Y/\\partial y$ block, forcing the linearized form.",
+                    "concept": "rank-theorem"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "How does the Rank Theorem generalize both IFT and Inverse FT?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Apply Rank Theorem to describe the level sets of $f: \\mathbb{R}^3 \\to \\mathbb{R}$ with nonzero gradient.",
+                "rubric": "Level sets form a stack of $C^r$ 2-discs (Corollary 27)."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 27,
+        "phase": 10,
+        "title": "Multiple Integrals: Fubini and Change of Variables",
+        "icon": "*",
+        "summary": "Riemann integration on rectangles; Fubini's theorem; Jacobian change of variables.",
+        "key_insight": "Multiple integrals reduce to iterated ones (Fubini), and coordinate changes multiply by the Jacobian determinant.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Is the characteristic function of the unit disc Riemann integrable on $[-1,1]^2$?",
+            "detail": "$f: R = [a,b]\\times[c,d] \\to \\mathbb{R}$ is Riemann integrable iff bounded and its discontinuity set is a zero set (R-L Theorem). Zero set: for each $\\epsilon$, covered by open rectangles of total area $< \\epsilon$.",
+            "concepts": [
+              "riemann-integral"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Define the Riemann integral on a rectangle and state Riemann-Lebesgue.",
+                "prior_knowledge": "1D Riemann integration."
+              },
+              "core": {
+                "exposition": "$f: R = [a,b]\\times[c,d] \\to \\mathbb{R}$ is Riemann integrable iff bounded and its discontinuity set is a zero set (R-L Theorem). Zero set: for each $\\epsilon$, covered by open rectangles of total area $< \\epsilon$.",
+                "worked_example": "$\\chi_{\\mathbb{Q}^2 \\cap R}$ is discontinuous everywhere on $R$—not a zero set—so not Riemann integrable.",
+                "problem": "Is the characteristic function of the unit disc Riemann integrable on $[-1,1]^2$?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Riemann-Lebesgue criterion in 2D?",
+                    "answer": "Bounded + discontinuities form a (planar) zero set.",
+                    "concept": "riemann-integral"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What makes a set a zero set in $\\mathbb{R}^2$?",
+                    "answer": "For each $\\epsilon > 0$, countable cover by open rectangles with total area $< \\epsilon$.",
+                    "concept": "zero-set"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why is the boundary of a Riemann measurable set a zero set?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove the boundary of the unit disc is a zero set.",
+                "rubric": "Parameterize and cover with small rectangles."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "State Cavalieri's principle as a consequence of Fubini.",
+            "detail": "If $f$ is Riemann integrable on $R = [a,b]\\times[c,d]$, then $\\underline{F}(y) = \\underline{\\int_a^b} f(x,y)\\,dx$ and $\\overline{F}(y) = \\overline{\\int} f(x,y)\\,dx$ are integrable, and $\\iint_R f = \\int_c^d \\underline{F}\\,dy = \\int_c^d \\overline{F}\\,dy$. For a.e. $y$, the $x$-slice integral exists.",
+            "concepts": [
+              "riemann-integral"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "State Fubini's theorem and use it to compute integrals.",
+                "prior_knowledge": "Iterated integrals."
+              },
+              "core": {
+                "exposition": "If $f$ is Riemann integrable on $R = [a,b]\\times[c,d]$, then $\\underline{F}(y) = \\underline{\\int_a^b} f(x,y)\\,dx$ and $\\overline{F}(y) = \\overline{\\int} f(x,y)\\,dx$ are integrable, and $\\iint_R f = \\int_c^d \\underline{F}\\,dy = \\int_c^d \\overline{F}\\,dy$. For a.e. $y$, the $x$-slice integral exists.",
+                "worked_example": "$\\iint_{[0,1]^2} xy\\,dx\\,dy = \\int_0^1 \\int_0^1 xy\\,dx\\,dy = \\int_0^1 y/2\\,dy = 1/4$; same either order.",
+                "problem": "State Cavalieri's principle as a consequence of Fubini."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What's the ambiguity in Fubini?",
+                    "answer": "On a zero set of $y$-values, the inner integral $\\int f(x,y)dx$ may not exist; any choice between $\\underline{F}, \\overline{F}$ works.",
+                    "concept": "riemann-integral"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Cavalieri's principle in one line?",
+                    "answer": "Area = integral of slice lengths.",
+                    "concept": "riemann-integral"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why does Fubini fail for non-integrable functions?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Compute $\\iint_D xy$ where $D$ is the triangle $0 \\le y \\le x \\le 1$.",
+                "rubric": "Reduce via Fubini; answer $1/8$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Use polar coordinates to compute $\\iint_{x^2+y^2\\le 1} e^{-(x^2+y^2)}\\,dA$.",
+            "detail": "For $\\varphi: U \\to W$ a $C^1$ diffeomorphism and $f$ Riemann integrable on $W$: $\\int_{\\varphi(R)} f = \\int_R (f\\circ\\varphi)|\\mathrm{Jac}\\,\\varphi|$. Proof idea: $\\varphi$ is locally affine, and linear maps multiply volume by $|\\det|$.",
+            "concepts": [
+              "riemann-integral",
+              "diffeomorphism"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "State and apply the Change of Variables Formula.",
+                "prior_knowledge": "Jacobian determinant."
+              },
+              "core": {
+                "exposition": "For $\\varphi: U \\to W$ a $C^1$ diffeomorphism and $f$ Riemann integrable on $W$: $\\int_{\\varphi(R)} f = \\int_R (f\\circ\\varphi)|\\mathrm{Jac}\\,\\varphi|$. Proof idea: $\\varphi$ is locally affine, and linear maps multiply volume by $|\\det|$.",
+                "worked_example": "Polar: $\\varphi(r,\\theta) = (r\\cos\\theta, r\\sin\\theta)$, $|\\mathrm{Jac}| = r$. So $\\iint_{\\mathrm{disc}} f(x,y)\\,dA = \\int_0^{2\\pi}\\int_0^1 f(r\\cos\\theta,r\\sin\\theta)r\\,dr\\,d\\theta$.",
+                "problem": "Use polar coordinates to compute $\\iint_{x^2+y^2\\le 1} e^{-(x^2+y^2)}\\,dA$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Why does $|\\det|$ appear (not $\\det$)?",
+                    "answer": "Volume is unsigned; orientation-reversing diffeomorphisms still multiply volume by $|\\det|$.",
+                    "concept": "diffeomorphism"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Key lemma: how does a linear $T$ act on volume?",
+                    "answer": "$|T(S)| = |\\det T| \\cdot |S|$ for Riemann measurable $S$.",
+                    "concept": "riemann-integral"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why does the proof use elementary matrix decomposition?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove $|T(S)| = |\\det T||S|$ for shear matrices using Fubini.",
+                "rubric": "Direct integration of $\\chi_{\\Pi}$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 28,
+        "phase": 10,
+        "title": "Differential Forms and Stokes' Theorem",
+        "icon": "*",
+        "summary": "$k$-forms as functionals on cells; wedge product; exterior derivative; General Stokes $\\int_M d\\omega = \\int_{\\partial M} \\omega$.",
+        "key_insight": "One formula unifies FTC, Green, Gauss, and Stokes curl: $\\int_M d\\omega = \\int_{\\partial M} \\omega$.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Why is arclength NOT a 1-form?",
+            "detail": "A 1-form $fdx + gdy$ is the functional $\\varphi \\mapsto \\int_0^1 (f\\circ\\varphi)(x'(t)) + (g\\circ\\varphi)(y'(t))\\,dt$ on smooth paths $\\varphi: [0,1] \\to \\mathbb{R}^2$. $dx$ alone returns net $x$-variation; $fdx$ is $f$-weighted $x$-variation.",
+            "concepts": [
+              "riemann-integral"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Understand 1-forms as functionals on paths.",
+                "prior_knowledge": "Line integrals from calculus."
+              },
+              "core": {
+                "exposition": "A 1-form $fdx + gdy$ is the functional $\\varphi \\mapsto \\int_0^1 (f\\circ\\varphi)(x'(t)) + (g\\circ\\varphi)(y'(t))\\,dt$ on smooth paths $\\varphi: [0,1] \\to \\mathbb{R}^2$. $dx$ alone returns net $x$-variation; $fdx$ is $f$-weighted $x$-variation.",
+                "worked_example": "$\\omega = ydx$ on $\\varphi(t) = (\\cos t, \\sin t)$, $t \\in [0,2\\pi]$: $\\int_\\omega = \\int_0^{2\\pi}\\sin t(-\\sin t)dt = -\\pi$.",
+                "problem": "Why is arclength NOT a 1-form?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What does $dx$ measure as a functional?",
+                    "answer": "Net $x$-variation $x(1) - x(0)$ of the path.",
+                    "concept": "riemann-integral"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why must 1-forms change sign under parameter reversal?",
+                    "answer": "They are signed quantities; reversing orientation reverses sign.",
+                    "concept": "riemann-integral"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Interpret $\\int_C fdx+gdy$ physically as work done by a force field."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Compute $\\int_C xdy$ where $C$ is the unit circle counterclockwise.",
+                "rubric": "Answer $\\pi$; note this equals the enclosed area."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Compute $d\\omega$ for $\\omega = xdy\\wedge dz + ydz\\wedge dx + zdx\\wedge dy$.",
+            "detail": "Wedge: $dx\\wedge dy = -dy\\wedge dx$, $dx\\wedge dx = 0$. Exterior derivative: $d(f) = \\sum (\\partial f/\\partial x_i)dx_i$; for higher forms, $d\\omega = \\sum df_I \\wedge dx_I$. Key: $d^2 = 0$.",
+            "concepts": [
+              "riemann-integral"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Compute wedge products and exterior derivatives.",
+                "prior_knowledge": "Determinants and antisymmetry."
+              },
+              "core": {
+                "exposition": "Wedge: $dx\\wedge dy = -dy\\wedge dx$, $dx\\wedge dx = 0$. Exterior derivative: $d(f) = \\sum (\\partial f/\\partial x_i)dx_i$; for higher forms, $d\\omega = \\sum df_I \\wedge dx_I$. Key: $d^2 = 0$.",
+                "worked_example": "$\\omega = xy\\,dx + x^2\\,dy$: $d\\omega = d(xy)\\wedge dx + d(x^2)\\wedge dy = (ydx + xdy)\\wedge dx + 2xdx\\wedge dy = -xdx\\wedge dy \\ldots$ wait, recompute: $ydx\\wedge dx = 0$, $xdy\\wedge dx = -xdx\\wedge dy$, $2xdx\\wedge dy$. Total: $(2x - x)dx\\wedge dy = xdx\\wedge dy$.",
+                "problem": "Compute $d\\omega$ for $\\omega = xdy\\wedge dz + ydz\\wedge dx + zdx\\wedge dy$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Why does $d^2 = 0$?",
+                    "answer": "Follows from symmetry of mixed partials: $f_{xy} = f_{yx}$ kills cross terms.",
+                    "concept": "riemann-integral"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Product rule for wedge?",
+                    "answer": "$d(\\alpha\\wedge\\beta) = d\\alpha\\wedge\\beta + (-1)^k\\alpha\\wedge d\\beta$ for $k$-form $\\alpha$.",
+                    "concept": "riemann-integral"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why does $(-1)^k$ appear in the wedge product rule?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Verify $d^2\\omega = 0$ for $\\omega = f(x,y,z)dx$.",
+                "rubric": "Compute $d\\omega$ then $d(d\\omega)$; use $f_{yz} = f_{zy}$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Derive Gauss divergence from General Stokes with $\\omega = fdy\\wedge dz + gdz\\wedge dx + hdx\\wedge dy$.",
+            "detail": "General Stokes: $\\int_\\varphi d\\omega = \\int_{\\partial\\varphi}\\omega$ for any $(k+1)$-cell $\\varphi$ and $k$-form $\\omega$. Specializations: $k=0$ gives FTC; $k=1$ in $\\mathbb{R}^2$ gives Green; $k=1$ in $\\mathbb{R}^3$ gives curl Stokes; $k=2$ in $\\mathbb{R}^3$ gives Gauss divergence.",
+            "concepts": [
+              "riemann-integral"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "State General Stokes and derive classical vector calculus theorems.",
+                "prior_knowledge": "Green, Gauss, curl Stokes from calculus."
+              },
+              "core": {
+                "exposition": "General Stokes: $\\int_\\varphi d\\omega = \\int_{\\partial\\varphi}\\omega$ for any $(k+1)$-cell $\\varphi$ and $k$-form $\\omega$. Specializations: $k=0$ gives FTC; $k=1$ in $\\mathbb{R}^2$ gives Green; $k=1$ in $\\mathbb{R}^3$ gives curl Stokes; $k=2$ in $\\mathbb{R}^3$ gives Gauss divergence.",
+                "worked_example": "Green: $\\omega = fdx+gdy$, $d\\omega = (g_x-f_y)dx\\wedge dy$. Stokes gives $\\iint_D (g_x-f_y)\\,dA = \\oint_{\\partial D} fdx+gdy$.",
+                "problem": "Derive Gauss divergence from General Stokes with $\\omega = fdy\\wedge dz + gdz\\wedge dx + hdx\\wedge dy$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What is $d\\omega$ for the Gauss flux form?",
+                    "answer": "$\\mathrm{div}\\,F \\cdot dx\\wedge dy\\wedge dz$.",
+                    "concept": "riemann-integral"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Proof strategy for Stokes on a cube?",
+                    "answer": "Reduce to FTC on each edge of $\\partial I^{k+1}$ via Fubini; signs come from inclusion orientations.",
+                    "concept": "riemann-integral"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why is orientability needed to apply Stokes on manifolds?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Using Stokes, prove the Brouwer Fixed-Point Theorem implies no retraction $B^n \\to S^{n-1}$ exists.",
+                "rubric": "Retraction kills top-degree volume form via pullback, contradicting positive volume of $B^n$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 29,
+        "phase": 11,
+        "title": "Outer Measure and Measurability",
+        "icon": "∫",
+        "summary": "Lebesgue outer measure, zero sets, and the Carathéodory criterion for measurability.",
+        "key_insight": "Outer measure is defined by infimum of coverings; measurability means the set cleanly splits every test set.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Show $m^*(\\mathbb{Q}\\cap[0,1])=0$.",
+            "detail": "Lebesgue outer measure $m^*A$ is the infimum of $\\sum|I_k|$ over countable coverings of $A$ by open intervals. In $\\mathbb{R}^n$ replace intervals by boxes. Outer measure satisfies: $m^*\\emptyset=0$, monotonicity, countable subadditivity.",
+            "concepts": [
+              "zero-set"
+            ],
+            "notes": [
+              "outer-measure-intro"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Recall the definition of Lebesgue outer measure.",
+                "prior_knowledge": "Infimum, open intervals, countable sums."
+              },
+              "core": {
+                "exposition": "Lebesgue outer measure $m^*A$ is the infimum of $\\sum|I_k|$ over countable coverings of $A$ by open intervals. In $\\mathbb{R}^n$ replace intervals by boxes. Outer measure satisfies: $m^*\\emptyset=0$, monotonicity, countable subadditivity.",
+                "worked_example": "For $A=[0,1]$: any cover by $(a_k,b_k)$ has total length $\\geq 1$ (compactness argument), and $(−\\epsilon,1+\\epsilon)$ gives $1+2\\epsilon$, so $m^*A=1$.",
+                "problem": "Show $m^*(\\mathbb{Q}\\cap[0,1])=0$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the three axioms of outer measure.",
+                    "answer": "$m^*\\emptyset=0$; monotonicity ($A\\subset B\\Rightarrow m^*A\\leq m^*B$); countable subadditivity.",
+                    "concept": "zero-set"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Define a zero set.",
+                    "answer": "A set $Z$ with $m^*Z=0$: for each $\\epsilon>0$ there is a countable open-interval cover with total length $<\\epsilon$.",
+                    "concept": "zero-set"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why is the countable union of zero sets a zero set? Explain the $\\epsilon/2^k$ trick."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove that $m^*[a,b]=b-a$.",
+                "rubric": "Upper bound from $(a-\\epsilon,b+\\epsilon)$; lower bound by compactness/induction on finite subcover."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Show that if $E$ is measurable so is $E^c$.",
+            "detail": "$E$ is (Lebesgue) measurable if for every test set $X$, $m^*X=m^*(X\\cap E)+m^*(X\\cap E^c)$. The collection $\\mathcal{M}$ is a $\\sigma$-algebra, $m^*$ restricted to $\\mathcal{M}$ is countably additive, and all zero sets are measurable.",
+            "concepts": [
+              "zero-set"
+            ],
+            "notes": [
+              "measurability-caratheodory"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Master the Carathéodory measurability criterion.",
+                "prior_knowledge": "Outer measure, set operations."
+              },
+              "core": {
+                "exposition": "$E$ is (Lebesgue) measurable if for every test set $X$, $m^*X=m^*(X\\cap E)+m^*(X\\cap E^c)$. The collection $\\mathcal{M}$ is a $\\sigma$-algebra, $m^*$ restricted to $\\mathcal{M}$ is countably additive, and all zero sets are measurable.",
+                "worked_example": "Every zero set $Z$ is measurable: $m^*(X\\cap Z)\\leq m^*Z=0$ and $m^*(X\\cap Z^c)\\leq m^*X$, so subadditivity gives equality.",
+                "problem": "Show that if $E$ is measurable so is $E^c$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the Carathéodory criterion.",
+                    "answer": "$E$ is measurable iff $m^*X=m^*(X\\cap E)+m^*(X\\cap E^c)$ for every $X$.",
+                    "concept": "zero-set"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Name three closure properties of $\\mathcal{M}$.",
+                    "answer": "Closed under complement, countable union, countable intersection (i.e., a $\\sigma$-algebra).",
+                    "concept": "zero-set"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why is subadditivity automatic, so only superadditivity needs verification for measurability?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove that a countable union of measurable sets is measurable.",
+                "rubric": "Reduce to disjoint union, use finite additivity on test sets, take limit."
+              }
+            }
+          },
+          {
+            "tier": "bronze",
+            "task_index": 1,
+            "text": "Prove the Cantor set has outer measure zero using the $(2/3)^n$ covering.",
+            "detail": "Lebesgue outer measure: $m^*A=\\inf\\sum|I_k|$ over countable open-interval coverings. Axioms: $m^*\\emptyset=0$, monotonicity, countable subadditivity. Same idea in $\\mathbb{R}^n$ with open boxes.",
+            "concepts": [
+              "outer-measure"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Review outer measure axioms via Pugh's geometric setup.",
+                "prior_knowledge": "Intervals, countable coverings, infima."
+              },
+              "core": {
+                "exposition": "Lebesgue outer measure: $m^*A=\\inf\\sum|I_k|$ over countable open-interval coverings. Axioms: $m^*\\emptyset=0$, monotonicity, countable subadditivity. Same idea in $\\mathbb{R}^n$ with open boxes.",
+                "worked_example": "Show $m^*\\mathbb{Q}=0$: enumerate $\\mathbb{Q}=\\{q_k\\}$ and cover with $(q_k-\\epsilon/2^{k+1},q_k+\\epsilon/2^{k+1})$.",
+                "problem": "Prove the Cantor set has outer measure zero using the $(2/3)^n$ covering."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Define Lebesgue outer measure.",
+                    "answer": "Infimum of total length of countable open-interval coverings of $A$.",
+                    "concept": "outer-measure"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why is $m^*[a,b]=b-a$?",
+                    "answer": "Trivial upper bound; compactness and finite-cover argument gives lower bound.",
+                    "concept": "outer-measure"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why countable subadditivity uses $\\epsilon/2^n$ trick."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove $m^*(A\\cup B)\\leq m^*A+m^*B$ directly.",
+                "rubric": "Combine coverings of $A,B$; apply subadditivity."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 30,
+        "phase": 11,
+        "title": "The Lebesgue Integral and Convergence Theorems",
+        "icon": "∑",
+        "summary": "Measurable functions, the Lebesgue integral, and the three classical convergence theorems.",
+        "key_insight": "Lebesgue integration exchanges limits and integrals under mild domination or monotonicity hypotheses — far better than Riemann.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Show that $f$ Riemann integrable on $[a,b]$ implies $f$ Lebesgue integrable with equal integrals.",
+            "detail": "A function $f:\\mathbb{R}^n\\to[0,\\infty]$ is measurable if $\\{f>a\\}$ is measurable for each $a$. Its Lebesgue integral is $\\int f\\,dm=m(\\mathcal{U}f)$, the measure of the undergraph, equivalently the sup of integrals of simple functions $\\leq f$. For signed $f$, write $f=f^+-f^-$.",
+            "concepts": [
+              "riemann-integral",
+              "zero-set"
+            ],
+            "notes": [
+              "lebesgue-integral"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Define the Lebesgue integral via the undergraph / simple functions.",
+                "prior_knowledge": "Riemann integral, measurable sets."
+              },
+              "core": {
+                "exposition": "A function $f:\\mathbb{R}^n\\to[0,\\infty]$ is measurable if $\\{f>a\\}$ is measurable for each $a$. Its Lebesgue integral is $\\int f\\,dm=m(\\mathcal{U}f)$, the measure of the undergraph, equivalently the sup of integrals of simple functions $\\leq f$. For signed $f$, write $f=f^+-f^-$.",
+                "worked_example": "$\\chi_\\mathbb{Q}$ on $[0,1]$ is not Riemann integrable but is Lebesgue integrable with integral $0$, since $\\mathbb{Q}\\cap[0,1]$ is a zero set.",
+                "problem": "Show that $f$ Riemann integrable on $[a,b]$ implies $f$ Lebesgue integrable with equal integrals."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "When is $f$ Lebesgue measurable?",
+                    "answer": "When $\\{x:f(x)>a\\}$ is a measurable set for every $a\\in\\mathbb{R}$.",
+                    "concept": "riemann-integral"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "How does Lebesgue handle $\\chi_\\mathbb{Q}$?",
+                    "answer": "$\\mathbb{Q}$ is a zero set, so $\\int\\chi_\\mathbb{Q}=0$ (Riemann integral does not exist).",
+                    "concept": "zero-set"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Contrast the Riemann and Lebesgue approaches: partitioning domain vs. partitioning range."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove linearity of the Lebesgue integral for nonnegative measurable functions.",
+                "rubric": "Use simple functions and monotone convergence."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Evaluate $\\lim_{n\\to\\infty}\\int_0^1\\frac{nx}{1+n^2x^2}\\,dx$ and justify using DCT or direct computation.",
+            "detail": "MCT: $0\\leq f_n\\uparrow f$ a.e. implies $\\int f_n\\to\\int f$. Fatou: $\\int\\liminf f_n\\leq\\liminf\\int f_n$ for $f_n\\geq 0$. DCT: $f_n\\to f$ a.e. and $|f_n|\\leq g\\in L^1$ implies $\\int f_n\\to\\int f$. Under uniform convergence on a finite-measure set, interchange is automatic.",
+            "concepts": [
+              "riemann-integral",
+              "uniform-convergence"
+            ],
+            "notes": [
+              "convergence-theorems"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Apply MCT, Fatou, and DCT to exchange limit and integral.",
+                "prior_knowledge": "Lebesgue integral, pointwise a.e. convergence."
+              },
+              "core": {
+                "exposition": "MCT: $0\\leq f_n\\uparrow f$ a.e. implies $\\int f_n\\to\\int f$. Fatou: $\\int\\liminf f_n\\leq\\liminf\\int f_n$ for $f_n\\geq 0$. DCT: $f_n\\to f$ a.e. and $|f_n|\\leq g\\in L^1$ implies $\\int f_n\\to\\int f$. Under uniform convergence on a finite-measure set, interchange is automatic.",
+                "worked_example": "$f_n(x)=n\\chi_{(0,1/n)}$ on $[0,1]$: $f_n\\to 0$ a.e. but $\\int f_n=1$. No dominating $g\\in L^1$ exists, so DCT does not apply — consistent with the failure.",
+                "problem": "Evaluate $\\lim_{n\\to\\infty}\\int_0^1\\frac{nx}{1+n^2x^2}\\,dx$ and justify using DCT or direct computation."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the Dominated Convergence Theorem.",
+                    "answer": "If $f_n\\to f$ a.e. and $|f_n|\\leq g$ with $g$ integrable, then $\\int f_n\\to\\int f$ and $\\int|f_n-f|\\to 0$.",
+                    "concept": "riemann-integral"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "When does Fatou give equality?",
+                    "answer": "When additionally the sequence converges and is dominated (or is monotone), so DCT/MCT applies.",
+                    "concept": "uniform-convergence"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain via the growing-steeple example why a dominating function is essential in DCT."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Use DCT to justify differentiation past the integral for $F(y)=\\int_0^\\infty e^{-x}\\cos(xy)\\,dx$.",
+                "rubric": "Verify pointwise differentiation, find integrable dominator for $\\partial_y$ integrand, conclude $F'(y)=\\int_0^\\infty\\partial_y[\\cdots]\\,dx$."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Evaluate $\\lim_{n\\to\\infty}\\int_0^\\infty \\frac{n x}{1+n^2x^2}\\,dx$. Does DCT apply?",
+            "detail": "For measurable $f_n\\geq 0$: (MCT) $f_n\\uparrow f\\Rightarrow\\int f_n\\uparrow\\int f$; (Fatou) $\\int\\liminf f_n\\leq\\liminf\\int f_n$; (DCT) if $f_n\\to f$ a.e. and $|f_n|\\leq g$ with $\\int g<\\infty$, then $\\int f_n\\to\\int f$. All follow from undergraph pictures and measure (dis)continuity.",
+            "concepts": [
+              "measurability",
+              "monotone-convergence-theorem",
+              "fatou-lemma",
+              "dominated-convergence-theorem"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Unify the three basic convergence theorems via undergraphs.",
+                "prior_knowledge": "Outer measure, measurable sets."
+              },
+              "core": {
+                "exposition": "For measurable $f_n\\geq 0$: (MCT) $f_n\\uparrow f\\Rightarrow\\int f_n\\uparrow\\int f$; (Fatou) $\\int\\liminf f_n\\leq\\liminf\\int f_n$; (DCT) if $f_n\\to f$ a.e. and $|f_n|\\leq g$ with $\\int g<\\infty$, then $\\int f_n\\to\\int f$. All follow from undergraph pictures and measure (dis)continuity.",
+                "worked_example": "Apply MCT to $f_n(x)=x^n$ on $[0,1/2]$: $f_n\\uparrow 0$ and $\\int f_n=1/(n+1)2^{n+1}\\to 0$.",
+                "problem": "Evaluate $\\lim_{n\\to\\infty}\\int_0^\\infty \\frac{n x}{1+n^2x^2}\\,dx$. Does DCT apply?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the Dominated Convergence Theorem.",
+                    "answer": "$f_n\\to f$ a.e. and $|f_n|\\leq g$ integrable $\\Rightarrow$ $\\int f_n\\to\\int f$.",
+                    "concept": "dominated-convergence-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why can Fatou's inequality be strict?",
+                    "answer": "Steeple functions: $\\int f_n=1$, liminf is 0 function; strict inequality holds.",
+                    "concept": "fatou-lemma"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain the role of the dominator $g$ — what goes wrong without it?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Use MCT to show $\\int\\sum f_k=\\sum\\int f_k$ for $f_k\\geq 0$.",
+                "rubric": "Apply to partial sums $F_n\\uparrow\\sum f_k$; integrals pass through."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 31,
+        "phase": 12,
+        "title": "Sequences, Series, and Uniform Convergence Mastery",
+        "icon": "*",
+        "summary": "Integrate sequence/series convergence with function space topology.",
+        "key_insight": "Uniform convergence preserves continuity and integrability; the sup norm turns C^0 into a complete space.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Prove every convergent sequence is bounded.",
+            "detail": "A sequence in R converges iff it is Cauchy. Completeness of R is equivalent to the LUB property.",
+            "concepts": [
+              "convergent-sequence",
+              "cauchy-sequence"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Recall Cauchy criterion in R.",
+                "prior_knowledge": "Definition of convergence via epsilon-N."
+              },
+              "core": {
+                "exposition": "A sequence in R converges iff it is Cauchy. Completeness of R is equivalent to the LUB property.",
+                "worked_example": "Show 1/n is Cauchy: given ε, pick N>2/ε; for n,k≥N, |1/n-1/k|<ε.",
+                "problem": "Prove every convergent sequence is bounded."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State CCC for sequences.",
+                    "answer": "$(a_n)$ converges iff $\\forall \\epsilon>0\\exists N$ with $|a_n-a_k|<\\epsilon$ for $n,k\\geq N$.",
+                    "concept": "cauchy-sequence"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why does Cauchy imply bounded?",
+                    "answer": "Take ε=1; tail lies in interval of length 2; finitely many earlier terms bounded.",
+                    "concept": "cauchy-sequence"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain in your own words why completeness of R equals CCC."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove the sequence $a_n=\\sum_{k=1}^n 1/k^2$ converges.",
+                "rubric": "Bound partial-sum differences via integral comparison to show Cauchy."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Show $f_n(x)=x/n$ converges uniformly on $[0,1]$ but not on $\\mathbb{R}$.",
+            "detail": "$f_n\\rightrightarrows f$ means $\\|f_n-f\\|_\\infty\\to 0$. $(C^0[a,b],\\|\\cdot\\|_\\infty)$ is complete. Uniform limits of continuous functions are continuous.",
+            "concepts": [
+              "uniform-convergence",
+              "function-space",
+              "sup-norm"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Distinguish pointwise from uniform convergence.",
+                "prior_knowledge": "Metric space convergence."
+              },
+              "core": {
+                "exposition": "$f_n\\rightrightarrows f$ means $\\|f_n-f\\|_\\infty\\to 0$. $(C^0[a,b],\\|\\cdot\\|_\\infty)$ is complete. Uniform limits of continuous functions are continuous.",
+                "worked_example": "$f_n(x)=x^n$ on $[0,1]$: pointwise limit discontinuous, so convergence cannot be uniform.",
+                "problem": "Show $f_n(x)=x/n$ converges uniformly on $[0,1]$ but not on $\\mathbb{R}$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What does completeness of $C^0([a,b],\\mathbb{R})$ with sup norm mean?",
+                    "answer": "Every uniformly Cauchy sequence of continuous functions converges uniformly to a continuous limit.",
+                    "concept": "function-space"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "State the Weierstrass M-test.",
+                    "answer": "If $\\|f_k\\|\\leq M_k$ and $\\sum M_k<\\infty$, then $\\sum f_k$ converges uniformly and absolutely.",
+                    "concept": "uniform-convergence"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why does uniform convergence commute with integration but not always with differentiation?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove that the uniform limit of Riemann integrable functions is Riemann integrable and integrals converge.",
+                "rubric": "Use Riemann-Lebesgue or direct ε-argument with sup-norm bound."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Decide if $\\{f_n(x)=\\sin(nx)\\}$ is equicontinuous on $[0,1]$.",
+            "detail": "Arzelà-Ascoli: a bounded equicontinuous sequence in $C^0([a,b])$ has a uniformly convergent subsequence. Equivalently, a subset of $C^0$ is compact iff it is closed, bounded, and equicontinuous.",
+            "concepts": [
+              "equicontinuity",
+              "arzela-ascoli",
+              "compactness"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Characterize compactness in function spaces.",
+                "prior_knowledge": "Heine-Borel in $\\mathbb{R}^n$ and sequential compactness."
+              },
+              "core": {
+                "exposition": "Arzelà-Ascoli: a bounded equicontinuous sequence in $C^0([a,b])$ has a uniformly convergent subsequence. Equivalently, a subset of $C^0$ is compact iff it is closed, bounded, and equicontinuous.",
+                "worked_example": "If $f_n$ are differentiable with $|f_n'|\\leq M$ and $|f_n(x_0)|\\leq C$, then $(f_n)$ is equicontinuous and bounded, hence has a uniformly convergent subsequence.",
+                "problem": "Decide if $\\{f_n(x)=\\sin(nx)\\}$ is equicontinuous on $[0,1]$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Define equicontinuity.",
+                    "answer": "For each $\\epsilon>0$ there is $\\delta>0$ with $|s-t|<\\delta\\Rightarrow|f_n(s)-f_n(t)|<\\epsilon$ for all $n$.",
+                    "concept": "equicontinuity"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "State Arzelà-Ascoli.",
+                    "answer": "Bounded + equicontinuous sequence in $C^0$ on a compact set has a uniformly convergent subsequence.",
+                    "concept": "arzela-ascoli"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why does the closed unit ball of $C^0[0,1]$ fail to be compact, in contrast to $\\mathbb{R}^n$?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Use Arzelà-Ascoli to extract a convergent subsequence from solutions of $y'=f(x,y)$ with uniform Lipschitz bound.",
+                "rubric": "Verify equicontinuity via bounded derivative and pointwise boundedness from initial data."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 32,
+        "phase": 12,
+        "title": "Approximation, Fixed Points, and Analyticity",
+        "icon": "*",
+        "summary": "Polynomial approximation, contractions, and power series behavior.",
+        "key_insight": "Density of polynomials, contraction fixed points, and analytic continuation all rest on uniform estimates.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Approximate $|x|$ on $[-1,1]$ by a polynomial to within $0.01$.",
+            "detail": "Weierstrass: polynomials are dense in $C^0([a,b],\\mathbb{R})$. Stone-Weierstrass generalizes to any subalgebra of $C^0(M)$ (M compact) that separates points and vanishes nowhere.",
+            "concepts": [
+              "weierstrass-approximation",
+              "stone-weierstrass"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Recall density of polynomials.",
+                "prior_knowledge": "Continuity on compact intervals, sup norm."
+              },
+              "core": {
+                "exposition": "Weierstrass: polynomials are dense in $C^0([a,b],\\mathbb{R})$. Stone-Weierstrass generalizes to any subalgebra of $C^0(M)$ (M compact) that separates points and vanishes nowhere.",
+                "worked_example": "Bernstein polynomials $B_n f(x)=\\sum\\binom{n}{k}f(k/n)x^k(1-x)^{n-k}$ converge uniformly to $f$.",
+                "problem": "Approximate $|x|$ on $[-1,1]$ by a polynomial to within $0.01$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the Stone-Weierstrass hypotheses.",
+                    "answer": "Subalgebra $\\mathcal{A}\\subset C^0(M)$, $M$ compact, $\\mathcal{A}$ separates points and vanishes nowhere.",
+                    "concept": "stone-weierstrass"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why are trigonometric polynomials dense in $C(S^1)$?",
+                    "answer": "They form a subalgebra separating points and containing constants; apply Stone-Weierstrass on the compact circle.",
+                    "concept": "weierstrass-approximation"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why Stone-Weierstrass fails on $\\mathbb{R}$ without compactness."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Is $\\{f\\in C[0,1]:f(0)=0\\}$ dense? Identify what fails.",
+                "rubric": "Recognize it's an algebra separating points but vanishes at 0, so density holds only within subspace."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Show $x'=\\sqrt{|x|},x(0)=0$ need not have a unique solution—why does Picard fail?",
+            "detail": "Banach Fixed-Point: a contraction on a complete metric space has a unique fixed point. Picard applies it to $\\Phi(\\gamma)(t)=p+\\int_0^t F(\\gamma(s))ds$ on a small time interval.",
+            "concepts": [
+              "contraction-mapping",
+              "picard-theorem"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Use contractions to solve ODEs.",
+                "prior_knowledge": "Complete metric spaces, Lipschitz condition."
+              },
+              "core": {
+                "exposition": "Banach Fixed-Point: a contraction on a complete metric space has a unique fixed point. Picard applies it to $\\Phi(\\gamma)(t)=p+\\int_0^t F(\\gamma(s))ds$ on a small time interval.",
+                "worked_example": "For $x'=x, x(0)=1$: $\\Phi(\\gamma)(t)=1+\\int_0^t\\gamma(s)ds$ is a contraction on $C([-\\tau,\\tau])$ with $\\tau<1$, yielding $\\gamma(t)=e^t$.",
+                "problem": "Show $x'=\\sqrt{|x|},x(0)=0$ need not have a unique solution—why does Picard fail?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State Banach's Contraction Principle.",
+                    "answer": "If $f:M\\to M$ has $d(fx,fy)\\leq kd(x,y)$ with $k<1$ and $M$ complete, $f$ has a unique fixed point; iterates converge to it.",
+                    "concept": "contraction-mapping"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What hypothesis fails for $\\sqrt{|x|}$?",
+                    "answer": "Lipschitz continuity of the vector field fails at 0.",
+                    "concept": "picard-theorem"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why does the contraction factor $\\tau L<1$ determine the existence time in Picard?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Solve $y'=y^2$, $y(0)=1$ using Picard iteration and describe the interval of existence.",
+                "rubric": "Construct iterates, identify blow-up at $t=1$, note local (not global) existence."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Show $\\sin x$ is analytic on $\\mathbb{R}$ by bounding its derivatives uniformly.",
+            "detail": "A smooth $f$ is analytic iff its derivative growth rate $\\alpha=\\limsup\\sqrt[r]{M_r/r!}$ is locally finite. Then Taylor series converges to $f$ on intervals of length $<1/\\alpha$.",
+            "concepts": [
+              "analytic-function",
+              "taylor-polynomial",
+              "uniform-convergence"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Characterize analytic functions via derivative growth.",
+                "prior_knowledge": "Power series convergence, Taylor remainder."
+              },
+              "core": {
+                "exposition": "A smooth $f$ is analytic iff its derivative growth rate $\\alpha=\\limsup\\sqrt[r]{M_r/r!}$ is locally finite. Then Taylor series converges to $f$ on intervals of length $<1/\\alpha$.",
+                "worked_example": "$e(x)=e^{-1/x}$ for $x>0$ has all derivatives zero at 0 yet is nonzero; so it is smooth but not analytic.",
+                "problem": "Show $\\sin x$ is analytic on $\\mathbb{R}$ by bounding its derivatives uniformly."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the Analyticity Theorem.",
+                    "answer": "A smooth function is analytic iff it has locally bounded derivative growth rate.",
+                    "concept": "analytic-function"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why is $1/(1+x^2)$ analytic with radius 1 at 0 though smooth on all of $\\mathbb{R}$?",
+                    "answer": "Its complex extension has poles at $\\pm i$, forcing the radius of convergence to be 1.",
+                    "concept": "analytic-function"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why analyticity propagates but smoothness does not."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Determine if $f(x)=\\sum x^n/n!$ defines an analytic function and identify its radius.",
+                "rubric": "Apply root/ratio test to find $R=\\infty$; identify $f=e^x$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 33,
+        "phase": 12,
+        "title": "Linear Algebra and Differentiation in R^n",
+        "icon": "*",
+        "summary": "Linear transformations, Fréchet derivative, higher derivatives, and symmetry.",
+        "key_insight": "The Fréchet derivative is the best linear approximation; symmetry of mixed partials reflects symmetry of the second derivative.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Compute $\\|S\\|$ for the shear $S(x,y)=(x+y,y)$.",
+            "detail": "For linear $T:V\\to W$, $\\|T\\|=\\sup\\{|Tv|/|v|:v\\neq 0\\}$. $\\|T\\|<\\infty$ iff $T$ is continuous iff $T$ is uniformly continuous. Every linear map on a finite-dimensional space is continuous.",
+            "concepts": [
+              "operator-norm",
+              "linear-map-continuity"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Recall operator norm basics.",
+                "prior_knowledge": "Norms on vector spaces."
+              },
+              "core": {
+                "exposition": "For linear $T:V\\to W$, $\\|T\\|=\\sup\\{|Tv|/|v|:v\\neq 0\\}$. $\\|T\\|<\\infty$ iff $T$ is continuous iff $T$ is uniformly continuous. Every linear map on a finite-dimensional space is continuous.",
+                "worked_example": "For $T:\\mathbb{R}^2\\to\\mathbb{R}^2$ with matrix $\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$, $\\|T\\|=3$.",
+                "problem": "Compute $\\|S\\|$ for the shear $S(x,y)=(x+y,y)$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "What is the operator norm?",
+                    "answer": "$\\|T\\|=\\sup|Tv|/|v|$ over nonzero $v$; it equals the maximal stretch.",
+                    "concept": "operator-norm"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why is every linear map on $\\mathbb{R}^n$ continuous?",
+                    "answer": "Finite-dimensionality gives $\\|T\\|\\leq nM$ with $M$ the max image of basis vectors; hence bounded, hence continuous.",
+                    "concept": "linear-map-continuity"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why on an infinite-dimensional normed space, a linear map can fail to be continuous."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove $\\|T\\circ S\\|\\leq\\|T\\|\\cdot\\|S\\|$.",
+                "rubric": "Apply definition: $|TSv|\\leq\\|T\\||Sv|\\leq\\|T\\|\\|S\\||v|$."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Compute $D(g\\circ f)$ where $f(x,y)=xy$ and $g(t)=\\sin t$.",
+            "detail": "$f$ is differentiable at $p$ iff $f(p+v)=f(p)+(Df)_p v+R(v)$ with $|R(v)|/|v|\\to 0$. Chain rule: $D(g\\circ f)_p=(Dg)_{f(p)}\\circ (Df)_p$. Leibniz for bilinear $\\beta$: $D\\beta(f,g)v=\\beta(Df v,g)+\\beta(f,Dg v)$.",
+            "concepts": [
+              "frechet-derivative",
+              "chain-rule-multi",
+              "leibniz-rule-multi"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Differentiate multivariable functions abstractly.",
+                "prior_knowledge": "Linear approximation in 1D."
+              },
+              "core": {
+                "exposition": "$f$ is differentiable at $p$ iff $f(p+v)=f(p)+(Df)_p v+R(v)$ with $|R(v)|/|v|\\to 0$. Chain rule: $D(g\\circ f)_p=(Dg)_{f(p)}\\circ (Df)_p$. Leibniz for bilinear $\\beta$: $D\\beta(f,g)v=\\beta(Df v,g)+\\beta(f,Dg v)$.",
+                "worked_example": "$f(x,y)=(x^2y,xy^2)$: $(Df)_{(1,1)}=\\begin{pmatrix}2&1\\\\1&2\\end{pmatrix}$.",
+                "problem": "Compute $D(g\\circ f)$ where $f(x,y)=xy$ and $g(t)=\\sin t$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Give the sublinearity condition for the Fréchet derivative.",
+                    "answer": "$|R(v)|/|v|\\to 0$ as $v\\to 0$, where $R=f(p+v)-f(p)-Tv$.",
+                    "concept": "frechet-derivative"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "State the multivariable chain rule.",
+                    "answer": "$D(g\\circ f)_p=(Dg)_{f(p)}\\circ(Df)_p$.",
+                    "concept": "chain-rule-multi"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why do partial derivatives existing not imply differentiability?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove if $f:\\mathbb{R}^n\\to\\mathbb{R}^m$ has continuous partials, it is differentiable.",
+                "rubric": "Use telescoping path argument from Theorem 8."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Show $f(x,y)=xy(x^2-y^2)/(x^2+y^2)$ has $f_{xy}(0,0)\\neq f_{yx}(0,0)$ and identify which hypothesis of symmetry fails.",
+            "detail": "If $(D^2 f)_p$ exists, it is a symmetric bilinear map $\\mathbb{R}^n\\times\\mathbb{R}^n\\to\\mathbb{R}^m$; equivalently $\\partial^2 f/\\partial x_i\\partial x_j=\\partial^2 f/\\partial x_j\\partial x_i$. The $C^1$ MVT gives $f(q)-f(p)=\\int_0^1 (Df)_{p+t(q-p)}dt\\,(q-p)$.",
+            "concepts": [
+              "second-derivative-multi",
+              "symmetry-mixed-partials",
+              "mean-value-theorem-multi"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Understand second derivatives as symmetric bilinear forms.",
+                "prior_knowledge": "First Fréchet derivative, bilinear maps."
+              },
+              "core": {
+                "exposition": "If $(D^2 f)_p$ exists, it is a symmetric bilinear map $\\mathbb{R}^n\\times\\mathbb{R}^n\\to\\mathbb{R}^m$; equivalently $\\partial^2 f/\\partial x_i\\partial x_j=\\partial^2 f/\\partial x_j\\partial x_i$. The $C^1$ MVT gives $f(q)-f(p)=\\int_0^1 (Df)_{p+t(q-p)}dt\\,(q-p)$.",
+                "worked_example": "For $f(x,y)=x^2 y^3$: $f_{xy}=6xy^2=f_{yx}$.",
+                "problem": "Show $f(x,y)=xy(x^2-y^2)/(x^2+y^2)$ has $f_{xy}(0,0)\\neq f_{yx}(0,0)$ and identify which hypothesis of symmetry fails."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "When are mixed partials guaranteed equal?",
+                    "answer": "When the second derivative exists at the point, or when the second partials exist nearby and are continuous at the point.",
+                    "concept": "symmetry-mixed-partials"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "State the $C^1$ Mean Value Theorem.",
+                    "answer": "$f(q)-f(p)=T(q-p)$ where $T=\\int_0^1 (Df)_{p+t(q-p)}dt$ is the average derivative along the segment.",
+                    "concept": "mean-value-theorem-multi"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why is second-order differentiability a pointwise condition that still yields global symmetry of bilinear maps?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Verify the Leibniz rule for higher derivatives of a product of smooth functions.",
+                "rubric": "Expand $D^r(fg)$ via induction; match binomial-coefficient form."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 34,
+        "phase": 12,
+        "title": "Implicit, Inverse, and Rank Theorems",
+        "icon": "*",
+        "summary": "Solve equations locally and understand constant-rank maps.",
+        "key_insight": "Constant-rank maps are locally equivalent to linear projections, unifying the Implicit, Inverse, and Rank Theorems.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Verify the hypothesis fails at $(1,0)$ and explain geometrically.",
+            "detail": "If $F:U\\to\\mathbb{R}^m$ is $C^r$, $F(x_0,y_0)=0$, and $\\partial F/\\partial y(x_0,y_0)$ is invertible, then locally $y=g(x)$ is $C^r$ with $F(x,g(x))=0$.",
+            "concepts": [
+              "implicit-function-theorem"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Solve $F(x,y)=0$ for $y$ in terms of $x$.",
+                "prior_knowledge": "Jacobian matrices."
+              },
+              "core": {
+                "exposition": "If $F:U\\to\\mathbb{R}^m$ is $C^r$, $F(x_0,y_0)=0$, and $\\partial F/\\partial y(x_0,y_0)$ is invertible, then locally $y=g(x)$ is $C^r$ with $F(x,g(x))=0$.",
+                "worked_example": "$F(x,y)=x^2+y^2-1$ at $(0,1)$: $\\partial F/\\partial y=2\\neq 0$; $g(x)=\\sqrt{1-x^2}$.",
+                "problem": "Verify the hypothesis fails at $(1,0)$ and explain geometrically."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the Implicit Function Theorem conclusion.",
+                    "answer": "Locally there exists a unique $C^r$ function $y=g(x)$ with $F(x,g(x))=c$.",
+                    "concept": "implicit-function-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "What replaces invertibility of $\\partial F/\\partial y$?",
+                    "answer": "Being a linear isomorphism on the relevant block.",
+                    "concept": "implicit-function-theorem"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Why does the proof rely on a contraction mapping $K_x(y)=-B^{-1}(Ax+R(x,y))$?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Apply the theorem to $xe^y+ye^x=0$ near (0,0) and compute $g'(0)$.",
+                "rubric": "Invertibility check, implicit differentiation yields $g'(0)=-1$."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Find where $f(x,y)=(x^2-y^2,2xy)$ is not a local diffeomorphism.",
+            "detail": "If $f:U\\to\\mathbb{R}^n$ is $C^r$ and $(Df)_p$ is invertible, then $f$ is a local $C^r$ diffeomorphism near $p$. Proved via the Implicit Function Theorem applied to $F(x,y)=f(x)-y$.",
+            "concepts": [
+              "inverse-function-theorem",
+              "diffeomorphism"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Recognize when maps are local diffeomorphisms.",
+                "prior_knowledge": "Implicit function theorem."
+              },
+              "core": {
+                "exposition": "If $f:U\\to\\mathbb{R}^n$ is $C^r$ and $(Df)_p$ is invertible, then $f$ is a local $C^r$ diffeomorphism near $p$. Proved via the Implicit Function Theorem applied to $F(x,y)=f(x)-y$.",
+                "worked_example": "$f(x,y)=(e^x\\cos y,e^x\\sin y)$: $\\det Df=e^{2x}\\neq 0$, so $f$ is a local diffeomorphism everywhere.",
+                "problem": "Find where $f(x,y)=(x^2-y^2,2xy)$ is not a local diffeomorphism."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the Inverse Function Theorem.",
+                    "answer": "$C^r$ map with invertible derivative at $p$ is a local $C^r$ diffeomorphism at $p$.",
+                    "concept": "inverse-function-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why does $x\\mapsto x^3$ fail?",
+                    "answer": "Derivative vanishes at 0; inverse $x^{1/3}$ not differentiable there.",
+                    "concept": "diffeomorphism"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explain why the Implicit and Inverse Function Theorems are equivalent."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove: if $f$ is $C^r$ with nonvanishing Jacobian on $U$, $f$ is an open map (sends open sets to open sets).",
+                "rubric": "Local diffeomorphism implies local homeomorphism, hence open."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "What does constant rank $k=n$ (full rank, $n\\leq m$) say locally? Constant rank $k=m$?",
+            "detail": "A $C^r$ map of constant rank $k$ is locally $C^r$-equivalent to the projection $(x_1,\\ldots,x_n)\\mapsto(x_1,\\ldots,x_k,0,\\ldots,0)$. Proof: translate, linearize, straighten with two diffeomorphisms.",
+            "concepts": [
+              "rank-theorem"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Normalize constant-rank maps.",
+                "prior_knowledge": "Inverse and implicit function theorems."
+              },
+              "core": {
+                "exposition": "A $C^r$ map of constant rank $k$ is locally $C^r$-equivalent to the projection $(x_1,\\ldots,x_n)\\mapsto(x_1,\\ldots,x_k,0,\\ldots,0)$. Proof: translate, linearize, straighten with two diffeomorphisms.",
+                "worked_example": "Radial projection $\\pi(v)=v/|v|$ on $\\mathbb{R}^3\\setminus\\{0\\}$ has constant rank 2; locally looks like $(x,y,z)\\mapsto(x,y,0)$.",
+                "problem": "What does constant rank $k=n$ (full rank, $n\\leq m$) say locally? Constant rank $k=m$?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "State the Rank Theorem's conclusion.",
+                    "answer": "Locally, a constant-rank-$k$ map is $C^r$-equivalent to linear projection onto a $k$-plane.",
+                    "concept": "rank-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Why is constant (not just initial) rank required?",
+                    "answer": "Rank can only increase under perturbation; the normal form needs it to stay constant in a neighborhood.",
+                    "concept": "rank-theorem"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Interpret the Rank Theorem as a generalization of both implicit and inverse function theorems."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Use the Rank Theorem to show level sets of a submersion are smooth submanifolds.",
+                "rubric": "Apply the normal form $(x,y)\\mapsto x$; level sets $\\{x=c\\}$ are planes locally."
+              }
+            }
           }
         ]
       }
@@ -7747,6 +11226,122 @@
       {
         "id": "sup-norm",
         "label": "Sup Norm"
+      },
+      {
+        "id": "connected-space",
+        "label": "Connected Space"
+      },
+      {
+        "id": "path-connected",
+        "label": "Path-Connected Space"
+      },
+      {
+        "id": "equicontinuity",
+        "label": "Equicontinuity"
+      },
+      {
+        "id": "arzela-ascoli",
+        "label": "Arzelà–Ascoli Theorem"
+      },
+      {
+        "id": "weierstrass-approximation",
+        "label": "Weierstrass Approximation"
+      },
+      {
+        "id": "stone-weierstrass",
+        "label": "Stone–Weierstrass Theorem"
+      },
+      {
+        "id": "baire-theorem",
+        "label": "Baire Category Theorem"
+      },
+      {
+        "id": "nowhere-differentiable",
+        "label": "Nowhere-Differentiable Function"
+      },
+      {
+        "id": "picard-theorem",
+        "label": "Picard Existence Theorem"
+      },
+      {
+        "id": "contraction-mapping",
+        "label": "Contraction Mapping Principle"
+      },
+      {
+        "id": "operator-norm",
+        "label": "Operator Norm"
+      },
+      {
+        "id": "conorm",
+        "label": "Conorm"
+      },
+      {
+        "id": "linear-map-continuity",
+        "label": "Continuity of Linear Maps"
+      },
+      {
+        "id": "frechet-derivative",
+        "label": "Fréchet (Total) Derivative"
+      },
+      {
+        "id": "partial-derivative",
+        "label": "Partial Derivative"
+      },
+      {
+        "id": "chain-rule-multi",
+        "label": "Multivariable Chain Rule"
+      },
+      {
+        "id": "leibniz-rule-multi",
+        "label": "Multivariable Leibniz Rule"
+      },
+      {
+        "id": "mean-value-theorem-multi",
+        "label": "Multivariable Mean Value Theorem"
+      },
+      {
+        "id": "second-derivative-multi",
+        "label": "Second Derivative (Bilinear)"
+      },
+      {
+        "id": "symmetry-mixed-partials",
+        "label": "Symmetry of Mixed Partials"
+      },
+      {
+        "id": "implicit-function-theorem",
+        "label": "Implicit Function Theorem"
+      },
+      {
+        "id": "inverse-function-theorem",
+        "label": "Inverse Function Theorem"
+      },
+      {
+        "id": "diffeomorphism",
+        "label": "Diffeomorphism"
+      },
+      {
+        "id": "rank-theorem",
+        "label": "Rank Theorem"
+      },
+      {
+        "id": "outer-measure",
+        "label": "Outer Measure"
+      },
+      {
+        "id": "measurability",
+        "label": "Lebesgue Measurability"
+      },
+      {
+        "id": "monotone-convergence-theorem",
+        "label": "Monotone Convergence Theorem"
+      },
+      {
+        "id": "dominated-convergence-theorem",
+        "label": "Dominated Convergence Theorem"
+      },
+      {
+        "id": "fatou-lemma",
+        "label": "Fatou's Lemma"
       }
     ],
     "prereqs": [
@@ -7945,6 +11540,342 @@
       [
         "uniform-convergence",
         "sup-norm"
+      ],
+      [
+        "connected-space",
+        "continuous-function"
+      ],
+      [
+        "connected-space",
+        "open-set"
+      ],
+      [
+        "path-connected",
+        "connected-space"
+      ],
+      [
+        "path-connected",
+        "continuous-function"
+      ],
+      [
+        "equicontinuity",
+        "continuous-function"
+      ],
+      [
+        "equicontinuity",
+        "uniform-convergence"
+      ],
+      [
+        "arzela-ascoli",
+        "equicontinuity"
+      ],
+      [
+        "arzela-ascoli",
+        "compactness"
+      ],
+      [
+        "arzela-ascoli",
+        "function-space"
+      ],
+      [
+        "weierstrass-approximation",
+        "uniform-convergence"
+      ],
+      [
+        "weierstrass-approximation",
+        "sup-norm"
+      ],
+      [
+        "stone-weierstrass",
+        "weierstrass-approximation"
+      ],
+      [
+        "stone-weierstrass",
+        "compactness"
+      ],
+      [
+        "baire-theorem",
+        "completeness"
+      ],
+      [
+        "baire-theorem",
+        "metric-space"
+      ],
+      [
+        "nowhere-differentiable",
+        "baire-theorem"
+      ],
+      [
+        "nowhere-differentiable",
+        "uniform-convergence"
+      ],
+      [
+        "contraction-mapping",
+        "completeness"
+      ],
+      [
+        "picard-theorem",
+        "contraction-mapping"
+      ],
+      [
+        "picard-theorem",
+        "arzela-ascoli"
+      ],
+      [
+        "operator-norm",
+        "triangle-inequality"
+      ],
+      [
+        "conorm",
+        "operator-norm"
+      ],
+      [
+        "linear-map-continuity",
+        "operator-norm"
+      ],
+      [
+        "linear-map-continuity",
+        "continuous-function"
+      ],
+      [
+        "frechet-derivative",
+        "linear-map-continuity"
+      ],
+      [
+        "frechet-derivative",
+        "derivada"
+      ],
+      [
+        "partial-derivative",
+        "frechet-derivative"
+      ],
+      [
+        "chain-rule-multi",
+        "frechet-derivative"
+      ],
+      [
+        "leibniz-rule-multi",
+        "frechet-derivative"
+      ],
+      [
+        "mean-value-theorem-multi",
+        "chain-rule-multi"
+      ],
+      [
+        "mean-value-theorem-multi",
+        "mean-value-theorem"
+      ],
+      [
+        "second-derivative-multi",
+        "frechet-derivative"
+      ],
+      [
+        "symmetry-mixed-partials",
+        "second-derivative-multi"
+      ],
+      [
+        "implicit-function-theorem",
+        "contraction-mapping"
+      ],
+      [
+        "implicit-function-theorem",
+        "chain-rule-multi"
+      ],
+      [
+        "inverse-function-theorem",
+        "implicit-function-theorem"
+      ],
+      [
+        "diffeomorphism",
+        "inverse-function-theorem"
+      ],
+      [
+        "rank-theorem",
+        "inverse-function-theorem"
+      ],
+      [
+        "rank-theorem",
+        "diffeomorphism"
+      ],
+      [
+        "picard-theorem",
+        "contraction-mapping"
+      ],
+      [
+        "picard-theorem",
+        "completeness"
+      ],
+      [
+        "first-order-system",
+        "picard-theorem"
+      ],
+      [
+        "frechet-derivative",
+        "linear-map-continuity"
+      ],
+      [
+        "partial-derivative",
+        "frechet-derivative"
+      ],
+      [
+        "chain-rule-multi",
+        "frechet-derivative"
+      ],
+      [
+        "mean-value-theorem-multi",
+        "mean-value-theorem"
+      ],
+      [
+        "mean-value-theorem-multi",
+        "frechet-derivative"
+      ],
+      [
+        "second-derivative-multi",
+        "frechet-derivative"
+      ],
+      [
+        "symmetry-mixed-partials",
+        "second-derivative-multi"
+      ],
+      [
+        "implicit-function-theorem",
+        "contraction-mapping"
+      ],
+      [
+        "implicit-function-theorem",
+        "frechet-derivative"
+      ],
+      [
+        "inverse-function-theorem",
+        "implicit-function-theorem"
+      ],
+      [
+        "diffeomorphism",
+        "inverse-function-theorem"
+      ],
+      [
+        "rank-theorem",
+        "inverse-function-theorem"
+      ],
+      [
+        "rank-theorem",
+        "implicit-function-theorem"
+      ],
+      [
+        "riemann-integral",
+        "zero-set"
+      ],
+      [
+        "darboux-integral",
+        "riemann-integral"
+      ],
+      [
+        "fundamental-theorem-calculus",
+        "riemann-integral"
+      ],
+      [
+        "uniform-convergence",
+        "sup-norm"
+      ],
+      [
+        "function-space",
+        "uniform-convergence"
+      ],
+      [
+        "arzela-ascoli",
+        "equicontinuity"
+      ],
+      [
+        "arzela-ascoli",
+        "compactness"
+      ],
+      [
+        "weierstrass-approximation",
+        "uniform-convergence"
+      ],
+      [
+        "stone-weierstrass",
+        "weierstrass-approximation"
+      ],
+      [
+        "baire-theorem",
+        "completeness"
+      ],
+      [
+        "nowhere-differentiable",
+        "baire-theorem"
+      ],
+      [
+        "picard-theorem",
+        "contraction-mapping"
+      ],
+      [
+        "contraction-mapping",
+        "completeness"
+      ],
+      [
+        "operator-norm",
+        "linear-map-continuity"
+      ],
+      [
+        "frechet-derivative",
+        "operator-norm"
+      ],
+      [
+        "chain-rule-multi",
+        "frechet-derivative"
+      ],
+      [
+        "partial-derivative",
+        "frechet-derivative"
+      ],
+      [
+        "second-derivative-multi",
+        "frechet-derivative"
+      ],
+      [
+        "symmetry-mixed-partials",
+        "second-derivative-multi"
+      ],
+      [
+        "implicit-function-theorem",
+        "contraction-mapping"
+      ],
+      [
+        "inverse-function-theorem",
+        "implicit-function-theorem"
+      ],
+      [
+        "diffeomorphism",
+        "inverse-function-theorem"
+      ],
+      [
+        "rank-theorem",
+        "inverse-function-theorem"
+      ],
+      [
+        "measurability",
+        "outer-measure"
+      ],
+      [
+        "monotone-convergence-theorem",
+        "measurability"
+      ],
+      [
+        "dominated-convergence-theorem",
+        "measurability"
+      ],
+      [
+        "fatou-lemma",
+        "measurability"
+      ],
+      [
+        "dominated-convergence-theorem",
+        "monotone-convergence-theorem"
+      ],
+      [
+        "fatou-lemma",
+        "monotone-convergence-theorem"
       ]
     ]
   }

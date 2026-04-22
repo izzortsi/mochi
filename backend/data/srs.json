@@ -214,5 +214,53 @@
     "due": "2026-04-20",
     "last_reviewed": null,
     "lapses": 0
+  },
+  "c7-d1-bronze-0::r1": {
+    "id": "c7-d1-bronze-0::r1",
+    "card_uid": "c7-d1-bronze-0",
+    "prompt_id": "r1",
+    "prompt": "State the three axioms defining an equivalence relation.",
+    "answer": "Reflexive ($s\\sim s$), symmetric ($s\\sim s'\\Rightarrow s'\\sim s$), transitive ($s\\sim s'\\sim s''\\Rightarrow s\\sim s''$).",
+    "concept": "equivalence-relation",
+    "box": 1,
+    "due": "2026-04-21",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c7-d1-bronze-0::r2": {
+    "id": "c7-d1-bronze-0::r2",
+    "card_uid": "c7-d1-bronze-0",
+    "prompt_id": "r2",
+    "prompt": "How do you prove two sets $A$ and $B$ are equal?",
+    "answer": "Show each element of $A$ belongs to $B$ and each element of $B$ belongs to $A$ (mutual inclusion).",
+    "concept": "set",
+    "box": 1,
+    "due": "2026-04-21",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c4-d2-silver-1::r1": {
+    "id": "c4-d2-silver-1::r1",
+    "card_uid": "c4-d2-silver-1",
+    "prompt_id": "r1",
+    "prompt": "How many variables does a first-order system have if the original ODE has order 3?",
+    "answer": "3 variables: $y_1, y_2, y_3$ representing $x, \\dot{x}, \\ddot{x}$.",
+    "concept": "first-order-system",
+    "box": 1,
+    "due": "2026-04-21",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c4-d2-silver-1::r2": {
+    "id": "c4-d2-silver-1::r2",
+    "card_uid": "c4-d2-silver-1",
+    "prompt_id": "r2",
+    "prompt": "For the system from $(\\dot{y}_1, \\dot{y}_2)$, is the system linear if the original scalar ODE is linear?",
+    "answer": "Yes, if the original scalar equation is linear, the first-order system is also linear.",
+    "concept": "first-order-system",
+    "box": 1,
+    "due": "2026-04-21",
+    "last_reviewed": null,
+    "lapses": 0
   }
 }

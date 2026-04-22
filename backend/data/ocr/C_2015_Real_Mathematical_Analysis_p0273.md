@@ -1,0 +1,9 @@
+The space $X$ is $\sigma$-compact if it is a countable union of compact sets, $X = \bigcup X_i$. For example $\mathbb{Z}, \mathbb{Q}, \mathbb{R}$ and $\mathbb{R}^m$ are $\sigma$-compact, while any uncountable set equipped with the discrete metric is not $\sigma$-compact.
+
+38 Theorem If $X$ is $\sigma$-compact and if $(f_n)$ is a sequence of pointwise equicontinuous functions such that for each $x \in X$, the sequence $(f_n(x))$ lies in a compact subset of $Y$, then $(f_n)$ has a subsequence that converges uniformly to a limit on each compact subset of $X$.
+
+Proof Express $X$ as $\bigcup X_i$ with $X_i$ compact. By Theorem 36 $(f_n|_{X_i})$ is uniformly equicontinuous. By Theorem 37 there is a subsequence $f_{1,n}$ that converges uniformly on $X_1$, and it has a sub-subsequence $f_{2,n}$ that converges uniformly on $X_2$, and so on. A diagonal subsequence $(g_m)$ converges uniformly on each $X_i$. Thus $(g_m)$ converges pointwise. If $A \subset X$ is compact, then $(g_m|_A)$ is uniformly equicontinuous and pointwise convergent. By the proof of the Arzelà Ascoli propagation theorem, $(g_m|_A)$ converges uniformly.
+
+39 Corollary If $(f_n)$ is a sequence of pointwise equicontinuous functions $\mathbb{R} \to \mathbb{R}$, and for some $x_0 \in \mathbb{R}, (f_n(x_0))$ is bounded then $(f_n)$ has a subsequence that converges uniformly on every compact subset of $\mathbb{R}$.
+
+Proof Let $[a,b]$ be any interval containing $x_0$. By Theorem 36, the restrictions of $f_n$ to $[a,b]$ are uniformly equicontinuous, and there is a $\delta > 0$ such that if $t, s \in [a,b]$ then $|t-s| < \delta$ implies that $|f_n(t)-f_n(s)| < 1$. Each point $x \in [a,b]$ can be reached in $\leq N$ steps of length $< \delta$, starting at $x_0$, if $N > (b-a)/\delta$. Thus $|f_n(x)| \leq |f_n(x_0)| + N$, and $(f_n(x))$ is bounded for each $x \in \mathbb{R}$. A bounded subset of $\mathbb{R}$ has compact closure and Theorem 38 gives the corollary.

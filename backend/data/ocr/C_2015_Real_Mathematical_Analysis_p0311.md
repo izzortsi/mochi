@@ -1,0 +1,15 @@
+where $\mathfrak{e}(x, y) \to 0$ as $(x, y) \to (0, 0)$. Since $gx \to 0$ as $x \to 0$, the error factor $\mathfrak{e}(x, gx)$ does tend to 0 as $x \to 0$, the remainder is sublinear with respect to $x$, and $g$ is differentiable at 0 with $(Dg)_0 = -B^{-1}A$.
+
+All facts proved at the origin hold equally at points $(x, y)$ on the zero locus near the origin. For the origin is nothing special. Thus, $g$ is differentiable at $x$ and $(Dg)_x = -B_x^{-1} \circ A_x$ where
+
+$$A_x = \frac{\partial f(x, gx)}{\partial x} \quad B_x = \frac{\partial f(x, gx)}{\partial y}.$$
+
+Since $gx$ is continuous (being differentiable) and $f$ is $C^1$, $A_x$ and $B_x$ are continuous functions of $x$. According to Cramer’s Rule for finding the inverse of a matrix, the entries of $B_x^{-1}$ are explicit, algebraic functions of the entries of $B_x$, and therefore they depend continuously on $x$. Therefore $g$ is $C^1$.
+
+To complete the proof that $g$ is $C^r$ we apply induction. For $2 \leq r < \infty$, assume the theorem is true for $r - 1$. When $f$ is $C^r$ this implies that $g$ is $C^{r-1}$. Because they are composites of $C^{r-1}$ functions, $A_x$ and $B_x$ are $C^{r-1}$. Because the entries of $B_x^{-1}$ depend algebraically on the entries of $B_x$, $B_x^{-1}$ is also $C^{r-1}$. Therefore $(Dg)_x$ is $C^{r-1}$ and $g$ is $C^r$. If $f$ is $C^\infty$, we have just shown that $g$ is $C^r$ for all finite $r$ and thus $g$ is $C^\infty$.
+
+Exercises 35 and 36 discuss the properties of matrix inversion avoiding Cramer’s Rule and finite dimensionality.
+
+Next we are going to deduce the Inverse Function Theorem from the Implicit Function Theorem. A fair question is: Since they turn out to be equivalent theorems, why not do it the other way around? Well, in my own experience the Implicit Function Theorem is more basic and flexible. I have at times needed forms of the Implicit Function Theorem with weaker differentiability hypotheses respecting $x$ than $y$ and they do not follow from the Inverse Function Theorem. For example, if we merely assume that $B = \partial f(x_0, y_0)/\partial y$ is invertible, that $\partial f(x, y)/\partial x$ is a continuous function of $(x, y)$, and that $f$ is continuous (or Lipschitz) then the local implicit function of $f$ is continuous (or Lipschitz). It is not necessary to assume that $f$ is of class $C^1$.
+
+Just as a homeomorphism is a continuous bijection whose inverse is continuous, so a $C^r$ diffeomorphism is a $C^r$ bijection whose inverse is $C^r$, $1 \leq r \leq \infty$. The inverse being $C^r$ is not automatic. The example to remember is $f(x) = x^3$. It is a $C^\infty$ bijection $\mathbb{R} \to \mathbb{R}$ and is a homeomorphism but not a diffeomorphism because its inverse fails to be differentiable at the origin. Since differentiability implies continuity, every diffeomorphism is a homeomorphism.

@@ -1,0 +1,15 @@
+Appendix C  Borel versus Lebesgue
+
+A valid criticism of Lebesgue theory as described in this chapter is that it conflicts a bit with topology, and problems arise if you try to think of Lebesgue measure theory in category terms. For example, not all homeomorphisms are meseomorphisms and composition of Lebesgue measurable functions can fail to be Lebesgue measurable. See Exercise 79.
+
+To repair these defects Armand Borel proposed replacing the $\sigma$-algebra $\mathcal{M}$ of Lebesgue measurable sets with a smaller one, $\mathcal{B} \subset \mathcal{M}$, and restricting Lebesgue measure to it. $\mathcal{B}$ is simply the intersection of all $\sigma$-algebras that include the open sets. There is one such $\sigma$-algebra, namely $\mathcal{M}$, so $\mathcal{B}$ exists and is contained in $\mathcal{M}$. It includes all $G_{\delta}$-sets (countable intersections of open sets), all $G_{\delta\sigma}$-sets (countable unions of $G_{\delta}$-sets), etc. Thus $\mathcal{B} \subset \mathcal{B} \subset \mathcal{B} \subset \cdots \subset \mathcal{B}$, where $\mathcal{B}$ is the collection of all $G_{\delta}$-sets, $\mathcal{B}_{\delta\sigma}$ is the collection of all $G_{\delta\sigma}$-sets, etc. Likewise $\mathcal{F}_{\sigma} \subset \mathcal{F}_{\delta\sigma} \subset \cdots \subset \mathcal{B}$ for $F_{\sigma}$-sets, $F_{\delta\sigma}$-sets, etc. See Exercise 8.
+
+A set is **Borel measurable** if it belongs to $\mathcal{B}$, and a nonnegative function is Borel measurable if its undergraph is a Borel measurable set. Equivalently a function is Borel measurable if the preimage of a Borel set is always Borel. The measure of $E \in \mathcal{B}$ is its Lebesgue measure and the integral of a Borel measurable function is its Lebesgue integral. All continuous functions are Borel measurable and the composition of Borel measurable functions is Borel measurable. That’s good.
+
+However, $\mathcal{B}$ has its own defects, the main one being that it is not complete. That is, not all subsets of a zero set are Borel measurable. (Recall that every subset of a zero set is Lebesgue measurable.) In the same vein, the limit of a sequence of Borel measurable functions that converge almost everywhere can fail to be Borel measurable. See Exercise 80.
+
+I chose not to use the Borel approach in this chapter because it adds an extra layer of complication to the basic Lebesgue theory. You could not state the Monotone Convergence Theorem as “if $f_n$ is (Borel) measurable and $f_n \uparrow f$ then $\int f_n \uparrow \int f$.” No. You would also need to assume $f$ is Borel measurable.
+
+But the real reason I chose $\mathcal{M}$ over $\mathcal{B}$ is that I like pathology. The fact that there are ugly zero sets – zero sets carried by homeomorphisms to nonmeasurable sets – is eye-opening. I want you to see them as part of the Lebesgue picture.
+
+Here are a couple of relevant remarks from mathoverflow in answer to the question “Why do probabilists take random variables to be Borel (and not Lebesgue) measurable?”

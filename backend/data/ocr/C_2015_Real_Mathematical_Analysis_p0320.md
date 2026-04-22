@@ -1,0 +1,1 @@
+Figure 115 $f$ has constant rank 2.

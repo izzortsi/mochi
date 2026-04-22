@@ -3177,5 +3177,89 @@
       "cauchy-schwarz-discriminant"
     ],
     "source": ""
+  },
+  {
+    "id": "outer-measure-intro",
+    "title": "Lebesgue Outer Measure",
+    "domain": "measure theory",
+    "tags": [
+      "measure",
+      "outer-measure",
+      "zero-set"
+    ],
+    "content": "**Outer measure** $m^*A=\\inf\\{\\sum|I_k|:\\{I_k\\}\\text{ open cover of }A\\}$.\n\nSatisfies:\n- $m^*\\emptyset=0$\n- monotonicity\n- countable subadditivity\n\n**Zero set**: $m^*Z=0$. Countable unions of zero sets are zero. $\\mathbb{Q}$, Cantor set are zero sets in $\\mathbb{R}$.\n\nFor closed intervals/boxes, $m^*=$ length/volume (grid proof).",
+    "related": [
+      "measurability-caratheodory"
+    ],
+    "source": ""
+  },
+  {
+    "id": "measurability-caratheodory",
+    "title": "Carathéodory Measurability",
+    "domain": "measure theory",
+    "tags": [
+      "measurability",
+      "sigma-algebra"
+    ],
+    "content": "$E$ is **measurable** iff $m^*X=m^*(X\\cap E)+m^*(X\\cap E^c)$ for every test set $X$.\n\n**Theorem**: $\\mathcal{M}$ is a $\\sigma$-algebra; $m^*|_\\mathcal{M}$ is countably additive; all zero sets are measurable.\n\nOpen sets, closed sets, Borel sets, and all their unions/intersections are measurable. Nonmeasurable sets exist (Vitali) but require the axiom of choice.",
+    "related": [
+      "outer-measure-intro",
+      "lebesgue-integral"
+    ],
+    "source": ""
+  },
+  {
+    "id": "convergence-theorems",
+    "title": "MCT, Fatou, DCT",
+    "domain": "integration",
+    "tags": [
+      "convergence",
+      "limit-integral"
+    ],
+    "content": "**MCT** (Monotone Convergence): $0\\leq f_n\\uparrow f$ a.e. $\\Rightarrow\\int f_n\\to\\int f$.\n\n**Fatou**: $f_n\\geq 0\\Rightarrow\\int\\liminf f_n\\leq\\liminf\\int f_n$.\n\n**DCT** (Dominated Convergence): $f_n\\to f$ a.e., $|f_n|\\leq g\\in L^1\\Rightarrow\\int f_n\\to\\int f$ and $\\int|f_n-f|\\to 0$.\n\nKey applications: differentiation past the integral, Fubini, $L^p$ completeness.",
+    "related": [
+      "lebesgue-integral"
+    ],
+    "source": ""
+  },
+  {
+    "id": "pugh-convergence-hierarchy",
+    "title": "Hierarchy of Convergence Notions",
+    "domain": "Real Analysis",
+    "tags": [
+      "convergence",
+      "function-spaces"
+    ],
+    "content": "Pointwise ⇒ almost-everywhere ⇒ in-measure, but not conversely. Uniform convergence is strictly stronger than pointwise; $L^1$ convergence is strictly stronger than in-measure. Egoroff: a.e. implies nearly uniform on finite-measure sets. Lusin: measurable implies nearly continuous. Littlewood's three principles unify these.",
+    "related": [
+      "pugh-undergraph"
+    ],
+    "source": ""
+  },
+  {
+    "id": "pugh-undergraph",
+    "title": "Undergraph Viewpoint of Lebesgue Integration",
+    "domain": "Real Analysis",
+    "tags": [
+      "lebesgue",
+      "integration"
+    ],
+    "content": "$\\int f = m(\\mathcal{U}f)$ where $\\mathcal{U}f=\\{(x,y):0\\leq y<f(x)\\}$. Makes MCT, DCT, Fatou visual: measure (dis)continuity of nested undergraphs translates directly to integral convergence. Also justifies linearity via the shear $T_f(x,y)=(x,y+f(x))$ as a meseometry.",
+    "related": [
+      "pugh-convergence-hierarchy"
+    ],
+    "source": ""
+  },
+  {
+    "id": "pugh-rank-normal-form",
+    "title": "Rank Theorem as Normal Form",
+    "domain": "Multivariable Calculus",
+    "tags": [
+      "implicit",
+      "rank"
+    ],
+    "content": "Constant-rank maps are locally $C^r$-equivalent to linear projection. This unifies Inverse FT (rank $=n$), Implicit FT (used in proof), and submersion/immersion theorems. Proof strategy: translate, linearize target/source, straighten via two diffeomorphisms chosen from Jacobian blocks.",
+    "related": [],
+    "source": ""
   }
 ]
