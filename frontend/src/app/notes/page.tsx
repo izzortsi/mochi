@@ -83,30 +83,32 @@ export default function NotesPage() {
   if (error && !graphData) return <div className="opacity-50">{error}</div>;
 
   return (
-    <div className="mx-[calc(50%-50vw)] w-screen px-4 pr-[26rem]">
-      <h1 className="font-display text-3xl mb-2">Knowledge Base</h1>
-      <p className="text-sm opacity-60 mb-4">Atomic notes extracted from your courses. Click a node to read.</p>
+    <div className="ml-[-6rem] mr-[calc(50%-50vw+11.5rem)]">
+      <div className="mx-auto max-w-3xl text-center">
+        <h1 className="font-display text-3xl mb-2">Knowledge Base</h1>
+        <p className="text-sm opacity-60 mb-4">Atomic notes extracted from your courses. Click a node to read.</p>
 
-      <div className="flex items-center gap-3 mb-4">
-        <div className="flex rounded-lg border border-[#2a2a2a] overflow-hidden">
-          <button
-            className={`px-3 py-1.5 text-sm ${tab === "graph" ? "bg-[#2a2a2a]" : "hover:bg-[#1a1a1a]"}`}
-            onClick={() => setTab("graph")}
-          >Graph</button>
-          <button
-            className={`px-3 py-1.5 text-sm ${tab === "list" ? "bg-[#2a2a2a]" : "hover:bg-[#1a1a1a]"}`}
-            onClick={() => setTab("list")}
-          >List</button>
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <div className="flex rounded-lg border border-[#2a2a2a] overflow-hidden">
+            <button
+              className={`px-3 py-1.5 text-sm ${tab === "graph" ? "bg-[#2a2a2a]" : "hover:bg-[#1a1a1a]"}`}
+              onClick={() => setTab("graph")}
+            >Graph</button>
+            <button
+              className={`px-3 py-1.5 text-sm ${tab === "list" ? "bg-[#2a2a2a]" : "hover:bg-[#1a1a1a]"}`}
+              onClick={() => setTab("list")}
+            >List</button>
+          </div>
+          <select
+            value={filter}
+            onChange={e => setFilter(e.target.value)}
+            className="bg-[#0c0c0c] border border-[#2a2a2a] rounded px-2 py-1 text-sm"
+          >
+            <option value="">All domains</option>
+            {domains.map(d => <option key={d} value={d}>{d}</option>)}
+          </select>
+          <span className="text-xs opacity-50">{filtered.length} notes</span>
         </div>
-        <select
-          value={filter}
-          onChange={e => setFilter(e.target.value)}
-          className="bg-[#0c0c0c] border border-[#2a2a2a] rounded px-2 py-1 text-sm"
-        >
-          <option value="">All domains</option>
-          {domains.map(d => <option key={d} value={d}>{d}</option>)}
-        </select>
-        <span className="text-xs opacity-50">{filtered.length} notes</span>
       </div>
 
       {tab === "graph" && filteredGraph && filteredGraph.nodes.length > 0 && (

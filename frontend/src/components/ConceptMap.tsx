@@ -71,11 +71,20 @@ export function ConceptMap({ data, cacheKey, height = 480 }: { data: ConceptMapD
     return () => { sim.stop(); };
   }, [data, cacheKey, height]);
 
-  const onWheel = (e: React.WheelEvent) => {
-    e.preventDefault();
-    const factor = e.deltaY > 0 ? 0.9 : 1.1;
-    setTransform(t => ({ ...t, k: Math.max(0.3, Math.min(3, t.k * factor)) }));
-  };
+  // React's onWheel is registered passive in React 17+, so e.preventDefault()
+  // there is silently ignored and the page scrolls instead of zooming.
+  // Attach the listener manually with { passive: false } to claim the wheel.
+  useEffect(() => {
+    const el = svgRef.current;
+    if (!el) return;
+    const handler = (e: WheelEvent) => {
+      e.preventDefault();
+      const factor = e.deltaY > 0 ? 0.9 : 1.1;
+      setTransform(t => ({ ...t, k: Math.max(0.3, Math.min(3, t.k * factor)) }));
+    };
+    el.addEventListener("wheel", handler, { passive: false });
+    return () => el.removeEventListener("wheel", handler);
+  }, []);
 
   const dragState = useRef<{ dragging: boolean; nodeId: string | null; panStart: { x: number; y: number } | null }>({
     dragging: false, nodeId: null, panStart: null,
@@ -122,7 +131,6 @@ export function ConceptMap({ data, cacheKey, height = 480 }: { data: ConceptMapD
       ref={svgRef}
       width="100%"
       height={height}
-      onWheel={onWheel}
       onMouseDown={onMouseDownBg}
       onMouseMove={onMouseMove}
       onMouseUp={onMouseUp}
