@@ -17,7 +17,7 @@ services:
   - type: web
     name: mochi-backend
     runtime: python
-    plan: pro
+    plan: starter
     rootDir: backend
     # uv is the package manager declared in pyproject.toml; install it
     # then sync the locked dependencies (no dev deps in production).
@@ -45,7 +45,7 @@ services:
   - type: web
     name: mochi-frontend
     runtime: node
-    plan: pro
+    plan: starter
     rootDir: frontend
     buildCommand: npm ci && npm run build
     startCommand: npm start

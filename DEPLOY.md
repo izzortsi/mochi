@@ -1,9 +1,12 @@
 # Deploying to Render
 
 The repo ships a `render.yaml` Blueprint that provisions both services and
-the persistent Disk. Steps below cover the one-time setup that the
-Blueprint can't do for you (cross-service URL wiring, OAuth token seed,
-optional initial-data load).
+the persistent Disk on the Starter plan (~$14/mo for both web services
+plus ~$1.25/mo for the 5 GB disk). Bump to `standard` or `pro` later if
+the OCR or LLM workload outgrows the 0.5 GB RAM cap.
+
+Steps below cover the one-time setup that the Blueprint can't do for you
+(cross-service URL wiring, OAuth token seed, optional initial-data load).
 
 ## 1. Apply the Blueprint
 
