@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 
 /*
@@ -356,6 +356,37 @@ const FIGURES = [
   "      (_|____|__/_)(_|____|_/_)                                   (_\\____|_)     (_|___|__/_)       ",
 ];
 
+// Single figure remaining — used in the manByFire phase. Reuses figure 2's
+// posture (already leaning toward the fire) so it reads as a quiet vigil.
+const FIGURES_ONE = [
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                       ,-.                                                                          ",
+  "                      ( o \\__                                                                       ",
+  "                      /|   |~~                                                                      ",
+  "                     (_|___|_/_)                                                                    ",
+];
+
 // ---------------------------------------------------------------------------
 // Ground (static)
 // ---------------------------------------------------------------------------
@@ -384,32 +415,42 @@ function placeBlock(grid: string[][], block: string[], row: number, col: number)
 }
 
 // ---------------------------------------------------------------------------
-// Scene 1 — EGG METEOR SHOWER. Several glowing eggs streak in from the sky
-// at staggered phases. Each is an oval head (`O`/`o`) with a fading dust
-// trail. The civilization at the fire watches them come.
+// METEOR SHOWER. Distant streaks across the upper sky — the meteors
+// themselves stay above the mountain line so they read as far away. The
+// rocks the player will walk to live on the foreground ground band; this
+// layer is just the sky drama.
 // ---------------------------------------------------------------------------
 
 const EGG_METEOR_PARAMS = [
-  { col: 8,  row0: 0, period: 11, len: 4 },
-  { col: 22, row0: 3, period: 9,  len: 4 },
-  { col: 38, row0: 1, period: 10, len: 5 },
-  { col: 56, row0: 0, period: 12, len: 5 },
-  { col: 70, row0: 2, period: 8,  len: 4 },
-  { col: 86, row0: 4, period: 11, len: 4 },
+  { col: 4,  row0: 0, period: 7, len: 3 },
+  { col: 14, row0: 1, period: 6, len: 2 },
+  { col: 22, row0: 0, period: 7, len: 3 },
+  { col: 31, row0: 2, period: 5, len: 2 },
+  { col: 38, row0: 0, period: 6, len: 3 },
+  { col: 47, row0: 1, period: 7, len: 3 },
+  { col: 55, row0: 0, period: 6, len: 2 },
+  { col: 63, row0: 2, period: 7, len: 3 },
+  { col: 71, row0: 0, period: 5, len: 2 },
+  { col: 79, row0: 1, period: 7, len: 3 },
+  { col: 87, row0: 0, period: 6, len: 2 },
+  { col: 94, row0: 2, period: 5, len: 2 },
 ];
 
+// Meteors only paint into the upper sky band — capping rowsTall to 7 keeps
+// every streak above the mountain silhouette at row 7.
+const METEOR_ROWS = 7;
+
 function makeEggMeteorFrame(t: number): string[] {
-  const rowsTall = 14; // covers from sky down past the horizon
-  const grid = blank(rowsTall, COLS);
+  const grid = blank(METEOR_ROWS, COLS);
   for (let i = 0; i < EGG_METEOR_PARAMS.length; i++) {
     const m = EGG_METEOR_PARAMS[i];
     const phase = (t + i * 2) % m.period;
     for (let k = 0; k < m.len; k++) {
       const row = m.row0 + phase - k;
       const col = m.col + k; // diagonal lean
-      if (row < 0 || row >= rowsTall || col < 0 || col >= COLS) continue;
-      // k=0 is the head (oval), k=1 a smaller oval, then dust trail.
-      grid[row][col] = k === 0 ? "O" : k === 1 ? "o" : k < 4 ? "." : "'";
+      if (row < 0 || row >= METEOR_ROWS || col < 0 || col >= COLS) continue;
+      // Distant: small head, faint tail. No bulky `O` glyph anywhere.
+      grid[row][col] = k === 0 ? "o" : k === 1 ? "." : "'";
     }
   }
   return grid.map((r) => r.join(""));
@@ -491,57 +532,26 @@ function makeGlyphStreamFrame(t: number): string[] {
 const GLYPH_STREAMS = Array.from({ length: FRAMES }, (_, i) => makeGlyphStreamFrame(i));
 
 // ---------------------------------------------------------------------------
-// Scene 3 — HATCHING. Three eggs were placed in the warming ring around the
-// fire. Across the scene's frame budget they crack, split, and emit a small
-// spark — the pets the player will care for.
+// Hatch timing — stretches the 4 meteorite states across the 15 shared
+// animation frames so the hatch reads as a slow progression instead of a
+// stutter. Final 4 frames hold on the hatched state.
 // ---------------------------------------------------------------------------
 
-// Three eggs aligned on the foreground ring around the fire — left, center,
-// right of the campfire base. Each art frame is 3 rows; we stack them at
-// TOP.eggs so they sit just in front of the logs.
-const EGGS_INTACT = [
-  "                                .-.            .-.            .-.                                   ",
-  "                               ( o )          ( o )          ( o )                                  ",
-  "                                `-'            `-'            `-'                                   ",
-];
-
-const EGGS_CRACKED = [
-  "                                .,-.           .-,.           .,-.                                  ",
-  "                               ( o\\)          (/o )          ( o\\)                                  ",
-  "                                `-'            `-'            `-'                                   ",
-];
-
-const EGGS_OPENING = [
-  "                               \\ . /          \\ . /          \\ . /                                  ",
-  "                                v v            v v            v v                                   ",
-  "                                `-'            `-'            `-'                                   ",
-];
-
-const EGGS_HATCHED = [
-  "                                ( . )          ( . )          ( . )                                 ",
-  "                                 \\v/            \\v/            \\v/                                  ",
-  "                               \\___/          \\___/          \\___/                                  ",
-];
-
-const EGG_STATES = [EGGS_INTACT, EGGS_CRACKED, EGGS_OPENING, EGGS_HATCHED];
-
-// Frame → which hatch state to render. Stretches the 4 states across the 15
-// shared animation frames so the hatch reads as a slow progression instead
-// of a stutter. Final 4 frames hold on the hatched state.
-function eggStateForFrame(t: number): number {
+function hatchStateForFrame(t: number): number {
   if (t < 4) return 0;
   if (t < 8) return 1;
   if (t < 11) return 2;
   return 3;
 }
 
-// Brief glow flash that pulses on the frame the eggs OPEN — sells the
+// Brief glow flash that pulses on the frame the rocks SPLIT — sells the
 // moment of birth. Empty grid most of the cycle, sparkles on transition.
 function makeHatchSparkleFrame(t: number): string[] {
   const grid = blank(3, COLS);
   if (t >= 8 && t <= 11) {
-    // Cols 33, 48, 63 — over the centers of the three eggs.
-    for (const col of [33, 48, 63]) {
+    // Match FIRE_RING_CENTERS (declared below; inlined here because this
+    // runs at module load before that line). Two rocks flank the fire.
+    for (const col of [33, 63]) {
       grid[0][col] = "*";
       grid[1][col - 1] = ".";
       grid[1][col + 1] = ".";
@@ -551,6 +561,213 @@ function makeHatchSparkleFrame(t: number): string[] {
 }
 
 const HATCH_SPARKLES = Array.from({ length: FRAMES }, (_, i) => makeHatchSparkleFrame(i));
+
+// ---------------------------------------------------------------------------
+// tripleRow — build a 100-col row with the same small chunk centered at
+// each of the given column anchors. Used by every fire-ring layer (placed
+// meteorites, hatch states, hatched sparks) so they share x-positions.
+// ---------------------------------------------------------------------------
+
+// Two rocks flank the fire — the middle anchor at col 48 was dropped
+// because the campfire itself (cols 39-60) occupies that space.
+const FIRE_RING_CENTERS = [33, 63] as const;
+
+function tripleRow(chunk: string, cols: readonly number[] = FIRE_RING_CENTERS): string {
+  const row: string[] = Array(COLS).fill(" ");
+  for (const c of cols) {
+    const start = c - Math.floor(chunk.length / 2);
+    for (let i = 0; i < chunk.length; i++) {
+      const dst = start + i;
+      if (dst >= 0 && dst < COLS) row[dst] = chunk[i];
+    }
+  }
+  return row.join("");
+}
+
+// ---------------------------------------------------------------------------
+// Meteorites at the fire — three rocks placed in the warming ring after the
+// player and tribe carry them back, then 4 hatch states (intact → cracked
+// → splitting → spark). Final state matches the spark-stage pet form.
+// ---------------------------------------------------------------------------
+
+const METEORITES_AT_FIRE = [
+  tripleRow(",o,"),
+  tripleRow("(***)"),
+  tripleRow("'-'"),
+];
+
+const METEORITES_CRACKED = [
+  tripleRow(",/,"),
+  tripleRow("(*-*)"),
+  tripleRow("'-'"),
+];
+
+const METEORITES_OPENING = [
+  tripleRow("\\*/"),
+  tripleRow("| |"),
+  tripleRow("`-'"),
+];
+
+const METEORITES_HATCHED = [
+  tripleRow("/\\"),
+  tripleRow("( . . )"),
+  tripleRow("`,_,'"),
+];
+
+const METEORITE_HATCH_STATES = [
+  METEORITES_AT_FIRE,
+  METEORITES_CRACKED,
+  METEORITES_OPENING,
+  METEORITES_HATCHED,
+];
+
+// ---------------------------------------------------------------------------
+// Landed meteorites — three perspective bands fill the landscape with depth
+// without blocking the foreground ground band where the player walks.
+//
+//   FAR  (rows 9-10)  — single `.` glyphs just below the mountain horizon,
+//                       a sparse scatter that reads as "way out there."
+//   MID  (rows 12-14) — small `o.` two-char glyphs across the middle.
+//   INTERMEDIATE (rows 17-23) — `,o,` three-char glyphs filling the gap
+//                       between mid and the player's roam zone, so the
+//                       distance to the target rock feels traversable.
+//
+// The TARGET sits inside the intermediate band so the player has to walk
+// back into the scene to reach it.
+// ---------------------------------------------------------------------------
+
+const LANDED_METEORITE_FAR_POSITIONS: ReadonlyArray<readonly [number, number]> = [
+  [9, 6],   [9, 19],  [9, 33],
+  [10, 12], [10, 41], [10, 58],
+  [9, 67],  [9, 81],  [9, 95],
+  [10, 74], [10, 88],
+];
+
+const LANDED_METEORITE_MID_POSITIONS: ReadonlyArray<readonly [number, number]> = [
+  [12, 8],  [12, 28], [12, 50], [12, 71], [12, 90],
+  [14, 16], [14, 38], [14, 62], [14, 84],
+];
+
+const LANDED_METEORITE_INTERMEDIATE_POSITIONS: ReadonlyArray<readonly [number, number]> = [
+  [17, 22], [17, 56], [17, 82],
+  [19, 14], [19, 38], [19, 70], [19, 94],
+  [21, 30], [21, 60], [21, 86],
+  [23, 18], [23, 46], [23, 76],
+];
+
+const TARGET_METEORITE_GLYPH = [
+  ",o,",
+  "(*)",
+];
+
+// The target sits in the intermediate band, off to the left — the player
+// has to walk back and away from camp to reach it.
+const TARGET_METEORITE_POSITION: readonly [number, number] = [22, 6];
+
+const LANDED_METEORITES_LAYER: string[] = (() => {
+  const grid = blank(ROWS, COLS);
+  // Far: a single dot per position.
+  for (const [r, c] of LANDED_METEORITE_FAR_POSITIONS) {
+    if (r >= 0 && r < ROWS && c >= 0 && c < COLS) grid[r][c] = ".";
+  }
+  // Mid: two-char glyph (head + faint shadow).
+  for (const [r, c] of LANDED_METEORITE_MID_POSITIONS) {
+    placeBlock(grid, ["o."], r, c);
+  }
+  // Intermediate: three-char glyph in the gap between mid and the
+  // foreground — the band the player walks back into to grab the target.
+  for (const [r, c] of LANDED_METEORITE_INTERMEDIATE_POSITIONS) {
+    placeBlock(grid, [",o,"], r, c);
+  }
+  return grid.map((row) => row.join(""));
+})();
+
+const TARGET_METEORITE_LAYER: string[] = (() => {
+  const grid = blank(ROWS, COLS);
+  placeBlock(
+    grid,
+    TARGET_METEORITE_GLYPH,
+    TARGET_METEORITE_POSITION[0],
+    TARGET_METEORITE_POSITION[1],
+  );
+  return grid.map((row) => row.join(""));
+})();
+
+// ---------------------------------------------------------------------------
+// Player figure — same drawing language as the FIGURES at the camp (`,-.`
+// head, parenthesised face, stick body) so the player reads as one of the
+// tribe stepping out into the dark. 4 rows × 5 cols.
+// ---------------------------------------------------------------------------
+
+const PLAYER_GLYPH = [
+  " ,-.",
+  "( o)",
+  "/|\\ ",
+  "/ \\ ",
+];
+
+const PLAYER_GLYPH_ROWS = PLAYER_GLYPH.length;          // 4
+const PLAYER_GLYPH_COLS = PLAYER_GLYPH[0].length;       // 5
+
+const PLAYER_START = { row: 28, col: 60 };
+const PLAYER_BOUNDS = {
+  // rowMin is one above the intermediate band so the player can step into
+  // and walk past the target's row, reinforcing the depth of the scene.
+  rowMin: 18,
+  rowMax: ROWS - PLAYER_GLYPH_ROWS,
+  colMin: 0,
+  colMax: COLS - PLAYER_GLYPH_COLS,
+};
+
+function renderPlayerLayer(row: number, col: number): string[] {
+  const grid = blank(ROWS, COLS);
+  placeBlock(grid, PLAYER_GLYPH, row, col);
+  return grid.map((r) => r.join(""));
+}
+
+// True when the player's footprint overlaps the target meteorite so Enter
+// picks it up. Compares centers with a generous threshold so the grab
+// doesn't require pixel-perfect alignment.
+function isPlayerAtTarget(row: number, col: number): boolean {
+  const [tr, tc] = TARGET_METEORITE_POSITION;
+  const playerCenterCol = col + Math.floor(PLAYER_GLYPH_COLS / 2);
+  const playerCenterRow = row + Math.floor(PLAYER_GLYPH_ROWS / 2);
+  const targetCenterCol = tc + 1; // 3-wide glyph
+  const targetCenterRow = tr + 0; // 2-tall glyph, anchor row
+  return (
+    Math.abs(playerCenterCol - targetCenterCol) <= 3 &&
+    Math.abs(playerCenterRow - targetCenterRow) <= 2
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Sleep cutscene — three z-strings rise above the sleeping figures and drift
+// sideways, mirroring the smoke streams' rendering convention.
+// ---------------------------------------------------------------------------
+
+const SLEEP_Z_STREAMS = [
+  { col: 12, drift: 0.4, period: 8,  chars: "zZ Zz" },
+  { col: 76, drift: 0.5, period: 9,  chars: "Zz zZ" },
+  { col: 88, drift: 0.3, period: 10, chars: "zZ z " },
+];
+
+function makeSleepZFrame(t: number): string[] {
+  const zRows = 8;
+  const grid = blank(zRows, COLS);
+  for (let i = 0; i < SLEEP_Z_STREAMS.length; i++) {
+    const s = SLEEP_Z_STREAMS[i];
+    const phase = (t + i * 2) % s.period;
+    if (phase >= zRows) continue;
+    const row = zRows - 1 - phase;
+    const col = Math.floor(s.col + phase * s.drift);
+    if (col < 0 || col >= COLS) continue;
+    const ch = s.chars[phase % s.chars.length];
+    if (ch !== " ") grid[row][col] = ch;
+  }
+  return grid.map((r) => r.join(""));
+}
+
+const SLEEP_ZS = Array.from({ length: FRAMES }, (_, i) => makeSleepZFrame(i));
 
 // ---------------------------------------------------------------------------
 // Layout offsets
@@ -566,21 +783,82 @@ const TOP = {
   fire: 20,
   embers: 13,
   ground: ROWS - GROUND.length,
-  // Scene 1 — egg meteors fall through the upper sky band.
-  eggMeteors: 0,
-  // Scene 2 — eggs landed in the warming ring around the fire.
-  eggs: 30,
-  // Scene 3 — tutors hover above the figures and emit glyphs downward.
+  // Egg/meteorite meteors fall through the upper sky band (full canvas).
+  meteors: 0,
+  // Meteorites placed at the warming ring (same row the eggs sat at).
+  meteoritesAtFire: 30,
+  // Sleep z-strings drift up above the sleeping figures.
+  sleepZs: 16,
+  // Tutors hover above the figures and emit glyphs downward (full canvas).
   tutorsHover: 0,
   glyphs: 0,
 } as const;
 
 // ---------------------------------------------------------------------------
-// Scene timing
+// Phase machine — a 10-step narrative arc.
+//   civilization     tribe at the fire under the night sky
+//   msgWarning       text overlay: the sky starts to fall
+//   meteorShower     glowing eggs/rocks streak in
+//   msgDarkness      text overlay: curiosity prompts you outward
+//   findMeteorite    INTERACTIVE — arrow keys move, Enter grabs near target
+//   msgTooHot        text overlay: it needs more heat
+//   fireOffering     humans place their meteorites by the fire
+//   sleep            cutscene — figures sleep, z's drift up
+//   hatching         on wakeup the meteorites crack open into sparks
+//   teaching         sparks hover, stream glyphs to the tribe (terminal)
 // ---------------------------------------------------------------------------
 
-// Per-scene durations for phases 0..2; phase 3 is the final settling scene.
-const SCENE_DURATIONS = [4500, 5500, 5500] as const;
+type Phase =
+  | "civilization"
+  | "msgWarning"
+  | "meteorShower"
+  | "manByFire"
+  | "msgDarkness"
+  | "findMeteorite"
+  | "msgTooHot"
+  | "fireOffering"
+  | "sleep"
+  | "hatching"
+  | "teaching";
+
+const PHASE_ORDER: readonly Phase[] = [
+  "civilization",
+  "msgWarning",
+  "meteorShower",
+  "manByFire",
+  "msgDarkness",
+  "findMeteorite",
+  "msgTooHot",
+  "fireOffering",
+  "sleep",
+  "hatching",
+  "teaching",
+];
+
+// Auto-advance durations (ms). Phases not listed advance via user input:
+//   - msgWarning / msgDarkness / msgTooHot — Enter confirms the message
+//   - findMeteorite — Enter on the target
+//   - teaching — terminal (no advance)
+const PHASE_DURATIONS: Partial<Record<Phase, number>> = {
+  civilization: 4500,
+  meteorShower: 10000,
+  manByFire: 5000,
+  fireOffering: 4500,
+  sleep: 4500,
+  hatching: 5500,
+};
+
+const MESSAGES: Partial<Record<Phase, string>> = {
+  msgWarning: "And all of a sudden... the sky... it seems to start falling...",
+  msgDarkness: "Inexorable curiosity prompts you into the darkness...",
+  msgTooHot: "It's almost too hot to hold... Something tells you it needs even more heat...",
+};
+
+function nextPhase(p: Phase): Phase | null {
+  const i = PHASE_ORDER.indexOf(p);
+  return i >= 0 && i + 1 < PHASE_ORDER.length ? PHASE_ORDER[i + 1] : null;
+}
+
 const SCENE_FADE_MS = 700;
 
 // ---------------------------------------------------------------------------
@@ -624,7 +902,9 @@ function Layer({
 
 // Persistent setting — the civilization at the fire. Present in every scene
 // so the camera doesn't move; only the dramatic element on top changes.
-function BaseScene({ f }: { f: number }) {
+// Pass `figures` to swap in a different cast (e.g. FIGURES_ONE for the
+// solitary man-by-fire vigil).
+function BaseScene({ f, figures = FIGURES }: { f: number; figures?: string[] }) {
   return (
     <>
       <Layer art={SKY_BASE} top={TOP.sky} className="text-slate-500/70" />
@@ -644,7 +924,7 @@ function BaseScene({ f }: { f: number }) {
       <Layer art={MOUNTAINS} top={TOP.mountains} className="text-slate-700/80" />
       <Layer art={SMOKE[f]} top={TOP.smoke} className="text-stone-500/40" />
       <Layer
-        art={FIGURES}
+        art={figures}
         top={TOP.figures}
         className="text-stone-300"
         style={{ filter: "drop-shadow(0 0 6px rgb(251 146 60 / 0.35))" }}
@@ -693,42 +973,186 @@ function BaseScene({ f }: { f: number }) {
   );
 }
 
-// 0. CIVILIZATION — base composition only, the rudimentary tribe at its fire.
+// CIVILIZATION — base composition only, the rudimentary tribe at its fire.
 function SceneCivilization({ f }: { f: number }) {
   return <BaseScene f={f} />;
 }
 
-// 1. EGG METEOR SHOWER — eggs streak through the sky toward the camp.
-function SceneEggMeteors({ f }: { f: number }) {
+// METEOR SHOWER — rocks streak through the sky toward the camp; the landed
+// scatter is shown beneath them so the landscape visibly fills with the
+// fallen objects as the shower unfolds (rather than appearing only later
+// in the aftermath).
+function SceneMeteorShower({ f }: { f: number }) {
   return (
     <>
       <BaseScene f={f} />
       <Layer
+        art={LANDED_METEORITES_LAYER}
+        top={0}
+        className="text-amber-700/70"
+        style={{ filter: "drop-shadow(0 0 3px rgb(217 119 6 / 0.45))" }}
+      />
+      <Layer
         art={EGG_METEORS[f]}
-        top={TOP.eggMeteors}
-        className="text-amber-200"
-        style={{ filter: "drop-shadow(0 0 6px rgb(252 211 77 / 0.8))" }}
+        top={TOP.meteors}
+        className="text-amber-200/75"
+        style={{ filter: "drop-shadow(0 0 3px rgb(252 211 77 / 0.55))" }}
       />
     </>
   );
 }
 
-// 2. HATCHING — eggs landed in the warming ring crack open across frames.
-function SceneHatching({ f }: { f: number }) {
-  const eggIdx = eggStateForFrame(f);
-  const hatched = eggIdx === 3;
+// MAN BY FIRE — quiet beat after the shower. Only one figure remains awake
+// at the camp, the others having gone to lie down. Landed rocks visible on
+// the ground. Target highlight is added during msgDarkness so the curiosity
+// the message describes has a literal glowing thing to point at.
+function SceneManByFire({ f, showTarget = false }: { f: number; showTarget?: boolean }) {
+  return (
+    <>
+      <BaseScene f={f} figures={FIGURES_ONE} />
+      <Layer
+        art={LANDED_METEORITES_LAYER}
+        top={0}
+        className="text-stone-500"
+      />
+      {showTarget && (
+        <Layer
+          art={TARGET_METEORITE_LAYER}
+          top={0}
+          className="text-amber-300/80"
+          style={{ filter: "drop-shadow(0 0 4px rgb(252 211 77 / 0.5))" }}
+        />
+      )}
+    </>
+  );
+}
+
+// AFTERMATH — same composition as civilization but with the fallen rocks
+// scattered across the ground. Backdrop for msgDarkness (target still
+// glowing on the ground, beckoning) and msgTooHot (target removed — the
+// player has just picked it up).
+function SceneAftermath({ f, showTarget }: { f: number; showTarget: boolean }) {
   return (
     <>
       <BaseScene f={f} />
       <Layer
-        art={EGG_STATES[eggIdx]}
-        top={TOP.eggs}
+        art={LANDED_METEORITES_LAYER}
+        top={0}
+        className="text-stone-500"
+      />
+      {showTarget && (
+        <Layer
+          art={TARGET_METEORITE_LAYER}
+          top={0}
+          className="text-amber-300/80"
+          style={{ filter: "drop-shadow(0 0 4px rgb(252 211 77 / 0.5))" }}
+        />
+      )}
+    </>
+  );
+}
+
+// FIND METEORITE — the interactive mini-game. Standalone composition: dark
+// landscape with sky/mountains/ground only, no camp visible. Just the player,
+// the scattered rocks, and the glowing target somewhere off in the distance.
+function SceneFindMeteorite({
+  f,
+  playerRow,
+  playerCol,
+}: {
+  f: number;
+  playerRow: number;
+  playerCol: number;
+}) {
+  return (
+    <>
+      <Layer art={SKY_BASE} top={TOP.sky} className="text-slate-700/50" />
+      <Layer art={STAR_FIELD} top={TOP.stars} className="text-slate-400/30" />
+      <Layer
+        art={TWINKLE[f]}
+        top={TOP.stars}
+        className="text-slate-200/50"
+      />
+      <Layer art={MOUNTAINS} top={TOP.mountains} className="text-slate-800" />
+      <Layer art={GROUND} top={TOP.ground} className="text-stone-700" />
+      <Layer
+        art={LANDED_METEORITES_LAYER}
+        top={0}
+        className="text-stone-500/70"
+      />
+      <Layer
+        art={TARGET_METEORITE_LAYER}
+        top={0}
+        className="text-amber-200"
+        style={{ filter: "drop-shadow(0 0 8px rgb(252 211 77 / 0.95))" }}
+      />
+      <Layer
+        art={renderPlayerLayer(playerRow, playerCol)}
+        top={0}
+        className="text-amber-100"
+        style={{ filter: "drop-shadow(0 0 4px rgb(254 243 199 / 0.6))" }}
+      />
+    </>
+  );
+}
+
+// FIRE OFFERING — the rocks have been carried back and placed in the
+// warming ring around the fire (intact, no hatch progression yet).
+function SceneFireOffering({ f }: { f: number }) {
+  return (
+    <>
+      <BaseScene f={f} />
+      <Layer
+        art={METEORITES_AT_FIRE}
+        top={TOP.meteoritesAtFire}
+        className="text-amber-300"
+        style={{ filter: "drop-shadow(0 0 4px rgb(252 211 77 / 0.6))" }}
+      />
+    </>
+  );
+}
+
+// SLEEP — figures rest at the fire, z-strings drift up. Existing fire/figures
+// layers continue to glow softly so the camp still reads as alive.
+function SceneSleep({ f }: { f: number }) {
+  return (
+    <>
+      <BaseScene f={f} />
+      <Layer
+        art={METEORITES_AT_FIRE}
+        top={TOP.meteoritesAtFire}
+        className="text-stone-400"
+      />
+      <Layer
+        art={SLEEP_ZS[f]}
+        top={TOP.sleepZs}
+        className="text-slate-300/70"
+      />
+      {/* Dim the whole scene with a translucent overlay so 'sleep' reads
+          visually even though every layer underneath stays animated. */}
+      <div className="absolute inset-0 bg-black/40 pointer-events-none" />
+    </>
+  );
+}
+
+// HATCHING — the meteorites placed in the ring crack across frames and
+// finally bloom into three sparks. Reuses the existing hatchStateForFrame
+// timing and HATCH_SPARKLES flash so the moment of birth still pops.
+function SceneHatching({ f }: { f: number }) {
+  const idx = hatchStateForFrame(f);
+  const hatched = idx === 3;
+  return (
+    <>
+      <BaseScene f={f} />
+      <Layer
+        art={METEORITE_HATCH_STATES[idx]}
+        top={TOP.meteoritesAtFire}
         className={hatched ? "text-amber-200" : "text-stone-300"}
-        style={hatched ? { filter: "drop-shadow(0 0 6px rgb(252 211 77 / 0.7))" } : undefined}
+        style={hatched ? { filter: "drop-shadow(0 0 6px rgb(252 211 77 / 0.75))" } : undefined}
       />
       <Layer
         art={HATCH_SPARKLES[f]}
-        top={TOP.eggs}
+        top={TOP.meteoritesAtFire}
         className="text-yellow-100"
         style={{ filter: "drop-shadow(0 0 8px rgb(254 240 138 / 0.9))" }}
       />
@@ -736,8 +1160,8 @@ function SceneHatching({ f }: { f: number }) {
   );
 }
 
-// 3. TEACHING — three hatchlings hover above the tribe and stream glyphs
-// down into the figures. Knowledge transfer made visible.
+// TEACHING — three hatchlings hover above the tribe and stream glyphs
+// down into the figures. Final scene; lingers as the intro's exit slate.
 function SceneTeaching({ f }: { f: number }) {
   return (
     <>
@@ -759,31 +1183,111 @@ function SceneTeaching({ f }: { f: number }) {
 }
 
 // ---------------------------------------------------------------------------
-// Component — four-scene narrative arc
-//   0. Civilization        — tribe gathered at its fire under the night sky
-//   1. Egg meteor shower   — glowing eggs streak in from the sky
-//   2. Hatching            — landed eggs crack open at the fire
-//   3. Teaching (final)    — hatchlings hover and stream glyphs to the tribe
+// MessageOverlay — typewritten text card centered over the current scene.
+// Resets the typewriter whenever the text changes, so each message starts
+// fresh when the phase transitions.
 // ---------------------------------------------------------------------------
 
-type Phase = 0 | 1 | 2 | 3;
+function MessageOverlay({ text }: { text: string }) {
+  const [shown, setShown] = useState(0);
+  useEffect(() => {
+    setShown(0);
+    const id = setInterval(() => {
+      setShown((n) => {
+        if (n >= text.length) {
+          clearInterval(id);
+          return n;
+        }
+        return n + 1;
+      });
+    }, 35);
+    return () => clearInterval(id);
+  }, [text]);
+  const done = shown >= text.length;
+  return (
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <div className="max-w-md text-center font-mono text-sm tracking-wide text-amber-100">
+        <div>
+          {text.slice(0, shown)}
+          {!done && <span className="opacity-70">_</span>}
+        </div>
+        <div
+          className="mt-3 text-[10px] uppercase tracking-[0.3em] transition-opacity duration-500"
+          style={{ opacity: done ? 0.5 : 0 }}
+        >
+          [enter] continue
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
 
 export function IntroScene() {
   const [tick, setTick] = useState(0);
-  const [phase, setPhase] = useState<Phase>(0);
+  const [phase, setPhase] = useState<Phase>("civilization");
+  const [playerRow, setPlayerRow] = useState(PLAYER_START.row);
+  const [playerCol, setPlayerCol] = useState(PLAYER_START.col);
 
   useEffect(() => {
     const t = setInterval(() => setTick((v) => (v + 1) % FRAMES), TICK_MS);
     return () => clearInterval(t);
   }, []);
 
-  // Auto-advance through scenes 0..2; phase 3 (hatch) stays — that's where
-  // the player's pet life begins.
+  // Auto-advance for phases that have a duration. Phases without one
+  // (findMeteorite, teaching) are advanced from elsewhere — the keyboard
+  // handler for the game, never for teaching (it's the final slate).
   useEffect(() => {
-    if (phase >= 3) return;
-    const ms = SCENE_DURATIONS[phase as 0 | 1 | 2];
-    const id = setTimeout(() => setPhase((p) => (p + 1) as Phase), ms);
+    const ms = PHASE_DURATIONS[phase];
+    if (ms == null) return;
+    const id = setTimeout(() => {
+      const n = nextPhase(phase);
+      if (n) setPhase(n);
+    }, ms);
     return () => clearTimeout(id);
+  }, [phase]);
+
+  // Keyboard:
+  //   findMeteorite — arrow keys move the player; Enter grabs the rock if
+  //                   the player is overlapping it (advances to msgTooHot).
+  //   message phase — Enter skips the typewriter and advances early.
+  // We keep the player-position read off refs so the Enter handler sees
+  // the latest values without re-binding the listener every keystroke.
+  const playerRowRef = useRef(playerRow);
+  const playerColRef = useRef(playerCol);
+  useEffect(() => { playerRowRef.current = playerRow; }, [playerRow]);
+  useEffect(() => { playerColRef.current = playerCol; }, [playerCol]);
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (phase === "findMeteorite") {
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          setPlayerCol((c) => Math.max(PLAYER_BOUNDS.colMin, c - 1));
+        } else if (e.key === "ArrowRight") {
+          e.preventDefault();
+          setPlayerCol((c) => Math.min(PLAYER_BOUNDS.colMax, c + 1));
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          setPlayerRow((r) => Math.max(PLAYER_BOUNDS.rowMin, r - 1));
+        } else if (e.key === "ArrowDown") {
+          e.preventDefault();
+          setPlayerRow((r) => Math.min(PLAYER_BOUNDS.rowMax, r + 1));
+        } else if (e.key === "Enter") {
+          if (isPlayerAtTarget(playerRowRef.current, playerColRef.current)) {
+            setPhase("msgTooHot");
+          }
+        }
+      } else if (MESSAGES[phase] && e.key === "Enter") {
+        const n = nextPhase(phase);
+        if (n) setPhase(n);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [phase]);
 
   const f = tick;
@@ -795,22 +1299,65 @@ export function IntroScene() {
     pointerEvents: "none",
   });
 
+  // Each phase decides which background scene plays underneath its overlay.
+  // Doing this as a small lookup keeps the JSX below readable: one line
+  // per phase, scene + optional message overlay.
+  function backgroundFor(p: Phase) {
+    switch (p) {
+      case "civilization":
+      case "msgWarning":
+        return <SceneCivilization f={f} />;
+      case "meteorShower":
+        return <SceneMeteorShower f={f} />;
+      case "manByFire":
+        return <SceneManByFire f={f} />;
+      case "msgDarkness":
+        return <SceneManByFire f={f} showTarget={true} />;
+      case "msgTooHot":
+        return <SceneAftermath f={f} showTarget={false} />;
+      case "findMeteorite":
+        return (
+          <SceneFindMeteorite
+            f={f}
+            playerRow={playerRow}
+            playerCol={playerCol}
+          />
+        );
+      case "fireOffering":
+        return <SceneFireOffering f={f} />;
+      case "sleep":
+        return <SceneSleep f={f} />;
+      case "hatching":
+        return <SceneHatching f={f} />;
+      case "teaching":
+        return <SceneTeaching f={f} />;
+    }
+  }
+
+  const message = MESSAGES[phase];
+  const showHints = phase === "findMeteorite";
+
   return (
     <div className="relative inline-block font-mono leading-[12px] text-[11px]">
       <pre className="m-0 p-0 select-none invisible">{sizingFiller}</pre>
 
-      <div className="absolute inset-0" style={sceneStyle(phase === 0)}>
-        <SceneCivilization f={f} />
-      </div>
-      <div className="absolute inset-0" style={sceneStyle(phase === 1)}>
-        <SceneEggMeteors f={f} />
-      </div>
-      <div className="absolute inset-0" style={sceneStyle(phase === 2)}>
-        <SceneHatching f={f} />
-      </div>
-      <div className="absolute inset-0" style={sceneStyle(phase === 3)}>
-        <SceneTeaching f={f} />
-      </div>
+      {PHASE_ORDER.map((p) => (
+        <div key={p} className="absolute inset-0" style={sceneStyle(phase === p)}>
+          {backgroundFor(p)}
+        </div>
+      ))}
+
+      {message && (
+        <div className="absolute inset-0">
+          <MessageOverlay text={message} />
+        </div>
+      )}
+
+      {showHints && (
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-widest font-mono opacity-50 pointer-events-none">
+          [arrows] move &nbsp; [enter] grab
+        </div>
+      )}
     </div>
   );
 }

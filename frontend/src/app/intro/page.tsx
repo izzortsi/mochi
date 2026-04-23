@@ -1,25 +1,18 @@
 "use client";
-import Link from "next/link";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { IntroScene } from "@/components/IntroScene";
-import { useSetTutorContext } from "@/lib/tutor-context";
+import { useTutorContext } from "@/lib/tutor-context";
 
 export default function IntroPage() {
-  const router = useRouter();
-  // The intro is a full-screen splash; hide the docked tutor here.
-  useSetTutorContext({ visible: false });
-
-  // Any key or click goes to the courses page.
+  // The intro is a full-screen splash; hide the docked tutor here, and
+  // restore it on unmount so navigating away (e.g. via the enter button)
+  // doesn't leave the tutor permanently hidden on the next route.
+  const { setContext } = useTutorContext();
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Enter" || e.key === " " || e.key === "Escape") {
-        router.push("/");
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [router]);
+    setContext({ visible: false });
+    return () => setContext({ visible: true });
+  }, [setContext]);
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center -mx-4 -my-5 px-4 py-8 bg-black">
@@ -39,9 +32,6 @@ export default function IntroPage() {
         >
           enter
         </Link>
-        <div className="mt-3 text-[10px] opacity-30 font-mono">
-          press enter, space, or click to continue
-        </div>
       </div>
     </div>
   );
