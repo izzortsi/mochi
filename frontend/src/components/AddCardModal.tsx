@@ -44,7 +44,11 @@ export function AddCardModal({ courseId, days, onClose, onSaved }: Props) {
     ontology.fetchConceptMapAll()
       .then(m => setConceptPool(m.nodes))
       .catch(() => setConceptPool([]));
-    const ws = new WsClient("ws://localhost:4000/ws", () => {}, setStatus);
+    const ws = new WsClient(
+      process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:4000/ws",
+      () => {},
+      setStatus,
+    );
     ws.connect();
     wsRef.current = ws;
     return () => ws.disconnect();

@@ -1,4 +1,5 @@
 from __future__ import annotations
+import os
 import threading
 from typing import Any
 
@@ -15,15 +16,22 @@ def _get_client() -> Any:
         return _client
     with _lock:
         if _client is None:
-            manager = OAuthManager()
+            # Override the default ~/.config path on platforms (e.g. Render)
+            # where HOME isn't on a persistent disk. Set SP_OAUTH_TOKEN_PATH
+            # to a file under the mounted disk so refreshed tokens survive
+            # restarts.
+            token_path = os.environ.get("SP_OAUTH_TOKEN_PATH") or None
+            manager = OAuthManager(token_path) if token_path else OAuthManager()
             if not manager.has_valid_tokens():
                 raise RuntimeError(
                     "No anthropic-oauth tokens found. "
-                    "Run `anthropic-oauth auth` in a terminal, then retry."
+                    "Run `anthropic-oauth auth` locally, then upload "
+                    "tokens.json to SP_OAUTH_TOKEN_PATH on the disk."
                 )
             _client = create_oauth_client(
                 auto_auth=False,
                 app_names=["study-plan"],
+                token_path=token_path,
             )
     return _client
 

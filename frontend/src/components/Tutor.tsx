@@ -44,7 +44,7 @@ export function Tutor() {
 
   useEffect(() => {
     const ws = new WsClient(
-      "ws://localhost:4000/ws",
+      process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:4000/ws",
       (msg) => {
         if (msg.requestId) {
           const resolver = pendingRef.current.get(msg.requestId);
