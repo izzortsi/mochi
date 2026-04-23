@@ -441,7 +441,11 @@ def _add_note(args):
     if not note_id or not title:
         raise ValueError("note-id and title required")
 
-    domain = (args.get("domain") or "").strip()
+    from app.services.note_normalize import normalize_domain, normalize_note_id
+    note_id = normalize_note_id(note_id)
+    if not note_id:
+        raise ValueError("note-id required")
+    domain = normalize_domain(args.get("domain") or "")
     tags_raw = args.get("tags") or []
     tags = [t.strip() for t in tags_raw if isinstance(t, str) and t.strip()]
     related_raw = args.get("related") or []
@@ -534,7 +538,8 @@ def _update_note(args):
     if "content" in args and args["content"] is not None:
         n.content = str(args["content"])
     if "domain" in args and args["domain"] is not None:
-        n.domain = str(args["domain"]).strip()
+        from app.services.note_normalize import normalize_domain
+        n.domain = normalize_domain(str(args["domain"]))
     if "tags" in args and args["tags"] is not None:
         n.tags = [
             t.strip() for t in args["tags"]

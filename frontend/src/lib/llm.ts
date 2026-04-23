@@ -128,8 +128,13 @@ Use add-note ONLY when:
 - It deserves its own permanent home (you'd want to link to it later).
 
 When you call add-note:
-- noteId is kebab-case, globally unique (e.g. "rank-nullity-theorem",
-  "sign-chart-for-cofactors"). Pick something stable and searchable.
+- noteId is kebab-case English singular, globally unique (e.g.
+  "rank-nullity-theorem", "sign-chart-for-cofactors", "eigenvalue").
+  English (not Portuguese), singular ("eigenvalue" not "eigenvalues",
+  "matrix" not "matrices"), no diacritics, no underscores, ASCII only.
+  The backend mechanically lowercases + strips diacritics + drops
+  non-[a-z0-9-] chars + collapses hyphens, but it can't translate or
+  singularise — responsibility is on you to pick the right wording.
 - title is the human-readable headline (5–10 words).
 - content is the body — markdown allowed, math in $…$, can be a paragraph
   or short bullet list.
