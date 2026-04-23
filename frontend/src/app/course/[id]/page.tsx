@@ -10,11 +10,60 @@ import { ResetModal } from "@/components/ResetModal";
 import { NextUpPanel } from "@/components/NextUpPanel";
 import { ConceptMapPanel } from "@/components/ConceptMapPanel";
 import { AddCardModal } from "@/components/AddCardModal";
+import { useSetTutorContext } from "@/lib/tutor-context";
 
 function countCompletedInDay(day: DayView, completed: Record<string, boolean>): number {
   let n = 0;
   for (const card of day.cards) if (completed[card.cardUid]) n++;
   return n;
+}
+
+// Course-level summary for the tutor. Lighter than the per-day StudyChat
+// context: lists every day with title, phase, tier, and completion ratio,
+// but not individual card text/solutions — those load when the user
+// drills into a day.
+function buildCourseDashboardContext(
+  course: Course,
+  progress: UserProgress,
+): string {
+  const completed = progress.completedTasks ?? {};
+  const dayTiers = progress.dayTiers ?? {};
+  const days = (course.days ?? []).map(d => ({ ...d, cards: d.cards ?? [] }));
+  const phases = (course.phases ?? []) as Array<[number, string]>;
+
+  const lines: string[] = [
+    "# CURRENT PAGE",
+    "View: Course dashboard",
+    `Course ${course.id}: ${course.title}`,
+  ];
+
+  if (phases.length) {
+    lines.push("");
+    lines.push("Phases:");
+    for (const [num, title] of phases) lines.push(`  ${num}. ${title}`);
+  }
+
+  lines.push("");
+  lines.push("Days:");
+  const phaseNums = Array.from(new Set(days.map(d => d.phase))).sort((a, b) => a - b);
+  for (const phaseNum of phaseNums) {
+    for (const d of days.filter(x => x.phase === phaseNum)) {
+      const total = d.cards.length;
+      const done = countCompletedInDay(d, completed);
+      const tier = dayTiers[`${course.id}.${d.id}`] ?? "none";
+      lines.push(`  Day ${d.id} (phase ${phaseNum}): ${d.title} [${done}/${total}, tier=${tier}]`);
+      if (d.keyInsight) lines.push(`    Key insight: ${d.keyInsight}`);
+    }
+  }
+
+  const totalTasks = days.reduce((a, d) => a + d.cards.length, 0);
+  const completedCount = days.reduce((a, d) => a + countCompletedInDay(d, completed), 0);
+  lines.push("");
+  lines.push(
+    `Course progress: ${completedCount}/${totalTasks} cards completed.` +
+    ` Overall: ${progress.xp} XP, streak ${progress.streak}.`,
+  );
+  return lines.join("\n");
 }
 
 export default function CourseDashboard() {
@@ -38,6 +87,18 @@ export default function CourseDashboard() {
     await api.deleteDay(courseId, dayId);
     refresh();
   };
+
+  // Push a course-level pageContext into the tutor while this page is
+  // mounted. Hook must run unconditionally — fall back to a placeholder
+  // before the data loads so the call is stable across renders.
+  useSetTutorContext({
+    courseId,
+    pageContext: course && progress
+      ? buildCourseDashboardContext(course, progress)
+      : `# CURRENT PAGE\nView: Course dashboard\nCourse ${courseId} (loading)`,
+    title: course ? `Course · ${course.title}` : "Course",
+    placeholder: "Ask about a day, request the next-up suggestion, or grade your progress…",
+  });
 
   if (!course || !progress) return <div className="opacity-50">loading…</div>;
 

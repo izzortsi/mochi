@@ -66,6 +66,10 @@ def dispatch(tool: str, args: dict):
         "record-tutor-note": _record_tutor_note,
         "get-tutor-notes": _get_tutor_notes,
         "add-note": _add_note,
+        "list-notes": _list_notes,
+        "fetch-note": _fetch_note,
+        "update-note": _update_note,
+        "delete-note": _delete_note,
     }
     handler = handlers.get(tool)
     if not handler:
@@ -462,6 +466,116 @@ def _add_note(args):
             if r and note_id not in r.related:
                 r.related.append(note_id)
 
+    store.save_notes(notes)
+    return {"ok": True, "id": note_id}
+
+
+def _list_notes(args):
+    """Summaries of every zettelkasten note. Optional `domain` filters."""
+    domain = (args.get("domain") or "").strip()
+    notes = store.load_notes()
+    if domain:
+        notes = [n for n in notes if n.domain == domain]
+    return {
+        "notes": [
+            {
+                "id": n.id,
+                "title": n.title,
+                "domain": n.domain,
+                "tags": n.tags,
+                "related": n.related,
+            }
+            for n in notes
+        ],
+    }
+
+
+def _fetch_note(args):
+    """Full body of one note, plus metadata for each related note."""
+    note_id = (args.get("noteId") or args.get("note-id", "")).strip()
+    if not note_id:
+        raise ValueError("note-id required")
+    notes = store.load_notes()
+    n = next((x for x in notes if x.id == note_id), None)
+    if not n:
+        raise ValueError(f"note {note_id} not found")
+    by_id = {x.id: x for x in notes}
+    related_meta = []
+    for rid in n.related:
+        r = by_id.get(rid)
+        if r:
+            related_meta.append({"id": r.id, "title": r.title, "domain": r.domain})
+    return {
+        "id": n.id,
+        "title": n.title,
+        "content": n.content,
+        "domain": n.domain,
+        "tags": n.tags,
+        "source": n.source,
+        "related": related_meta,
+    }
+
+
+def _update_note(args):
+    """Patch an existing note. Only fields actually present in args are
+    touched; everything else stays as-is. Updating `related` re-mirrors the
+    reverse links: ids added get this note appended to their list, ids
+    removed get this note pulled from theirs."""
+    note_id = (args.get("noteId") or args.get("note-id", "")).strip()
+    if not note_id:
+        raise ValueError("note-id required")
+    notes = store.load_notes()
+    n = next((x for x in notes if x.id == note_id), None)
+    if not n:
+        raise ValueError(f"note {note_id} not found")
+
+    if "title" in args and args["title"] is not None:
+        n.title = str(args["title"]).strip()
+    if "content" in args and args["content"] is not None:
+        n.content = str(args["content"])
+    if "domain" in args and args["domain"] is not None:
+        n.domain = str(args["domain"]).strip()
+    if "tags" in args and args["tags"] is not None:
+        n.tags = [
+            t.strip() for t in args["tags"]
+            if isinstance(t, str) and t.strip()
+        ]
+    if "related" in args and args["related"] is not None:
+        new_related = [
+            r.strip() for r in args["related"]
+            if isinstance(r, str) and r.strip()
+        ]
+        old_set = set(n.related)
+        new_set = set(new_related)
+        n.related = new_related
+        by_id = {x.id: x for x in notes}
+        for rid in new_set - old_set:
+            r = by_id.get(rid)
+            if r and note_id not in r.related:
+                r.related.append(note_id)
+        for rid in old_set - new_set:
+            r = by_id.get(rid)
+            if r and note_id in r.related:
+                r.related.remove(note_id)
+
+    store.save_notes(notes)
+    return {"ok": True, "id": note_id}
+
+
+def _delete_note(args):
+    """Remove a note and clean up the reverse `related` references in any
+    other note that pointed at it."""
+    note_id = (args.get("noteId") or args.get("note-id", "")).strip()
+    if not note_id:
+        raise ValueError("note-id required")
+    notes = store.load_notes()
+    idx = next((i for i, x in enumerate(notes) if x.id == note_id), None)
+    if idx is None:
+        raise ValueError(f"note {note_id} not found")
+    notes.pop(idx)
+    for r in notes:
+        if note_id in r.related:
+            r.related.remove(note_id)
     store.save_notes(notes)
     return {"ok": True, "id": note_id}
 

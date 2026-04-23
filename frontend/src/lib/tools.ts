@@ -37,6 +37,21 @@ export const addNoteSchema = z.object({
   tags: z.array(z.string()).optional().default([]),
   related: z.array(z.string()).optional().default([]),
 });
+export const listNotesSchema = z.object({
+  domain: z.string().optional().default(""),
+});
+export const fetchNoteSchema = z.object({ noteId: z.string() });
+// Update is a partial — every field except noteId is optional and only
+// touched when explicitly passed.
+export const updateNoteSchema = z.object({
+  noteId: z.string(),
+  title: z.string().optional(),
+  content: z.string().optional(),
+  domain: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+  related: z.array(z.string()).optional(),
+});
+export const deleteNoteSchema = z.object({ noteId: z.string() });
 
 export const listCoursesSchema = z.object({});
 export const listConceptsSchema = z.object({});
@@ -73,7 +88,7 @@ export type ToolName =
   | "fetch-card" | "mark-task-complete" | "grade-attempt"
   | "append-generated-task" | "append-chat" | "get-chat" | "get-progress"
   | "record-tutor-note" | "get-tutor-notes"
-  | "add-note";
+  | "add-note" | "list-notes" | "fetch-note" | "update-note" | "delete-note";
 
 export const toolSchemas: Record<ToolName, z.ZodTypeAny> = {
   "list-courses": listCoursesSchema,
@@ -101,6 +116,10 @@ export const toolSchemas: Record<ToolName, z.ZodTypeAny> = {
   "record-tutor-note": recordTutorNoteSchema,
   "get-tutor-notes": getTutorNotesSchema,
   "add-note": addNoteSchema,
+  "list-notes": listNotesSchema,
+  "fetch-note": fetchNoteSchema,
+  "update-note": updateNoteSchema,
+  "delete-note": deleteNoteSchema,
 };
 
 function toKebab(key: string): string {

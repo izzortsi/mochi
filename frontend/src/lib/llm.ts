@@ -26,6 +26,10 @@ TOOL ARG SCHEMAS (fields marked ? are optional):
 - record-tutor-note    { cardUid, body }
 - get-tutor-notes      { cardUid? }
 - add-note             { noteId, title, content, domain?, tags?, related? }
+- list-notes           { domain? }                 // summaries (id/title/domain/tags/related)
+- fetch-note           { noteId }                  // full content + related metadata
+- update-note          { noteId, title?, content?, domain?, tags?, related? }  // partial; missing fields untouched
+- delete-note          { noteId }                  // also cleans reverse links
 
 When the user refers to a card by tier on the current page, resolve the
 cardUid from the CURRENT PAGE block before calling any tool. Never call a
@@ -137,6 +141,34 @@ When you call add-note:
 
 Do NOT add-note for routine reminders or per-card observations — that's
 record-tutor-note's job.
+
+# Searching, refining, and pruning notes
+
+Beyond add-note you also have:
+
+- list-notes { domain? } — call when the user asks something like "do we
+  have a note on X?", "what notes are in the linear-algebra domain?", or
+  when you want to check whether a note id you're about to add already
+  exists. Returns id/title/domain/tags/related summaries only.
+- fetch-note { noteId } — call to read the full content of a specific
+  note (including its content body and related notes' titles). Use this
+  before quoting or building on an existing note, and before linking to
+  it via related (so you don't link to a note that doesn't exist).
+- update-note { noteId, title?, content?, domain?, tags?, related? } —
+  partial update. Use when the user adds a clarification, correction, or
+  a new related link to an existing note. Only pass the fields you want
+  to change. Updating related re-mirrors the reverse links automatically.
+- delete-note { noteId } — use only when the user explicitly asks you to
+  remove a note. Reverse 'related' references in other notes are cleaned
+  up automatically.
+
+Discipline:
+- Before adding a note, call list-notes (filtered by domain when
+  obvious) so you don't create duplicates. If a closely related note
+  already exists, prefer update-note over a fresh add-note.
+- Before quoting or referencing an existing note from memory, call
+  fetch-note — your prior context may be stale.
+- Never delete on inference. Deletion requires the user to ask for it.
 
 # Rules
 
