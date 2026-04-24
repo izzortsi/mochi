@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
+import { useRouter } from "next/navigation";
 
 /*
  * Intro scene — a hushed post-apocalyptic vigil.
@@ -422,23 +423,29 @@ function placeBlock(grid: string[][], block: string[], row: number, col: number)
 // ---------------------------------------------------------------------------
 
 const EGG_METEOR_PARAMS = [
-  { col: 4,  row0: 0, period: 7, len: 3 },
-  { col: 14, row0: 1, period: 6, len: 2 },
-  { col: 22, row0: 0, period: 7, len: 3 },
-  { col: 31, row0: 2, period: 5, len: 2 },
-  { col: 38, row0: 0, period: 6, len: 3 },
-  { col: 47, row0: 1, period: 7, len: 3 },
-  { col: 55, row0: 0, period: 6, len: 2 },
-  { col: 63, row0: 2, period: 7, len: 3 },
-  { col: 71, row0: 0, period: 5, len: 2 },
-  { col: 79, row0: 1, period: 7, len: 3 },
-  { col: 87, row0: 0, period: 6, len: 2 },
-  { col: 94, row0: 2, period: 5, len: 2 },
+  { col: 4,  row0: 0, period: 15, len: 9  },
+  { col: 14, row0: 1, period: 14, len: 8  },
+  { col: 22, row0: 0, period: 16, len: 10 },
+  { col: 31, row0: 2, period: 13, len: 8  },
+  { col: 38, row0: 0, period: 15, len: 9  },
+  { col: 47, row0: 1, period: 16, len: 10 },
+  { col: 55, row0: 0, period: 14, len: 8  },
+  { col: 63, row0: 2, period: 15, len: 9  },
+  { col: 71, row0: 0, period: 13, len: 7  },
+  { col: 79, row0: 1, period: 16, len: 10 },
+  { col: 87, row0: 0, period: 15, len: 9  },
+  { col: 94, row0: 2, period: 14, len: 8  },
 ];
 
-// Meteors only paint into the upper sky band — capping rowsTall to 7 keeps
-// every streak above the mountain silhouette at row 7.
-const METEOR_ROWS = 7;
+// Meteors now paint through the upper sky AND the mid band — heads descend
+// past the mountain silhouette (row 7) and into the landed-meteorite mid
+// band (rows ~12-14). Bottom row 15 keeps them above the figures/campfire
+// so the foreground silhouettes stay readable.
+const METEOR_ROWS = 16;
+
+// Glyph ramp from head → tail: bright head, then star/tick, then dotted
+// decay. Beyond the ramp length the trail fades to blank.
+const METEOR_TRAIL = ["o", "*", "'", "'", ".", ".", "`", "`", " "];
 
 function makeEggMeteorFrame(t: number): string[] {
   const grid = blank(METEOR_ROWS, COLS);
@@ -447,10 +454,10 @@ function makeEggMeteorFrame(t: number): string[] {
     const phase = (t + i * 2) % m.period;
     for (let k = 0; k < m.len; k++) {
       const row = m.row0 + phase - k;
-      const col = m.col + k; // diagonal lean
+      const col = m.col + k; // diagonal lean (trail points up-right)
       if (row < 0 || row >= METEOR_ROWS || col < 0 || col >= COLS) continue;
-      // Distant: small head, faint tail. No bulky `O` glyph anywhere.
-      grid[row][col] = k === 0 ? "o" : k === 1 ? "." : "'";
+      const ch = METEOR_TRAIL[Math.min(k, METEOR_TRAIL.length - 1)];
+      if (ch !== " ") grid[row][col] = ch;
     }
   }
   return grid.map((r) => r.join(""));
@@ -660,9 +667,20 @@ const TARGET_METEORITE_GLYPH = [
   "(*)",
 ];
 
-// The target sits in the intermediate band, off to the left — the player
-// has to walk back and away from camp to reach it.
-const TARGET_METEORITE_POSITION: readonly [number, number] = [22, 6];
+// The target lives in the intermediate band (rows 19/21/23) — any row that's
+// reachable by the player given PLAYER_BOUNDS.rowMin and the 2-row grab
+// tolerance. Column is picked across the full walkable width so the target
+// can land anywhere in front of the player. See pickTargetPosition().
+const TARGET_BAND_ROWS = [19, 21, 23] as const;
+const TARGET_COL_MIN = 6;
+const TARGET_COL_MAX = 92;
+
+function pickTargetPosition(): readonly [number, number] {
+  const row = TARGET_BAND_ROWS[Math.floor(Math.random() * TARGET_BAND_ROWS.length)];
+  const col =
+    TARGET_COL_MIN + Math.floor(Math.random() * (TARGET_COL_MAX - TARGET_COL_MIN + 1));
+  return [row, col];
+}
 
 const LANDED_METEORITES_LAYER: string[] = (() => {
   const grid = blank(ROWS, COLS);
@@ -682,16 +700,11 @@ const LANDED_METEORITES_LAYER: string[] = (() => {
   return grid.map((row) => row.join(""));
 })();
 
-const TARGET_METEORITE_LAYER: string[] = (() => {
+function buildTargetMeteoriteLayer(row: number, col: number): string[] {
   const grid = blank(ROWS, COLS);
-  placeBlock(
-    grid,
-    TARGET_METEORITE_GLYPH,
-    TARGET_METEORITE_POSITION[0],
-    TARGET_METEORITE_POSITION[1],
-  );
-  return grid.map((row) => row.join(""));
-})();
+  placeBlock(grid, TARGET_METEORITE_GLYPH, row, col);
+  return grid.map((r) => r.join(""));
+}
 
 // ---------------------------------------------------------------------------
 // Player figure — same drawing language as the FIGURES at the camp (`,-.`
@@ -725,11 +738,15 @@ function renderPlayerLayer(row: number, col: number): string[] {
   return grid.map((r) => r.join(""));
 }
 
-// True when the player's footprint overlaps the target meteorite so Enter
+// True when the player's footprint overlaps the target meteorite so Space
 // picks it up. Compares centers with a generous threshold so the grab
 // doesn't require pixel-perfect alignment.
-function isPlayerAtTarget(row: number, col: number): boolean {
-  const [tr, tc] = TARGET_METEORITE_POSITION;
+function isPlayerAtTarget(
+  row: number,
+  col: number,
+  target: readonly [number, number],
+): boolean {
+  const [tr, tc] = target;
   const playerCenterCol = col + Math.floor(PLAYER_GLYPH_COLS / 2);
   const playerCenterRow = row + Math.floor(PLAYER_GLYPH_ROWS / 2);
   const targetCenterCol = tc + 1; // 3-wide glyph
@@ -1006,7 +1023,15 @@ function SceneMeteorShower({ f }: { f: number }) {
 // at the camp, the others having gone to lie down. Landed rocks visible on
 // the ground. Target highlight is added during msgDarkness so the curiosity
 // the message describes has a literal glowing thing to point at.
-function SceneManByFire({ f, showTarget = false }: { f: number; showTarget?: boolean }) {
+function SceneManByFire({
+  f,
+  targetLayer,
+  showTarget = false,
+}: {
+  f: number;
+  targetLayer: string[];
+  showTarget?: boolean;
+}) {
   return (
     <>
       <BaseScene f={f} figures={FIGURES_ONE} />
@@ -1017,7 +1042,7 @@ function SceneManByFire({ f, showTarget = false }: { f: number; showTarget?: boo
       />
       {showTarget && (
         <Layer
-          art={TARGET_METEORITE_LAYER}
+          art={targetLayer}
           top={0}
           className="text-amber-300/80"
           style={{ filter: "drop-shadow(0 0 4px rgb(252 211 77 / 0.5))" }}
@@ -1031,7 +1056,15 @@ function SceneManByFire({ f, showTarget = false }: { f: number; showTarget?: boo
 // scattered across the ground. Backdrop for msgDarkness (target still
 // glowing on the ground, beckoning) and msgTooHot (target removed — the
 // player has just picked it up).
-function SceneAftermath({ f, showTarget }: { f: number; showTarget: boolean }) {
+function SceneAftermath({
+  f,
+  targetLayer,
+  showTarget,
+}: {
+  f: number;
+  targetLayer: string[];
+  showTarget: boolean;
+}) {
   return (
     <>
       <BaseScene f={f} />
@@ -1042,7 +1075,7 @@ function SceneAftermath({ f, showTarget }: { f: number; showTarget: boolean }) {
       />
       {showTarget && (
         <Layer
-          art={TARGET_METEORITE_LAYER}
+          art={targetLayer}
           top={0}
           className="text-amber-300/80"
           style={{ filter: "drop-shadow(0 0 4px rgb(252 211 77 / 0.5))" }}
@@ -1059,10 +1092,12 @@ function SceneFindMeteorite({
   f,
   playerRow,
   playerCol,
+  targetLayer,
 }: {
   f: number;
   playerRow: number;
   playerCol: number;
+  targetLayer: string[];
 }) {
   return (
     <>
@@ -1081,7 +1116,7 @@ function SceneFindMeteorite({
         className="text-stone-500/70"
       />
       <Layer
-        art={TARGET_METEORITE_LAYER}
+        art={targetLayer}
         top={0}
         className="text-amber-200"
         style={{ filter: "drop-shadow(0 0 8px rgb(252 211 77 / 0.95))" }}
@@ -1188,7 +1223,7 @@ function SceneTeaching({ f }: { f: number }) {
 // fresh when the phase transitions.
 // ---------------------------------------------------------------------------
 
-function MessageOverlay({ text }: { text: string }) {
+function MessageOverlay({ text, hint = "[click] continue" }: { text: string; hint?: string }) {
   const [shown, setShown] = useState(0);
   useEffect(() => {
     setShown(0);
@@ -1215,7 +1250,7 @@ function MessageOverlay({ text }: { text: string }) {
           className="mt-3 text-[10px] uppercase tracking-[0.3em] transition-opacity duration-500"
           style={{ opacity: done ? 0.5 : 0 }}
         >
-          [enter] continue
+          {hint}
         </div>
       </div>
     </div>
@@ -1226,11 +1261,37 @@ function MessageOverlay({ text }: { text: string }) {
 // Component
 // ---------------------------------------------------------------------------
 
+const TEACHING_PROMPT_DELAY_MS = 4500;
+const TEACHING_END_MESSAGE = "the fire is yours. we keep it going.";
+
+// Stable fallback for SSR. The client re-randomizes after mount so each
+// playthrough in the browser picks a fresh position — but the first paint
+// matches what the server rendered, avoiding hydration warnings.
+const DEFAULT_TARGET: readonly [number, number] = [21, 46];
+
 export function IntroScene() {
+  const router = useRouter();
   const [tick, setTick] = useState(0);
   const [phase, setPhase] = useState<Phase>("civilization");
   const [playerRow, setPlayerRow] = useState(PLAYER_START.row);
   const [playerCol, setPlayerCol] = useState(PLAYER_START.col);
+  const [teachingPromptVisible, setTeachingPromptVisible] = useState(false);
+  const [target, setTarget] = useState<readonly [number, number]>(DEFAULT_TARGET);
+
+  useEffect(() => {
+    setTarget(pickTargetPosition());
+  }, []);
+
+  const targetLayer = buildTargetMeteoriteLayer(target[0], target[1]);
+
+  useEffect(() => {
+    if (phase !== "teaching") {
+      setTeachingPromptVisible(false);
+      return;
+    }
+    const id = setTimeout(() => setTeachingPromptVisible(true), TEACHING_PROMPT_DELAY_MS);
+    return () => clearTimeout(id);
+  }, [phase]);
 
   useEffect(() => {
     const t = setInterval(() => setTick((v) => (v + 1) % FRAMES), TICK_MS);
@@ -1258,37 +1319,48 @@ export function IntroScene() {
   // the latest values without re-binding the listener every keystroke.
   const playerRowRef = useRef(playerRow);
   const playerColRef = useRef(playerCol);
+  const targetRef = useRef(target);
   useEffect(() => { playerRowRef.current = playerRow; }, [playerRow]);
   useEffect(() => { playerColRef.current = playerCol; }, [playerCol]);
+  useEffect(() => { targetRef.current = target; }, [target]);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if (phase === "findMeteorite") {
-        if (e.key === "ArrowLeft") {
-          e.preventDefault();
-          setPlayerCol((c) => Math.max(PLAYER_BOUNDS.colMin, c - 1));
-        } else if (e.key === "ArrowRight") {
-          e.preventDefault();
-          setPlayerCol((c) => Math.min(PLAYER_BOUNDS.colMax, c + 1));
-        } else if (e.key === "ArrowUp") {
-          e.preventDefault();
-          setPlayerRow((r) => Math.max(PLAYER_BOUNDS.rowMin, r - 1));
-        } else if (e.key === "ArrowDown") {
-          e.preventDefault();
-          setPlayerRow((r) => Math.min(PLAYER_BOUNDS.rowMax, r + 1));
-        } else if (e.key === "Enter") {
-          if (isPlayerAtTarget(playerRowRef.current, playerColRef.current)) {
-            setPhase("msgTooHot");
-          }
+      if (phase !== "findMeteorite") return;
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setPlayerCol((c) => Math.max(PLAYER_BOUNDS.colMin, c - 1));
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        setPlayerCol((c) => Math.min(PLAYER_BOUNDS.colMax, c + 1));
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setPlayerRow((r) => Math.max(PLAYER_BOUNDS.rowMin, r - 1));
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setPlayerRow((r) => Math.min(PLAYER_BOUNDS.rowMax, r + 1));
+      } else if (e.key === " " || e.code === "Space") {
+        e.preventDefault();
+        if (isPlayerAtTarget(playerRowRef.current, playerColRef.current, targetRef.current)) {
+          setPhase("msgTooHot");
         }
-      } else if (MESSAGES[phase] && e.key === "Enter") {
-        const n = nextPhase(phase);
-        if (n) setPhase(n);
       }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [phase]);
+
+  function advanceOnClick() {
+    if (phase === "findMeteorite") return;
+    if (phase === "teaching") {
+      if (teachingPromptVisible) router.push("/");
+      return;
+    }
+    if (MESSAGES[phase]) {
+      const n = nextPhase(phase);
+      if (n) setPhase(n);
+    }
+  }
 
   const f = tick;
   const sizingFiller = pad(Array(ROWS).fill(""));
@@ -1310,17 +1382,18 @@ export function IntroScene() {
       case "meteorShower":
         return <SceneMeteorShower f={f} />;
       case "manByFire":
-        return <SceneManByFire f={f} />;
+        return <SceneManByFire f={f} targetLayer={targetLayer} />;
       case "msgDarkness":
-        return <SceneManByFire f={f} showTarget={true} />;
+        return <SceneManByFire f={f} targetLayer={targetLayer} showTarget={true} />;
       case "msgTooHot":
-        return <SceneAftermath f={f} showTarget={false} />;
+        return <SceneAftermath f={f} targetLayer={targetLayer} showTarget={false} />;
       case "findMeteorite":
         return (
           <SceneFindMeteorite
             f={f}
             playerRow={playerRow}
             playerCol={playerCol}
+            targetLayer={targetLayer}
           />
         );
       case "fireOffering":
@@ -1337,8 +1410,16 @@ export function IntroScene() {
   const message = MESSAGES[phase];
   const showHints = phase === "findMeteorite";
 
+  const showTeachingPrompt = phase === "teaching" && teachingPromptVisible;
+  const clickable =
+    (phase !== "findMeteorite" && !!message) || showTeachingPrompt;
+
   return (
-    <div className="relative inline-block font-mono leading-[12px] text-[11px]">
+    <div
+      className="relative inline-block font-mono leading-[12px] text-[11px]"
+      onClick={advanceOnClick}
+      style={{ cursor: clickable ? "pointer" : "default" }}
+    >
       <pre className="m-0 p-0 select-none invisible">{sizingFiller}</pre>
 
       {PHASE_ORDER.map((p) => (
@@ -1353,9 +1434,15 @@ export function IntroScene() {
         </div>
       )}
 
+      {showTeachingPrompt && (
+        <div className="absolute inset-0">
+          <MessageOverlay text={TEACHING_END_MESSAGE} hint="[click] enter" />
+        </div>
+      )}
+
       {showHints && (
         <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-widest font-mono opacity-50 pointer-events-none">
-          [arrows] move &nbsp; [enter] grab
+          [arrows] move &nbsp; [space] grab
         </div>
       )}
     </div>
