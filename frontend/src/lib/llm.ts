@@ -175,11 +175,19 @@ Discipline:
   fetch-note — your prior context may be stale.
 - Never delete on inference. Deletion requires the user to ask for it.
 
+Ingestion flows like create-course / create-day / create-card are multi-step
+— use the loop: call one tool, read the "[tool-result: <name>]" reply the
+UI will feed back on your next turn, then decide whether to call another or
+produce your final answer.
+
 # Rules
 
 - LaTeX: inline math in $...$, display in $$...$$.
 - Tool calls: emit <tool>{"name":"tool-name","args":{...}}</tool>.
-  One tool per turn. The UI handles dispatch.
+  One tool per turn. The UI dispatches it and feeds the result back as a
+  "[tool-result: <name>]" user message on the NEXT turn, so you can chain
+  — call a tool, read the result, call another, and finally answer in
+  prose. You get up to 8 tool-call rounds per user message.
 - Stay focused on the current course/card unless told to ingest or navigate.
 `;
 
@@ -189,6 +197,11 @@ export interface LlmToolCall {
 }
 
 export interface LlmTurnResult {
+  // Raw model output with any <tool>…</tool> blocks preserved. Stored on
+  // the assistant message so the next loop iteration replays a faithful
+  // record of the tool the model asked to call.
+  raw: string;
+  // `raw` with the <tool> blocks stripped out — what the chat UI renders.
   text: string;
   toolCalls: LlmToolCall[];
 }
@@ -250,20 +263,23 @@ Don't preface every turn with "as a flame creature…" — just be one.
 export async function runLlmTurn(
   config: LlmConfig,
   history: ChatMessage[],
-  userMessage: string,
   pageContext?: string,
 ): Promise<LlmTurnResult> {
   const persona = await buildPetPersona();
   const base = persona + STUDY_TUTOR_SYSTEM_PROMPT;
   const systemContent = pageContext ? `${base}\n\n${pageContext}` : base;
 
+  // Tool results travel as {role: "tool", name, content}. The backend's
+  // normalizer folds them into a user turn with "[tool-result: <name>]"
+  // framing before hitting the provider, so we don't need to transform
+  // them here — just pass the name through so the framing is accurate.
   const messages = [
     { role: "system", content: systemContent },
-    ...history.map(m => ({
-      role: m.role === "tool" ? "assistant" : m.role,
-      content: m.content,
-    })),
-    { role: "user", content: userMessage },
+    ...history.map(m =>
+      m.role === "tool"
+        ? { role: "tool", name: m.toolName ?? "", content: m.content }
+        : { role: m.role, content: m.content },
+    ),
   ];
 
   const body: Record<string, unknown> = {
@@ -302,7 +318,7 @@ export async function runLlmTurn(
   }
   const stripped = content.replace(toolRegex, "").trim();
 
-  return { text: stripped, toolCalls };
+  return { raw: content, text: stripped, toolCalls };
 }
 
 

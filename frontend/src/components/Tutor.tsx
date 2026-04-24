@@ -13,6 +13,38 @@ import { MathText } from "./MathText";
 import { MarkdownContent } from "./MarkdownContent";
 import { CHAT_APPENDED_EVENT, type ChatAppendedDetail } from "./SessionCard";
 
+// Maximum tool-call iterations per user turn. Each iteration is one LLM
+// round-trip: {assistant reply → optional tool dispatch → feed result back}.
+// Loop exits early when the model stops emitting <tool> blocks. Cap prevents
+// a confused model from looping on a tool that keeps failing.
+const MAX_TOOL_ITERATIONS = 8;
+
+// Remove <tool>…</tool> blocks from an assistant message's raw content so
+// the chat UI shows only the prose. We still STORE the raw content (blocks
+// included) — the LLM needs to see its own prior tool calls when the loop
+// re-enters with results.
+function stripToolBlocks(content: string): string {
+  return content.replace(/<tool>[\s\S]*?<\/tool>/g, "").trim();
+}
+
+// Compact inline indicator for a tool call in the chat stream. The full
+// content of the tool response isn't visually relevant to the user — it's
+// context for the model, not the reader — so we render just the name + a
+// status dot. Green = ran to completion, red = the tool errored (detected
+// by the "<name> failed:" prefix wired into the dispatch path below).
+function ToolChip({ name, ok }: { name: string; ok: boolean }) {
+  return (
+    <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-mono opacity-50">
+      <span
+        className={`w-1.5 h-1.5 rounded-full ${
+          ok ? "bg-emerald-500/70" : "bg-red-500/70"
+        }`}
+      />
+      <span>{name}</span>
+    </div>
+  );
+}
+
 function summarizeToolError(raw: string): string {
   try {
     const parsed: Array<{ path?: unknown[]; code?: string; message?: string }> =
@@ -128,36 +160,49 @@ export function Tutor() {
     setInput("");
     setBusy(true);
 
-    try {
-      const result = await runLlmTurn(config, messages ?? [], userMsg.content, pageContext);
-      const assistantMsg: ChatMessage = {
-        role: "assistant", content: result.text || "(calling tool)",
-        toolName: null, timestamp: new Date().toISOString(),
-      };
-      pushMessage(assistantMsg);
+    // Local history snapshot we extend synchronously across the loop —
+    // setMessages is async, so we can't rely on `messages` reflecting
+    // turns we just appended.
+    let history: ChatMessage[] = [...(messages ?? []), userMsg];
 
-      for (const call of result.toolCalls) {
-        pushMessage({
-          role: "tool", content: `→ ${call.name}`, toolName: call.name,
+    try {
+      for (let iter = 0; iter < MAX_TOOL_ITERATIONS; iter++) {
+        const result = await runLlmTurn(config, history, pageContext);
+        const assistantMsg: ChatMessage = {
+          // Store the RAW model output so the next iteration's history
+          // faithfully shows the <tool> call block this assistant turn
+          // emitted. stripToolBlocks() trims it down for the chat UI.
+          role: "assistant",
+          content: result.raw,
+          toolName: null,
           timestamp: new Date().toISOString(),
-        });
-        try {
-          const resp = await callTool(call.name, call.args);
-          pushMessage({
-            role: "tool", content: resp, toolName: call.name,
-            timestamp: new Date().toISOString(),
-          });
-          onToolCall?.(call.name, true);
-        } catch (e) {
-          const msg = e instanceof Error ? e.message : String(e);
-          const summary = summarizeToolError(msg);
-          pushMessage({
+        };
+        pushMessage(assistantMsg);
+        history = [...history, assistantMsg];
+
+        if (result.toolCalls.length === 0) break;
+
+        for (const call of result.toolCalls) {
+          let toolContent: string;
+          try {
+            toolContent = await callTool(call.name, call.args);
+            onToolCall?.(call.name, true);
+          } catch (e) {
+            const msg = e instanceof Error ? e.message : String(e);
+            // Prefix "<name> failed:" is the signal the ToolChip reads to
+            // paint the status dot red. Also gives the LLM a clear
+            // instruction to retry with corrected args.
+            toolContent = `${call.name} failed: ${summarizeToolError(msg)}. Retry with complete args (see tool schema).`;
+            onToolCall?.(call.name, false);
+          }
+          const toolMsg: ChatMessage = {
             role: "tool",
-            content: `${call.name} failed: ${summary}. Retry with complete args (see tool schema).`,
+            content: toolContent,
             toolName: call.name,
             timestamp: new Date().toISOString(),
-          });
-          onToolCall?.(call.name, false);
+          };
+          pushMessage(toolMsg);
+          history = [...history, toolMsg];
         }
       }
     } catch (e) {
@@ -207,26 +252,44 @@ export function Tutor() {
         </div>
       </div>
       <div className="flex-1 overflow-y-auto px-3 py-3 space-y-3">
-        {(messages ?? []).map((m, i) => (
-          <div key={i} className="text-sm">
-            <div className="text-[10px] uppercase tracking-wider font-mono opacity-40 mb-1">
-              {m.role}
-            </div>
-            {m.role === "assistant" ? (
-              <div className="text-neutral-200">
-                <MarkdownContent content={m.content} compact />
+        {(messages ?? []).map((m, i) => {
+          if (m.role === "tool") {
+            // Minimal chip — tool name + status dot. The full payload is
+            // kept in `m.content` for replay into the LLM; no need to show
+            // it to the user.
+            const ok = !/^\S+ failed:/.test(m.content);
+            return (
+              <ToolChip key={i} name={m.toolName ?? "tool"} ok={ok} />
+            );
+          }
+          if (m.role === "assistant") {
+            const display = stripToolBlocks(m.content);
+            // Pure tool-dispatch turns (no prose, just a <tool> block)
+            // collapse to nothing visible — the adjacent ToolChip carries
+            // the signal that something happened.
+            if (!display) return null;
+            return (
+              <div key={i} className="text-sm">
+                <div className="text-[10px] uppercase tracking-wider font-mono opacity-40 mb-1">
+                  assistant
+                </div>
+                <div className="text-neutral-200">
+                  <MarkdownContent content={display} compact />
+                </div>
               </div>
-            ) : m.role === "tool" ? (
-              <pre className="font-mono text-xs opacity-60 whitespace-pre-wrap break-words m-0">
-                {m.content}
-              </pre>
-            ) : (
+            );
+          }
+          return (
+            <div key={i} className="text-sm">
+              <div className="text-[10px] uppercase tracking-wider font-mono opacity-40 mb-1">
+                user
+              </div>
               <div className="text-neutral-100 whitespace-pre-wrap">
                 <MathText>{m.content}</MathText>
               </div>
-            )}
-          </div>
-        ))}
+            </div>
+          );
+        })}
       </div>
       <div className="border-t border-[#1a1a1a] p-2 flex gap-2">
         <textarea

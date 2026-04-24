@@ -7,6 +7,32 @@ from app.services import llm, llm_anthropic
 router = APIRouter()
 
 
+def _normalize_messages(messages: list[dict]) -> list[dict]:
+    """Collapse tool-role messages to user-role with a structured wrapper.
+
+    The tutor loop sends the LLM its own prior tool results as
+    ``{role: "tool", name: "<tool-name>", content: "<raw>"}``. Neither
+    provider (Anthropic OAuth / zai OpenAI-compat) accepts a "tool" role on
+    this endpoint, so we fold them into a user turn with an explicit
+    "[tool-result: <name>]" prefix — the LLM reads the prefix as a protocol
+    signal that the preceding assistant's ``<tool>...</tool>`` call just
+    returned, without needing native tool-use plumbing on the provider side.
+    """
+    out: list[dict] = []
+    for m in messages:
+        role = m.get("role")
+        if role == "tool":
+            name = str(m.get("name") or m.get("tool_name") or "tool")
+            body = str(m.get("content", ""))
+            out.append({
+                "role": "user",
+                "content": f"[tool-result: {name}]\n{body}",
+            })
+        else:
+            out.append({"role": role, "content": str(m.get("content", ""))})
+    return out
+
+
 async def _call_eval(provider: str, model: str, api_key: str,
                      system_prompt: str, user_content: str) -> str:
     if provider == "anthropic-oauth":
@@ -44,6 +70,8 @@ async def chat(body: dict):
         raise HTTPException(400, "model required")
     if not isinstance(messages, list) or not messages:
         raise HTTPException(400, "messages required")
+
+    messages = _normalize_messages(messages)
 
     try:
         if provider == "anthropic-oauth":
