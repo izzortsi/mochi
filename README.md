@@ -1,5 +1,9 @@
 # mochi
 
+<p align="center">
+  <img src=".github/assets/mochi.png" alt="mochi intro scene — meteor shower over the tribe at the fire" width="720" />
+</p>
+
 A study companion that turns your courses into a Tamagotchi: every card you
 finish feeds a small flame creature; the same creature is also the LLM tutor
 who teaches you the next one.
