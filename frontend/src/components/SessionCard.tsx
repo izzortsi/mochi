@@ -10,6 +10,7 @@ import { PHASE_NAMES } from "@/lib/types";
 import { evalAttempt } from "@/lib/llm";
 import { loadConfig, isConfigured } from "@/lib/settings";
 import { api } from "@/lib/api";
+import { phaseRef, promptRef } from "@/lib/refs";
 
 // Event fired after any attempt (retrieval or elaborate) is persisted to the
 // course chat thread. StudyChat listens for this so it can append the turn
@@ -42,6 +43,21 @@ const PHASE_META: Record<PhaseName, { label: string; hint: string }> = {
   elaborate: { label: "Elaborate", hint: "Explain in your own words." },
   check: { label: "Check", hint: "Self-assess against the rubric." },
 };
+
+// Small inline code for addressing a phase/prompt in chat. Non-interactive
+// on purpose — user types the ref themselves; this is the visible cheat
+// sheet. Tooltip explains the scheme so first-time readers don't have to
+// guess what "s:r1" means.
+function RefPill({ code }: { code: string }) {
+  return (
+    <span
+      title="Reference code — type it in chat to point the tutor at this item."
+      className="text-[9px] font-mono px-1 py-px rounded bg-[#141414] border border-[#242424] text-neutral-500 tracking-wider"
+    >
+      {code}
+    </span>
+  );
+}
 
 export function SessionCard({
   cardUid, concepts, notes, phases, completedPhases, onTogglePhase, onDelete,
@@ -129,6 +145,7 @@ export function SessionCard({
         {PHASE_NAMES.map((p) => {
           const done = !!completedPhases?.[p];
           const isOpen = open[p];
+          const ref = phaseRef(cardUid, p);
           return (
             <div key={p}>
               <div className="flex items-center gap-2 px-3 py-1.5 hover:bg-[#0f0f0f] transition-colors">
@@ -148,6 +165,7 @@ export function SessionCard({
                   <span className={`text-[11px] uppercase tracking-wider font-mono ${done ? "opacity-40" : "text-neutral-200"}`}>
                     {PHASE_META[p].label}
                   </span>
+                  {ref && <RefPill code={ref} />}
                   <span className="text-[10px] opacity-40 truncate">{PHASE_META[p].hint}</span>
                   <ChevronDown
                     className={`w-3 h-3 ml-auto opacity-40 transition-transform flex-shrink-0 ${
@@ -206,8 +224,8 @@ function PhaseContent({
     if (!prompts.length) return <Empty />;
     return (
       <ol className="space-y-3 list-decimal list-inside">
-        {prompts.map((p) => (
-          <RetrievalItem key={p.id} prompt={p} cardUid={cardUid} />
+        {prompts.map((p, i) => (
+          <RetrievalItem key={p.id} prompt={p} cardUid={cardUid} index={i} />
         ))}
       </ol>
     );
@@ -217,8 +235,8 @@ function PhaseContent({
     if (!prompts.length) return <Empty />;
     return (
       <ol className="space-y-3 list-decimal list-inside">
-        {prompts.map((p) => (
-          <ElaborateItem key={p.id} prompt={p} cardUid={cardUid} />
+        {prompts.map((p, i) => (
+          <ElaborateItem key={p.id} prompt={p} cardUid={cardUid} index={i} />
         ))}
       </ol>
     );
@@ -247,15 +265,20 @@ function Empty() {
 }
 
 function RetrievalItem({
-  prompt, cardUid,
+  prompt, cardUid, index,
 }: {
   prompt: { id: string; prompt: string; answer: string; concept?: string | null };
   cardUid: CardUid;
+  index: number;
 }) {
   const [show, setShow] = useState(false);
+  const ref = promptRef(cardUid, "retrieval", index);
   return (
     <li>
-      <MathText>{prompt.prompt}</MathText>
+      <span className="inline-flex items-center gap-1.5">
+        {ref && <RefPill code={ref} />}
+        <MathText>{prompt.prompt}</MathText>
+      </span>
       <AttemptBox
         kind="retrieval"
         prompt={prompt.prompt}
@@ -287,14 +310,19 @@ function RetrievalItem({
 }
 
 function ElaborateItem({
-  prompt, cardUid,
+  prompt, cardUid, index,
 }: {
   prompt: { id: string; prompt: string };
   cardUid: CardUid;
+  index: number;
 }) {
+  const ref = promptRef(cardUid, "elaborate", index);
   return (
     <li>
-      <MathText>{prompt.prompt}</MathText>
+      <span className="inline-flex items-center gap-1.5">
+        {ref && <RefPill code={ref} />}
+        <MathText>{prompt.prompt}</MathText>
+      </span>
       <AttemptBox
         kind="elaborate"
         prompt={prompt.prompt}

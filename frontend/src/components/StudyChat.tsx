@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import type { Course, DayView, UserProgress, TutorNote } from "@/lib/types";
 import { useSetTutorContext } from "@/lib/tutor-context";
+import { phaseRef, promptRef } from "@/lib/refs";
 
 function buildPageContext(
   course: Course,
@@ -30,6 +31,34 @@ function buildPageContext(
       lines.push(`  Text: ${c.text}`);
       lines.push(`  Solution (internal — don't reveal unless asked): ${c.detail}`);
       if (c.concepts.length > 0) lines.push(`  Concepts: ${c.concepts.join(", ")}`);
+      // Reference codes — mirror the pills the user sees in the UI so the
+      // tutor can resolve a shorthand like "s:r2" to the concrete phase or
+      // prompt it points at. Retrieval/elaborate prompts list each index
+      // with its code; the flat phases (prime/core/check) get one code each.
+      const phaseRefs: string[] = [];
+      for (const ph of ["prime", "core", "check"] as const) {
+        const r = phaseRef(c.cardUid, ph);
+        if (r) phaseRefs.push(`${r}=${ph}`);
+      }
+      if (phaseRefs.length) {
+        lines.push(`  Refs: ${phaseRefs.join(", ")}`);
+      }
+      const ret = c.phases.retrieval.prompts;
+      if (ret.length) {
+        lines.push(`  Retrieval prompts:`);
+        for (let i = 0; i < ret.length; i++) {
+          const r = promptRef(c.cardUid, "retrieval", i);
+          lines.push(`    - ${r ?? `#${i + 1}`}: ${ret[i].prompt}`);
+        }
+      }
+      const ela = c.phases.elaborate.prompts;
+      if (ela.length) {
+        lines.push(`  Elaborate prompts:`);
+        for (let i = 0; i < ela.length; i++) {
+          const r = promptRef(c.cardUid, "elaborate", i);
+          lines.push(`    - ${r ?? `#${i + 1}`}: ${ela[i].prompt}`);
+        }
+      }
       const notes = notesByCard[c.cardUid] || [];
       if (notes.length > 0) {
         lines.push(`  Tutor notes:`);
