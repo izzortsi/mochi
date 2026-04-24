@@ -182,7 +182,7 @@ export function Tutor() {
 
   return (
     <div
-      className="fixed right-0 bottom-0 w-96 flex flex-col border-t border-l border-[#1a1a1a] bg-black/95 backdrop-blur z-30 rounded-tl-lg"
+      className="fixed right-0 bottom-0 w-96 flex flex-col border-t border-l border-[#1a1a1a] bg-black/95 backdrop-blur z-30"
       style={{ top: "var(--hud-h, 102px)" }}
     >
       <div className="px-3 py-2 border-b border-[#1a1a1a] flex items-center justify-between gap-2">

@@ -539,10 +539,10 @@ export function PetCreature() {
       )}
 
       {!isCoal && !isDead && (
-        <div className="flex flex-col gap-0.5 min-w-[100px]">
+        <div className="flex flex-col gap-0.5 min-w-[160px]">
           {pet.name && (
             <span
-              className="text-[11px] font-semibold truncate max-w-[100px] opacity-90"
+              className="text-[11px] font-semibold truncate max-w-[160px] opacity-90"
               style={{ textShadow: "0 0 8px rgba(255,255,255,0.15)" }}
             >
               {pet.name}
@@ -550,7 +550,7 @@ export function PetCreature() {
           )}
           <div className="flex items-center gap-1">
             <span className="text-[9px] opacity-50 w-8">HP</span>
-            <div className="w-20 h-2.5 rounded-full bg-[#1a1a1a] overflow-hidden">
+            <div className="w-28 h-2.5 rounded-full bg-[#1a1a1a] overflow-hidden">
               <motion.div
                 className="h-full rounded-full"
                 style={{
@@ -565,7 +565,7 @@ export function PetCreature() {
           </div>
           <div className="flex items-center gap-1">
             <span className="text-[9px] opacity-50 w-8">Joy</span>
-            <div className="w-20 h-2.5 rounded-full bg-[#1a1a1a] overflow-hidden">
+            <div className="w-28 h-2.5 rounded-full bg-[#1a1a1a] overflow-hidden">
               <motion.div
                 className="h-full rounded-full"
                 style={{
@@ -587,7 +587,7 @@ export function PetCreature() {
               {stageLabel}
             </motion.span>
             {xpToNext != null && pet.totalXpEarned != null && (
-              <div className="w-16 h-1.5 rounded-full bg-[#1a1a1a] overflow-hidden">
+              <div className="w-24 h-1.5 rounded-full bg-[#1a1a1a] overflow-hidden">
                 <div
                   className="h-full rounded-full"
                   style={{
