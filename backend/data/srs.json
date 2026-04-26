@@ -6,9 +6,9 @@
     "prompt": "State the classical probability formula for equiprobable outcomes.",
     "answer": "$P(A) = N(A)/N$, where $N(A)$ is favorable outcomes and $N$ is total outcomes.",
     "concept": "probability",
-    "box": 2,
-    "due": "2026-04-23",
-    "last_reviewed": "2026-04-20",
+    "box": 3,
+    "due": "2026-04-30",
+    "last_reviewed": "2026-04-23",
     "lapses": 0
   },
   "c5-d1-bronze-0::r2": {
@@ -18,9 +18,9 @@
     "prompt": "What does relative frequency converge to, and what is the limiting definition?",
     "answer": "Relative frequency $n(A)/n$ converges to probability $P(A) = \\lim_{n \\to \\infty} n(A)/n$.",
     "concept": "relative-frequency",
-    "box": 2,
-    "due": "2026-04-23",
-    "last_reviewed": "2026-04-20",
+    "box": 3,
+    "due": "2026-04-30",
+    "last_reviewed": "2026-04-23",
     "lapses": 0
   },
   "c3-d1-bronze-0::r1": {
@@ -30,9 +30,9 @@
     "prompt": "O que é o polinômio característico de uma matriz?",
     "answer": "$\\det(A - \\lambda I)$; suas raízes são os autovalores.",
     "concept": "autovalor",
-    "box": 2,
-    "due": "2026-04-23",
-    "last_reviewed": "2026-04-20",
+    "box": 3,
+    "due": "2026-04-30",
+    "last_reviewed": "2026-04-23",
     "lapses": 0
   },
   "c3-d1-bronze-0::r2": {
@@ -42,9 +42,9 @@
     "prompt": "Para uma matriz triangular, como você encontra rapidamente os autovalores?",
     "answer": "São exatamente os elementos da diagonal principal.",
     "concept": "autovalor",
-    "box": 2,
-    "due": "2026-04-23",
-    "last_reviewed": "2026-04-20",
+    "box": 3,
+    "due": "2026-04-30",
+    "last_reviewed": "2026-04-23",
     "lapses": 0
   },
   "c3-d1-silver-1::r1": {
@@ -54,9 +54,9 @@
     "prompt": "Qual é a condição suficiente para que uma matriz seja diagonalizável?",
     "answer": "Todos os autovalores são distintos.",
     "concept": "diagonalizacao",
-    "box": 1,
-    "due": "2026-04-21",
-    "last_reviewed": "2026-04-20",
+    "box": 2,
+    "due": "2026-04-26",
+    "last_reviewed": "2026-04-23",
     "lapses": 1
   },
   "c3-d1-silver-1::r2": {
@@ -66,9 +66,9 @@
     "prompt": "Toda matriz simétrica é diagonalizável. Por quê?",
     "answer": "Porque o Teorema Espectral garante uma base ortonormal de autovetores.",
     "concept": "diagonalizacao",
-    "box": 2,
-    "due": "2026-04-23",
-    "last_reviewed": "2026-04-20",
+    "box": 3,
+    "due": "2026-04-30",
+    "last_reviewed": "2026-04-23",
     "lapses": 0
   },
   "c4-d1-bronze-0::r1": {
@@ -78,9 +78,9 @@
     "prompt": "Why is it useful to convert Newton's second-order equation into a first-order system?",
     "answer": "A first-order system is better suited for theoretical analysis and can represent the same dynamics with both $x$ and $v$ as independent variables.",
     "concept": "newtons-equations",
-    "box": 2,
-    "due": "2026-04-23",
-    "last_reviewed": "2026-04-20",
+    "box": 3,
+    "due": "2026-04-30",
+    "last_reviewed": "2026-04-23",
     "lapses": 0
   },
   "c4-d1-bronze-0::r2": {
@@ -90,9 +90,9 @@
     "prompt": "What does the initial condition $(x(0), v(0))$ determine for a particle under constant force?",
     "answer": "It uniquely determines the entire trajectory past and future via $x(t) = x(0) + v(0)t - \\frac{g}{2}t^2$.",
     "concept": "newtons-equations",
-    "box": 2,
-    "due": "2026-04-23",
-    "last_reviewed": "2026-04-20",
+    "box": 3,
+    "due": "2026-04-30",
+    "last_reviewed": "2026-04-23",
     "lapses": 0
   },
   "c4-d2-bronze-0::r1": {
@@ -102,9 +102,9 @@
     "prompt": "What is the order of $\\ddot{x} + 3\\dot{x} + 2x = \\sin(t)$?",
     "answer": "Order 2, since the highest derivative is $\\ddot{x}$.",
     "concept": "ode-classification",
-    "box": 2,
-    "due": "2026-04-23",
-    "last_reviewed": "2026-04-20",
+    "box": 3,
+    "due": "2026-04-30",
+    "last_reviewed": "2026-04-23",
     "lapses": 0
   },
   "c4-d2-bronze-0::r2": {
@@ -114,9 +114,9 @@
     "prompt": "Is $\\dot{x} = \\sin(x) + t$ linear?",
     "answer": "No, because $\\sin(x)$ is nonlinear in $x$.",
     "concept": "ode-classification",
-    "box": 2,
-    "due": "2026-04-23",
-    "last_reviewed": "2026-04-20",
+    "box": 3,
+    "due": "2026-04-30",
+    "last_reviewed": "2026-04-23",
     "lapses": 0
   },
   "c3-d1-gold-2::r1": {
@@ -126,9 +126,9 @@
     "prompt": "Como você encontra os autovetores de uma matriz $A$ para um autovalor $\\lambda$?",
     "answer": "Resolvendo o sistema $(A - \\lambda I)\\vec{v} = \\vec{0}$.",
     "concept": "autovetor",
-    "box": 2,
-    "due": "2026-04-23",
-    "last_reviewed": "2026-04-20",
+    "box": 3,
+    "due": "2026-04-30",
+    "last_reviewed": "2026-04-23",
     "lapses": 0
   },
   "c3-d1-gold-2::r2": {
@@ -138,9 +138,9 @@
     "prompt": "Autovetores de autovalores distintos são sempre linearmente independentes?",
     "answer": "Sim, este é um resultado fundamental da álgebra linear.",
     "concept": "autovetor",
-    "box": 2,
-    "due": "2026-04-23",
-    "last_reviewed": "2026-04-20",
+    "box": 3,
+    "due": "2026-04-30",
+    "last_reviewed": "2026-04-23",
     "lapses": 0
   },
   "c6-d1-bronze-0::r1": {
@@ -150,9 +150,9 @@
     "prompt": "Qual é a condição necessária e suficiente para que um operador linear $f$ com matriz $T$ seja inversível?",
     "answer": "$\\det T \\neq 0$. Nesse caso a matriz de $f^{-1}$ é $T^{-1}$.",
     "concept": "operador-inversivel",
-    "box": 2,
-    "due": "2026-04-23",
-    "last_reviewed": "2026-04-20",
+    "box": 3,
+    "due": "2026-04-30",
+    "last_reviewed": "2026-04-23",
     "lapses": 0
   },
   "c6-d1-bronze-0::r2": {
@@ -162,9 +162,9 @@
     "prompt": "Se $f\\circ f^{-1} = I$, o que isso significa geometricamente?",
     "answer": "$f^{-1}$ desfaz a ação de $f$: todo vetor transformado é devolvido à sua posição original.",
     "concept": "operador-linear",
-    "box": 2,
-    "due": "2026-04-23",
-    "last_reviewed": "2026-04-20",
+    "box": 3,
+    "due": "2026-04-30",
+    "last_reviewed": "2026-04-23",
     "lapses": 0
   },
   "c6-d1-silver-1::r1": {
@@ -174,9 +174,9 @@
     "prompt": "Como se usa $T^{-1}$ para encontrar $v$ tal que $f(v)=w$?",
     "answer": "Calcula-se $v=T^{-1}w$, pois $f(v)=Tv=w$ implica $v=T^{-1}w$.",
     "concept": "operador-inversivel",
-    "box": 1,
-    "due": "2026-04-20",
-    "last_reviewed": null,
+    "box": 2,
+    "due": "2026-04-26",
+    "last_reviewed": "2026-04-23",
     "lapses": 0
   },
   "c6-d1-silver-1::r2": {
@@ -186,9 +186,9 @@
     "prompt": "Se $f$ não é inversível e $f(v)=w$, a equação pode ter solução?",
     "answer": "Sim, pode ter zero ou infinitas soluções, mas não existe $f^{-1}$ definido globalmente.",
     "concept": "operador-inversivel",
-    "box": 1,
-    "due": "2026-04-20",
-    "last_reviewed": null,
+    "box": 2,
+    "due": "2026-04-26",
+    "last_reviewed": "2026-04-23",
     "lapses": 0
   },
   "c3-d2-silver-0::r1": {
@@ -198,9 +198,9 @@
     "prompt": "Como você calcula as coordenadas de um vetor em uma base ortonormal?",
     "answer": "Usando produtos internos: $c_i = \\vec{u} \\cdot \\vec{v}_i$.",
     "concept": "operador-linear",
-    "box": 1,
-    "due": "2026-04-20",
-    "last_reviewed": null,
+    "box": 2,
+    "due": "2026-04-26",
+    "last_reviewed": "2026-04-23",
     "lapses": 0
   },
   "c3-d2-silver-0::r2": {
@@ -210,9 +210,9 @@
     "prompt": "Por que esse método funciona para bases ortonormais mas não para bases gerais?",
     "answer": "Porque $\\vec{v}_i \\cdot \\vec{v}_j = \\delta_{ij}$ (1 se $i=j$, 0 caso contrário), simplificando a álgebra.",
     "concept": "operador-linear",
-    "box": 1,
-    "due": "2026-04-20",
-    "last_reviewed": null,
+    "box": 2,
+    "due": "2026-04-26",
+    "last_reviewed": "2026-04-23",
     "lapses": 0
   },
   "c7-d1-bronze-0::r1": {
@@ -222,9 +222,9 @@
     "prompt": "State the three axioms defining an equivalence relation.",
     "answer": "Reflexive ($s\\sim s$), symmetric ($s\\sim s'\\Rightarrow s'\\sim s$), transitive ($s\\sim s'\\sim s''\\Rightarrow s\\sim s''$).",
     "concept": "equivalence-relation",
-    "box": 1,
-    "due": "2026-04-21",
-    "last_reviewed": null,
+    "box": 2,
+    "due": "2026-04-26",
+    "last_reviewed": "2026-04-23",
     "lapses": 0
   },
   "c7-d1-bronze-0::r2": {
@@ -234,9 +234,9 @@
     "prompt": "How do you prove two sets $A$ and $B$ are equal?",
     "answer": "Show each element of $A$ belongs to $B$ and each element of $B$ belongs to $A$ (mutual inclusion).",
     "concept": "set",
-    "box": 1,
-    "due": "2026-04-21",
-    "last_reviewed": null,
+    "box": 2,
+    "due": "2026-04-26",
+    "last_reviewed": "2026-04-23",
     "lapses": 0
   },
   "c4-d2-silver-1::r1": {
@@ -246,9 +246,9 @@
     "prompt": "How many variables does a first-order system have if the original ODE has order 3?",
     "answer": "3 variables: $y_1, y_2, y_3$ representing $x, \\dot{x}, \\ddot{x}$.",
     "concept": "first-order-system",
-    "box": 1,
-    "due": "2026-04-21",
-    "last_reviewed": null,
+    "box": 2,
+    "due": "2026-04-26",
+    "last_reviewed": "2026-04-23",
     "lapses": 0
   },
   "c4-d2-silver-1::r2": {
@@ -258,8 +258,176 @@
     "prompt": "For the system from $(\\dot{y}_1, \\dot{y}_2)$, is the system linear if the original scalar ODE is linear?",
     "answer": "Yes, if the original scalar equation is linear, the first-order system is also linear.",
     "concept": "first-order-system",
+    "box": 2,
+    "due": "2026-04-26",
+    "last_reviewed": "2026-04-23",
+    "lapses": 0
+  },
+  "c3-d3-silver-0::r1": {
+    "id": "c3-d3-silver-0::r1",
+    "card_uid": "c3-d3-silver-0",
+    "prompt_id": "r1",
+    "prompt": "Enuncie a regra da cadeia.",
+    "answer": "$\\frac{d}{dt}f(x(t)) = f'(x(t)) \\cdot \\frac{dx}{dt}$.",
+    "concept": "derivada",
+    "box": 2,
+    "due": "2026-04-27",
+    "last_reviewed": "2026-04-24",
+    "lapses": 0
+  },
+  "c3-d3-silver-0::r2": {
+    "id": "c3-d3-silver-0::r2",
+    "card_uid": "c3-d3-silver-0",
+    "prompt_id": "r2",
+    "prompt": "Como você deriva uma fração (quociente)?",
+    "answer": "Regra do quociente: $(u/v)' = (u'v - uv')/v^2$.",
+    "concept": "derivada",
+    "box": 2,
+    "due": "2026-04-27",
+    "last_reviewed": "2026-04-24",
+    "lapses": 0
+  },
+  "c3-d3-silver-1::r1": {
+    "id": "c3-d3-silver-1::r1",
+    "card_uid": "c3-d3-silver-1",
+    "prompt_id": "r1",
+    "prompt": "Qual é a derivada de $e^{h(t)}$?",
+    "answer": "$e^{h(t)} \\cdot h'(t)$ pela regra da cadeia.",
+    "concept": "derivada",
     "box": 1,
-    "due": "2026-04-21",
+    "due": "2026-04-24",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c3-d3-silver-1::r2": {
+    "id": "c3-d3-silver-1::r2",
+    "card_uid": "c3-d3-silver-1",
+    "prompt_id": "r2",
+    "prompt": "Enuncie a regra do produto.",
+    "answer": "$(uv)' = u'v + uv'$.",
+    "concept": "derivada",
+    "box": 1,
+    "due": "2026-04-24",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c3-d3-gold-2::r1": {
+    "id": "c3-d3-gold-2::r1",
+    "card_uid": "c3-d3-gold-2",
+    "prompt_id": "r1",
+    "prompt": "Qual é a derivada de $\\sqrt{u}$ em relação a $u$?",
+    "answer": "$\\frac{1}{2\\sqrt{u}}$.",
+    "concept": "derivada",
+    "box": 1,
+    "due": "2026-04-24",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c3-d3-gold-2::r2": {
+    "id": "c3-d3-gold-2::r2",
+    "card_uid": "c3-d3-gold-2",
+    "prompt_id": "r2",
+    "prompt": "Como você deriva uma função da forma $\\sqrt{f(t)}$?",
+    "answer": "$\\frac{f'(t)}{2\\sqrt{f(t)}}$ pela regra da cadeia.",
+    "concept": "derivada",
+    "box": 1,
+    "due": "2026-04-24",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c8-d1-bronze-0::r1": {
+    "id": "c8-d1-bronze-0::r1",
+    "card_uid": "c8-d1-bronze-0",
+    "prompt_id": "r1",
+    "prompt": "O que torna uma EDO não-linear?",
+    "answer": "Aparecer $y$ ou derivadas multiplicadas entre si, elevadas a potências, ou dentro de funções não-lineares.",
+    "concept": "linear-ode",
+    "box": 1,
+    "due": "2026-04-24",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c8-d1-bronze-0::r2": {
+    "id": "c8-d1-bronze-0::r2",
+    "card_uid": "c8-d1-bronze-0",
+    "prompt_id": "r2",
+    "prompt": "Como definir ordem de uma EDO?",
+    "answer": "É a maior ordem de derivada que aparece na equação.",
+    "concept": "ode-classification",
+    "box": 1,
+    "due": "2026-04-24",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c3-d4-silver-0::r1": {
+    "id": "c3-d4-silver-0::r1",
+    "card_uid": "c3-d4-silver-0",
+    "prompt_id": "r1",
+    "prompt": "Qual é $\\int e^{bx} \\, dx$?",
+    "answer": "$\\frac{1}{b}e^{bx} + C$.",
+    "concept": "integral-indefinida",
+    "box": 1,
+    "due": "2026-04-25",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c3-d4-silver-0::r2": {
+    "id": "c3-d4-silver-0::r2",
+    "card_uid": "c3-d4-silver-0",
+    "prompt_id": "r2",
+    "prompt": "A integral é linear?",
+    "answer": "Sim: $\\int (af + bg) \\, dt = a\\int f \\, dt + b\\int g \\, dt$.",
+    "concept": "integral-indefinida",
+    "box": 1,
+    "due": "2026-04-25",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c3-d4-silver-1::r1": {
+    "id": "c3-d4-silver-1::r1",
+    "card_uid": "c3-d4-silver-1",
+    "prompt_id": "r1",
+    "prompt": "Qual é a ideia por trás da substituição $u = g(x)$ na integral?",
+    "answer": "Se $du = g'(x) \\, dx$, então $\\int f(g(x)) g'(x) \\, dx = \\int f(u) \\, du$, simplificando o cálculo.",
+    "concept": "integral-indefinida",
+    "box": 1,
+    "due": "2026-04-26",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c3-d4-silver-1::r2": {
+    "id": "c3-d4-silver-1::r2",
+    "card_uid": "c3-d4-silver-1",
+    "prompt_id": "r2",
+    "prompt": "Como você reconhece quando usar substituição?",
+    "answer": "Procure uma função e sua derivada no integrando.",
+    "concept": "integral-indefinida",
+    "box": 1,
+    "due": "2026-04-26",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c3-d4-gold-2::r1": {
+    "id": "c3-d4-gold-2::r1",
+    "card_uid": "c3-d4-gold-2",
+    "prompt_id": "r1",
+    "prompt": "Qual é $\\int \\frac{1}{u} \\, du$?",
+    "answer": "$\\ln|u| + C$.",
+    "concept": "integral-indefinida",
+    "box": 1,
+    "due": "2026-04-26",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c3-d4-gold-2::r2": {
+    "id": "c3-d4-gold-2::r2",
+    "card_uid": "c3-d4-gold-2",
+    "prompt_id": "r2",
+    "prompt": "Como você integra $\\frac{1}{ax + b}$?",
+    "answer": "Por substituição: $u = ax + b$, obtendo $\\frac{1}{a} \\ln|ax + b| + C$.",
+    "concept": "integral-indefinida",
+    "box": 1,
+    "due": "2026-04-26",
     "last_reviewed": null,
     "lapses": 0
   }

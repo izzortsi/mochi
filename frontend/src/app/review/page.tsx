@@ -5,6 +5,40 @@ import { ChevronLeft } from "lucide-react";
 import { api } from "@/lib/api";
 import { MathText } from "@/components/MathText";
 import type { SrsItem, SrsStats, SrsVerdict } from "@/lib/types";
+import { useSetTutorContext } from "@/lib/tutor-context";
+
+function buildReviewContext(args: {
+  current: SrsItem | undefined;
+  idx: number;
+  queueLen: number;
+  totalDue: number;
+  stats: SrsStats | null;
+  reveal: boolean;
+}): string {
+  const { current, idx, queueLen, totalDue, stats, reveal } = args;
+  const lines: string[] = ["# CURRENT PAGE", "View: SRS Review (spaced repetition queue)"];
+  if (stats) {
+    const boxes = Object.entries(stats.byBox)
+      .map(([k, v]) => `${k}→${v}`)
+      .join("  ");
+    lines.push(`Tracked: ${stats.total} items · Due today: ${totalDue} · Boxes: ${boxes}`);
+  }
+  if (!current) {
+    lines.push("", "Queue is empty — user has cleared today's reviews.");
+    return lines.join("\n");
+  }
+  lines.push("", `Position: ${idx + 1} of ${queueLen}`);
+  lines.push(`Current item: card-uid ${current.cardUid} · box ${current.box} · ${current.lapses} lapse(s)`);
+  if (current.concept) lines.push(`Concept: ${current.concept}`);
+  lines.push(`Answer revealed: ${reveal ? "yes" : "no (user is still trying to recall)"}`);
+  lines.push("", "Prompt:");
+  lines.push(current.prompt.length > 400 ? current.prompt.slice(0, 400) + "…" : current.prompt);
+  if (reveal && current.answer) {
+    lines.push("", "Answer (now visible to the user):");
+    lines.push(current.answer.length > 400 ? current.answer.slice(0, 400) + "…" : current.answer);
+  }
+  return lines.join("\n");
+}
 
 export default function ReviewPage() {
   const [queue, setQueue] = useState<SrsItem[]>([]);
@@ -41,10 +75,21 @@ export default function ReviewPage() {
     }
   };
 
-  if (loading) return <div className="opacity-50">loading…</div>;
-
   const current = queue[idx];
   const done = !current;
+
+  useSetTutorContext({
+    courseId: 0,
+    pageContext: loading
+      ? "# CURRENT PAGE\nView: SRS Review (loading)"
+      : buildReviewContext({ current, idx, queueLen: queue.length, totalDue, stats, reveal }),
+    title: "Tutor · Review",
+    placeholder: done
+      ? "Reviews cleared. Ask anything…"
+      : "Stuck? Ask for a hint without revealing the answer…",
+  });
+
+  if (loading) return <div className="opacity-50">loading…</div>;
 
   return (
     <div className="max-w-2xl mx-auto">

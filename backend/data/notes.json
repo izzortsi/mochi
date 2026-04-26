@@ -185,7 +185,8 @@
       "orthogonal-operator",
       "similar-matrix",
       "symmetric-operator",
-      "linear-system-fundamental-matrix"
+      "linear-system-fundamental-matrix",
+      "eigenfunction"
     ],
     "source": ""
   },
@@ -266,7 +267,8 @@
       "orthogonal-operator",
       "linear-operator",
       "similar-matrix",
-      "symmetric-matrix"
+      "symmetric-matrix",
+      "eigenfunction"
     ],
     "source": ""
   },
@@ -325,7 +327,8 @@
     "content": "Os **autovalores** de uma matriz quadrada $A$ são os escalares $\\lambda$ que satisfazem a equação característica:\n\n$$\\det(A - \\lambda I) = 0$$\n\nPara matrizes triangulares (superiores ou inferiores), os autovalores correspondem diretamente aos elementos da diagonal principal.",
     "related": [
       "eigenvector-overview",
-      "diagonalization"
+      "diagonalization",
+      "eigenfunction"
     ],
     "source": ""
   },
@@ -341,7 +344,8 @@
     "related": [
       "eigenvalue-overview",
       "diagonalization",
-      "base-ortonormal"
+      "base-ortonormal",
+      "eigenfunction"
     ],
     "source": ""
   },
@@ -3072,6 +3076,514 @@
     ],
     "content": "Constant-rank maps are locally $C^r$-equivalent to linear projection. This unifies Inverse FT (rank $=n$), Implicit FT (used in proof), and submersion/immersion theorems. Proof strategy: translate, linearize target/source, straighten via two diffeomorphisms chosen from Jacobian blocks.",
     "related": [],
+    "source": ""
+  },
+  {
+    "id": "differential-operator",
+    "title": "Differential Operators",
+    "domain": "functional-analysis",
+    "tags": [
+      "operator",
+      "derivative",
+      "linear-operator",
+      "function-space"
+    ],
+    "content": "A **differential operator** is a linear operator $L$ acting on a space of (sufficiently smooth) functions by combining derivatives with coefficient functions. In one variable:\n\n$$L = \\sum_{k=0}^{n} a_k(x)\\, \\frac{d^k}{dx^k},$$\n\nso $L[y] = a_n(x)\\, y^{(n)} + \\cdots + a_1(x)\\, y' + a_0(x)\\, y$. The integer $n$ is the **order**.\n\nKey facts:\n- $L$ is linear: $L[\\alpha y_1 + \\beta y_2] = \\alpha L[y_1] + \\beta L[y_2]$.\n- The domain must be chosen carefully (e.g. $C^n$ functions, or a Sobolev space, often with boundary conditions) — this is where functional-analytic subtleties live.\n- Classical examples: $D = d/dx$, the Laplacian $\\Delta = \\sum \\partial_i^2$, the Sturm–Liouville operator $L[y] = -(p(x)y')' + q(x)y$.\n- An ODE is the equation $L[y] = f$; the homogeneous case $L[y] = 0$ has a solution space of dimension equal to the order (for linear ODEs with continuous coefficients).\n\nDifferential operators are the bridge between ODE/PDE theory and spectral theory in function spaces.",
+    "related": [],
+    "source": "tutor"
+  },
+  {
+    "id": "eigenfunction",
+    "title": "Eigenfunction",
+    "domain": "functional-analysis",
+    "tags": [
+      "eigenfunction",
+      "eigenvalue",
+      "linear-operator",
+      "spectral-theory",
+      "sturm-liouville"
+    ],
+    "content": "An **eigenfunction** of a linear operator $L$ acting on a function space is a nonzero function $\\varphi$ satisfying\n\n$$L\\varphi = \\lambda\\varphi$$\n\nfor some scalar $\\lambda$, called the corresponding **eigenvalue**. This is the infinite-dimensional analogue of an eigenvector: the operator acts on $\\varphi$ by simple scaling.\n\n## Typical settings\n\n- **Differential operators.** For $L = -\\frac{d^2}{dx^2}$ on $[0,\\pi]$ with Dirichlet boundary conditions, the eigenfunctions are $\\varphi_n(x) = \\sin(nx)$ with eigenvalues $\\lambda_n = n^2$.\n- **Sturm–Liouville problems.** $(p\\varphi')' + q\\varphi = -\\lambda w\\varphi$ with boundary conditions — eigenfunctions form an orthogonal basis of $L^2$ with weight $w$.\n- **Quantum mechanics.** Stationary states of the Hamiltonian $\\hat{H}\\psi = E\\psi$ are energy eigenfunctions.\n- **Integral operators.** $(K\\varphi)(x) = \\int k(x,y)\\varphi(y)\\,dy = \\lambda\\varphi(x)$.\n\n## Why they matter\n\nIf $\\{\\varphi_n\\}$ is a complete orthogonal family of eigenfunctions of $L$, any suitable $f$ expands as $f = \\sum c_n\\varphi_n$, and $L$ becomes diagonal in this basis: $Lf = \\sum \\lambda_n c_n \\varphi_n$. This reduces solving $Lu = f$ or $u_t = Lu$ to an algebraic problem in the coefficients — the foundation of Fourier methods and separation of variables.",
+    "related": [
+      "eigenvalue-overview",
+      "eigenvector-overview",
+      "linear-operator",
+      "symmetric-operator"
+    ],
+    "source": "tutor"
+  },
+  {
+    "id": "ode-classification-note",
+    "title": "Classificação de EDOs",
+    "domain": "EDO",
+    "tags": [
+      "ordem",
+      "linearidade"
+    ],
+    "content": "Uma **equação diferencial ordinária (EDO)** relaciona $y$, sua variável independente e derivadas. Classificamos por:\n\n- **Ordem**: maior ordem de derivada que aparece.\n- **Linearidade**: linear se da forma $a_n(x)y^{(n)}+\\dots+a_0(x)y=g(x)$, sem produtos/potências/funções não-lineares de $y$ ou derivadas.\n- **Homogeneidade**: homogênea se $g(x)\\equiv 0$.\n\nExemplos: $y''+xy'+y=e^x$ é 2ª ordem, linear, não-homogênea.",
+    "related": [
+      "linear-ode-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "operador-linear-note",
+    "title": "Operador Linear",
+    "domain": "Álgebra/EDO",
+    "tags": [
+      "linearidade"
+    ],
+    "content": "Um operador $\\mathcal{L}$ é **linear** se:\n\n1. $\\mathcal{L}[u+v]=\\mathcal{L}[u]+\\mathcal{L}[v]$ (aditividade)\n2. $\\mathcal{L}[cu]=c\\,\\mathcal{L}[u]$ (homogeneidade)\n\nExemplos lineares: $\\tfrac{d}{dx}$, $\\int_a^x$, multiplicação por função de $x$. Não-lineares: $u\\mapsto u^2$, $u\\mapsto u\\,u_x$, $u\\mapsto\\sqrt{1+u}$.",
+    "related": [
+      "linear-ode-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "superposition-note",
+    "title": "Princípio da Superposição",
+    "domain": "EDO",
+    "tags": [
+      "linearidade"
+    ],
+    "content": "Se $\\mathcal{L}$ é linear:\n\n- Combinações lineares de soluções de $\\mathcal{L}[u]=0$ ainda resolvem $\\mathcal{L}[u]=0$.\n- Diferença de duas soluções de $\\mathcal{L}[u]=g$ é solução de $\\mathcal{L}[u]=0$.\n- Solução geral: $u=u_p+u_h$, com $u_p$ particular e $u_h$ geral da homogênea.\n\n**Prova da diferença**: $\\mathcal{L}[u_1-u_2]=\\mathcal{L}[u_1]-\\mathcal{L}[u_2]=g-g=0$.",
+    "related": [
+      "linear-ode-note",
+      "operador-linear-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "solution-verification-note",
+    "title": "Verificação de Soluções",
+    "domain": "EDO",
+    "tags": [
+      "técnica"
+    ],
+    "content": "Para verificar se $y=\\varphi(x)$ resolve uma EDO: calcule as derivadas necessárias, substitua na equação e simplifique. Se obter identidade, é solução.\n\nExemplo: $y=x^{1/2}$ em $2x^2y''+3xy'-y=0$:\n$y'=\\tfrac12 x^{-1/2}$, $y''=-\\tfrac14 x^{-3/2}$.\n$2x^2(-\\tfrac14 x^{-3/2})+3x(\\tfrac12 x^{-1/2})-x^{1/2}=-\\tfrac12 x^{1/2}+\\tfrac32 x^{1/2}-x^{1/2}=0$. ✓",
+    "related": [
+      "linear-ode-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "characteristic-equation-note",
+    "title": "Soluções Exponenciais e de Potência",
+    "domain": "EDO",
+    "tags": [
+      "técnica",
+      "coeficientes constantes",
+      "Euler"
+    ],
+    "content": "**Coeficientes constantes**: ansatz $y=e^{rx}$ reduz a EDO linear a equação algébrica (característica) em $r$.\n\nExemplo: $y''+y'-6y=0\\Rightarrow r^2+r-6=0\\Rightarrow r=2,-3$.\n\n**Equação de Euler** $x^2 y''+bxy'+cy=0$: ansatz $y=x^r$ ⇒ $r(r-1)+br+c=0$.\n\nExemplo: $x^2y''+4xy'+2y=0\\Rightarrow r^2+3r+2=0\\Rightarrow r=-1,-2$.",
+    "related": [
+      "linear-ode-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "equilibrium-stability-note",
+    "title": "Equilíbrios e Estabilidade",
+    "domain": "Sistemas Dinâmicos",
+    "tags": [
+      "qualitativa",
+      "estabilidade"
+    ],
+    "content": "Para EDO autônoma $\\dot x=f(x)$, **equilíbrios** são raízes de $f(x)=0$.\n\n**Estabilidade linear**: $f'(x^*)<0$ ⇒ poço (atrator); $f'(x^*)>0$ ⇒ fonte (repulsor).\n\nExemplo linear $\\dot x=ax+b$: único equilíbrio $x^*=-b/a$ (se $a\\ne 0$). Solução: $x(t)=(x_0-x^*)e^{at}+x^*$. Atrator sse $a<0$.\n\n**Retrato de fase** (1D): reta com setas indicando sinal de $f$.",
+    "related": [
+      "linear-ode-note"
+    ],
+    "source": ""
+  },
+  {
+    "id": "fase-autonoma",
+    "title": "Linha de Fase de Equações Autônomas",
+    "domain": "EDO",
+    "tags": [
+      "qualitativo",
+      "autonoma",
+      "estabilidade"
+    ],
+    "content": "Para $\\dot x = f(x)$:\n\n1. **Zeros de $f$** são os pontos fixos $x^*$.\n2. Entre zeros consecutivos, o sinal de $f$ é constante e define a direção do fluxo.\n3. Classificação:\n   - **Poço** (estável): $f$ passa de $+$ para $-$ ao cruzar $x^*$.\n   - **Fonte** (instável): $f$ passa de $-$ para $+$.\n   - **Semi-estável**: sinal não muda (zero de multiplicidade par).\n4. Unicidade impede que soluções atravessem equilíbrios — eles são barreiras.\n\nEsboçar gráfico de $f$ contra $x$ facilita ler regiões de sinal.",
+    "related": [
+      "separacao-variaveis-justificativa"
+    ],
+    "source": ""
+  },
+  {
+    "id": "separacao-variaveis-justificativa",
+    "title": "Justificativa do Método de Separação",
+    "domain": "EDO",
+    "tags": [
+      "metodo",
+      "separavel",
+      "unicidade"
+    ],
+    "content": "Para $\\dot x = f(x)g(t)$, $x(t_0)=x_0$:\n\n**Dicotomia por unicidade**: ou $f(x(t))\\equiv 0$ (solução estacionária em zero de $f$), ou $f(x(t))\\ne 0$ para todo $t$.\n\nNo caso não-estacionário, seja $H$ antiderivada de $1/f$ e $G$ antiderivada de $g$. Pela regra da cadeia,\n$$\\frac{d}{dt}H(x(t)) = \\frac{1}{f(x)}\\dot x = g(t).$$\nIntegrando de $t_0$ a $t$:\n$$\\int_{x_0}^{x(t)}\\frac{du}{f(u)} = \\int_{t_0}^{t} g(s)\\,ds.$$\nA fórmula escrita simbolicamente como $\\int dx/f(x) = \\int g(t)\\,dt$ é legítima porque a unicidade garante que dividir por $f$ é válido.",
+    "related": [
+      "fase-autonoma"
+    ],
+    "source": ""
+  },
+  {
+    "id": "vetor-classe-equivalencia",
+    "title": "Vetor como Classe de Equivalência",
+    "domain": "Geometria Analítica",
+    "tags": [
+      "vetor",
+      "equivalência"
+    ],
+    "content": "Um **vetor** é uma classe de equivalência de pares ordenados de pontos $(A,B)$ sob a relação: $(A,B)\\sim(C,D)$ sse $AB\\parallel CD$ com mesmo comprimento e $AC\\parallel BD$ com mesmo comprimento (ou seja, formam um paralelogramo, possivelmente degenerado).\n\nA classe é denotada $\\overrightarrow{AB}$. Esta abstração permite tratar 'flechinhas livres' que podem ser transladadas a qualquer ponto do espaço.\n\n**Propriedades**:\n- Reflexividade, simetria, transitividade.\n- Dado vetor $\\vec{v}$ e ponto $P$, existe único $Q$ com $\\overrightarrow{PQ}=\\vec{v}$.\n- Vetor nulo: $\\vec{0}=\\overrightarrow{PP}$.",
+    "related": [
+      "coordenadas-base-canonica"
+    ],
+    "source": ""
+  },
+  {
+    "id": "coordenadas-base-canonica",
+    "title": "Coordenadas na Base Canônica",
+    "domain": "Geometria Analítica",
+    "tags": [
+      "coordenadas",
+      "base"
+    ],
+    "content": "A **base canônica** de $V$ é $\\{\\vec{e}_1,\\vec{e}_2,\\vec{e}_3\\}$: vetores unitários, dois a dois ortogonais.\n\nTodo vetor admite representação única\n$$\\vec{v}=x_1\\vec{e}_1+x_2\\vec{e}_2+x_3\\vec{e}_3,$$\ne $(x_1,x_2,x_3)$ são as **coordenadas** de $\\vec{v}$.\n\nA bijeção $V\\leftrightarrow\\mathbb{R}^3$ é um **isomorfismo**: preserva soma e produto por escalar. Combinada com a fixação de origem $O\\in E$ (que dá bijeção $E\\leftrightarrow V$ via $P\\mapsto\\overrightarrow{OP}$), obtemos a 'Santíssima Trindade': pontos, vetores e ternos identificam-se simultaneamente.",
+    "related": [
+      "vetor-classe-equivalencia",
+      "produto-escalar-r3"
+    ],
+    "source": ""
+  },
+  {
+    "id": "produto-escalar-r3",
+    "title": "Produto Escalar em $\\mathbb{R}^3$",
+    "domain": "Geometria Analítica",
+    "tags": [
+      "produto escalar",
+      "ortogonalidade"
+    ],
+    "content": "Definição geométrica: $\\langle\\vec{u},\\vec{v}\\rangle=|\\vec{u}||\\vec{v}|\\cos\\theta$.\n\nEm coordenadas (base canônica): $\\langle\\vec{u},\\vec{v}\\rangle=u_1v_1+u_2v_2+u_3v_3$.\n\n**Propriedades**:\n1. Simetria: $\\langle\\vec{u},\\vec{v}\\rangle=\\langle\\vec{v},\\vec{u}\\rangle$.\n2. Linearidade: $\\langle t\\vec{u},\\vec{v}\\rangle=t\\langle\\vec{u},\\vec{v}\\rangle$.\n3. Distributividade: $\\langle\\vec{u},\\vec{v}_1+\\vec{v}_2\\rangle=\\langle\\vec{u},\\vec{v}_1\\rangle+\\langle\\vec{u},\\vec{v}_2\\rangle$.\n4. Base canônica ortonormal: $\\langle\\vec{e}_i,\\vec{e}_j\\rangle=\\delta_{ij}$.\n\n**Aplicações**:\n- Norma: $|\\vec{v}|=\\sqrt{\\langle\\vec{v},\\vec{v}\\rangle}$.\n- Ângulo: $\\cos\\theta=\\langle\\vec{u},\\vec{v}\\rangle/(|\\vec{u}||\\vec{v}|)$.\n- Coordenadas: $v_i=\\langle\\vec{v},\\vec{e}_i\\rangle$.",
+    "related": [
+      "projecao-vetor",
+      "equacao-cartesiana-plano"
+    ],
+    "source": ""
+  },
+  {
+    "id": "projecao-vetor",
+    "title": "Projeção Ortogonal de Vetor",
+    "domain": "Geometria Analítica",
+    "tags": [
+      "projeção",
+      "ortogonalidade"
+    ],
+    "content": "A projeção de $\\vec{u}$ na direção de $\\vec{v}\\neq\\vec{0}$ é\n$$\\vec{u}_o=\\frac{\\langle\\vec{u},\\vec{v}\\rangle}{\\langle\\vec{v},\\vec{v}\\rangle}\\vec{v}.$$\n\n**Caracterização**: $\\vec{u}_o$ é o múltiplo de $\\vec{v}$ tal que $\\vec{u}-\\vec{u}_o\\perp\\vec{v}$.\n\n**Propriedade de mínima distância**: $\\vec{u}_o$ é o ponto da reta gerada por $\\vec{v}$ mais próximo de $\\vec{u}$.\n\nEsta propriedade fundamenta inúmeras aplicações, da média aritmética a quadrados mínimos.",
+    "related": [
+      "produto-escalar-r3",
+      "media-aritmetica-projecao"
+    ],
+    "source": ""
+  },
+  {
+    "id": "equacao-cartesiana-plano",
+    "title": "Equação Cartesiana do Plano",
+    "domain": "Geometria Analítica",
+    "tags": [
+      "plano",
+      "produto escalar"
+    ],
+    "content": "O plano $\\alpha$ por $P_0=(x_0,y_0,z_0)$ normal a $\\vec{n}=(a,b,c)$ é\n$$\\alpha=\\{P\\mid\\langle\\overrightarrow{P_0P},\\vec{n}\\rangle=0\\}.$$\n\nEm coordenadas: $a(x-x_0)+b(y-y_0)+c(z-z_0)=0$, ou\n$$ax+by+cz+d=0,\\quad d=-(ax_0+by_0+cz_0).$$\n\n**Interpretação alternativa**: todos os pontos de $\\alpha$ projetam-se no mesmo ponto da reta por origem na direção $\\vec{n}$.",
+    "related": [
+      "produto-escalar-r3"
+    ],
+    "source": ""
+  },
+  {
+    "id": "convexidade",
+    "title": "Conjuntos Convexos e Semiespaços",
+    "domain": "Geometria",
+    "tags": [
+      "convexidade",
+      "poliedro"
+    ],
+    "content": "Um conjunto $K$ é **convexo** se $A,B\\in K\\Rightarrow[A,B]\\subset K$, onde $[A,B]=\\{tA+(1-t)B:t\\in[0,1]\\}$.\n\n**Exemplos fundamentais**:\n- Semiespaço $\\{\\vec{v}\\mid\\langle\\vec{v},\\vec{n}\\rangle\\le c\\}$ é convexo.\n- Interseção de convexos é convexa.\n- **Poliedro convexo**: interseção finita e limitada de semiespaços.\n\n**Vértice** de $K$: ponto $P$ que não é interior a nenhum segmento $[A,B]\\subset K$ com $A,B\\neq P$.\n\n**Triângulo cheio**: $T=\\{p_1P_1+p_2P_2+p_3P_3\\mid p_i\\ge 0,\\sum p_i=1\\}$.",
+    "related": [
+      "maximo-em-vertice"
+    ],
+    "source": ""
+  },
+  {
+    "id": "maximo-em-vertice",
+    "title": "Máximo Linear em Vértice",
+    "domain": "Otimização",
+    "tags": [
+      "programação linear",
+      "convexidade"
+    ],
+    "content": "**Resultado fundamental**: Seja $K\\subset\\mathbb{R}^n$ poliedro convexo limitado e $L(x)=\\langle x,c\\rangle$ função linear. Então $\\max_{x\\in K}L(x)$ é atingido em algum vértice de $K$.\n\n**Argumento geométrico**: hiperplanos de nível de $L$ são paralelos e perpendiculares a $c$. Movendo na direção de $c$, o último a tocar $K$ contém um vértice.\n\n**Aplicação**: problema de Zumbi (amendoim) — maximizar lucro $L_1x+L_2y+L_3z$ sob restrições lineares se reduz a verificar finitos vértices.",
+    "related": [
+      "convexidade"
+    ],
+    "source": ""
+  },
+  {
+    "id": "media-aritmetica-projecao",
+    "title": "Média Aritmética como Projeção",
+    "domain": "Estatística / Geometria",
+    "tags": [
+      "média",
+      "projeção",
+      "produto escalar"
+    ],
+    "content": "Dadas medidas $x=(x_1,\\ldots,x_n)\\in\\mathbb{R}^n$, a 'medida ideal' seria $(\\bar{m},\\ldots,\\bar{m})$ na reta diagonal $r=\\{t(1,\\ldots,1)\\}$.\n\nA projeção ortogonal de $x$ sobre $r$ usando produto escalar canônico é\n$$\\bar{x}=\\frac{\\langle x,(1,\\ldots,1)\\rangle}{n}(1,\\ldots,1)=(\\bar{m},\\ldots,\\bar{m}),$$\ncom\n$$\\bar{m}=\\frac{x_1+\\cdots+x_n}{n}.$$\n\n**Otimalidade**: $\\bar{x}$ minimiza $|x-y|$ entre $y\\in r$, via Pitágoras generalizado: para $y\\in r$,\n$$|y-x|^2=|x-\\bar{x}|^2+|y-\\bar{x}|^2.$$\n\nEste é um exemplo paradigmático de **geometrização** de problema algébrico/estatístico em $\\mathbb{R}^n$.",
+    "related": [
+      "projecao-vetor"
+    ],
+    "source": ""
+  },
+  {
+    "id": "matriz-yakecan-markov",
+    "title": "Matrizes de Markov",
+    "domain": "Probabilidade",
+    "tags": [
+      "Markov",
+      "probabilidade",
+      "matriz estocástica"
+    ],
+    "content": "Uma **matriz de Markov** (estocástica) $A=(a_{ij})$ tem $a_{ij}\\ge 0$ e cada coluna soma 1: $\\sum_i a_{ij}=1$. Aqui $a_{ij}$ é a probabilidade de transição do estado $j$ para o $i$.\n\n**Estado**: vetor $p=(p_1,\\ldots,p_n)$ com $p_i\\ge 0$ e $\\sum p_i=1$, vivendo no **simplex**.\n\n**Evolução**: estado após uma rodada é $Ap$. O simplex é mapeado em si mesmo.\n\n**Geometria**: o simplex evolui contraindo a cada rodada (em casos não-degenerados), sugerindo existência de **estado estacionário** (autovetor de $A$ com autovalor 1).",
+    "related": [
+      "axiomas-espaco-vetorial"
+    ],
+    "source": ""
+  },
+  {
+    "id": "axiomas-espaco-vetorial",
+    "title": "Axiomas de Espaço Vetorial",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "espaço vetorial",
+      "axiomas"
+    ],
+    "content": "Um **espaço vetorial real** é uma tripla $(V,+,\\cdot)$ onde $+:V\\times V\\to V$ e $\\cdot:\\mathbb{R}\\times V\\to V$ satisfazem, para todos $u,v,w\\in V$ e $s,t\\in\\mathbb{R}$:\n\n1. $u+(v+w)=(u+v)+w$ (associatividade)\n2. $u+v=v+u$ (comutatividade)\n3. $\\exists 0\\in V:u+0=u$ (neutro)\n4. $\\exists -u:u+(-u)=0$ (oposto)\n5. $t(u+v)=tu+tv$\n6. $(s+t)u=su+tu$\n7. $s(tu)=(st)u$\n8. $1u=u$\n\n**Exemplos**: $\\mathbb{R}^n$, espaços de funções, polinômios $\\mathbb{R}[x]$, matrizes, sequências, $\\mathbb{C}^n$.\n\n**Unicidade**: o vetor nulo e o oposto $-u$ são únicos.",
+    "related": [
+      "subespaco-vetorial",
+      "base-coordenadas"
+    ],
+    "source": ""
+  },
+  {
+    "id": "subespaco-vetorial",
+    "title": "Subespaço Vetorial",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "subespaço"
+    ],
+    "content": "$W\\subset V$ é **subespaço** se:\n1. $W\\neq\\emptyset$ (equivalentemente, $0\\in W$);\n2. $w_1,w_2\\in W\\Rightarrow w_1+w_2\\in W$;\n3. $w\\in W,t\\in\\mathbb{R}\\Rightarrow tw\\in W$.\n\nUm subespaço é, ele próprio, um espaço vetorial com as operações herdadas.\n\n**Exemplos**: planos por origem em $\\mathbb{R}^3$; $\\{f\\in C[a,b]:f(a)=0\\}$; polinômios de grau $\\le n$.\n\n**Subespaço gerado** por $X\\subset V$: conjunto de combinações lineares finitas de elementos de $X$, equivalentemente a interseção de todos os subespaços que contêm $X$.",
+    "related": [
+      "axiomas-espaco-vetorial"
+    ],
+    "source": ""
+  },
+  {
+    "id": "base-coordenadas",
+    "title": "Base e Coordenadas",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "base",
+      "coordenadas"
+    ],
+    "content": "Um conjunto ordenado $\\{v_1,\\ldots,v_n\\}\\subset V$ é **base** se todo $v\\in V$ se escreve **unicamente** como\n$$v=x_1v_1+\\cdots+x_nv_n.$$\nOs $x_i$ são as **coordenadas** de $v$.\n\n**Caracterização**: $\\{v_1,\\ldots,v_n\\}$ é base sse:\n(i) gera $V$;\n(ii) é linearmente independente.\n\n**Isomorfismo**: a bijeção $v\\leftrightarrow(x_1,\\ldots,x_n)$ é compatível com soma e produto escalar. Assim, todo espaço vetorial de dimensão $n$ é isomorfo a $\\mathbb{R}^n$.",
+    "related": [
+      "li-equivalencias",
+      "lema-fundamental-bases"
+    ],
+    "source": ""
+  },
+  {
+    "id": "li-equivalencias",
+    "title": "Equivalências da Independência Linear",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "independência linear"
+    ],
+    "content": "Para $v_1,\\ldots,v_n\\in V$, são equivalentes:\n\n1. **Existem** dois ternos distintos $(x_i)\\neq(y_i)$ com $\\sum x_iv_i=\\sum y_iv_i$;\n2. Algum $v_i$ é combinação linear dos demais;\n3. **Existe** combinação não-trivial $\\sum t_iv_i=\\vec{0}$ com nem todos $t_i=0$.\n\nEstas três condições caracterizam **dependência linear**.\n\n**Independência linear** é a negação: $\\sum t_iv_i=\\vec{0}\\Rightarrow t_1=\\cdots=t_n=0$.\n\n**Importância**: representação por coordenadas é única sse os vetores são LI.",
+    "related": [
+      "base-coordenadas"
+    ],
+    "source": ""
+  },
+  {
+    "id": "lema-fundamental-bases",
+    "title": "Lema Fundamental da Substituição",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "dimensão",
+      "base"
+    ],
+    "content": "**Lema**: Sejam $\\alpha=\\{v_1,\\ldots,v_m\\}$ que gera $V$ e $\\beta=\\{u_1,\\ldots,u_n\\}\\subset V$ linearmente independente. Então:\n\n(i) $m\\ge n$;\n(ii) podemos substituir $n$ vetores de $\\alpha$ pelos $u_j$, mantendo um conjunto que ainda gera $V$.\n\n**Demonstração** (esquema): substituições passo-a-passo, a cada etapa trocando um $v_j$ por um $u_i$, usando que $u_i$ se escreve como combinação dos atuais com algum coeficiente não nulo (necessário pois $\\beta$ é LI).\n\n**Consequência crucial**: Quaisquer duas bases de $V$ têm o mesmo número de elementos.",
+    "related": [
+      "dimensao-invariante"
+    ],
+    "source": ""
+  },
+  {
+    "id": "dimensao-invariante",
+    "title": "Dimensão de Espaço Vetorial",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "dimensão"
+    ],
+    "content": "A **dimensão** de $V$, $\\dim V$, é o número de elementos de qualquer base. Pelo Lema Fundamental, esse número é bem definido.\n\n**Resultados clássicos** ($\\dim V=n$):\n- Qualquer conjunto LI com $n$ elementos é base.\n- Qualquer conjunto gerador com $n$ elementos é base.\n- Qualquer conjunto LI pode ser estendido a uma base.\n- Qualquer conjunto gerador contém uma base.\n- Mais que $n$ vetores em $V$ são sempre LD.\n\n**Exemplos**: $\\dim\\mathbb{R}^n=n$; $\\dim\\mathbb{R}_n[x]=n+1$ (polinômios de grau $\\le n$); $\\dim\\mathbb{R}^{m\\times n}=mn$.",
+    "related": [
+      "lema-fundamental-bases",
+      "base-coordenadas"
+    ],
+    "source": ""
+  },
+  {
+    "id": "projecao-convexos-hilbert",
+    "title": "Teorema da Projeção sobre Convexos Fechados",
+    "domain": "Análise Funcional / Geometria",
+    "tags": [
+      "hilbert",
+      "convexidade",
+      "projecao"
+    ],
+    "content": "# Teorema da Projeção sobre Convexos Fechados\n\nSeja $H$ um espaço de Hilbert real e $K\\subset H$ convexo, fechado, não-vazio. Então para cada $x\\in H$ existe único $y=p_K(x)\\in K$ com $|x-y|\\le|x-z|$ para todo $z\\in K$.\n\n## Caracterização variacional\n$$y = p_K(x) \\iff \\langle x-y, z-y\\rangle \\le 0 \\quad \\forall z\\in K.$$\n\n## Demonstração (esboço)\n1. Seja $d=\\inf\\{|z-x|:z\\in K\\}$ e $(y_n)$ minimizante.\n2. **Identidade do paralelogramo** aplicada a $u=y_m-x$, $v=y_n-x$:\n$$\\frac{|y_m-y_n|^2}{4} = \\frac{|y_m-x|^2+|y_n-x|^2}{2} - \\left|\\frac{y_m+y_n}{2}-x\\right|^2.$$\n3. Convexidade dá $(y_m+y_n)/2\\in K$, logo o último termo $\\ge d^2$.\n4. Como $|y_n-x|^2\\to d^2$, segue que $(y_n)$ é Cauchy.\n5. Completude → $y_n\\to y$; K fechado → $y\\in K$.\n\n## Lipschitz\n$|p_K(x_1)-p_K(x_2)|\\le |x_1-x_2|$ — a projeção é não-expansiva.\n\n## Por que importa\n- Generaliza projeção ortogonal sobre subespaço.\n- Funciona em dimensão infinita.\n- Base do método de gradiente projetado em otimização convexa.",
+    "related": [
+      "base-ortonormal-projecao"
+    ],
+    "source": ""
+  },
+  {
+    "id": "determinante-forma-multilinear",
+    "title": "Determinante como Forma Multilinear Alternada",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "determinante",
+      "multilinear",
+      "orientacao"
+    ],
+    "content": "# Determinante: Caracterização Axiomática\n\nO determinante $\\det:V^n\\to\\mathbb{R}$ (com $\\dim V=n$) é a única função satisfazendo:\n\n1. **Multilinear**: linear em cada argumento.\n2. **Alternada**: $\\det=0$ se dois argumentos são iguais (equivalente: muda de sinal ao trocar dois).\n3. **Normalização**: $\\det(e_1,\\ldots,e_n)=1$.\n\n## Interpretação geométrica\n- Em $\\mathbb{R}^2$: área orientada do paralelogramo.\n- Em $\\mathbb{R}^3$: volume orientado do paralelepípedo.\n- Sinal codifica **orientação** relativa à base canônica.\n\n## Fórmula 3x3 (Sarrus)\n$$\\det = a_{11}a_{22}a_{33} - a_{11}a_{23}a_{32} + a_{12}a_{23}a_{31} - a_{12}a_{21}a_{33} + a_{13}a_{21}a_{32} - a_{13}a_{22}a_{31}$$\n\n## Cofatores e Cramer\nExpansão de Laplace: $\\det A = \\sum_j (-1)^{i+j}a_{ij}|\\tilde A_{ij}|$.\n\n**Cramer**: para $A\\vec{x}=\\vec{y}$ com $\\det A\\ne 0$,\n$$x_i = \\frac{\\det A_i}{\\det A}$$\nonde $A_i$ é A com coluna i substituída por $\\vec{y}$.\n\n## Critério de independência\n$\\det(\\vec{v}_1,\\ldots,\\vec{v}_n)\\ne 0 \\iff \\{\\vec{v}_i\\}$ é LI $\\iff$ é base.",
+    "related": [
+      "produto-vetorial-quaternions"
+    ],
+    "source": ""
+  },
+  {
+    "id": "produto-vetorial-quaternions",
+    "title": "Produto Vetorial e Quatérnions",
+    "domain": "Álgebra / Geometria",
+    "tags": [
+      "quaternion",
+      "produto-vetorial",
+      "hamilton"
+    ],
+    "content": "# Produto Vetorial: Origem nos Quatérnions\n\nHamilton (1843): $i^2=j^2=k^2=ijk=-1$, com $ij=k=-ji$, etc. Multiplicação **não comutativa**.\n\n## Multiplicação de quatérnions puros\nSe $\\vec{u}=x_1i+y_1j+z_1k$ e $\\vec{v}=x_2i+y_2j+z_2k$:\n$$\\vec{u}\\cdot\\vec{v} = -(x_1x_2+y_1y_2+z_1z_2) + (\\vec{u}\\times\\vec{v})$$\n- **Parte escalar**: $-\\langle\\vec{u},\\vec{v}\\rangle$ (produto escalar negado).\n- **Parte vetorial**: o produto vetorial $\\vec{u}\\times\\vec{v}$.\n\n## Fórmula como determinante\n$$\\vec{u}\\times\\vec{v} = \\det\\begin{pmatrix}\\vec{i}&\\vec{j}&\\vec{k}\\\\x_1&y_1&z_1\\\\x_2&y_2&z_2\\end{pmatrix}$$\n\n## Propriedades geométricas\n1. **Ortogonalidade**: $\\vec{u}\\times\\vec{v} \\perp \\vec{u}, \\vec{v}$.\n2. **Módulo**: $|\\vec{u}\\times\\vec{v}| = |\\vec{u}||\\vec{v}|\\sin\\theta$ = área do paralelogramo.\n3. **Orientação**: $(\\vec{u}\\times\\vec{v},\\vec{u},\\vec{v})$ é base positivamente orientada.\n\n## Produto misto = volume\n$$\\vec{u}\\cdot(\\vec{v}\\times\\vec{w}) = \\det(\\vec{u},\\vec{v},\\vec{w})$$\n\n## Não-associatividade\nIdentidade de Jacobi:\n$$(\\vec{u}\\times\\vec{v})\\times\\vec{w} + (\\vec{v}\\times\\vec{w})\\times\\vec{u} + (\\vec{w}\\times\\vec{u})\\times\\vec{v} = \\vec{0}$$",
+    "related": [
+      "determinante-forma-multilinear"
+    ],
+    "source": ""
+  },
+  {
+    "id": "cone-classificacao",
+    "title": "Classificação de Cônicas por Autovalores",
+    "domain": "geometria-analitica",
+    "tags": [
+      "cônicas",
+      "autovalor",
+      "forma-quadrática"
+    ],
+    "content": "A parte quadrática de $Ax^2+Bxy+Cy^2+\\cdots=0$ é dada pela matriz simétrica $M=\\begin{pmatrix}A&B/2\\\\B/2&C\\end{pmatrix}$.\n\nSeus autovalores $\\lambda_1,\\lambda_2$ classificam a cônica:\n- $\\lambda_1\\lambda_2>0$: elipse (ou ponto/vazio)\n- $\\lambda_1\\lambda_2<0$: hipérbole (ou par de retas)\n- $\\lambda_1\\lambda_2=0$: parábola (ou retas paralelas)\n\nO determinante $\\det M=AC-B^2/4$ tem o sinal de $\\lambda_1\\lambda_2$.",
+    "related": [],
+    "source": ""
+  },
+  {
+    "id": "svd-geometria",
+    "title": "SVD: Interpretação Geométrica",
+    "domain": "algebra-linear",
+    "tags": [
+      "SVD",
+      "ortogonal",
+      "elipsoide"
+    ],
+    "content": "Toda matriz real $A$ admite decomposição $A=U\\Sigma V^T$ onde:\n- $U,V$ são ortogonais\n- $\\Sigma$ é diagonal com $\\sigma_1\\geq\\sigma_2\\geq\\cdots\\geq 0$\n\nGeometricamente, $A$ envia a esfera unitária no elipsoide cujos semieixos são os valores singulares $\\sigma_i$, alinhados às colunas de $U$.\n\nOs $\\sigma_i$ são as raízes quadradas dos autovalores de $A^TA$. A SVD generaliza a diagonalização para matrizes não simétricas e mesmo não quadradas.",
+    "related": [
+      "cone-classificacao"
+    ],
+    "source": ""
+  },
+  {
+    "id": "conicas-coordenadas-polares",
+    "title": "Cônicas em Coordenadas Polares",
+    "domain": "Geometria Analítica",
+    "tags": [
+      "conica",
+      "polar"
+    ],
+    "content": "## Equação Unificada\n\nCom foco na origem, diretriz a distância $d$, ângulo $\\varphi$ entre eixo principal e horizontal:\n\n$$r = \\frac{ed}{1 - e\\cos(\\theta-\\varphi)}$$\n\n- $e<1$: elipse (denominador nunca nulo)\n- $e=1$: parábola (denominador nulo em $\\theta=\\varphi+\\pi$)\n- $e>1$: hipérbole (dois ramos)\n\n## Hipérbole: dois ramos\n\n- Ramo próximo: $r_1(\\theta)=\\frac{ed}{1-e\\cos(\\theta-\\varphi)}$, válido onde $\\cos(\\theta-\\varphi)<1/e$\n- Ramo distante: $r_2(\\theta)=\\frac{-ed}{1+e\\cos(\\theta-\\varphi)}$, válido onde $\\cos(\\theta-\\varphi)<-1/e$",
+    "related": [
+      "diametros-conjugados-apolonio"
+    ],
+    "source": ""
+  },
+  {
+    "id": "diametros-conjugados-apolonio",
+    "title": "Diâmetros Conjugados e Teorema de Apolônio",
+    "domain": "Geometria Analítica",
+    "tags": [
+      "conica",
+      "diametro"
+    ],
+    "content": "## Definição\n\nDado feixe de paralelas a $\\vec v$ cortando uma elipse $c$, os pontos médios das cordas formam o **diâmetro conjugado** à direção de $\\vec v$.\n\n## Estratégia\n\nToda elipse é $T(c_0)$ com $c_0$ círculo unitário e $T$ linear bijetiva. $T$ leva diâmetros perpendiculares em conjugados.\n\n## Teorema de Apolônio\n\nO paralelogramo formado pelas tangentes nas extremidades de um par de diâmetros conjugados tem área **constante** (independe do par):\n$$\\text{Área} = |\\det T|\\cdot\\text{Área quadrado circunscrito ao círculo}$$\n\n## Hipérboles conjugadas\n\nDuas hipérboles compartilhando eixos de simetria, assíntotas e distância focal, mas com focos em eixos distintos. Diâmetros de uma têm conjugados na outra.",
+    "related": [
+      "conicas-coordenadas-polares",
+      "quadricas-classificacao"
+    ],
+    "source": ""
+  },
+  {
+    "id": "quadricas-classificacao",
+    "title": "Classificação de Quádricas via Espectral",
+    "domain": "Geometria Analítica",
+    "tags": [
+      "quadrica",
+      "espectral"
+    ],
+    "content": "## Forma Diagonal\n\nApós diagonalização ortogonal e translação:\n$$\\lambda_1 u^2+\\lambda_2 v^2+\\lambda_3 w^2 = K$$\n\n## Casos por sinal dos $\\lambda_i$\n\n| Sinais | Caso | Quádrica |\n|--------|------|----------|\n| +,+,+ | $K>0$ | Elipsoide |\n| +,+,- | $K>0$ | Hiperboloide 1 folha |\n| +,-,- | $K>0$ | Hiperboloide 2 folhas |\n| +,+,- | $K=0$ | Cone elíptico |\n| +,+,0 | termo linear | Paraboloide elíptico |\n| +,-,0 | termo linear | Paraboloide hiperbólico (sela) |\n| dois zero | termo linear | Cilindro |\n\n## Fato notável\n\nO hiperboloide de uma folha é **regrado**: por cada ponto passam exatamente duas retas contidas na superfície.",
+    "related": [
+      "diametros-conjugados-apolonio",
+      "isometrias-r3"
+    ],
+    "source": ""
+  },
+  {
+    "id": "isometrias-r3",
+    "title": "Classificação de Isometrias em R³",
+    "domain": "Geometria",
+    "tags": [
+      "isometria",
+      "ortogonal"
+    ],
+    "content": "## Fatos básicos\n\n- $f$ isométrica com $f(0)=0$ é **linear** e preserva produto interno.\n- Sua matriz em base ortonormal é **ortogonal**.\n\n## Isometrias lineares em R³\n\nO polinômio característico é cúbico real → autovalor $\\pm 1$. O plano ortogonal ao autovetor é invariante. Resultam três tipos:\n\n1. **Rotação** em torno de reta pela origem\n2. **Reflexão** por plano contendo a origem\n3. **Rotação seguida de reflexão** pelo plano normal ao eixo\n\n## Caso geral (sem ponto fixo)\n\nApós escolha apropriada de origem, toda isometria de R³ é:\n\n1. **Helicoidal**: rotação + translação ao longo do eixo (inclui rotações puras, translações puras, identidade)\n2. **Reflexão com deslizamento**: reflexão por plano + translação paralela\n3. **Rotação refletida**: rotação + reflexão pelo plano normal ao eixo\n\n## Próprias × Impróprias\n\nIsometrias **próprias** preservam orientação (det = +1) — apenas tipo (1). As outras revertem orientação.",
+    "related": [
+      "quadricas-classificacao",
+      "aproximacao-schmidt-svd"
+    ],
+    "source": ""
+  },
+  {
+    "id": "aproximacao-schmidt-svd",
+    "title": "Teorema de Aproximação de Schmidt",
+    "domain": "Álgebra Linear",
+    "tags": [
+      "svd",
+      "aproximacao"
+    ],
+    "content": "## Norma de Frobenius\n\n$$\\|A\\|_F^2 = \\sum_{i,j} a_{ij}^2 = \\text{tr}(A^TA)$$\n\nInvariante sob multiplicação por matrizes ortogonais: $\\|UAV^T\\|_F=\\|A\\|_F$.\n\n## Teorema\n\nSeja $A=U\\Sigma V^T$ com $\\sigma_1\\ge\\sigma_2\\ge\\ldots\\ge 0$. Para $k\\le \\min(m,n)$:\n\n$$A_k = U\\Sigma_k V^T$$\n\n(truncando $\\Sigma$ aos $k$ maiores valores singulares) é a **melhor aproximação de posto $\\le k$** em norma de Frobenius:\n\n$$\\|A-A_k\\|_F \\le \\|A-B\\|_F \\quad \\forall B \\text{ de posto} \\le k$$\n\nE\n$$\\|A-A_k\\|_F^2 = \\sum_{i>k}\\sigma_i^2$$\n\n## Estratégia da prova\n\n1. Por invariância de Frobenius sob ortogonais, basta considerar $A=\\Sigma$.\n2. Fixe subespaço $E$ de dimensão $k$ contendo as colunas de $B$.\n3. Maximize $\\|\\Sigma(E)\\|^2 = \\sum_j\\alpha_j\\sigma_j^2$ com pesos $\\alpha_j\\in[0,1]$, $\\sum\\alpha_j\\le k$.\n4. Como $\\sigma_j^2$ é decrescente, ótimo é concentrar pesos nos $k$ primeiros.\n\n## Aplicações\n\n- Compressão de imagens (reter $k$ valores singulares)\n- PCA / redução de dimensionalidade\n- Aproximação de baixo posto em sistemas grandes",
+    "related": [
+      "isometrias-r3"
+    ],
     "source": ""
   }
 ]

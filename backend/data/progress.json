@@ -1,8 +1,8 @@
 {
-  "xp": 256,
-  "streak": 3,
+  "xp": 496,
+  "streak": 1,
   "best_streak": 3,
-  "last_completed": "2026-04-21",
+  "last_completed": "2026-04-26",
   "completed_tasks": {
     "c5-d1-bronze-0": true,
     "c4-d1-bronze-0": true,
@@ -10,7 +10,15 @@
     "c3-d1-gold-2": true,
     "c3-d1-bronze-0": true,
     "c3-d1-silver-1": true,
-    "c7-d1-bronze-0": true
+    "c7-d1-bronze-0": true,
+    "c3-d2-silver-0": true,
+    "c3-d3-silver-0": true,
+    "c3-d3-silver-1": true,
+    "c3-d3-gold-2": true,
+    "c8-d1-bronze-0": true,
+    "c3-d4-silver-0": true,
+    "c3-d4-silver-1": true,
+    "c3-d4-gold-2": true
   },
   "completed_phases": {
     "c5-d1-bronze-0": {
@@ -71,10 +79,10 @@
     },
     "c3-d2-silver-0": {
       "prime": true,
-      "core": false,
+      "core": true,
       "retrieval": true,
-      "elaborate": false,
-      "check": false
+      "elaborate": true,
+      "check": true
     },
     "c7-d1-bronze-0": {
       "prime": true,
@@ -95,6 +103,55 @@
       "core": true,
       "elaborate": true,
       "check": true
+    },
+    "c3-d3-silver-0": {
+      "prime": true,
+      "core": true,
+      "retrieval": true,
+      "elaborate": true,
+      "check": true
+    },
+    "c3-d3-silver-1": {
+      "prime": true,
+      "core": true,
+      "elaborate": true,
+      "retrieval": true,
+      "check": true
+    },
+    "c3-d3-gold-2": {
+      "core": true,
+      "prime": true,
+      "retrieval": true,
+      "elaborate": true,
+      "check": true
+    },
+    "c3-d4-silver-0": {
+      "prime": true,
+      "core": true,
+      "retrieval": true,
+      "elaborate": true,
+      "check": true
+    },
+    "c8-d1-bronze-0": {
+      "prime": true,
+      "core": true,
+      "retrieval": true,
+      "elaborate": true,
+      "check": true
+    },
+    "c3-d4-silver-1": {
+      "prime": true,
+      "core": true,
+      "retrieval": true,
+      "elaborate": true,
+      "check": true
+    },
+    "c3-d4-gold-2": {
+      "prime": true,
+      "core": true,
+      "retrieval": true,
+      "elaborate": true,
+      "check": true
     }
   },
   "day_tiers": {
@@ -103,8 +160,11 @@
     "4.1": "gold",
     "4.2": "bronze",
     "6.1": "none",
-    "3.2": "bronze",
-    "7.1": "gold"
+    "3.2": "gold",
+    "7.1": "gold",
+    "3.3": "gold",
+    "8.1": "gold",
+    "3.4": "gold"
   },
   "generated_tasks": [],
   "attempts": [
@@ -125,6 +185,42 @@
       "verdict": "correct",
       "comment": "Autovetores corretos: [1,1] para λ=4 e [1,-1] para λ=-2, formando uma base de R².",
       "timestamp": "2026-04-20T15:13:18.595343"
+    },
+    {
+      "card-uid": "c3-d3-silver-0",
+      "verdict": "correct",
+      "comment": "Aplicou regra do quociente e depois cadeia corretamente; chegou em (t²+4t+2)/(2+t)².",
+      "timestamp": "2026-04-23T18:58:39.242016"
+    },
+    {
+      "card-uid": "c3-d3-silver-1",
+      "verdict": "correct",
+      "comment": "Aplicou produto + cadeia corretamente: g'(t) = 3t²(1+e^{t²}) + (1+t³)·2t·e^{t²}.",
+      "timestamp": "2026-04-23T23:20:38.433143"
+    },
+    {
+      "card-uid": "c3-d3-silver-0",
+      "verdict": "partial",
+      "comment": "Enunciado correto em essência (avaliação de f' em g(t)), mas incluiu um 'dt' espúrio no final, confundindo notação de derivada com diferencial/integral.",
+      "timestamp": "2026-04-24T12:28:44.465320"
+    },
+    {
+      "card-uid": "c8-d1-bronze-0",
+      "verdict": "correct",
+      "comment": "Classificou corretamente: 2ª ordem, linear, não-homogênea, não-autônoma.",
+      "timestamp": "2026-04-24T19:27:10.081134"
+    },
+    {
+      "card-uid": "c3-d4-silver-0",
+      "verdict": "correct",
+      "comment": "Esqueceu o termo 2x² na primeira tentativa; corrigiu após apontamento.",
+      "timestamp": "2026-04-25T14:41:41.367624"
+    },
+    {
+      "card-uid": "c3-d4-silver-1",
+      "verdict": "correct",
+      "comment": "Reconheceu g e g' direto; só faltou o +C.",
+      "timestamp": "2026-04-26T14:17:56.251653"
     }
   ]
 }
