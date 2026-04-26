@@ -53,22 +53,23 @@ chmod 600 /data/anthropic-oauth/tokens.json
 The OAuth library refreshes the access token in place, so as long as the
 Disk persists, the token stays valid indefinitely.
 
-## 4. Seed initial data (optional)
+## 4. Seed / sync data (automatic)
 
-If you want the local JSON state to come along for the ride:
+The backend syncs git-tracked JSON state into `/data` on every startup
+(see `app/seed.py`). The deploy is a one-way mirror: whatever's in the
+repo's `backend/data/*.json` overwrites the disk. Single-user, single
+source of truth.
 
-```bash
-# locally, from the repo root
-tar czf seed.tgz -C backend/data .
+This means:
 
-# on Render: mochi-backend → Shell
-cd /data
-# upload seed.tgz via the Render shell's drag-and-drop, then:
-tar xzf seed.tgz
-rm seed.tgz
-```
-
-Restart the backend service so it picks up the new files.
+- Updating the course catalog or any other state is `commit + push +
+  redeploy`. No shell upload needed.
+- Studying directly on the Render instance and expecting that progress
+  to survive the next deploy DOES NOT WORK — pull the disk's copy back
+  to git first (`mochi-backend → Shell` → `cat /data/progress.json` or
+  similar) and commit it.
+- OAuth tokens (`/data/anthropic-oauth/tokens.json`) and PDF/OCR caches
+  are not in the seed list, so they persist across deploys untouched.
 
 ## 5. Verify
 
