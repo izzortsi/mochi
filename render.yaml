@@ -36,6 +36,13 @@ services:
         value: /data/pdfs
       - key: SP_OAUTH_TOKEN_PATH
         value: /data/anthropic-oauth/tokens.json
+      # Optional rebuild-resilient seed for the anthropic-oauth token file.
+      # Set this in the Render dashboard (sync: false → not committed) to
+      # the JSON contents of your local ~/.config/anthropic-oauth/tokens.json.
+      # On startup the backend writes it to SP_OAUTH_TOKEN_PATH IF that file
+      # is missing, so a wiped disk recovers without a shell paste.
+      - key: SP_OAUTH_TOKENS_JSON
+        sync: false
       - key: PYTHON_VERSION
         value: 3.12.6
 

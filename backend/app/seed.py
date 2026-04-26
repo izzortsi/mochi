@@ -19,6 +19,7 @@ files around in place.
 """
 from __future__ import annotations
 
+import os
 import shutil
 from pathlib import Path
 
@@ -56,3 +57,36 @@ def seed_data_dir() -> None:
         if not src.exists():
             continue
         shutil.copy2(src, target / name)
+
+
+def seed_oauth_tokens() -> None:
+    """Restore anthropic-oauth tokens.json from an env var if missing.
+
+    Render's persistent disk usually survives deploys, but tier changes
+    or blueprint reapplies can rebuild it — wiping the OAuth tokens that
+    live OUTSIDE the seed allowlist (because they're a secret, not git
+    state). To avoid having to manually re-paste the file into the Render
+    shell every time that happens, paste it once into the env var
+    ``SP_OAUTH_TOKENS_JSON`` and this function will write it to disk on
+    startup IF the file is missing.
+
+    Existing files are left alone — the OAuth library refreshes the
+    access token in-place over time, so we'd corrupt live tokens by
+    overwriting them with the (now-stale) original from the env var.
+    """
+    payload = os.environ.get("SP_OAUTH_TOKENS_JSON", "").strip()
+    if not payload:
+        return
+    raw_path = os.environ.get("SP_OAUTH_TOKEN_PATH", "").strip()
+    if not raw_path:
+        return
+    target_path = Path(raw_path)
+    if target_path.exists():
+        return
+    target_path.parent.mkdir(parents=True, exist_ok=True)
+    target_path.write_text(payload, encoding="utf-8")
+    try:
+        target_path.chmod(0o600)
+    except OSError:
+        # Some hosted environments forbid chmod; best-effort.
+        pass

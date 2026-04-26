@@ -32,7 +32,7 @@ setting it the first time.
 The backend needs a valid `tokens.json` on the Disk at
 `/data/anthropic-oauth/tokens.json` (matches the `SP_OAUTH_TOKEN_PATH`
 env var). You can't run the interactive `anthropic-oauth auth` flow on
-Render, so do it locally and upload.
+Render, so do it locally and propagate.
 
 ```bash
 # locally
@@ -40,7 +40,19 @@ anthropic-oauth auth                       # opens browser, writes ~/.config/ant
 cat ~/.config/anthropic-oauth/tokens.json  # copy the contents
 ```
 
-Then on Render: **mochi-backend → Shell** and:
+Then in the Render dashboard, on **mochi-backend → Environment**, set
+`SP_OAUTH_TOKENS_JSON` to that JSON. On the next backend startup the seed
+hook (`app/seed.py::seed_oauth_tokens`) writes it to
+`SP_OAUTH_TOKEN_PATH` IF the file is missing, so the deploy bootstraps
+itself without a shell paste. Once the file exists on disk, the OAuth
+library refreshes the access token in place — `SP_OAUTH_TOKENS_JSON` is
+ignored on subsequent restarts so live refreshes are never clobbered.
+
+The env var is the original token. If the disk is rebuilt later (tier
+change, blueprint reapply, manual disk delete), the next backend start
+re-seeds from the env var automatically.
+
+If you'd rather paste once via the shell instead (no env var):
 
 ```bash
 mkdir -p /data/anthropic-oauth
@@ -49,9 +61,6 @@ cat > /data/anthropic-oauth/tokens.json <<'EOF'
 EOF
 chmod 600 /data/anthropic-oauth/tokens.json
 ```
-
-The OAuth library refreshes the access token in place, so as long as the
-Disk persists, the token stays valid indefinitely.
 
 ## 4. Seed / sync data (automatic)
 
