@@ -63,12 +63,17 @@ export function MobileTutor() {
           }
         >
           {/* Pet card sits above the chat — the tutor IS the pet, so the
-              two share a single surface on mobile too. overflow-x-auto so
-              wider stages (fire/ember) can scroll horizontally on narrow
-              viewports without breaking the layout. */}
-          <div className="border-b border-[#1f1f1f] px-3 py-2 overflow-x-auto flex items-center justify-center">
-            <PetCreature />
-          </div>
+              two share a single surface on mobile too. Only rendered in
+              fullscreen mode; the half-sheet is too cramped to spare the
+              vertical space, so the pet hides until the user expands.
+              overflow-x-auto so wider stages (fire/ember) can scroll
+              horizontally on narrow viewports without breaking the
+              layout. */}
+          {expanded && (
+            <div className="border-b border-[#1f1f1f] px-3 py-2 overflow-x-auto flex items-center justify-center">
+              <PetCreature />
+            </div>
+          )}
           <TutorPane
             title={title}
             placeholder={placeholder}

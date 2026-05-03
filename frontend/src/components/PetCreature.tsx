@@ -226,7 +226,14 @@ function healthGradient(hp: number): { background: string; boxShadow: string } {
   };
 }
 
-export function PetCreature() {
+interface PetCreatureProps {
+  // Trim the stats column to just name + HP + Joy. Stage XP, rehatch
+  // button, the four-stat grid, and the total-XP line all hide. Used in
+  // the mobile tutor sheet where vertical space is at a premium.
+  compact?: boolean;
+}
+
+export function PetCreature({ compact = false }: PetCreatureProps = {}) {
   const [pet, setPet] = useState<PetState | null>(null);
   const [tick, setTick] = useState(0);
   const [showHatch, setShowHatch] = useState(false);
@@ -577,29 +584,31 @@ export function PetCreature() {
             </div>
             <span className="text-[9px] opacity-50">{Math.round(pet.happiness)}</span>
           </div>
-          <div className="flex items-center gap-1.5 mt-0.5">
-            <motion.span
-              className="text-[9px] px-2 py-0.5 rounded bg-[#1a1a1a]"
-              style={{ borderLeft: `2px solid ${stageBorderColor}` }}
-              animate={{ opacity: [0.7, 1, 0.7] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            >
-              {stageLabel}
-            </motion.span>
-            {xpToNext != null && pet.totalXpEarned != null && (
-              <div className="w-24 h-1.5 rounded-full bg-[#1a1a1a] overflow-hidden">
-                <div
-                  className="h-full rounded-full"
-                  style={{
-                    width: `${xpProgress}%`,
-                    background: "linear-gradient(90deg, #6366f1, #818cf8)",
-                    boxShadow: "0 0 4px rgba(99,102,241,0.3)",
-                  }}
-                />
-              </div>
-            )}
-          </div>
-          {!isDead && (pet.rehatchTokens ?? 0) > 0 && (
+          {!compact && (
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <motion.span
+                className="text-[9px] px-2 py-0.5 rounded bg-[#1a1a1a]"
+                style={{ borderLeft: `2px solid ${stageBorderColor}` }}
+                animate={{ opacity: [0.7, 1, 0.7] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              >
+                {stageLabel}
+              </motion.span>
+              {xpToNext != null && pet.totalXpEarned != null && (
+                <div className="w-24 h-1.5 rounded-full bg-[#1a1a1a] overflow-hidden">
+                  <div
+                    className="h-full rounded-full"
+                    style={{
+                      width: `${xpProgress}%`,
+                      background: "linear-gradient(90deg, #6366f1, #818cf8)",
+                      boxShadow: "0 0 4px rgba(99,102,241,0.3)",
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+          {!compact && !isDead && (pet.rehatchTokens ?? 0) > 0 && (
             <button
               onClick={requestRehatch}
               disabled={rerolling}
@@ -609,7 +618,7 @@ export function PetCreature() {
               {rerolling ? "rerolling…" : `↻ re-roll · ${pet.rehatchTokens}`}
             </button>
           )}
-          {pet.stats && (
+          {!compact && pet.stats && (
             <div
               className="grid grid-cols-2 gap-x-2 gap-y-0.5 text-[9px] font-mono opacity-70 mt-0.5"
               title="perseverance · curiosity · audacity · knowledge"
@@ -620,7 +629,7 @@ export function PetCreature() {
               <span><span className="opacity-50">KNO</span> {pet.stats.knowledge}</span>
             </div>
           )}
-          {pet.totalXpEarned != null && (
+          {!compact && pet.totalXpEarned != null && (
             <span className="text-[9px] opacity-40">{pet.totalXpEarned} XP</span>
           )}
         </div>
