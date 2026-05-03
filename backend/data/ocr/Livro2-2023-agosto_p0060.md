@@ -1,0 +1,1 @@
+Capítulo 7: Produto escalar, de novo

@@ -1,0 +1,21 @@
+Exercício 18.29 Seja $m_2 : R^2 \times R^2 \rightarrow R$ como definida há pouco. Seja $\omega_2 : R^2 \times R^2 \rightarrow R$ dada por $\omega_2(u,v) = 0$ se $u$ e $v$ são linearmente dependentes, $\omega_2(u,v) = m_2(u,v)$ se $(u,v)$ tem a mesma orientação que $(e_1,e_2)$ e $\omega_2(u,v) = -m_2(u,v)$ se $(u,v)$ não tem a mesma orientação que $(e_1,e_2)$. Mostre que
+
+(i) $\omega_2(u,v) = 0$ se, e somente se, $u$ e $v$ são linearmente dependentes
+(ii) $\omega_2(u,v) = -\omega_2(v,u)$, $\forall u,v$
+(iii) $\omega_2(\lambda u + w,v) = \lambda \omega_2(u,v) + \omega_2(w,v)$ $\forall \lambda,u,w,v$
+
+Exercício 18.30 Seja $\omega$ uma forma $(n+1)$-linear alternada em $\mathbb{R}^{n+1}$. Suponha que $\omega$ não é identicamente nula. Mostre que duas bases ordenadas
+
+$$(v_1,\ldots,v_i,u,v_{i+1},\ldots,v_n) \text{ e } (v_1,\ldots,v_i,w,v_{i+1},\ldots,v_n)$$
+
+têm a mesma orientação se e somente se $\omega(u_1,\ldots,u_{n+1}) \text{ e } \omega(v_1,\ldots,v_{n+1})$ têm o mesmo sinal.
+
+Proposição: Seja $\omega$ uma forma $(n+1)$-linear alternada em $\mathbb{R}^{n+1}$, não identicamente nula. Então duas bases ordenadas $(u_1,\ldots,u_{n+1}) \text{ e } (v_1,\ldots,v_{n+1})$ de $\mathbb{R}^{n+1}$ têm a mesma orientação se e somente se $\omega(u_1,\ldots,u_{n+1}) \text{ e } \omega(v_1,\ldots,v_{n+1})$ têm o mesmo sinal.
+
+Demonstração: Supondo que as duas bases tenham a mesma orientação, considere as funções continuas $f_1,\ldots,f_{n+1} : [0,1] \rightarrow \mathbb{R}$, $\alpha(t) = \omega(f_1(t),\ldots,f_{n+1}(t))$. A função $\alpha$ é continuação e não pode se anular (pois, nesse caso, $\omega$ seria identicamente nula - ver a Observação 1, página 150). O resultado segue do Teorema do Valor Intermediário.
+
+Para a recíproca, comecemos observando que o processo de ortonormalização de Gram-Schmidt nos fornece uma deformação de $(u_1,\ldots,u_{n+1})$ em uma base ortonormal com a mesma orientação, mantendo o sinal de $\omega$. O mesmo acontece com $(v_1,\ldots,v_{n+1})$. Assim, podemos supor que as duas bases são ortonormais e que $\omega(u_1,\ldots,u_{n+1}) \text{ e } \omega(v_1,\ldots,v_{n+1})$ têm o mesmo sinal. Vamos agora, passo a passo, deformar cada $u_i$ em cada $v_i$.
+
+Se $u_1 = v_1$ ou $u_1 = -v_1$, nada fazemos; caso contrário, tomamos $\theta$ tal que $\cos \theta = <u_1,v_1 >$, fazemos $e_1 = u_1$, $\bar{v}_1 = v_1 - <v_1,u_1 > u_1$, $e_2 = (1/|\bar{v}_1|)\bar{v}_1$ e, para $t \in [0,1]$, consideramos a transformação $T_t$ de V em V dada por $T_t e_1 = \cos(t\theta)e_1 + \sin(t\theta)e_2$, $T_t e_2 = -\sin(t\theta)e_1 + \cos(t\theta)e_2$, mantendo fixos os vetores ortogonais ao espaço gerado por $e_1$ e $e_2$. Assim, como $T_t$ preserva a ortonormalidade, a antiga base $(u_1,\ldots,u_{n+1})$ se deforma em uma nova (que continuaremos a chamar de $(u_1,\ldots,u_{n+1})$, com o novo $u_1$ igual a $v_1$. Fazemos o mesmo com $u_2$ (note que, agora, como $u_1 = \pm v_1$, que é ortogonal a $v_2$ e ao novo $u_2$, $u_1$ não será alterado). Prossguimos da mesma forma, até $u_n$, observando que os passos posteriores ao $k$-ésimo não alteram mais $u_1,\ldots,u_k$. Teremos, no fim, uma nova base ortonormal, que continuamos chamando $(u_1,\ldots,u_{n+1})$, em que $u_i = v_i$ ou $u_i = -v_i$, $i = 1,\ldots,n$. Daí decorre que também temos $u_{n+1} = v_{n+1}$ ou $u_{n+1} = -v_{n+1}$. Durante todo o processo, o sinal de $\omega(u_1,\ldots,u_{n+1})$ não se alterou, continuando igual ao de $\omega(v_1,\ldots,v_{n+1})$. Logo, o número de indices $i$ para os quais $u_i = -v_i$ é par; 2k, digamos. Mas, se $u_i = -v_i$ e $u_j = -v_j$, podemos fazer, no espaço $W$ gerado por $u_i$ e $u_j$, uma rotação de 180°, deixando parados os vetores de $\mathbf{w}^\perp$. Com $k$ rotações como essa, transformamos finalmente uma base na outra.
+
+Corolário: Duas bases ordenadas $(u_1,\ldots,u_{n+1}) \text{ e } (v_1,\ldots,v_{n+1}) \text{ de } \mathbb{R}^{n+1}$ têm a mesma orientação se e somente se $det(u_1,\ldots,u_{n+1}) \text{ e } det(v_1,\ldots,v_{n+1})$ têm o mesmo sinal.

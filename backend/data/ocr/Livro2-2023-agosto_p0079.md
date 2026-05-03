@@ -1,0 +1,3 @@
+9.3: Projeção de ponto sobre conjunto convexo
+
+Exercício 9.11 Prove que, em $\mathbb{R}^2$, podemos sempre, se K é convexo e fechado e P é um ponto fora de K, separar P e K por uma reta. , isto é: existe uma reta que divide o plano em dois semiplanos (abertos) tais que P está em um deles e K está no outro. Note que o mesmo resultado vale, e não custa mais caro, se substituímos $\mathbb{R}^2$ por um espaço de Hilbert real.

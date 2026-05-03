@@ -1,0 +1,11 @@
+As observações acima devem ser suficientes para que o leitor se convença da veracidade do seguinte resultado:
+
+**Teorema:** Se $T : V \rightarrow V$ é uma transformação linear, então existe um número $\alpha$ tal que, para todo $sólido X \subset V$, se tem $volume de T(X) = \alpha volume de X$.
+
+Demonstração: Entendemos por $sólido$, sem entrar em demasiados detalhes, qualquer subconjunto $X$ de $V$ cujo volume possa ser calculado por meio de aproximações, por dentro e por fora: as aproximações por dentro consistem em colocar, dentro de $X$, cubinhos cujos interiores não se interceptem; as aproximações por fora consistem em colocar $X$ dentro de uma união de cubinhos cujos interiores não se inteceptam.¹
+
+Pelo que acabamos de ver, se fizermos, para $X$, aproximações, por dentro e por fora, usando cubinhos de lados paralelos aos vetores da base canônica, teremos, automaticamente, aproximações para $T(X)$, por dentro e por fora, usando os paralelepípedos imagens dos cubinhos usados para $X$. Mas pelo que aprendemos sobre determinantes, a razão entre o volume do paralelepípedo imagem e o volume do cubinho original é $|det(T\vec{e}_1, T\vec{e}_2, T\vec{e}_3)|$, qualquer que seja o cubinho (veja se acredita mesmo). Tomando supremos e ínfimos (e roubando um pouquinho, ou gastando mais tempo e espaço para cuidar dos detalhes), concluímos que $volume de T(X) = \alpha volume de X$, com $\alpha = |det(T\vec{e}_1, T\vec{e}_2, T\vec{e}_3)|$.
+
+**Escólio:** Pelo que acabamos de ver, a razão $\alpha$ entre os volumes de $T(X)$ e de $X$ é dada por $\alpha = |det(T\vec{e}_1, T\vec{e}_2, T\vec{e}_3)|$. É um pouco desagradável termos esse número atrelado à base canônica. No entanto, é imediato que, se $\vec{u}$, $\vec{v}$ e $\vec{w}$ são linearmente independentes, então $|det(T\vec{u}, T\vec{v}, T\vec{w})| = \alpha |det(\vec{u}, \vec{v}, \vec{w})|$. É claro, também, que o sinal de $det(T\vec{e}_1, T\vec{e}_2, T\vec{e}_3)$ indica se $T$ está preservando ou invertendo a orientação do espaço.
+
+¹Fica entendido que os cubinhos terão lados paralelos aos vetores da base canônica. Podemos, eventualmente, ter sólidos degenerados, que terão volume nulo; neste caso, as aproximações por dentro são feitas por zero cubinhos. A hipótese é que o ínfimo dos volumes das aproximações por fora é igual ao supremo dos volumes das aproximações por dentro

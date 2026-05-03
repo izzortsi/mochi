@@ -1,0 +1,1 @@
+Capítulo 11: Quatérnions e produto vetorial

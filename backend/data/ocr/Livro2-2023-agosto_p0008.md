@@ -1,0 +1,4 @@
+Agradeço mais uma vez ao colega Dinaméricico Pombo Jr., pela revisão do texto (mas assumo os erros que introduzi, alterando posteriormente o que já parecia fechado), e a Bernardo da Costa, Monique Carmona, Orestes Piermatei Filho, Ricardo Rosa, Waldecir Bianchini (que criou os applets) e Umberto Hryniewicz, que contribuíram para que o texto viesse à luz. A tradução para arquivos digitais da maioria das minhas figuras a lapseira Caran d’Ache foi feita por João Paulo Pinto Siqueira; ultimamente tenho feito algumas no geogebra. João Paulo foi também meu assistente de direção na maior parte dos vídeos.
+
+Felipe Acker
+Santa Teresa, setembro de 2023
