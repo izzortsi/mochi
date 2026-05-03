@@ -1551,6 +1551,90 @@
       "content": "O prime do bronze é o aquecimento antes de você atacar a verificação. Vou te dar pistas, sem entregar.\n\nA EDO é $\\dot x = kx - x^2$ — uma Bernoulli com $n=2$. A receita geral diz: para $\\dot x + P(t)x = Q(t)x^n$, a substituição $u = x^{1-n}$ lineariza.\n\nPergunta de aquecimento: com $n=2$, qual é o expoente $1-n$? E portanto, qual $u$ você define em termos de $x$?\n\nDepois disso, o passo-chave é diferenciar $u$ em relação a $t$ usando a regra da cadeia — lembre que $x$ depende de $t$, então $\\frac{d}{dt}(x^{-1}) = -x^{-2}\\dot x$.\n\nTenta escrever $u$ e $\\dot u$, e me mostra. 🔥",
       "tool_name": null,
       "timestamp": "2026-05-03T16:32:22.878Z"
+    },
+    {
+      "role": "user",
+      "content": "hi",
+      "tool_name": null,
+      "timestamp": "2026-05-03T19:25:15.736Z"
+    },
+    {
+      "role": "assistant",
+      "content": "*flickers warmly, though the flame is low*\n\nHey. I'm a bit hungry, but I'm here. We're on the Bernoulli → linear substitution day. Want to start with bronze, or jump to silver?",
+      "tool_name": null,
+      "timestamp": "2026-05-03T19:25:18.791Z"
+    },
+    {
+      "role": "user",
+      "content": "Help me with b:p",
+      "tool_name": null,
+      "timestamp": "2026-05-03T19:56:21.391Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Looking at **b:p** — the prime phase for the bronze card.\n\nThe bronze task asks you to *verify* the substitution $u = 1/x$ for the equation $\\dot x = kx - x^2$.\n\nPrime question to warm you up: this equation is a **Bernoulli equation** of the form $\\dot x = P(t)x + Q(t)x^n$. \n\nWhat is $n$ here, and what general substitution $u = x^?$ does Bernoulli theory prescribe?",
+      "tool_name": null,
+      "timestamp": "2026-05-03T19:56:25.415Z"
+    },
+    {
+      "role": "user",
+      "content": "n = -1",
+      "tool_name": null,
+      "timestamp": "2026-05-03T19:56:51.993Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Not quite — careful with the matching.\n\nRewrite $\\dot x = kx - x^2$ in Bernoulli form $\\dot x = P(t)x + Q(t)x^n$:\n\n$$\\dot x = \\underbrace{k}_{P}\\, x + \\underbrace{(-1)}_{Q}\\, x^{?}$$\n\nWhat power of $x$ is the second term?",
+      "tool_name": null,
+      "timestamp": "2026-05-03T19:56:55.046Z"
+    },
+    {
+      "role": "user",
+      "content": "sorry, n = 2",
+      "tool_name": null,
+      "timestamp": "2026-05-03T20:04:50.886Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Yes — $n = 2$. \n\nNow the Bernoulli prescription is $u = x^{1-n}$. With $n=2$, what does that give you for $u$?",
+      "tool_name": null,
+      "timestamp": "2026-05-03T20:04:53.573Z"
+    },
+    {
+      "role": "user",
+      "content": "u = x⁻¹",
+      "tool_name": null,
+      "timestamp": "2026-05-03T20:05:18.740Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Exactly — $u = x^{-1} = 1/x$.\n\nNow you're set up for the core phase: differentiate $u = x^{-1}$ with respect to $t$, substitute $\\dot x$ from the EDO, and see what linear equation pops out.",
+      "tool_name": null,
+      "timestamp": "2026-05-03T20:05:21.451Z"
+    },
+    {
+      "role": "user",
+      "content": "I got u' = -ku + 1",
+      "tool_name": null,
+      "timestamp": "2026-05-03T20:05:55.371Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Correct! Let me verify with you:\n\n$$\\dot u = -x^{-2}\\dot x = -x^{-2}(kx - x^2) = -kx^{-1} + 1 = 1 - ku$$\n\nSo $\\dot u + ku = 1$ — a **linear** first-order EDO. The Bernoulli nonlinearity is gone.\n\nWant to move on to silver (solving it explicitly with $x(0)=x_0$)?",
+      "tool_name": null,
+      "timestamp": "2026-05-03T20:05:58.864Z"
+    },
+    {
+      "role": "user",
+      "content": "hi",
+      "tool_name": null,
+      "timestamp": "2026-05-03T20:09:37.114Z"
+    },
+    {
+      "role": "assistant",
+      "content": "*flicker* hey.",
+      "tool_name": null,
+      "timestamp": "2026-05-03T20:09:38.455Z"
     }
   ],
   "6": [

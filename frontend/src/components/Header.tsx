@@ -6,6 +6,7 @@ import { XPBar } from "./XPBar";
 import { StreakBadge } from "./StreakBadge";
 import { Settings } from "./Settings";
 import { PetCreature } from "./PetCreature";
+import { ShellModeToggle } from "./ShellModeToggle";
 import { CoursesIcon, ReviewIcon, MemoryIcon, ConceptsIcon, NotesIcon } from "./Icons";
 import { useProgress } from "@/lib/progress-context";
 
@@ -70,13 +71,16 @@ export function Header() {
           <PetCreature />
         </div>
       </div>
-      <button
-        onClick={() => setShowSettings(true)}
-        aria-label="Settings"
-        className="absolute top-2 right-2 z-50 p-1 rounded hover:bg-[#1a1a1a]"
-      >
-        <SettingsIcon className="w-4 h-4 opacity-60 hover:opacity-100" />
-      </button>
+      <div className="absolute top-2 right-2 z-50 flex items-center gap-1">
+        <ShellModeToggle />
+        <button
+          onClick={() => setShowSettings(true)}
+          aria-label="Settings"
+          className="p-1 rounded hover:bg-[#1a1a1a]"
+        >
+          <SettingsIcon className="w-4 h-4 opacity-60 hover:opacity-100" />
+        </button>
+      </div>
       {showSettings && <Settings onClose={() => setShowSettings(false)} />}
     </header>
   );

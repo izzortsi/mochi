@@ -1,5 +1,5 @@
 {
-  "xp": 533,
+  "xp": 535,
   "streak": 2,
   "best_streak": 3,
   "last_completed": "2026-04-27",
@@ -156,7 +156,8 @@
       "check": true
     },
     "c8-d12-bronze-0": {
-      "prime": true
+      "prime": true,
+      "core": true
     }
   },
   "day_tiers": {
