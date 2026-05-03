@@ -4,6 +4,7 @@ import { Flame } from "lucide-react";
 import { useTutorContext } from "@/lib/tutor-context";
 import { useTutorEngine } from "@/lib/use-tutor-engine";
 import { TutorPane } from "./TutorPane";
+import { PetCreature } from "./PetCreature";
 
 /* Mobile tutor surface — floating action button (bottom-right) that
  * opens a fullscreen overlay with the same TutorPane. Distinct from the
@@ -61,6 +62,13 @@ export function MobileTutor() {
               : "h-[55vh] rounded-t-xl shadow-[0_-12px_24px_rgba(0,0,0,0.5)]")
           }
         >
+          {/* Pet card sits above the chat — the tutor IS the pet, so the
+              two share a single surface on mobile too. overflow-x-auto so
+              wider stages (fire/ember) can scroll horizontally on narrow
+              viewports without breaking the layout. */}
+          <div className="border-b border-[#1f1f1f] px-3 py-2 overflow-x-auto flex items-center justify-center">
+            <PetCreature />
+          </div>
           <TutorPane
             title={title}
             placeholder={placeholder}
