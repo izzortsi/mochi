@@ -1,8 +1,8 @@
 {
-  "xp": 496,
-  "streak": 1,
+  "xp": 533,
+  "streak": 2,
   "best_streak": 3,
-  "last_completed": "2026-04-26",
+  "last_completed": "2026-04-27",
   "completed_tasks": {
     "c5-d1-bronze-0": true,
     "c4-d1-bronze-0": true,
@@ -18,7 +18,9 @@
     "c8-d1-bronze-0": true,
     "c3-d4-silver-0": true,
     "c3-d4-silver-1": true,
-    "c3-d4-gold-2": true
+    "c3-d4-gold-2": true,
+    "c6-d1-bronze-0": true,
+    "c6-d1-silver-1": true
   },
   "completed_phases": {
     "c5-d1-bronze-0": {
@@ -64,18 +66,18 @@
       "check": true
     },
     "c6-d1-bronze-0": {
-      "prime": false,
-      "core": false,
-      "retrieval": false,
-      "elaborate": false,
-      "check": false
+      "prime": true,
+      "core": true,
+      "retrieval": true,
+      "elaborate": true,
+      "check": true
     },
     "c6-d1-silver-1": {
-      "prime": false,
-      "core": false,
-      "retrieval": false,
-      "elaborate": false,
-      "check": false
+      "prime": true,
+      "core": true,
+      "retrieval": true,
+      "elaborate": true,
+      "check": true
     },
     "c3-d2-silver-0": {
       "prime": true,
@@ -152,6 +154,9 @@
       "retrieval": true,
       "elaborate": true,
       "check": true
+    },
+    "c8-d12-bronze-0": {
+      "prime": true
     }
   },
   "day_tiers": {
@@ -159,7 +164,7 @@
     "3.1": "gold",
     "4.1": "gold",
     "4.2": "bronze",
-    "6.1": "none",
+    "6.1": "gold",
     "3.2": "gold",
     "7.1": "gold",
     "3.3": "gold",
@@ -221,6 +226,12 @@
       "verdict": "correct",
       "comment": "Reconheceu g e g' direto; só faltou o +C.",
       "timestamp": "2026-04-26T14:17:56.251653"
+    },
+    {
+      "card-uid": "c6-d1-bronze-0",
+      "verdict": "correct",
+      "comment": "Calculou det T = 2, montou T⁻¹ corretamente e traduziu para f⁻¹(x,y) = (x+2y, x/2 + 3y/2).",
+      "timestamp": "2026-04-27T12:45:01.267934"
     }
   ]
 }

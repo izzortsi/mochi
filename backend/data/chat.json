@@ -613,6 +613,18 @@
       "content": "Opa, mudança de contexto — voltamos pro próximo cartão da fila de revisão.\n\nO cartão pergunta como derivar uma fração $v/u$ (quociente). Sua resposta: $(uv' - vu')/u^2$.\n\nQuase. O **numerador está invertido**. A regra do quociente é:\n\n$$\\left(\\frac{v}{u}\\right)' = \\frac{v'u - vu'}{u^2}$$\n\nO termo com a derivada do numerador ($v'$) vem **primeiro**, multiplicado pelo denominador. Mnemônico: *\"baixo vezes derivada do alto, menos alto vezes derivada do baixo, tudo sobre baixo ao quadrado\"*.\n\nDo jeito que você escreveu, o sinal fica trocado — você derivaria $u/v$ em vez de $v/u$, basicamente.\n\n→ grade-attempt\n\n{\"name\":\"grade-attempt\",\"args\":{\"cardUid\":\"c3-d3-silver-0\",\"verdict\":\"wrong\",\"comment\":\"Numerador invertido: escreveu (uv' - vu')/u² em vez de (v'u - vu')/u². Conceito da regra presente, ordem trocada.\"}}\n\n(Depois a gente volta pra nota da regra da cadeia — ficou pendente o fetch-note pra decidir se amplia a `chain-rule` existente ou cria irmã.)",
       "tool_name": null,
       "timestamp": "2026-04-24T15:34:20.124Z"
+    },
+    {
+      "role": "user",
+      "content": "hi Tofu",
+      "tool_name": null,
+      "timestamp": "2026-05-02T18:29:02.656Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Hey. *flickers softly*\n\nWhat are we working on?",
+      "tool_name": null,
+      "timestamp": "2026-05-02T18:29:05.930Z"
     }
   ],
   "3": [
@@ -1479,6 +1491,284 @@
       "content": "[elaborate-eval · c8-d1-bronze-0 / e1]\nprompt: Por que $y\\,y'=0$ é não-linear embora pareça simples?\nattempt: Porque nela figura o produto da função desconhecida por uma de suas derivadas\nverdict: adequate\nfeedback: Você identificou corretamente o ponto central: o produto y·y' envolve a função incógnita multiplicada por sua derivada, o que viola a linearidade (que exige que y e suas derivadas apareçam apenas em primeiro grau e sem produtos entre si). Para fortalecer, vale mencionar explicitamente que numa EDO linear os coeficientes podem depender apenas de x, não de y, e que esse termo y·y' é quadrático na incógnita.",
       "tool_name": "elaborate-eval",
       "timestamp": "2026-04-24T22:29:59.280Z"
+    },
+    {
+      "role": "user",
+      "content": "hi",
+      "tool_name": null,
+      "timestamp": "2026-04-26T18:28:48.354Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Hey. Ready to pick up where we left off?\n\nYou've got Day 1 done — classification of ODEs. Day 2 (Operadores Lineares) is the natural next step: it builds directly on linearity and sets up everything that follows (superposition, characteristic equations, etc.).\n\nWant to start there, or jump somewhere else?",
+      "tool_name": null,
+      "timestamp": "2026-04-26T18:28:52.173Z"
+    },
+    {
+      "role": "user",
+      "content": "me ajuda com s:p. eu sei que um operador linear satisfaz o seguinte: L[af + g] = aL[f]+L[g], mas não sei como testar a linearidade do operador.",
+      "tool_name": null,
+      "timestamp": "2026-04-29T00:24:40.568Z"
+    },
+    {
+      "role": "assistant",
+      "content": "error: Error: LLM error 502: {\"detail\":\"LLM error: APIConnectionError: Connection error.\"}",
+      "tool_name": null,
+      "timestamp": "2026-04-29T00:24:43.385Z"
+    },
+    {
+      "role": "user",
+      "content": "me ajuda com s:p. eu sei que um operador linear satisfaz o seguinte: L[af + g] = aL[f]+L[g], mas não sei como testar a linearidade do operador.\n",
+      "tool_name": null,
+      "timestamp": "2026-04-29T00:25:33.457Z"
+    },
+    {
+      "role": "assistant",
+      "content": "error: Error: LLM error 502: {\"detail\":\"LLM error: APIConnectionError: Connection error.\"}",
+      "tool_name": null,
+      "timestamp": "2026-04-29T00:25:36.064Z"
+    },
+    {
+      "role": "user",
+      "content": "me ajuda com s:p. eu sei que um operador linear satisfaz o seguinte: L[af + g] = aL[f]+L[g], mas não sei como testar a linearidade do operador.\n",
+      "tool_name": null,
+      "timestamp": "2026-04-29T00:26:15.715Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Boa — você já tem a definição certa. Testar é mecânico: você **aplica** o operador em $au + v$ e verifica se o resultado bate com $a\\mathcal{L}[u] + \\mathcal{L}[v]$.\n\nReceita:\n\n1. Escreva $\\mathcal{L}[au + v]$ substituindo literalmente $au+v$ no lugar de $u$ na fórmula do operador.\n2. Distribua as derivadas / multiplicações usando linearidade da derivada ($\\partial(au+v) = a\\,\\partial u + \\partial v$).\n3. Compare com $a\\mathcal{L}[u] + \\mathcal{L}[v]$. Se for idêntico, é linear. Se sobrar algum termo cruzado (tipo $u\\cdot v$, $(\\partial u)^2$, $\\sqrt{\\cdot}$), não é.\n\nTenta com o nosso: $\\mathcal{L}[u] = u_x + x u_y$. Calcula $\\mathcal{L}[au+v]$ passo a passo e me mostra o que dá. 🔥",
+      "tool_name": null,
+      "timestamp": "2026-04-29T00:26:22.931Z"
+    },
+    {
+      "role": "user",
+      "content": "ajude com b:p",
+      "tool_name": null,
+      "timestamp": "2026-05-03T16:32:15.701Z"
+    },
+    {
+      "role": "assistant",
+      "content": "O prime do bronze é o aquecimento antes de você atacar a verificação. Vou te dar pistas, sem entregar.\n\nA EDO é $\\dot x = kx - x^2$ — uma Bernoulli com $n=2$. A receita geral diz: para $\\dot x + P(t)x = Q(t)x^n$, a substituição $u = x^{1-n}$ lineariza.\n\nPergunta de aquecimento: com $n=2$, qual é o expoente $1-n$? E portanto, qual $u$ você define em termos de $x$?\n\nDepois disso, o passo-chave é diferenciar $u$ em relação a $t$ usando a regra da cadeia — lembre que $x$ depende de $t$, então $\\frac{d}{dt}(x^{-1}) = -x^{-2}\\dot x$.\n\nTenta escrever $u$ e $\\dot u$, e me mostra. 🔥",
+      "tool_name": null,
+      "timestamp": "2026-05-03T16:32:22.878Z"
+    }
+  ],
+  "6": [
+    {
+      "role": "user",
+      "content": "qual a relação entre det T != 0 e invertibilidade?",
+      "tool_name": null,
+      "timestamp": "2026-04-27T15:15:41.775Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Boa pergunta — vai direto ao coração do bronze. Deixa eu puxar pelos fios:\n\n**A ligação curta:** $\\det T \\neq 0 \\iff T$ é inversível (como matriz) $\\iff f$ é inversível (como operador).\n\n**Por quê?** Várias formas equivalentes de ver:\n\n1. **Fórmula da inversa.** Existe a expressão\n$$T^{-1} = \\frac{1}{\\det T}\\,\\operatorname{adj}(T).$$\nSe $\\det T = 0$, essa fração explode — não há inversa. Se $\\det T \\neq 0$, a fórmula entrega $T^{-1}$ explicitamente.\n\n2. **Núcleo / injetividade.** $\\det T = 0$ significa que as colunas de $T$ são linearmente dependentes, então existe $v \\neq 0$ com $Tv = 0$. Aí $f(v) = f(0) = 0$ — dois vetores diferentes vão para o mesmo lugar, $f$ não é injetiva, logo não tem inversa.\n\n3. **Imagem / sobrejetividade.** $\\det T \\neq 0$ ⟺ posto$(T) = n$ ⟺ as colunas geram $\\mathbb{R}^n$ ⟺ $f$ é sobrejetiva. Em dimensão finita com $f:V\\to V$, injetiva ⟺ sobrejetiva ⟺ bijetiva.\n\n4. **Geometria.** $|\\det T|$ é o fator pelo qual $f$ escala volumes. Se $\\det T = 0$, $f$ esmaga $V$ num subespaço de dimensão menor — informação se perde, sem volta possível.\n\nQuer aplicar isso ao bronze e calcular $\\det T$ para o $f(x,y)=(3x-4y,-x+2y)$?",
+      "tool_name": null,
+      "timestamp": "2026-04-27T15:15:53.873Z"
+    },
+    {
+      "role": "user",
+      "content": "Sim",
+      "tool_name": null,
+      "timestamp": "2026-04-27T15:37:56.486Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Beleza. Primeiro escreva a matriz $T$ de $f$ — as colunas são as imagens dos vetores da base canônica.\n\n$$f(1,0) = (3, -1), \\quad f(0,1) = (-4, 2)$$\n\nEntão\n$$T = \\begin{pmatrix} 3 & -4 \\\\ -1 & 2 \\end{pmatrix}.$$\n\nAgora calcula $\\det T$. Para uma $2\\times 2$:\n$$\\det\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix} = ad - bc.$$\n\nQuanto dá? E o que isso te diz sobre invertibilidade?",
+      "tool_name": null,
+      "timestamp": "2026-04-27T15:38:00.178Z"
+    },
+    {
+      "role": "user",
+      "content": "2. é invertível",
+      "tool_name": null,
+      "timestamp": "2026-04-27T15:40:31.379Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Isso! $\\det T = 3\\cdot 2 - (-4)\\cdot(-1) = 6 - 4 = 2 \\neq 0$, então $f$ é inversível. ✅\n\nAgora a segunda parte: achar $f^{-1}(x,y)$. Use a fórmula da inversa $2\\times 2$:\n\n$$T^{-1} = \\frac{1}{\\det T}\\begin{pmatrix} d & -b \\\\ -c & a \\end{pmatrix}.$$\n\nAplica em\n$$T = \\begin{pmatrix} 3 & -4 \\\\ -1 & 2 \\end{pmatrix}$$\n\ne depois traduz a matriz $T^{-1}$ de volta para a forma $f^{-1}(x,y) = (\\ldots, \\ldots)$. Manda ver.",
+      "tool_name": null,
+      "timestamp": "2026-04-27T15:40:37.469Z"
+    },
+    {
+      "role": "user",
+      "content": "(1x + 2y, 1/2 x + 3/2 y)",
+      "tool_name": null,
+      "timestamp": "2026-04-27T15:44:51.119Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Quase — você acertou a estrutura mas escorregou nas entradas. Vamos refazer com cuidado.\n\n$$T = \\begin{pmatrix} 3 & -4 \\\\ -1 & 2 \\end{pmatrix}, \\quad \\det T = 2.$$\n\nPela fórmula:\n$$T^{-1} = \\frac{1}{2}\\begin{pmatrix} 2 & -(-4) \\\\ -(-1) & 3 \\end{pmatrix} = \\frac{1}{2}\\begin{pmatrix} 2 & 4 \\\\ 1 & 3 \\end{pmatrix} = \\begin{pmatrix} 1 & 2 \\\\ 1/2 & 3/2 \\end{pmatrix}.$$\n\nAh espera — sua matriz **está correta**! Eu li errado. Deixa eu verificar a tradução para $f^{-1}$:\n\n$$f^{-1}(x,y) = (1\\cdot x + 2\\cdot y,\\; \\tfrac{1}{2}x + \\tfrac{3}{2}y) = \\left(x + 2y,\\; \\tfrac{x+3y}{2}\\right).$$\n\nEstá certo! ✅ Desculpa o susto.\n\n**Verificação rápida:** $f^{-1}(f(x,y)) = f^{-1}(3x-4y, -x+2y)$\n- 1ª coord: $(3x-4y) + 2(-x+2y) = 3x-4y-2x+4y = x$ ✓\n- 2ª coord: $\\tfrac{1}{2}(3x-4y) + \\tfrac{3}{2}(-x+2y) = \\tfrac{3x}{2}-2y-\\tfrac{3x}{2}+3y = y$ ✓\n\nBate. Bronze resolvido.\n\n<tool>{\"name\":\"grade-attempt\",\"args\":{\"cardUid\":\"c6-d1-bronze-0\",\"verdict\":\"correct\",\"comment\":\"Calculou det T = 2, montou T⁻¹ corretamente e traduziu para f⁻¹(x,y) = (x+2y, x/2 + 3y/2).\"}}</tool>\n\nQuer seguir pro silver ($\\mathbb{R}^3$, mais trabalhoso) ou revisar algo antes?",
+      "tool_name": null,
+      "timestamp": "2026-04-27T15:45:01.266Z"
+    },
+    {
+      "role": "tool",
+      "content": "\"ok\"",
+      "tool_name": "grade-attempt",
+      "timestamp": "2026-04-27T15:45:01.372Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Registrado. Pronto pro silver quando quiser — lá você vai precisar inverter uma $3\\times 3$, então a fórmula da adjunta ou eliminação de Gauss vão entrar em jogo. Qual prefere usar?",
+      "tool_name": null,
+      "timestamp": "2026-04-27T15:45:04.760Z"
+    },
+    {
+      "role": "tool",
+      "content": "[retrieval-eval · c6-d1-bronze-0 / r1]\nprompt: Qual é a condição necessária e suficiente para que um operador linear $f$ com matriz $T$ seja inversível?\nattempt: det T != 0\nverdict: correct\nfeedback: Correctly identifies that the determinant must be non-zero. Could have added that the inverse operator's matrix is T⁻¹, but the necessary and sufficient condition is stated correctly.",
+      "tool_name": "retrieval-eval",
+      "timestamp": "2026-04-27T15:46:03.256Z"
+    },
+    {
+      "role": "tool",
+      "content": "[retrieval-eval · c6-d1-bronze-0 / r2]\nprompt: Se $f\\circ f^{-1} = I$, o que isso significa geometricamente?\nattempt: Suponha uma região R num espaço V, com f : V -> W. f(R) \\in W é R deformada. f⁻¹(f(R)) = R.\nverdict: correct\nfeedback: A resposta captura corretamente a ideia geométrica: aplicar f e depois f⁻¹ retorna a região (ou vetor) à sua posição original, ou seja, f⁻¹ desfaz a ação de f.",
+      "tool_name": "retrieval-eval",
+      "timestamp": "2026-04-27T15:49:39.150Z"
+    },
+    {
+      "role": "user",
+      "content": "Posso dizer que se o determinante é zero, o nucleo de T tem dimensão > 0, logo T nao é injetiva?",
+      "tool_name": null,
+      "timestamp": "2026-04-27T15:56:31.178Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Exatamente isso. ✅\n\nA cadeia formal:\n\n$$\\det T = 0 \\iff T \\text{ singular} \\iff \\text{colunas de } T \\text{ l.d.} \\iff \\exists v \\neq 0: Tv = 0 \\iff \\ker T \\neq \\{0\\} \\iff \\dim \\ker T \\geq 1.$$\n\nE aí $T$ (logo $f$) não é injetiva, porque $f(v) = 0 = f(0)$ com $v \\neq 0$ — dois vetores distintos com a mesma imagem.\n\n**Bônus em dimensão finita** ($f: V \\to V$, $\\dim V = n$): pelo teorema do núcleo e imagem,\n$$\\dim \\ker f + \\dim \\operatorname{Im} f = n.$$\n\nEntão:\n- $\\ker f \\neq \\{0\\}$ ⟹ $\\dim \\operatorname{Im} f < n$ ⟹ $f$ não é sobrejetiva também.\n- Inversamente, $\\ker f = \\{0\\}$ ⟹ $\\dim \\operatorname{Im} f = n$ ⟹ $f$ sobrejetiva.\n\nPor isso, **em dimensão finita e com $f: V \\to V$**, injetividade, sobrejetividade e bijetividade são equivalentes — basta uma para garantir invertibilidade. (Em dimensão infinita isso quebra: o shift $\\ell^2 \\to \\ell^2$, $(x_1, x_2, \\ldots) \\mapsto (0, x_1, x_2, \\ldots)$ é injetivo mas não sobrejetivo.)\n\nQuer que eu salve essa cadeia de equivalências como nota permanente? Pode ser útil para vários cards adiante.",
+      "tool_name": null,
+      "timestamp": "2026-04-27T15:56:41.020Z"
+    },
+    {
+      "role": "user",
+      "content": "Sim",
+      "tool_name": null,
+      "timestamp": "2026-04-27T15:57:35.726Z"
+    },
+    {
+      "role": "assistant",
+      "content": "<tool>{\"name\":\"list-notes\",\"args\":{\"domain\":\"linear-algebra\"}}</tool>",
+      "tool_name": null,
+      "timestamp": "2026-04-27T15:57:41.215Z"
+    },
+    {
+      "role": "tool",
+      "content": "{\"notes\":[]}",
+      "tool_name": "list-notes",
+      "timestamp": "2026-04-27T15:57:41.309Z"
+    },
+    {
+      "role": "assistant",
+      "content": "<tool>{\"name\":\"add-note\",\"args\":{\"noteId\":\"invertibility-equivalences-finite-dim\",\"title\":\"Equivalências de invertibilidade em dimensão finita\",\"content\":\"Para um operador linear $f: V \\\\to V$ com $\\\\dim V = n$ e matriz $T$ numa base, as seguintes condições são **equivalentes**:\\n\\n1. $f$ é inversível (existe $f^{-1}$ com $f \\\\circ f^{-1} = f^{-1} \\\\circ f = I$).\\n2. $\\\\det T \\\\neq 0$ (i.e. $T$ é não-singular).\\n3. As colunas (ou linhas) de $T$ são linearmente independentes.\\n4. $\\\\ker f = \\\\{0\\\\}$ — ou seja, $f$ é injetiva.\\n5. $\\\\operatorname{Im} f = V$ — ou seja, $f$ é sobrejetiva.\\n6. $f$ é bijetiva.\\n7. $\\\\operatorname{posto}(T) = n$.\\n\\n**Por que injetividade ⟺ sobrejetividade aqui?** Pelo teorema do núcleo e imagem,\\n$$\\\\dim \\\\ker f + \\\\dim \\\\operatorname{Im} f = n.$$\\nLogo $\\\\ker f = \\\\{0\\\\}$ força $\\\\dim \\\\operatorname{Im} f = n$, e vice-versa.\\n\\n**Cadeia chave para o caso $\\\\det T = 0$:**\\n$$\\\\det T = 0 \\\\iff \\\\text{colunas l.d.} \\\\iff \\\\exists v \\\\neq 0:\\\\ Tv = 0 \\\\iff \\\\ker T \\\\neq \\\\{0\\\\} \\\\iff f \\\\text{ não injetiva} \\\\iff f \\\\text{ não inversível}.$$\\n\\n**Atenção — dimensão infinita quebra a equivalência.** O shift à direita em $\\\\ell^2$, $(x_1, x_2, \\\\ldots) \\\\mapsto (0, x_1, x_2, \\\\ldots)$, é injetivo mas não sobrejetivo. Em $V \\\\to V$ com $\\\\dim V = \\\\infty$, injetividade e sobrejetividade são independentes.\\n\\n**Fórmula da inversa (quando existe):**\\n$$T^{-1} = \\\\frac{1}{\\\\det T}\\\\,\\\\operatorname{adj}(T).$$\",\"domain\":\"linear-algebra\",\"tags\":[\"operador-linear\",\"invertibilidade\",\"determinante\",\"nucleo\",\"posto\",\"teorema-nucleo-imagem\"]}}</tool>",
+      "tool_name": null,
+      "timestamp": "2026-04-27T15:57:59.443Z"
+    },
+    {
+      "role": "tool",
+      "content": "{\"ok\":true,\"id\":\"invertibility-equivalences-finite-dim\"}",
+      "tool_name": "add-note",
+      "timestamp": "2026-04-27T15:57:59.540Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Salvo. 📝 Note id: `invertibility-equivalences-finite-dim` — vai aparecer no /notes e podemos linkar a partir de outros cards adiante.\n\nPronto pra atacar o silver agora? Decide a estratégia: **adjunta** (fórmula direta, mais aritmética) ou **Gauss-Jordan** ($[T \\mid I] \\to [I \\mid T^{-1}]$, costuma ser mais limpo em $3\\times 3$).",
+      "tool_name": null,
+      "timestamp": "2026-04-27T15:58:04.789Z"
+    },
+    {
+      "role": "tool",
+      "content": "[elaborate-eval · c6-d1-bronze-0 / e1]\nprompt: Por que a condição $\\det T \\neq 0$ garante a existência de $f^{-1}$? Explique a ligação entre determinante e invertibilidade de matrizes.\nattempt: Considere T e f equivalentes.\nMatricialmente, a relação jaz no fato de que 1/detT adj(T) = T⁻¹. se detT = 0, a matriz inversa não está definida.\nEquivalentemente, se detT = 0, T é singular, entao suas colunas são linearmente dependentes. Logo existe algum v \\in V nao-nulo tal que Tv = 0. Isso é, T0 = 0 = Tv, logo f nao é injetiva, portanto nao tem inversa.\nverdict: adequate\nfeedback: Strengths: the student correctly invokes the adjugate formula T⁻¹ = (1/det T) adj(T) to show why det T = 0 prevents inversion, and gives a solid second argument via singularity → linearly dependent columns → nontrivial kernel → non-injectivity. What to sharpen: the opening 'Considere T e f equivalentes' is vague — it should be stated that f is a linear map and T its matrix in some basis, with det defined basis-independently; also, the adjugate argument alone is somewhat circular (it shows the formula fails, not that no inverse exists), so the kernel/injectivity argument is really the conceptual core and deserves more emphasis, ideally complemented by noting that det T ≠ 0 ⇔ columns form a basis ⇔ T is bijective.",
+      "tool_name": "elaborate-eval",
+      "timestamp": "2026-04-27T16:02:12.480Z"
+    },
+    {
+      "role": "user",
+      "content": "me ajude com s:p",
+      "tool_name": null,
+      "timestamp": "2026-04-27T16:12:35.476Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Silver prime. O card é $f(x,y,z)=(x-y+2z,\\,y-z,\\,2y-3z)$ e o objetivo final é achar $f^{-1}$.\n\nA fase **prime** é para ativar o que você já sabe antes de atacar. Algumas perguntas pra você responder (rápido, sem cálculos pesados):\n\n1. **Qual é a matriz $T$ de $f$?** (Monte com as imagens da base canônica como colunas, ou leia direto dos coeficientes.)\n\n2. **Qual é o primeiro teste a fazer antes de tentar inverter?**\n\n3. **Em $\\mathbb{R}^3$, quais técnicas você conhece para inverter uma matriz $3\\times 3$?** (Pelo menos duas.)\n\nResponde essas três e a gente avança pro core. Pode ser bem direto.",
+      "tool_name": null,
+      "timestamp": "2026-04-27T16:12:43.192Z"
+    },
+    {
+      "role": "user",
+      "content": "a matriz é [1 -1 2; 0 1 -1; 0 2 -3].\ncalcular o determinante pra ver se a matriz é invertivel.\nNenhuma tecnica.",
+      "tool_name": null,
+      "timestamp": "2026-04-27T16:15:29.772Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Ótimo nas duas primeiras. Matriz correta ✅, e sim — det primeiro.\n\nSobre a terceira: você tem **duas ferramentas principais** pra inverter $3\\times 3$. Vou te apresentar e a gente escolhe uma:\n\n**Opção 1 — Fórmula da adjunta:**\n$$T^{-1} = \\frac{1}{\\det T}\\,\\operatorname{adj}(T),$$\nonde $\\operatorname{adj}(T) = (\\text{cofatores})^\\top$. Ou seja: pra cada entrada $(i,j)$, calcula o cofator $C_{ij} = (-1)^{i+j}\\det M_{ij}$ (o $M_{ij}$ é a matriz $2\\times 2$ que sobra ao remover linha $i$ e coluna $j$), monta a matriz de cofatores, transpõe, divide por $\\det T$.\n\n**Opção 2 — Gauss-Jordan:** Escreve a matriz aumentada $[T \\mid I]$ e faz operações de linha até virar $[I \\mid T^{-1}]$. Mais mecânico, menos sujeito a erro de sinal.\n\nPra essa matriz específica (muitos zeros na primeira coluna), **Gauss-Jordan tende a ser mais limpo**, mas a adjunta também é viável e te dá prática com cofatores (útil pra teoria).\n\nAntes de escolher: **calcula $\\det T$ primeiro**. Sugestão: expansão pela primeira coluna (tem dois zeros, então só sobra um termo). Quanto dá?",
+      "tool_name": null,
+      "timestamp": "2026-04-27T16:15:39.541Z"
+    },
+    {
+      "role": "tool",
+      "content": "[retrieval-eval · c6-d1-silver-1 / r1]\nprompt: Como se usa $T^{-1}$ para encontrar $v$ tal que $f(v)=w$?\nattempt: T⁻¹(w)\nverdict: correct\nfeedback: The student correctly identifies that v = T⁻¹(w), which is the key idea. The justification (that f(v)=Tv=w implies v=T⁻¹w) is not shown but the answer is right.",
+      "tool_name": "retrieval-eval",
+      "timestamp": "2026-04-27T17:48:03.383Z"
+    },
+    {
+      "role": "user",
+      "content": "ajuda com s:r2",
+      "tool_name": null,
+      "timestamp": "2026-04-27T17:48:40.124Z"
+    },
+    {
+      "role": "assistant",
+      "content": "**s:r2:** *Se $f$ não é inversível e $f(v)=w$, a equação pode ter solução?*\n\nPensa assim: \"não inversível\" não significa \"sem solução nunca\". Significa que $T$ é singular — $\\ker T \\neq \\{0\\}$ e $\\operatorname{Im} T \\subsetneq V$.\n\nDuas perguntas pra te guiar:\n\n1. **Pode ainda haver algum $w$ pra qual $f(v) = w$ tem solução?** (Pista: o que é $f(0)$? E vetores na imagem de $f$?)\n\n2. **Se existir uma solução $v_0$, ela é única?** (Pista: se $u \\in \\ker f$ e $u \\neq 0$, o que é $f(v_0 + u)$?)\n\nResponde essas duas e a resposta completa cai sozinha.",
+      "tool_name": null,
+      "timestamp": "2026-04-27T17:48:46.339Z"
+    },
+    {
+      "role": "user",
+      "content": "se v = 0 = w, tem solução. mas ela não é única.",
+      "tool_name": null,
+      "timestamp": "2026-04-27T17:50:29.805Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Boa intuição, mas vamos refinar — sua resposta está restrita demais.\n\n**Sobre existência:** $v=0, w=0$ sempre funciona, mas há mais. Qualquer $w \\in \\operatorname{Im} f$ tem solução. Por exemplo, escolhe qualquer $v_0 \\in V$ e põe $w_0 = f(v_0)$ — pronto, $f(v) = w_0$ tem solução $v_0$. Então:\n\n- Se $w \\in \\operatorname{Im} f$: **existe** solução.\n- Se $w \\notin \\operatorname{Im} f$: **não existe** solução. (E como $f$ não é sobrejetiva, esse caso ocorre.)\n\n**Sobre unicidade (quando existe):** você acertou — não é única. Por quê? Se $f(v_0) = w$ e $u \\in \\ker f$ com $u \\neq 0$, então\n$$f(v_0 + u) = f(v_0) + f(u) = w + 0 = w.$$\n\nLogo $v_0 + u$ também é solução. Como $\\ker f \\neq \\{0\\}$ (é isso que \"não inversível\" garante em dim. finita), há **infinitas** soluções — o conjunto solução é o subespaço afim $v_0 + \\ker f$.\n\n**Resumo:**\n| | $w \\in \\operatorname{Im} f$ | $w \\notin \\operatorname{Im} f$ |\n|---|---|---|\n| **soluções** | infinitas ($v_0 + \\ker f$) | nenhuma |\n\n(Isso é exatamente a estrutura de soluções de sistemas lineares $Tv = w$ com $T$ singular — solução particular + núcleo.)\n\nQuer voltar pro silver e calcular $\\det T$ daquela matriz?",
+      "tool_name": null,
+      "timestamp": "2026-04-27T17:50:40.326Z"
+    },
+    {
+      "role": "tool",
+      "content": "[retrieval-eval · c6-d1-silver-1 / r2]\nprompt: Se $f$ não é inversível e $f(v)=w$, a equação pode ter solução?\nattempt: Sim, basta que w \\in Im f. A questão é que f não é sobrejetiva, logo nem todo w \\in Im f, e como ker f != {0}, existe z \\in ker f tal que f(v + z) = f(v) + f(z) = w + 0 = w = f(v).\nverdict: correct\nfeedback: Correctly identifies that solutions can exist (when w ∈ Im f) and that non-injectivity (ker f ≠ {0}) implies infinitely many solutions. Captures the key idea that the equation may have zero or infinite solutions even without a global inverse.",
+      "tool_name": "retrieval-eval",
+      "timestamp": "2026-04-27T17:54:53.060Z"
+    },
+    {
+      "role": "user",
+      "content": "ajuda com s:e. eu sei que pra f ser inversivel tem que ter inversa à esquerda e à direita, mas isso é suficiente pra resposta?",
+      "tool_name": null,
+      "timestamp": "2026-04-27T18:00:51.737Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Boa percepção — você já tem o esqueleto. Mas \"tem que ter os dois lados\" sozinho é descritivo, não explicativo. O prompt pede **por quê** ambos são necessários. Pra elaborar bem, atacar duas frentes:\n\n**Frente 1 — O que cada lado garante isoladamente?**\n\n- $f \\circ f^{-1} = I$ diz: para todo $w$, $f(f^{-1}(w)) = w$. Ou seja, $f^{-1}$ é uma **inversa à direita**. O que isso te dá sobre $f$? (Pensa: se conseguimos \"atingir\" todo $w$ aplicando $f$, então $f$ é…?)\n\n- $f^{-1} \\circ f = I$ diz: para todo $v$, $f^{-1}(f(v)) = v$. Ou seja, $f^{-1}$ é uma **inversa à esquerda**. O que isso te dá sobre $f$? (Pensa: se $f(v_1) = f(v_2)$, aplica $f^{-1}$ dos dois lados — o que conclui?)\n\n**Frente 2 — Em geral, uma sozinha não basta.**\n\nEm conjuntos infinitos (ou funções entre espaços diferentes), você pode ter inversa à esquerda **sem** ter inversa à direita, e vice-versa. Exemplo clássico:\n- $f: \\mathbb{N} \\to \\mathbb{N}$, $f(n) = n+1$. Tem inversa à esquerda ($g(n) = n-1$ se $n\\geq 1$, $g(0)=0$, dá $g\\circ f = I$) mas **não** tem inversa à direita (ninguém vai pra $0$).\n- Esse $f$ é injetivo mas não sobrejetivo. Então só uma das equações funciona.\n\n**Caso especial dim. finita, $V \\to V$:** aí, como vimos, injetiva ⟺ sobrejetiva, então uma equação implica a outra automaticamente. Mas isso é uma **consequência**, não a definição. A definição precisa das duas porque sem essa hipótese extra elas não são equivalentes.\n\nAgora monta a resposta: para cada equação, diga o que ela garante (sobrejetividade vs. injetividade), e termine dizendo que ambas juntas = bijeção = invertibilidade no sentido pleno. Quer tentar escrever?",
+      "tool_name": null,
+      "timestamp": "2026-04-27T18:01:06.557Z"
+    },
+    {
+      "role": "tool",
+      "content": "[elaborate-eval · c6-d1-silver-1 / e1]\nprompt: Explique por que as propriedades $f\\circ f^{-1}=I$ e $f^{-1}\\circ f=I$ são ambas necessárias na definição de operador inversível.\nattempt: Uma assegura injetividade, a outra sobrejetividade. Conjuntas, implicam bijetividade e portanto invertibilidade.\nverdict: adequate\nfeedback: A resposta captura corretamente a ideia central: f∘f⁻¹ = I (no contradomínio) força sobrejetividade, enquanto f⁻¹∘f = I (no domínio) força injetividade, e juntas dão bijetividade. Para fortalecer, valeria explicitar qual identidade corresponde a qual propriedade (a resposta diz 'uma...a outra' sem especificar) e mencionar que em dimensão infinita as duas condições são genuinamente independentes — existem operadores com inversa apenas à esquerda ou apenas à direita (ex.: shift unilateral em ℓ²), o que justifica exigir ambas na definição.",
+      "tool_name": "elaborate-eval",
+      "timestamp": "2026-04-27T18:07:01.314Z"
+    },
+    {
+      "role": "user",
+      "content": "Explique b:p",
+      "tool_name": null,
+      "timestamp": "2026-04-28T15:05:36.733Z"
+    },
+    {
+      "role": "assistant",
+      "content": "The \"prime\" phase for the bronze card isn't shown in my page block — only the prompt text, retrieval, and elaborate prompts are listed. So I can't quote it verbatim.\n\nBut I can explain what b:p is *for*: priming activates what you already know before tackling the card. For this bronze problem, priming means recalling:\n\n- **What a matrix representation of a linear operator is.** Given $f:\\mathbb{R}^2\\to\\mathbb{R}^2$ and a basis $A$, the matrix $T_A$ has as its $j$-th column the coordinates of $f(a_j)$ in the basis $A$.\n- **What a change-of-basis matrix is.** $Q$ from $B$ to $A$ has the vectors of $B$ written in coordinates of $A$ as its columns. Here $A$ is canonical, so $Q = \\begin{pmatrix}-2 & 1\\\\ 1 & 2\\end{pmatrix}$ — the $B$ vectors literally as columns.\n- **The similarity relation.** $T_B = Q^{-1} T_A Q$. Same operator, different \"language\" (basis).\n\nOnce primed, the bronze task reduces to: write $T_A$ from $f$, write $Q$, invert it, multiply.\n\nWant to try it, or should I walk through the computation?",
+      "tool_name": null,
+      "timestamp": "2026-04-28T15:05:46.435Z"
     }
   ]
 }

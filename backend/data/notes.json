@@ -3585,5 +3585,21 @@
       "isometrias-r3"
     ],
     "source": ""
+  },
+  {
+    "id": "invertibility-equivalences-finite-dim",
+    "title": "Equivalências de invertibilidade em dimensão finita",
+    "domain": "algebra",
+    "tags": [
+      "operador-linear",
+      "invertibilidade",
+      "determinante",
+      "nucleo",
+      "posto",
+      "teorema-nucleo-imagem"
+    ],
+    "content": "Para um operador linear $f: V \\to V$ com $\\dim V = n$ e matriz $T$ numa base, as seguintes condições são **equivalentes**:\n\n1. $f$ é inversível (existe $f^{-1}$ com $f \\circ f^{-1} = f^{-1} \\circ f = I$).\n2. $\\det T \\neq 0$ (i.e. $T$ é não-singular).\n3. As colunas (ou linhas) de $T$ são linearmente independentes.\n4. $\\ker f = \\{0\\}$ — ou seja, $f$ é injetiva.\n5. $\\operatorname{Im} f = V$ — ou seja, $f$ é sobrejetiva.\n6. $f$ é bijetiva.\n7. $\\operatorname{posto}(T) = n$.\n\n**Por que injetividade ⟺ sobrejetividade aqui?** Pelo teorema do núcleo e imagem,\n$$\\dim \\ker f + \\dim \\operatorname{Im} f = n.$$\nLogo $\\ker f = \\{0\\}$ força $\\dim \\operatorname{Im} f = n$, e vice-versa.\n\n**Cadeia chave para o caso $\\det T = 0$:**\n$$\\det T = 0 \\iff \\text{colunas l.d.} \\iff \\exists v \\neq 0:\\ Tv = 0 \\iff \\ker T \\neq \\{0\\} \\iff f \\text{ não injetiva} \\iff f \\text{ não inversível}.$$\n\n**Atenção — dimensão infinita quebra a equivalência.** O shift à direita em $\\ell^2$, $(x_1, x_2, \\ldots) \\mapsto (0, x_1, x_2, \\ldots)$, é injetivo mas não sobrejetivo. Em $V \\to V$ com $\\dim V = \\infty$, injetividade e sobrejetividade são independentes.\n\n**Fórmula da inversa (quando existe):**\n$$T^{-1} = \\frac{1}{\\det T}\\,\\operatorname{adj}(T).$$",
+    "related": [],
+    "source": "tutor"
   }
 ]

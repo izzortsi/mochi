@@ -11895,6 +11895,10 @@
       {
         "num": 3,
         "title": "Existência, Unicidade e Métodos Iterativos"
+      },
+      {
+        "num": 4,
+        "title": "Prova 1 — Revisão Integrada"
       }
     ],
     "days": [
@@ -12816,6 +12820,406 @@
             }
           }
         ]
+      },
+      {
+        "id": 12,
+        "phase": 4,
+        "title": "Substituição: Bernoulli para Linear",
+        "icon": "*",
+        "summary": "Uso de $u = x^{-1}$ para linearizar uma equação de Bernoulli logística e resolver.",
+        "key_insight": "A substituição $u=x^{-1}$ transforma $\\dot x = kx - x^2$ em uma EDO linear de 1ª ordem.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Verifique a substituição calculando $\\dot u$ a partir de $u=1/x$ e da EDO.",
+            "detail": "Para $\\dot x = kx - x^2$ ($n=2$), defina $u = x^{-1}$. Então $\\dot u = -x^{-2}\\dot x$. Substituindo: $\\dot u = -x^{-2}(kx-x^2) = -kx^{-1}+1 = 1-ku$.",
+            "concepts": [
+              "bernoulli-equation",
+              "linear-ode"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Reconhecer Bernoulli e a substituição padrão.",
+                "prior_knowledge": "Forma $\\dot x = P(t)x + Q(t)x^n$ é Bernoulli."
+              },
+              "core": {
+                "exposition": "Para $\\dot x = kx - x^2$ ($n=2$), defina $u = x^{-1}$. Então $\\dot u = -x^{-2}\\dot x$. Substituindo: $\\dot u = -x^{-2}(kx-x^2) = -kx^{-1}+1 = 1-ku$.",
+                "worked_example": "Dado $u=x^{-1}$:\n$\\dot u = -x^{-2}\\dot x$\n$x^{-2}\\dot x = kx^{-1}-1$\n$\\Rightarrow \\dot u = 1-ku$.",
+                "problem": "Verifique a substituição calculando $\\dot u$ a partir de $u=1/x$ e da EDO."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Qual substituição lineariza $\\dot x = kx - x^2$?",
+                    "answer": "$u = x^{-1}$.",
+                    "concept": "bernoulli-equation"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Qual EDO resulta após substituir?",
+                    "answer": "$\\dot u = 1 - ku$, linear de 1ª ordem.",
+                    "concept": "linear-ode"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que $u=x^{1-n}$ funciona em geral para Bernoulli?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Mostre passo a passo a transformação.",
+                "rubric": "Correto se derivar $\\dot u$, substituir e obter $1-ku$."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Com $x(0)=x_0$, determine $C$ e escreva $x(t)$ explícito.",
+            "detail": "Reescreva $\\dot u + ku = 1$. Multiplique por $e^{kt}$: $(e^{kt}u)' = e^{kt}$. Integre: $e^{kt}u = e^{kt}/k + C$, logo $u(t)=1/k + Ce^{-kt}$. Então $x(t)=1/u(t)$.",
+            "concepts": [
+              "linear-ode",
+              "integral-indefinida"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Resolver $\\dot u = 1-ku$ e recuperar $x(t)$.",
+                "prior_knowledge": "Fator integrante $e^{kt}$."
+              },
+              "core": {
+                "exposition": "Reescreva $\\dot u + ku = 1$. Multiplique por $e^{kt}$: $(e^{kt}u)' = e^{kt}$. Integre: $e^{kt}u = e^{kt}/k + C$, logo $u(t)=1/k + Ce^{-kt}$. Então $x(t)=1/u(t)$.",
+                "worked_example": "$u(t) = \\tfrac{1}{k} + Ce^{-kt}$\n$x(t) = \\dfrac{1}{\\tfrac{1}{k}+Ce^{-kt}} = \\dfrac{k}{1+kCe^{-kt}}$.",
+                "problem": "Com $x(0)=x_0$, determine $C$ e escreva $x(t)$ explícito."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Qual o fator integrante de $\\dot u+ku=1$?",
+                    "answer": "$e^{kt}$.",
+                    "concept": "linear-ode"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Como recuperar $x$ de $u$?",
+                    "answer": "$x = 1/u$.",
+                    "concept": "bernoulli-equation"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Compare $\\lim_{t\\to\\infty}x(t)$ com a análise qualitativa de $\\dot x=kx-x^2$."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Resolva o PVI $\\dot x=kx-x^2$, $x(0)=x_0$.",
+                "rubric": "Correto se chegar a $x(t)=\\tfrac{k x_0}{x_0+(k-x_0)e^{-kt}}$ ou equivalente."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "phase": 4,
+        "title": "Critério de Linearidade",
+        "icon": "*",
+        "summary": "Identificar EDOs lineares vs. não lineares por inspeção dos termos em $y$ e suas derivadas.",
+        "key_insight": "Linear ⇔ $y$ e suas derivadas aparecem apenas em grau 1, sem produtos entre si.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Classifique as três equações e indique o termo que viola linearidade quando aplicável.",
+            "detail": "Uma EDO é linear em $y$ se cada termo é $a_i(x)y^{(i)}$ ou função só de $x$. Termos como $\\sqrt y$, $y\\,y'$, $y^2$ quebram linearidade. Coeficientes podem depender de $x$ livremente.",
+            "concepts": [
+              "linear-ode",
+              "ode-classification"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Aplicar o critério de linearidade caso a caso.",
+                "prior_knowledge": "Forma geral $\\sum a_i(x)y^{(i)} = g(x)$."
+              },
+              "core": {
+                "exposition": "Uma EDO é linear em $y$ se cada termo é $a_i(x)y^{(i)}$ ou função só de $x$. Termos como $\\sqrt y$, $y\\,y'$, $y^2$ quebram linearidade. Coeficientes podem depender de $x$ livremente.",
+                "worked_example": "(i) $\\sqrt y$ → não linear.\n(ii) $(1+y)=1+y$, todos termos lineares em $y$ → linear.\n(iii) $y\\,y'$ → não linear.",
+                "problem": "Classifique as três equações e indique o termo que viola linearidade quando aplicável."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Por que $\\sqrt y$ torna a EDO não linear?",
+                    "answer": "Porque $y$ aparece em grau não-unitário (potência $1/2$).",
+                    "concept": "linear-ode"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "$y\\,y'$ é linear?",
+                    "answer": "Não — produto de $y$ com sua derivada.",
+                    "concept": "linear-ode"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que $\\cos(x)y'$ é permitido em uma EDO linear?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Quais são lineares: (i),(ii),(iii)?",
+                "rubric": "Correto: apenas (ii). Justificar com termo problemático em (i) e (iii)."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "phase": 4,
+        "title": "Conservação de Energia",
+        "icon": "*",
+        "summary": "Provar que $E=\\tfrac12\\dot x^2+V(x)$ é constante ao longo de soluções de $\\ddot x = -V'(x)$.",
+        "key_insight": "Derivar $E$ e usar a EDO faz tudo cancelar — primeira integral natural.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Repita a prova explicitamente, justificando cada passo.",
+            "detail": "ATENÇÃO: o enunciado escreve $V(t)$ mas a interpretação correta é $V(x(t))$ (energia potencial avaliada na solução). Derive $E(t)=\\tfrac12\\dot x^2+V(x(t))$.",
+            "concepts": [
+              "first-integral",
+              "hamiltonian-system"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Mostrar $dE/dt = 0$.",
+                "prior_knowledge": "Regra da cadeia: $\\frac{d}{dt}V(x(t))=V'(x)\\dot x$."
+              },
+              "core": {
+                "exposition": "ATENÇÃO: o enunciado escreve $V(t)$ mas a interpretação correta é $V(x(t))$ (energia potencial avaliada na solução). Derive $E(t)=\\tfrac12\\dot x^2+V(x(t))$.",
+                "worked_example": "$\\dot E = \\dot x\\,\\ddot x + V'(x)\\dot x = \\dot x(\\ddot x + V'(x))$.\nPela EDO, $\\ddot x = -V'(x)$, logo $\\ddot x+V'(x)=0$.\n$\\therefore \\dot E\\equiv 0$, $E$ constante.",
+                "problem": "Repita a prova explicitamente, justificando cada passo."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Qual identidade da EDO faz $\\dot E$ se anular?",
+                    "answer": "$\\ddot x + V'(x) = 0$.",
+                    "concept": "first-integral"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Por que $V$ deve ser $C^1$?",
+                    "answer": "Para que $V'(x)$ exista e seja contínua, garantindo a regra da cadeia.",
+                    "concept": "first-integral"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Interprete fisicamente: o que representa cada termo de $E$?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Demonstre que $E$ é constante.",
+                "rubric": "Correto se derivar, aplicar cadeia, substituir EDO e concluir."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "phase": 4,
+        "title": "Bifurcação e Estabilidade — $\\dot x=(x-\\mu)(x^2-\\mu)$",
+        "icon": "*",
+        "summary": "Analisar equilíbrios, retrato de fase, estabilidade e diagrama de bifurcação.",
+        "key_insight": "Os equilíbrios são $x=\\mu$ e (se $\\mu\\ge 0$) $x=\\pm\\sqrt\\mu$; colidem em $\\mu=0$ e $\\mu=1$.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Trace o diagrama de bifurcação no plano $(\\mu,x)$ com as três curvas $x=\\mu$, $x=\\pm\\sqrt\\mu$.",
+            "detail": "$f(x)=(x-\\mu)(x^2-\\mu)=0$. Sempre $x=\\mu$. Se $\\mu>0$: também $x=\\pm\\sqrt\\mu$. Se $\\mu=0$: raiz tripla em $0$. Se $\\mu<0$: apenas $x=\\mu$.",
+            "concepts": [
+              "autonomous-equation",
+              "qualitative-analysis"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Encontrar equilíbrios em função de $\\mu$.",
+                "prior_knowledge": "Equilíbrios: $f(x)=0$."
+              },
+              "core": {
+                "exposition": "$f(x)=(x-\\mu)(x^2-\\mu)=0$. Sempre $x=\\mu$. Se $\\mu>0$: também $x=\\pm\\sqrt\\mu$. Se $\\mu=0$: raiz tripla em $0$. Se $\\mu<0$: apenas $x=\\mu$.",
+                "worked_example": "Casos:\n• $\\mu<0$: 1 equilíbrio, $x=\\mu$.\n• $\\mu=0$: $x=0$ (triplo).\n• $0<\\mu<1$: três equilíbrios $-\\sqrt\\mu,\\mu,\\sqrt\\mu$ com $-\\sqrt\\mu<\\mu<\\sqrt\\mu$.\n• $\\mu=1$: $\\mu=\\sqrt\\mu=1$ colidem; equilíbrios $-1,1$.\n• $\\mu>1$: $-\\sqrt\\mu<\\sqrt\\mu<\\mu$.",
+                "problem": "Trace o diagrama de bifurcação no plano $(\\mu,x)$ com as três curvas $x=\\mu$, $x=\\pm\\sqrt\\mu$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Quantos equilíbrios para $\\mu<0$?",
+                    "answer": "Apenas um: $x=\\mu$.",
+                    "concept": "autonomous-equation"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Em quais $\\mu$ ocorrem bifurcações?",
+                    "answer": "$\\mu=0$ e $\\mu=1$.",
+                    "concept": "qualitative-analysis"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Descreva geometricamente a colisão de ramos em $\\mu=1$."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Liste equilíbrios em cada intervalo de $\\mu$.",
+                "rubric": "Correto se cobrir $\\mu<0$, $\\mu=0$, $0<\\mu<1$, $\\mu=1$, $\\mu>1$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Faça o retrato de fase para $\\mu=0$ e $\\mu=1$, e classifique todos os equilíbrios para $\\mu>1$.",
+            "detail": "Calcule $f'(x)=(x^2-\\mu)+(x-\\mu)(2x)=3x^2-2\\mu x-\\mu$. Avalie nos equilíbrios. Quando $f'=0$, use sinal de $f$ no retrato de fase.",
+            "concepts": [
+              "qualitative-analysis",
+              "autonomous-equation"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Determinar estabilidade via $f'(x^*)$ ou sinal de $f$.",
+                "prior_knowledge": "$f'(x^*)<0$ ⇒ estável; $>0$ ⇒ instável; $=0$ ⇒ inconclusivo."
+              },
+              "core": {
+                "exposition": "Calcule $f'(x)=(x^2-\\mu)+(x-\\mu)(2x)=3x^2-2\\mu x-\\mu$. Avalie nos equilíbrios. Quando $f'=0$, use sinal de $f$ no retrato de fase.",
+                "worked_example": "Caso $0<\\mu<1$: em $x=\\sqrt\\mu$: $f'=3\\mu-2\\mu^{3/2}-\\mu=2\\mu-2\\mu^{3/2}=2\\mu(1-\\sqrt\\mu)>0$ → instável. Em $x=-\\sqrt\\mu$: $f'=2\\mu(1+\\sqrt\\mu)>0$ → instável. Em $x=\\mu$: $f'=3\\mu^2-2\\mu^2-\\mu=\\mu^2-\\mu=\\mu(\\mu-1)<0$ → estável.\nCaso $\\mu=0$: $f(x)=x^3$, $f'(0)=0$; sinal: $f<0$ p/ $x<0$, $f>0$ p/ $x>0$ → instável (semi-estável repulsor).",
+                "problem": "Faça o retrato de fase para $\\mu=0$ e $\\mu=1$, e classifique todos os equilíbrios para $\\mu>1$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Estabilidade de $x=\\mu$ para $0<\\mu<1$?",
+                    "answer": "Estável, pois $f'(\\mu)=\\mu(\\mu-1)<0$.",
+                    "concept": "qualitative-analysis"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Como classificar quando $f'(x^*)=0$?",
+                    "answer": "Pelo sinal de $f$ à esquerda/direita (retrato de fase).",
+                    "concept": "autonomous-equation"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Marque sólido (estável) e tracejado (instável) no diagrama de bifurcação e explique a troca em $\\mu=1$."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Diagrama de bifurcação completo com estabilidades.",
+                "rubric": "Correto se: $x=\\mu$ estável p/ $\\mu\\in(0,1)$, instável fora; $\\pm\\sqrt\\mu$ instáveis p/ $0<\\mu<1$, e analisar $\\mu>1$ via $f'$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "phase": 4,
+        "title": "Linhas de Fase a partir do Gráfico de $f$",
+        "icon": "*",
+        "summary": "Ler equilíbrios, estabilidade, trajetórias e bacias de atração de $\\dot y=f(y)$ pelo gráfico.",
+        "key_insight": "Onde $f>0$ a trajetória sobe; onde $f<0$ desce. Equilíbrios são zeros de $f$.",
+        "cards": [
+          {
+            "tier": "gold",
+            "task_index": 0,
+            "text": "Para $y_0\\in(0,9]$: $\\lim_{t\\to+\\infty}y(t)=5$. Para $\\lim_{t\\to-\\infty}y=-5$: $y_0$ na bacia repulsiva de $-5$ no tempo reverso, i.e. $y_0\\in(-7,0)$ excluindo $-5$ (mas incluindo $-5$ trivialmente).",
+            "detail": "Equilíbrios = zeros de $f$. Estável se $f$ passa de + para − ao crescer $y$; instável se de − para +. Bacia de atração de um equilíbrio estável $y^*$ é o intervalo entre equilíbrios instáveis adjacentes (incluindo $\\pm\\infty$).",
+            "concepts": [
+              "qualitative-analysis",
+              "autonomous-equation"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Extrair informação dinâmica do gráfico de $f$.",
+                "prior_knowledge": "Sinal de $f$ determina monotonicidade de $y(t)$."
+              },
+              "core": {
+                "exposition": "Equilíbrios = zeros de $f$. Estável se $f$ passa de + para − ao crescer $y$; instável se de − para +. Bacia de atração de um equilíbrio estável $y^*$ é o intervalo entre equilíbrios instáveis adjacentes (incluindo $\\pm\\infty$).",
+                "worked_example": "Suponha zeros típicos em $-5,0,5$ com $f>0$ em $(-7,-5)\\cup(0,5)$ e $f<0$ em $(-5,0)\\cup(5,9)$:\n• $-5$: + → −, estável.\n• $0$: − → +, instável.\n• $5$: + → −, estável.\nBacia de $5$: $(0,9]$. $\\lim_{t\\to-\\infty}y=-5$ se $y_0\\in(-7,0)$.",
+                "problem": "Para $y_0\\in(0,9]$: $\\lim_{t\\to+\\infty}y(t)=5$. Para $\\lim_{t\\to-\\infty}y=-5$: $y_0$ na bacia repulsiva de $-5$ no tempo reverso, i.e. $y_0\\in(-7,0)$ excluindo $-5$ (mas incluindo $-5$ trivialmente)."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Como identificar equilíbrio estável no gráfico de $f$?",
+                    "answer": "$f$ cruza zero descendo (de + para −).",
+                    "concept": "qualitative-analysis"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Bacia de atração no futuro de $y^*=5$?",
+                    "answer": "Intervalo entre o instável imediatamente abaixo (e.g. $0$) até o próximo instável acima (ou fronteira).",
+                    "concept": "autonomous-equation"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que $\\lim_{t\\to-\\infty}y(t)$ leva a equilíbrios instáveis?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Determine $\\{y_0:\\lim_{t\\to+\\infty}y(t)=5\\}$ e $\\{y_0:\\lim_{t\\to-\\infty}y(t)=-5\\}$.",
+                "rubric": "Correto se identificar a bacia futura de $5$ e a bacia passada (repulsão direta) de $-5$, usando os equilíbrios adjacentes do gráfico."
+              }
+            }
+          }
+        ]
       }
     ],
     "concepts": [
@@ -12850,6 +13254,22 @@
       {
         "id": "contraction-mapping",
         "label": "Princípio da Contração"
+      },
+      {
+        "id": "bernoulli-equation",
+        "label": "Equação de Bernoulli"
+      },
+      {
+        "id": "first-integral",
+        "label": "Integral Primeira"
+      },
+      {
+        "id": "hamiltonian-system",
+        "label": "Sistema Hamiltoniano"
+      },
+      {
+        "id": "integral-indefinida",
+        "label": "Integral Indefinida"
       }
     ],
     "prereqs": [
@@ -12888,6 +13308,18 @@
       [
         "qualitative-analysis",
         "picard-theorem"
+      ],
+      [
+        "bernoulli-equation",
+        "linear-ode"
+      ],
+      [
+        "first-integral",
+        "derivada"
+      ],
+      [
+        "hamiltonian-system",
+        "first-integral"
       ]
     ]
   },
