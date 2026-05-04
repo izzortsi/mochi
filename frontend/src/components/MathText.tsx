@@ -1,6 +1,11 @@
 "use client";
 import katex from "katex";
 import { useMemo } from "react";
+// Side-effect import — installs a global copy listener that, when a
+// selection covers KaTeX-rendered nodes, replaces the clipboard payload
+// with the LaTeX source pulled from each formula's MathML annotation.
+// Requires output: "htmlAndMathml" below so the annotation is in the DOM.
+import "katex/contrib/copy-tex";
 
 interface Props { children: string; className?: string; }
 
@@ -37,7 +42,7 @@ function renderSegment(seg: Segment, idx: number): React.ReactElement {
   const html = katex.renderToString(seg.value, {
     throwOnError: false,
     displayMode: seg.type === "display",
-    output: "html",
+    output: "htmlAndMathml",
   });
   return <span key={idx} dangerouslySetInnerHTML={{ __html: html }} />;
 }
