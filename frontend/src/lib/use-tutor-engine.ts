@@ -42,6 +42,12 @@ export interface TutorEngine {
   send: () => void;
   busy: boolean;
   status: ConnectionStatus;
+  // Images queued to attach to the next user turn. Already uploaded to
+  // /api/chat-image; URLs accumulate here and are flushed onto the user
+  // message at send-time.
+  pendingImages: string[];
+  addPendingImage: (url: string) => void;
+  removePendingImage: (url: string) => void;
 }
 
 /* The Tutor's chat engine, separated from chrome so the desktop fixed
@@ -55,8 +61,16 @@ export function useTutorEngine(): TutorEngine {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState<ConnectionStatus>("disconnected");
+  const [pendingImages, setPendingImages] = useState<string[]>([]);
   const wsRef = useRef<WsClient | null>(null);
   const pendingRef = useRef<Map<string, (resp: string) => void>>(new Map());
+
+  const addPendingImage = useCallback((url: string) => {
+    setPendingImages((cur) => (cur.includes(url) ? cur : [...cur, url]));
+  }, []);
+  const removePendingImage = useCallback((url: string) => {
+    setPendingImages((cur) => cur.filter((u) => u !== url));
+  }, []);
 
   useEffect(() => {
     const ws = new WsClient(
@@ -125,7 +139,10 @@ export function useTutorEngine(): TutorEngine {
   }, [persistTurn]);
 
   const send = useCallback(async () => {
-    if (!input.trim() || busy) return;
+    // Allow sending image-only turns (no text) — useful for "what is in
+    // this image?" prompts. Block only when both are empty.
+    if (!input.trim() && pendingImages.length === 0) return;
+    if (busy) return;
     const config = loadConfig();
     if (!isConfigured(config)) {
       pushMessage({
@@ -138,10 +155,15 @@ export function useTutorEngine(): TutorEngine {
     }
 
     const userMsg: ChatMessage = {
-      role: "user", content: input, toolName: null, timestamp: new Date().toISOString(),
+      role: "user",
+      content: input,
+      toolName: null,
+      timestamp: new Date().toISOString(),
+      images: pendingImages.length ? [...pendingImages] : undefined,
     };
     pushMessage(userMsg);
     setInput("");
+    setPendingImages([]);
     setBusy(true);
 
     // Local history snapshot we extend synchronously across the loop —
@@ -194,7 +216,10 @@ export function useTutorEngine(): TutorEngine {
     } finally {
       setBusy(false);
     }
-  }, [input, busy, messages, pageContext, callTool, pushMessage, onToolCall]);
+  }, [input, busy, messages, pageContext, callTool, pushMessage, onToolCall, pendingImages]);
 
-  return { messages, input, setInput, send, busy, status };
+  return {
+    messages, input, setInput, send, busy, status,
+    pendingImages, addPendingImage, removePendingImage,
+  };
 }

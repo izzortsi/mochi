@@ -27,6 +27,9 @@ export function Tutor() {
         onSend={engine.send}
         busy={engine.busy}
         status={engine.status}
+        pendingImages={engine.pendingImages}
+        onAddImage={engine.addPendingImage}
+        onRemoveImage={engine.removePendingImage}
       />
     </div>
   );

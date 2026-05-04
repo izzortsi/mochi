@@ -104,6 +104,7 @@ export const api = {
         content: m.content,
         "tool-name": m.toolName,
         timestamp: m.timestamp,
+        images: m.images ?? [],
       }),
     deleteChatTurn: (courseId: number, index: number) =>
       deletePath<{ ok: boolean }>(
@@ -121,6 +122,16 @@ export const api = {
       deletePath<{ ok: boolean }>(
         `/api/memory/tutor-notes/${encodeURIComponent(id)}`,
       ),
+  },
+  uploadChatImage: async (file: File): Promise<{ name: string; url: string }> => {
+    const fd = new FormData();
+    fd.append("file", file);
+    const res = await fetch("/api/chat-image", { method: "POST", body: fd });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text.slice(0, 200));
+    }
+    return camelizeKeys<{ name: string; url: string }>(await res.json());
   },
   petPet: () =>
     fetch("/api/pet/pet", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" })

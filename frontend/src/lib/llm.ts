@@ -287,13 +287,18 @@ export async function runLlmTurn(
   // normalizer folds them into a user turn with "[tool-result: <name>]"
   // framing before hitting the provider, so we don't need to transform
   // them here — just pass the name through so the framing is accurate.
+  // User messages may also carry image refs; the backend re-fetches each
+  // from disk and embeds it as a multimodal block (Anthropic only).
   const messages = [
     { role: "system", content: systemContent },
-    ...history.map(m =>
-      m.role === "tool"
-        ? { role: "tool", name: m.toolName ?? "", content: m.content }
-        : { role: m.role, content: m.content },
-    ),
+    ...history.map(m => {
+      if (m.role === "tool") {
+        return { role: "tool", name: m.toolName ?? "", content: m.content };
+      }
+      const base: Record<string, unknown> = { role: m.role, content: m.content };
+      if (m.images && m.images.length) base.images = m.images;
+      return base;
+    }),
   ];
 
   const body: Record<string, unknown> = {

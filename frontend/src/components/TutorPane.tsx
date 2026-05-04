@@ -1,7 +1,9 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
 import { Send, Database, X, Maximize2, Minimize2 } from "lucide-react";
 import type { ChatMessage, ConnectionStatus } from "@/lib/types";
+import { api } from "@/lib/api";
 import { MathText } from "./MathText";
 import { MarkdownContent } from "./MarkdownContent";
 
@@ -30,6 +32,11 @@ interface Props {
   // chat-reading space; desktop omits it (the panel size is fixed).
   onToggleExpand?: () => void;
   expanded?: boolean;
+  // Pasted image attachments for the next user turn. Engine owns the
+  // state; the pane handles paste upload + thumbnail UI.
+  pendingImages: string[];
+  onAddImage: (url: string) => void;
+  onRemoveImage: (url: string) => void;
 }
 
 // Remove <tool>…</tool> blocks from an assistant message's raw content so
@@ -57,8 +64,31 @@ function ToolChip({ name, ok }: { name: string; ok: boolean }) {
 
 export function TutorPane({
   title, placeholder, messages, input, onInput, onSend, busy, status, onClose,
-  onToggleExpand, expanded,
+  onToggleExpand, expanded, pendingImages, onAddImage, onRemoveImage,
 }: Props) {
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+
+  const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    const items = Array.from(e.clipboardData?.items ?? []);
+    const images = items.filter((it) => it.kind === "file" && it.type.startsWith("image/"));
+    if (images.length === 0) return;
+    e.preventDefault();
+    setUploadError(null);
+    setUploading(true);
+    try {
+      for (const it of images) {
+        const file = it.getAsFile();
+        if (!file) continue;
+        const { url } = await api.uploadChatImage(file);
+        onAddImage(url);
+      }
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setUploading(false);
+    }
+  };
   const statusDot =
     status === "connected" ? "bg-emerald-500" :
     status === "connecting" ? "bg-amber-500" :
@@ -137,13 +167,57 @@ export function TutorPane({
               <div className="text-[10px] uppercase tracking-wider font-mono opacity-40 mb-1">
                 user
               </div>
-              <div className="text-neutral-100 whitespace-pre-wrap">
-                <MathText>{m.content}</MathText>
-              </div>
+              {m.content && (
+                <div className="text-neutral-100 whitespace-pre-wrap mb-1">
+                  <MathText>{m.content}</MathText>
+                </div>
+              )}
+              {m.images && m.images.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                  {m.images.map((url) => (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      key={url}
+                      src={url}
+                      alt="attachment"
+                      className="max-h-32 rounded border border-[#1f1f1f] object-cover"
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           );
         })}
       </div>
+      {(pendingImages.length > 0 || uploading || uploadError) && (
+        <div className="border-t border-[#1a1a1a] px-2 py-2 flex flex-wrap items-center gap-2">
+          {pendingImages.map((url) => (
+            <div key={url} className="relative">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={url}
+                alt="attachment"
+                className="h-14 w-14 object-cover rounded border border-[#1f1f1f]"
+              />
+              <button
+                onClick={() => onRemoveImage(url)}
+                aria-label="Remove attachment"
+                className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-black/90 border border-[#2a2a2a] flex items-center justify-center hover:bg-red-900/70"
+              >
+                <X className="w-2.5 h-2.5 opacity-70" />
+              </button>
+            </div>
+          ))}
+          {uploading && (
+            <span className="text-[10px] uppercase tracking-wider font-mono opacity-50">
+              uploading…
+            </span>
+          )}
+          {uploadError && (
+            <span className="text-[10px] font-mono text-red-400">{uploadError}</span>
+          )}
+        </div>
+      )}
       <div className="border-t border-[#1a1a1a] p-2 flex gap-2">
         <textarea
           className="flex-1 bg-[#050505] border border-[#1a1a1a] rounded px-2 py-1 text-sm resize-none outline-none focus:border-[#2a2a2a]"
@@ -156,6 +230,7 @@ export function TutorPane({
               onSend();
             }
           }}
+          onPaste={handlePaste}
           placeholder={placeholder}
         />
         <button

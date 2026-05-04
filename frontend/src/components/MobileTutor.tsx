@@ -86,6 +86,9 @@ export function MobileTutor() {
             onClose={() => setOpen(false)}
             onToggleExpand={() => setExpanded((v) => !v)}
             expanded={expanded}
+            pendingImages={engine.pendingImages}
+            onAddImage={engine.addPendingImage}
+            onRemoveImage={engine.removePendingImage}
           />
         </div>
       )}

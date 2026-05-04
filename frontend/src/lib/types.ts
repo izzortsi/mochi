@@ -124,6 +124,11 @@ export interface ChatMessage {
   content: string;
   toolName: string | null;
   timestamp: string;
+  // Optional list of image URLs (e.g. "/api/chat-image/abc.png") attached
+  // to the message. Used on user turns; rendered as inline thumbnails and
+  // re-embedded into the LLM context as multimodal content blocks on
+  // every turn that references them.
+  images?: string[];
 }
 
 export interface NoteSummary {
