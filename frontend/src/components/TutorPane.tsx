@@ -4,8 +4,10 @@ import Link from "next/link";
 import { Send, Database, X, Maximize2, Minimize2 } from "lucide-react";
 import type { ChatMessage, ConnectionStatus } from "@/lib/types";
 import { api } from "@/lib/api";
+import { segmentAssistantContent } from "@/lib/artifacts";
 import { MathText } from "./MathText";
 import { MarkdownContent } from "./MarkdownContent";
+import { ArtifactBlock } from "./ArtifactBlock";
 
 /* Presentational chat pane — header (title + memory link + status dot),
  * scrollable message list, input row. No state of its own; the desktop
@@ -39,10 +41,10 @@ interface Props {
   onRemoveImage: (url: string) => void;
 }
 
-// Remove <tool>…</tool> blocks from an assistant message's raw content so
-// the chat UI shows only the prose. We still STORE the raw content (blocks
-// included) — the LLM needs to see its own prior tool calls when the loop
-// re-enters with results.
+// Remove <tool>…</tool> blocks from an assistant message's raw content
+// before splitting into segments. We STORE the raw content (blocks
+// included) — the LLM needs to see its own prior tool calls when the
+// loop re-enters with results — but for display we drop them.
 function stripToolBlocks(content: string): string {
   return content.replace(/<tool>[\s\S]*?<\/tool>/g, "").trim();
 }
@@ -147,17 +149,26 @@ export function TutorPane({
             return <ToolChip key={i} name={m.toolName ?? "tool"} ok={ok} />;
           }
           if (m.role === "assistant") {
-            const display = stripToolBlocks(m.content);
-            // Pure tool-dispatch turns (no prose, just a <tool> block)
-            // collapse — the adjacent ToolChip carries the signal.
-            if (!display) return null;
+            // Drop tool blocks first (they're rendered via ToolChip on
+            // adjacent tool messages), then split the remainder into
+            // text + artifact segments so iframes render inline with
+            // the prose, in the same order the model emitted them.
+            const cleaned = stripToolBlocks(m.content);
+            const segments = segmentAssistantContent(cleaned);
+            if (segments.length === 0) return null;
             return (
               <div key={i} className="text-sm">
                 <div className="text-[10px] uppercase tracking-wider font-mono opacity-40 mb-1">
                   assistant
                 </div>
-                <div className="text-neutral-200">
-                  <MarkdownContent content={display} compact />
+                <div className="text-neutral-200 space-y-2">
+                  {segments.map((seg, j) =>
+                    seg.kind === "text" ? (
+                      <MarkdownContent key={j} content={seg.text} compact />
+                    ) : (
+                      <ArtifactBlock key={seg.artifact.id + j} artifact={seg.artifact} />
+                    ),
+                  )}
                 </div>
               </div>
             );
