@@ -1,11 +1,23 @@
 "use client";
 import katex from "katex";
-import { useMemo } from "react";
-// Side-effect import — installs a global copy listener that, when a
-// selection covers KaTeX-rendered nodes, replaces the clipboard payload
-// with the LaTeX source pulled from each formula's MathML annotation.
-// Requires output: "htmlAndMathml" below so the annotation is in the DOM.
-import "katex/contrib/copy-tex";
+import { useEffect, useMemo } from "react";
+
+// One-time client-only init for katex/contrib/copy-tex. The module's
+// top-level executes `document.addEventListener("copy", …)` to swap
+// rendered KaTeX with its LaTeX source on copy — but accessing
+// `document` at module load crashes Next.js prerendering. A dynamic
+// import inside useEffect defers it to the browser. The import has
+// internal caching so calling this from many MathText instances still
+// runs the side effect exactly once.
+let _copyTexLoaded = false;
+function loadCopyTexOnce() {
+  if (_copyTexLoaded) return;
+  _copyTexLoaded = true;
+  // @ts-expect-error — contrib module ships no types
+  import("katex/contrib/copy-tex").catch(() => {
+    _copyTexLoaded = false; // allow retry if the import failed
+  });
+}
 
 interface Props { children: string; className?: string; }
 
@@ -49,5 +61,6 @@ function renderSegment(seg: Segment, idx: number): React.ReactElement {
 
 export function MathText({ children, className }: Props) {
   const segments = useMemo(() => splitSegments(children), [children]);
+  useEffect(() => { loadCopyTexOnce(); }, []);
   return <span className={className}>{segments.map(renderSegment)}</span>;
 }
