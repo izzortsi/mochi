@@ -36,25 +36,47 @@ def _get_client() -> Any:
     return _client
 
 
+def _to_blocks(content: Any) -> list[dict]:
+    """Normalize a message's content to a list of Anthropic content blocks."""
+    if isinstance(content, list):
+        return [b for b in content if isinstance(b, dict)]
+    text = str(content or "")
+    return [{"type": "text", "text": text}] if text else []
+
+
 def _split_system(messages: list[dict]) -> tuple[str, list[dict]]:
     system_parts: list[str] = []
     rest: list[dict] = []
     for m in messages:
         role = m.get("role")
-        content = str(m.get("content", ""))
+        content = m.get("content", "")
         if role == "system":
-            system_parts.append(content)
+            # System prompts are text-only; collapse any block list to text.
+            if isinstance(content, list):
+                text = "\n".join(
+                    b.get("text", "") for b in content if isinstance(b, dict) and b.get("type") == "text"
+                )
+            else:
+                text = str(content)
+            system_parts.append(text)
         elif role in ("user", "assistant"):
             rest.append({"role": role, "content": content})
     return "\n\n".join(system_parts), rest
 
 
 def _merge_consecutive(messages: list[dict]) -> list[dict]:
-    # Anthropic requires alternating user/assistant turns.
+    # Anthropic requires alternating user/assistant turns. When merging,
+    # promote both sides to block-lists if either carries non-text content
+    # (images), then concatenate.
     merged: list[dict] = []
     for m in messages:
         if merged and merged[-1]["role"] == m["role"]:
-            merged[-1]["content"] = merged[-1]["content"] + "\n\n" + m["content"]
+            prev_c = merged[-1]["content"]
+            curr_c = m["content"]
+            if isinstance(prev_c, list) or isinstance(curr_c, list):
+                merged[-1]["content"] = _to_blocks(prev_c) + _to_blocks(curr_c)
+            else:
+                merged[-1]["content"] = str(prev_c) + "\n\n" + str(curr_c)
         else:
             merged.append(dict(m))
     return merged

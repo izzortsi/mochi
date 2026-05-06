@@ -115,6 +115,10 @@ class ChatMessage(BaseModel):
     content: str
     tool_name: str | None = None
     timestamp: str = ""
+    # Optional list of image references — paths under /api/chat-image/.
+    # Stored on the message, not in `content`, so chat.json stays small
+    # and replay reattaches images from disk into the LLM context.
+    images: list[str] = []
 
 
 class ConceptNode(BaseModel):

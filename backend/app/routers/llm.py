@@ -1,10 +1,59 @@
 from __future__ import annotations
 import asyncio
+import base64
 from fastapi import APIRouter, HTTPException
 from app.services import llm, llm_anthropic
+from app.routers.chat_images import resolve_image_path, ALLOWED_MEDIA_TYPES
 
 
 router = APIRouter()
+
+
+# Reverse lookup: file extension → media type. Used when fetching a
+# stored image off disk to attach it to an Anthropic content block.
+_EXT_TO_MEDIA = {ext: media for media, ext in ALLOWED_MEDIA_TYPES.items()}
+
+
+def _attach_images_anthropic(messages: list[dict]) -> list[dict]:
+    """Replace each message's content with a block list when it carries
+    images. Reads each referenced image off disk and inlines it as a
+    base64 source block. Anthropic-only — other providers don't get this.
+    """
+    out: list[dict] = []
+    for m in messages:
+        images = m.get("images") or []
+        rest = {k: v for k, v in m.items() if k != "images"}
+        if not images:
+            out.append(rest)
+            continue
+        text = str(m.get("content", ""))
+        blocks: list[dict] = []
+        if text:
+            blocks.append({"type": "text", "text": text})
+        for ref in images:
+            # Reference is either a bare filename or a "/api/chat-image/..."
+            # URL. Pull just the trailing component for the disk lookup.
+            name = str(ref).rsplit("/", 1)[-1]
+            try:
+                path = resolve_image_path(name)
+            except HTTPException:
+                continue  # silently drop missing images so a stale chat
+                          # history doesn't poison the next turn
+            ext = path.suffix.lower()
+            media = _EXT_TO_MEDIA.get(ext, "image/png")
+            data = base64.standard_b64encode(path.read_bytes()).decode("ascii")
+            blocks.append({
+                "type": "image",
+                "source": {"type": "base64", "media_type": media, "data": data},
+            })
+        rest["content"] = blocks
+        out.append(rest)
+    return out
+
+
+def _strip_images(messages: list[dict]) -> list[dict]:
+    """Drop the `images` field for providers that don't support multimodal."""
+    return [{k: v for k, v in m.items() if k != "images"} for m in messages]
 
 
 def _normalize_messages(messages: list[dict]) -> list[dict]:
@@ -17,6 +66,10 @@ def _normalize_messages(messages: list[dict]) -> list[dict]:
     "[tool-result: <name>]" prefix — the LLM reads the prefix as a protocol
     signal that the preceding assistant's ``<tool>...</tool>`` call just
     returned, without needing native tool-use plumbing on the provider side.
+
+    Non-tool messages pass through unchanged. List-shaped content (an
+    Anthropic multimodal block list — see _attach_images_anthropic) is
+    preserved as-is; only scalar content is stringified.
     """
     out: list[dict] = []
     for m in messages:
@@ -29,7 +82,10 @@ def _normalize_messages(messages: list[dict]) -> list[dict]:
                 "content": f"[tool-result: {name}]\n{body}",
             })
         else:
-            out.append({"role": role, "content": str(m.get("content", ""))})
+            content = m.get("content", "")
+            if not isinstance(content, list):
+                content = str(content)
+            out.append({"role": role, "content": content})
     return out
 
 
@@ -71,10 +127,13 @@ async def chat(body: dict):
     if not isinstance(messages, list) or not messages:
         raise HTTPException(400, "messages required")
 
-    messages = _normalize_messages(messages)
-
+    # Image attachment runs BEFORE _normalize_messages — once normalize
+    # rewrites a message it strips unknown fields (like `images`), so we
+    # need to fold them into the content blocks first.
     try:
         if provider == "anthropic-oauth":
+            messages = _attach_images_anthropic(messages)
+            messages = _normalize_messages(messages)
             content = await asyncio.to_thread(
                 llm_anthropic.chat, model, messages, 32000
             )
@@ -82,6 +141,10 @@ async def chat(body: dict):
             api_key = (body.get("api-key") or body.get("apiKey") or "").strip()
             if not api_key:
                 raise HTTPException(400, "api-key required for zai provider")
+            # zai's GLM models are mostly text-only; drop image refs so the
+            # provider doesn't reject the request.
+            messages = _strip_images(messages)
+            messages = _normalize_messages(messages)
             content = await llm.call_openai_chat(
                 api_key=api_key,
                 model=model,

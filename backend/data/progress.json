@@ -1,8 +1,8 @@
 {
-  "xp": 533,
-  "streak": 2,
+  "xp": 671,
+  "streak": 1,
   "best_streak": 3,
-  "last_completed": "2026-04-27",
+  "last_completed": "2026-05-04",
   "completed_tasks": {
     "c5-d1-bronze-0": true,
     "c4-d1-bronze-0": true,
@@ -20,7 +20,12 @@
     "c3-d4-silver-1": true,
     "c3-d4-gold-2": true,
     "c6-d1-bronze-0": true,
-    "c6-d1-silver-1": true
+    "c6-d1-silver-1": true,
+    "c8-d12-bronze-0": true,
+    "c10-d1-bronze-1": true,
+    "c10-d1-silver-0": true,
+    "c10-d1-gold-2": true,
+    "c10-d2-silver-0": true
   },
   "completed_phases": {
     "c5-d1-bronze-0": {
@@ -156,7 +161,43 @@
       "check": true
     },
     "c8-d12-bronze-0": {
-      "prime": true
+      "prime": true,
+      "core": true,
+      "retrieval": true,
+      "elaborate": true,
+      "check": true
+    },
+    "c10-d1-bronze-1": {
+      "prime": true,
+      "core": true,
+      "retrieval": true,
+      "elaborate": true,
+      "check": true
+    },
+    "c10-d1-silver-0": {
+      "prime": true,
+      "core": true,
+      "elaborate": true,
+      "check": true,
+      "retrieval": true
+    },
+    "c10-d1-gold-2": {
+      "prime": true,
+      "core": true,
+      "retrieval": true,
+      "elaborate": true,
+      "check": true
+    },
+    "c10-d2-silver-0": {
+      "prime": true,
+      "core": true,
+      "retrieval": true,
+      "elaborate": true,
+      "check": true
+    },
+    "c10-d2-gold-1": {
+      "prime": true,
+      "core": true
     }
   },
   "day_tiers": {
@@ -169,7 +210,10 @@
     "7.1": "gold",
     "3.3": "gold",
     "8.1": "gold",
-    "3.4": "gold"
+    "3.4": "gold",
+    "8.12": "bronze",
+    "10.1": "gold",
+    "10.2": "silver"
   },
   "generated_tasks": [],
   "attempts": [
@@ -232,6 +276,12 @@
       "verdict": "correct",
       "comment": "Calculou det T = 2, montou T⁻¹ corretamente e traduziu para f⁻¹(x,y) = (x+2y, x/2 + 3y/2).",
       "timestamp": "2026-04-27T12:45:01.267934"
+    },
+    {
+      "card-uid": "c10-d1-gold-2",
+      "verdict": "correct",
+      "comment": "Derivou $\\dot E = \\dot x(\\ddot x + V'(x))$ e cancelou com $\\ddot x = -V'(x)$. Pequeno typo (esqueceu a linha em $V'$), mas raciocínio correto.",
+      "timestamp": "2026-05-04T17:11:40.072338"
     }
   ]
 }

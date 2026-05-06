@@ -1,6 +1,24 @@
 "use client";
 import katex from "katex";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { KATEX_MACROS } from "@/lib/katex-macros";
+
+// One-time client-only init for katex/contrib/copy-tex. The module's
+// top-level executes `document.addEventListener("copy", …)` to swap
+// rendered KaTeX with its LaTeX source on copy — but accessing
+// `document` at module load crashes Next.js prerendering. A dynamic
+// import inside useEffect defers it to the browser. The import has
+// internal caching so calling this from many MathText instances still
+// runs the side effect exactly once.
+let _copyTexLoaded = false;
+function loadCopyTexOnce() {
+  if (_copyTexLoaded) return;
+  _copyTexLoaded = true;
+  // @ts-expect-error — contrib module ships no types
+  import("katex/contrib/copy-tex").catch(() => {
+    _copyTexLoaded = false; // allow retry if the import failed
+  });
+}
 
 interface Props { children: string; className?: string; }
 
@@ -37,12 +55,14 @@ function renderSegment(seg: Segment, idx: number): React.ReactElement {
   const html = katex.renderToString(seg.value, {
     throwOnError: false,
     displayMode: seg.type === "display",
-    output: "html",
+    output: "htmlAndMathml",
+    macros: KATEX_MACROS,
   });
   return <span key={idx} dangerouslySetInnerHTML={{ __html: html }} />;
 }
 
 export function MathText({ children, className }: Props) {
   const segments = useMemo(() => splitSegments(children), [children]);
+  useEffect(() => { loadCopyTexOnce(); }, []);
   return <span className={className}>{segments.map(renderSegment)}</span>;
 }

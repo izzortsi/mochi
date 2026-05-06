@@ -1,9 +1,9 @@
 import "../styles/globals.css";
 import type { Metadata, Viewport } from "next";
-import { Header } from "@/components/Header";
-import { Tutor } from "@/components/Tutor";
-import { TutorProvider, TutorAwareMain } from "@/lib/tutor-context";
+import { TutorProvider } from "@/lib/tutor-context";
 import { ProgressProvider } from "@/lib/progress-context";
+import { ShellProvider } from "@/lib/shell-context";
+import { ShellSwitch } from "@/components/ShellSwitch";
 
 export const metadata: Metadata = {
   title: "mochi",
@@ -18,13 +18,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <ProgressProvider>
-          <TutorProvider>
-            <Header />
-            <TutorAwareMain>{children}</TutorAwareMain>
-            <Tutor />
-          </TutorProvider>
-        </ProgressProvider>
+        <ShellProvider>
+          <ProgressProvider>
+            <TutorProvider>
+              <ShellSwitch>{children}</ShellSwitch>
+            </TutorProvider>
+          </ProgressProvider>
+        </ShellProvider>
       </body>
     </html>
   );

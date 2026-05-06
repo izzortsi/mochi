@@ -12,6 +12,7 @@ def _chat_dict(m: ChatMessage) -> dict:
         "content": m.content,
         "tool-name": m.tool_name,
         "timestamp": m.timestamp,
+        "images": list(m.images or []),
     }
 
 
@@ -56,11 +57,20 @@ def append_chat(body: dict):
     content = body.get("content", "")
     tool_name = body.get("tool-name") or body.get("toolName")
     timestamp = body.get("timestamp") or datetime.now().isoformat()
+    images = body.get("images") or []
+    if not isinstance(images, list):
+        images = []
 
     chat = store.load_chat()
     msgs = chat.setdefault(int(course_id), [])
     msgs.append(
-        ChatMessage(role=role, content=content, tool_name=tool_name, timestamp=timestamp)
+        ChatMessage(
+            role=role,
+            content=content,
+            tool_name=tool_name,
+            timestamp=timestamp,
+            images=[str(x) for x in images],
+        )
     )
     store.save_chat(chat)
     return {"ok": True, "count": len(msgs)}
