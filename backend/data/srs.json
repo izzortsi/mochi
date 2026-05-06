@@ -550,5 +550,53 @@
     "due": "2026-05-05",
     "last_reviewed": null,
     "lapses": 0
+  },
+  "c10-d2-gold-1::r1": {
+    "id": "c10-d2-gold-1::r1",
+    "card_uid": "c10-d2-gold-1",
+    "prompt_id": "r1",
+    "prompt": "Estabilidade em $\\mu=0$?",
+    "answer": "Único equilíbrio $x=0$ é instável ($\\dot x=x^3$, foge da origem).",
+    "concept": "qualitative-analysis",
+    "box": 1,
+    "due": "2026-05-06",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c10-d2-gold-1::r2": {
+    "id": "c10-d2-gold-1::r2",
+    "card_uid": "c10-d2-gold-1",
+    "prompt_id": "r2",
+    "prompt": "Para $0<\\mu<1$, qual ramo é estável?",
+    "answer": "$x=\\sqrt\\mu$ (do meio) é estável; $-\\sqrt\\mu$ e $\\mu$ são instáveis.",
+    "concept": "autonomous-equation",
+    "box": 1,
+    "due": "2026-05-06",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c10-d2-gold-2::r1": {
+    "id": "c10-d2-gold-2::r1",
+    "card_uid": "c10-d2-gold-2",
+    "prompt_id": "r1",
+    "prompt": "Como reconhecer um equilíbrio estável no gráfico de $f$?",
+    "answer": "$f$ cruza o eixo de positivo para negativo (descendente).",
+    "concept": "qualitative-analysis",
+    "box": 1,
+    "due": "2026-05-06",
+    "last_reviewed": null,
+    "lapses": 0
+  },
+  "c10-d2-gold-2::r2": {
+    "id": "c10-d2-gold-2::r2",
+    "card_uid": "c10-d2-gold-2",
+    "prompt_id": "r2",
+    "prompt": "Bacia de atração de um equilíbrio estável $y^*$ em 1D?",
+    "answer": "Intervalo entre os equilíbrios instáveis vizinhos (incluindo $y^*$).",
+    "concept": "autonomous-equation",
+    "box": 1,
+    "due": "2026-05-06",
+    "last_reviewed": null,
+    "lapses": 0
   }
 }

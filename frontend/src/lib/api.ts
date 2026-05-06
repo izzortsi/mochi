@@ -1,6 +1,6 @@
 import type {
   UserProgress, CardUid, PhaseName, SrsItem, SrsStats, SrsVerdict,
-  ChatThread, ChatMessage, TutorNote,
+  ChatThread, ChatChannel, ChatMessage, TutorNote, ArtifactRecord,
 } from "./types";
 
 export function camelizeKey(key: string): string {
@@ -93,25 +93,59 @@ export const api = {
   memory: {
     fetchAllChats: () =>
       getJson<{ threads: ChatThread[] }>("/api/memory/chat"),
-    fetchChat: (courseId: number) =>
-      getJson<{ courseId: number; messages: ChatMessage[] }>(
+    fetchCourseChannels: (courseId: number) =>
+      getJson<{ courseId: number; channels: ChatChannel[] }>(
         `/api/memory/chat?course-id=${courseId}`,
       ),
-    appendChat: (courseId: number, m: ChatMessage) =>
-      postJson<{ ok: boolean; count: number }>("/api/memory/chat/append", {
-        "course-id": courseId,
-        role: m.role,
-        content: m.content,
-        "tool-name": m.toolName,
-        timestamp: m.timestamp,
-        images: m.images ?? [],
-      }),
-    deleteChatTurn: (courseId: number, index: number) =>
-      deletePath<{ ok: boolean }>(
-        `/api/memory/chat/turn?course-id=${courseId}&index=${index}`,
+    fetchChannel: (courseId: number, channelId: string) =>
+      getJson<{ courseId: number; channel: ChatChannel }>(
+        `/api/memory/chat?course-id=${courseId}&channel-id=${encodeURIComponent(channelId)}`,
       ),
-    wipeChat: (courseId: number) =>
-      deletePath<{ ok: boolean }>(`/api/memory/chat?course-id=${courseId}`),
+    appendChat: (courseId: number, m: ChatMessage, channelId?: string) =>
+      postJson<{ ok: boolean; courseId: number; channelId: string; count: number }>(
+        "/api/memory/chat/append",
+        {
+          "course-id": courseId,
+          ...(channelId ? { "channel-id": channelId } : {}),
+          role: m.role,
+          content: m.content,
+          "tool-name": m.toolName,
+          timestamp: m.timestamp,
+          images: m.images ?? [],
+        },
+      ),
+    createChannel: (courseId: number, name?: string) =>
+      postJson<{ ok: boolean; courseId: number; channel: ChatChannel }>(
+        "/api/memory/channel",
+        { "course-id": courseId, name: name ?? "" },
+      ),
+    renameChannel: (courseId: number, channelId: string, name: string) =>
+      fetch("/api/memory/channel", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          "course-id": courseId,
+          "channel-id": channelId,
+          name,
+        }),
+      }).then(async (r) => {
+        if (!r.ok) throw new Error(`rename channel: ${r.status}`);
+        return camelizeKeys<{ ok: boolean; channel: ChatChannel }>(await r.json());
+      }),
+    deleteChannel: (courseId: number, channelId: string) =>
+      deletePath<{ ok: boolean }>(
+        `/api/memory/channel?course-id=${courseId}&channel-id=${encodeURIComponent(channelId)}`,
+      ),
+    deleteChatTurn: (courseId: number, channelId: string, index: number) =>
+      deletePath<{ ok: boolean }>(
+        `/api/memory/chat/turn?course-id=${courseId}&channel-id=${encodeURIComponent(channelId)}&index=${index}`,
+      ),
+    wipeChat: (courseId: number, channelId?: string) =>
+      deletePath<{ ok: boolean }>(
+        channelId
+          ? `/api/memory/chat?course-id=${courseId}&channel-id=${encodeURIComponent(channelId)}`
+          : `/api/memory/chat?course-id=${courseId}`,
+      ),
     fetchTutorNotes: (cardUid?: string) =>
       getJson<{ notes: TutorNote[] }>(
         cardUid
@@ -122,6 +156,27 @@ export const api = {
       deletePath<{ ok: boolean }>(
         `/api/memory/tutor-notes/${encodeURIComponent(id)}`,
       ),
+  },
+  artifacts: {
+    list: (courseId?: number) =>
+      getJson<{ artifacts: ArtifactRecord[] }>(
+        courseId !== undefined
+          ? `/api/artifacts?course-id=${courseId}`
+          : "/api/artifacts",
+      ),
+    save: (a: { id: string; type: string; title: string; body: string; courseId: number }) =>
+      postJson<{ ok: boolean; artifact: ArtifactRecord; replaced: boolean }>(
+        "/api/artifacts",
+        {
+          id: a.id,
+          type: a.type,
+          title: a.title,
+          body: a.body,
+          "course-id": a.courseId,
+        },
+      ),
+    delete: (id: string) =>
+      deletePath<{ ok: boolean }>(`/api/artifacts/${encodeURIComponent(id)}`),
   },
   uploadChatImage: async (file: File): Promise<{ name: string; url: string }> => {
     const fd = new FormData();

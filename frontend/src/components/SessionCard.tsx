@@ -18,6 +18,11 @@ import { phaseRef, promptRef } from "@/lib/refs";
 export const CHAT_APPENDED_EVENT = "studyplan:chat-appended";
 export interface ChatAppendedDetail {
   courseId: number;
+  // The channel the message landed in. Set by the backend's append
+  // response — SessionCard piping omits a target channel-id, so the
+  // server resolves to the most-recent channel for the course and the
+  // engine can use this to filter event spam from other channels.
+  channelId: string;
   message: ChatMessage;
 }
 
@@ -383,12 +388,14 @@ function AttemptBox({
       timestamp: new Date().toISOString(),
     };
     try {
-      await api.memory.appendChat(courseId, message);
+      const resp = await api.memory.appendChat(courseId, message);
       setPiped(true);
-      // Let any open StudyChat on this course update in-place.
+      // Let any open StudyChat on this course update in-place. We
+      // forward the resolved channel-id so the listener can filter
+      // out events for channels the user isn't currently viewing.
       window.dispatchEvent(
         new CustomEvent<ChatAppendedDetail>(CHAT_APPENDED_EVENT, {
-          detail: { courseId, message },
+          detail: { courseId, channelId: resp.channelId, message },
         }),
       );
     } catch {
