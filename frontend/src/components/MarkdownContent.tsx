@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import remarkGfm from "remark-gfm";
 import rehypeKatex from "rehype-katex";
+import { KATEX_MACROS } from "@/lib/katex-macros";
 import type { Components } from "react-markdown";
 
 function buildComponents(compact: boolean): Components {
@@ -80,7 +81,7 @@ export function MarkdownContent({ content, compact = false }: Props) {
     <div className="markdown-body">
       <ReactMarkdown
         remarkPlugins={[remarkMath, remarkGfm]}
-        rehypePlugins={[rehypeKatex]}
+        rehypePlugins={[[rehypeKatex, { macros: KATEX_MACROS }]]}
         components={compact ? compactComponents : roomyComponents}
       >
         {content}

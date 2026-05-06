@@ -64,19 +64,24 @@ chmod 600 /data/anthropic-oauth/tokens.json
 
 ## 4. Seed / sync data (automatic)
 
-The backend syncs git-tracked JSON state into `/data` on every startup
-(see `app/seed.py`). The deploy is a one-way mirror: whatever's in the
-repo's `backend/data/*.json` overwrites the disk. Single-user, single
-source of truth.
+The backend syncs git-tracked JSON state into `/data` at startup, split
+into two policies (see `app/seed.py`):
+
+- **Catalog** — `courses.json`, `aliases.json`. Overwritten on every
+  startup so a `git push` of new course content reaches the live app.
+- **Runtime state** — `progress.json`, `pet.json`, `chat.json`,
+  `notes.json`, `tutor_notes.json`, `srs.json`. Seeded only when
+  missing on disk; subsequent restarts leave them alone so studying on
+  the deployed instance survives cold starts.
 
 This means:
 
-- Updating the course catalog or any other state is `commit + push +
-  redeploy`. No shell upload needed.
-- Studying directly on the Render instance and expecting that progress
-  to survive the next deploy DOES NOT WORK — pull the disk's copy back
-  to git first (`mochi-backend → Shell` → `cat /data/progress.json` or
-  similar) and commit it.
+- Updating the course catalog: `commit + push + redeploy` is enough.
+- Force-pushing local runtime state to Render (e.g. you studied
+  locally and want to override the disk's version): in the Render
+  shell, `rm /data/<name>.json` for the file you want to overwrite,
+  then redeploy. The seed will lay down the bundled copy on the next
+  start because the file is missing.
 - OAuth tokens (`/data/anthropic-oauth/tokens.json`) and PDF/OCR caches
   are not in the seed list, so they persist across deploys untouched.
 

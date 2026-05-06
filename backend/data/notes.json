@@ -3601,5 +3601,266 @@
     "content": "Para um operador linear $f: V \\to V$ com $\\dim V = n$ e matriz $T$ numa base, as seguintes condições são **equivalentes**:\n\n1. $f$ é inversível (existe $f^{-1}$ com $f \\circ f^{-1} = f^{-1} \\circ f = I$).\n2. $\\det T \\neq 0$ (i.e. $T$ é não-singular).\n3. As colunas (ou linhas) de $T$ são linearmente independentes.\n4. $\\ker f = \\{0\\}$ — ou seja, $f$ é injetiva.\n5. $\\operatorname{Im} f = V$ — ou seja, $f$ é sobrejetiva.\n6. $f$ é bijetiva.\n7. $\\operatorname{posto}(T) = n$.\n\n**Por que injetividade ⟺ sobrejetividade aqui?** Pelo teorema do núcleo e imagem,\n$$\\dim \\ker f + \\dim \\operatorname{Im} f = n.$$\nLogo $\\ker f = \\{0\\}$ força $\\dim \\operatorname{Im} f = n$, e vice-versa.\n\n**Cadeia chave para o caso $\\det T = 0$:**\n$$\\det T = 0 \\iff \\text{colunas l.d.} \\iff \\exists v \\neq 0:\\ Tv = 0 \\iff \\ker T \\neq \\{0\\} \\iff f \\text{ não injetiva} \\iff f \\text{ não inversível}.$$\n\n**Atenção — dimensão infinita quebra a equivalência.** O shift à direita em $\\ell^2$, $(x_1, x_2, \\ldots) \\mapsto (0, x_1, x_2, \\ldots)$, é injetivo mas não sobrejetivo. Em $V \\to V$ com $\\dim V = \\infty$, injetividade e sobrejetividade são independentes.\n\n**Fórmula da inversa (quando existe):**\n$$T^{-1} = \\frac{1}{\\det T}\\,\\operatorname{adj}(T).$$",
     "related": [],
     "source": "tutor"
+  },
+  {
+    "id": "bernoulli-substituicao",
+    "title": "Substituição de Bernoulli",
+    "domain": "EDO",
+    "tags": [
+      "bernoulli",
+      "substituicao"
+    ],
+    "content": "Para $\\dot x = p(t)x + q(t)x^n$ com $n\\neq 0,1$, a substituição $u=x^{1-n}$ reduz a uma EDO **linear** em $u$. No caso $n=2$, $u=x^{-1}$ e $\\dot u = -x^{-2}\\dot x$.\n\n**Exemplo logístico**: $\\dot x = kx - x^2$. Dividindo por $x^2$: $x^{-2}\\dot x = kx^{-1} - 1$, isto é $-\\dot u = ku - 1$, ou $\\dot u = 1 - ku$.",
+    "related": [
+      "edo-linear-1a-ordem"
+    ],
+    "source": ""
+  },
+  {
+    "id": "edo-linear-1a-ordem",
+    "title": "EDO Linear de 1ª Ordem",
+    "domain": "EDO",
+    "tags": [
+      "linear",
+      "fator-integrante"
+    ],
+    "content": "Forma $\\dot u + p(t)u = g(t)$. Fator integrante $\\mu(t) = e^{\\int p\\,dt}$, daí $(\\mu u)' = \\mu g$ e $u = \\mu^{-1}\\left(\\int \\mu g\\,dt + C\\right)$.\n\nPara $\\dot u + ku = 1$ (constante): $u(t) = 1/k + Ce^{-kt}$.",
+    "related": [
+      "bernoulli-substituicao"
+    ],
+    "source": ""
+  },
+  {
+    "id": "criterio-linearidade-edo",
+    "title": "Critério de Linearidade",
+    "domain": "EDO",
+    "tags": [
+      "classificacao"
+    ],
+    "content": "Uma EDO em $y(x)$ é **linear** se tem a forma $\\sum_{k=0}^n a_k(x)y^{(k)} = g(x)$. Termos como $y^2$, $\\sqrt y$, $\\sin(y)$, $y\\cdot y'$ violam linearidade. Coeficientes podem depender de $x$ livremente.",
+    "related": [],
+    "source": ""
+  },
+  {
+    "id": "conservacao-energia",
+    "title": "Conservação de Energia em $\\ddot x = -V'(x)$",
+    "domain": "EDO",
+    "tags": [
+      "energia",
+      "hamiltoniano"
+    ],
+    "content": "Para o sistema mecânico $\\ddot x = -V'(x)$, defina $E(t) = \\tfrac12\\dot x^2 + V(x(t))$. Então\n$$\\frac{dE}{dt} = \\dot x \\ddot x + V'(x)\\dot x = \\dot x(\\ddot x + V'(x)) = 0.$$\nLogo $E$ é constante: a energia total se conserva. Em forma Hamiltoniana, $H(x,p) = p^2/2 + V(x)$.",
+    "related": [],
+    "source": ""
+  },
+  {
+    "id": "diagrama-bifurcacao",
+    "title": "Diagrama de Bifurcação",
+    "domain": "EDO",
+    "tags": [
+      "bifurcacao"
+    ],
+    "content": "Gráfico no plano (parâmetro, equilíbrio) mostrando como os equilíbrios se movem com o parâmetro. Cruzamentos/colisões de ramos sinalizam bifurcações (sela-nó, transcrítica, forquilha).\n\nPara $\\dot x = (x-\\mu)(x^2-\\mu)$: ramos $x=\\mu$ (reta) e $x=\\pm\\sqrt\\mu$ (parábola deitada, $\\mu\\geq 0$), com colisões em $\\mu=0$ e $\\mu=1$.",
+    "related": [
+      "estabilidade-linearizada"
+    ],
+    "source": ""
+  },
+  {
+    "id": "estabilidade-linearizada",
+    "title": "Teorema de Estabilidade Linearizada (1D)",
+    "domain": "EDO",
+    "tags": [
+      "estabilidade"
+    ],
+    "content": "Para $\\dot x = f(x)$ com equilíbrio $x^*$ ($f(x^*)=0$):\n- $f'(x^*)<0$ ⇒ assintoticamente estável;\n- $f'(x^*)>0$ ⇒ instável;\n- $f'(x^*)=0$ ⇒ inconclusivo, use sinal de $f$ em vizinhança (retrato de fase).",
+    "related": [
+      "retrato-fase-1d"
+    ],
+    "source": ""
+  },
+  {
+    "id": "retrato-fase-1d",
+    "title": "Retrato de Fase 1D",
+    "domain": "EDO",
+    "tags": [
+      "fase"
+    ],
+    "content": "Na reta, marque equilíbrios e sinais de $f$ entre eles. Setas → onde $f>0$, ← onde $f<0$. Equilíbrio com setas convergentes é estável; divergentes, instável; uma seta entrando e outra saindo, semi-estável.",
+    "related": [
+      "bacia-atracao"
+    ],
+    "source": ""
+  },
+  {
+    "id": "bacia-atracao",
+    "title": "Bacia de Atração (1D)",
+    "domain": "EDO",
+    "tags": [
+      "bacia"
+    ],
+    "content": "Para um equilíbrio estável $y^*$ de $\\dot y = f(y)$, a bacia de atração é o maior intervalo aberto contendo $y^*$ tal que toda solução iniciada nele converge a $y^*$. Em 1D é delimitado pelos equilíbrios instáveis vizinhos.\n\nPara $t\\to-\\infty$, soluções convergem a equilíbrios **instáveis** (repulsores no tempo direto = atratores no tempo reverso).",
+    "related": [
+      "retrato-fase-1d"
+    ],
+    "source": ""
+  },
+  {
+    "id": "p1-bifurcacao-quartica",
+    "title": "Bifurcações de $f(x;\\mu)=(x^2-1)(x^2-\\mu)$",
+    "domain": "EDO",
+    "tags": [
+      "bifurcação",
+      "sela-nó",
+      "transcrítica"
+    ],
+    "content": "**Equilíbrios**: $x=\\pm 1$ sempre; $x=\\pm\\sqrt\\mu$ se $\\mu\\geq 0$.\n\n**Bifurcações**:\n- $\\mu=0$: sela-nó (dupla, em $x=0$): par $\\pm\\sqrt\\mu$ nasce.\n- $\\mu=1$: transcrítica (dupla): ramos $\\pm\\sqrt\\mu$ cruzam $\\pm 1$ trocando estabilidade.\n\n**Estabilidade** (via $f'$ ou sinal):\n- $\\mu<0$: $-1$ estável, $+1$ instável.\n- $0<\\mu<1$: $-1,\\sqrt\\mu$ estáveis; $-\\sqrt\\mu,+1$ instáveis.\n- $\\mu>1$: $-\\sqrt\\mu,+1$ estáveis; $-1,\\sqrt\\mu$ instáveis.\n\n**Item (e)**: $x(0)=-2\\to -1$ sse $\\mu<1$.",
+    "related": [],
+    "source": ""
+  },
+  {
+    "id": "p1-pvi-separaveis",
+    "title": "Intervalo Maximal de PVIs Separáveis",
+    "domain": "EDO",
+    "tags": [
+      "separável",
+      "blow-up",
+      "existência"
+    ],
+    "content": "**(i)** $\\dot y=-2t/y$, $y(0)=y_0\\neq 0$: $y(t)=\\mathrm{sgn}(y_0)\\sqrt{y_0^2-2t^2}$, $|t|<|y_0|/\\sqrt 2$.\n\n**(ii)** $\\dot y=2ty^2$, $y(0)=y_0$:\n- $y_0=0$: $y\\equiv 0$, $t\\in\\mathbb R$.\n- $y_0>0$: $y=y_0/(1-y_0 t^2)$, blow-up em $|t|=1/\\sqrt{y_0}$.\n- $y_0<0$: $y=y_0/(1-y_0 t^2)$, global em $\\mathbb R$.\n\n**Moral**: não-linearidade pode produzir blow-up em tempo finito; o intervalo maximal depende sensivelmente de $y_0$.",
+    "related": [],
+    "source": ""
+  },
+  {
+    "id": "operador-linear-edo",
+    "title": "Operadores Lineares em EDOs",
+    "domain": "EDO",
+    "tags": [
+      "linearidade",
+      "operador",
+      "classificacao"
+    ],
+    "content": "Um operador $\\mathcal{L}$ é linear se $\\mathcal{L}[u+v]=\\mathcal{L}[u]+\\mathcal{L}[v]$ e $\\mathcal{L}[cu]=c\\mathcal{L}[u]$. A equação $\\mathcal{L}[u]=0$ é **linear homogênea**; $\\mathcal{L}[u]=g$ com $g\\neq 0$, **linear não-homogênea**. **Teste rápido de não-linearidade**: presença de $u^2$, $uu_x$, $(u_x)^2$, $\\sqrt{1+u}$, $\\sin u$ etc. Coeficientes podem depender da variável independente sem quebrar linearidade.\n\n**Estrutura afim**: se $u_p$ é particular de $\\mathcal{L}[u]=g$ e $u_h$ resolve $\\mathcal{L}[u]=0$, então $u_p+u_h$ resolve $\\mathcal{L}[u]=g$. Diferença de duas soluções da não-homogênea cai na homogênea.",
+    "related": [
+      "ansatz-edo-linear"
+    ],
+    "source": ""
+  },
+  {
+    "id": "ansatz-edo-linear",
+    "title": "Ansatz $e^{rx}$ e $x^r$",
+    "domain": "EDO",
+    "tags": [
+      "ansatz",
+      "equacao-caracteristica",
+      "cauchy-euler"
+    ],
+    "content": "**Coef. constantes** ($ay''+by'+cy=0$): tente $y=e^{rx}$. Substituindo dá equação característica $ar^2+br+c=0$. Cada raiz $r_i$ dá solução $e^{r_ix}$.\n\n**Cauchy-Euler** ($x^2y''+axy'+by=0$): tente $y=x^r$. Equação indicial $r(r-1)+ar+b=0$.\n\n**Por que funciona**: derivar $e^{rx}$ ou $x^r$ reproduz a mesma forma a menos de fator multiplicativo, transformando a EDO em equação algébrica em $r$.",
+    "related": [
+      "operador-linear-edo"
+    ],
+    "source": ""
+  },
+  {
+    "id": "estabilidade-linear-1d",
+    "title": "Estabilidade em EDOs Lineares 1D",
+    "domain": "EDO",
+    "tags": [
+      "estabilidade",
+      "equilibrio",
+      "atrator"
+    ],
+    "content": "Para $\\dot x=ax+b$:\n- Equilíbrio: $x^*=-b/a$ (se $a\\neq 0$).\n- Solução: $x(t)=x^*+(x_0-x^*)e^{at}$.\n- $a<0$: $x^*$ é **poço/atrator** (estável).\n- $a>0$: $x^*$ é **fonte/repulsor** (instável).\n- $a=0$: caso degenerado (translação uniforme se $b\\neq 0$, linha de equilíbrios se $b=0$).\n\nA estabilidade depende **apenas do sinal de $a$**, não de $b$. A translação $y=x-x^*$ reduz a não-homogênea à homogênea $\\dot y=ay$.",
+    "related": [
+      "operador-linear-edo"
+    ],
+    "source": ""
+  },
+  {
+    "id": "teorema-existencia-unicidade",
+    "title": "Teoremas de Existência e Unicidade",
+    "domain": "EDO",
+    "tags": [
+      "picard",
+      "unicidade"
+    ],
+    "content": "**Teorema 1 (Linear):** $y'+p(t)y=g(t)$, $y(t_0)=y_0$, com $p,g$ contínuas em $I\\ni t_0$ aberto $\\Rightarrow$ solução única em todo $I$.\n\n**Teorema 2 (Geral):** $y'=f(t,y)$, $y(t_0)=y_0$, com $f$ e $\\partial_y f$ contínuas em região $D\\ni(t_0,y_0)$ $\\Rightarrow$ solução única em $(t_0-h,t_0+h)$.\n\nHipóteses suficientes mas não necessárias.",
+    "related": [
+      "regiao-unicidade",
+      "metodo-picard"
+    ],
+    "source": ""
+  },
+  {
+    "id": "regiao-unicidade",
+    "title": "Regiões de Unicidade",
+    "domain": "EDO",
+    "tags": [
+      "unicidade",
+      "dominio"
+    ],
+    "content": "Para $y'=f(x,y)$, identifique onde $f$ e $\\partial_y f$ são contínuas. Exclua singularidades. A região aberta resultante é onde Teorema 2 se aplica.\n\n**Exemplos:**\n- $x\\,dy/dx=y$: excluir $x=0$.\n- $y'=\\sqrt{xy}$: $\\{x>0,y>0\\}\\cup\\{x<0,y<0\\}$.\n- $(4-y^2)y'=x^2$: excluir $y=\\pm 2$.",
+    "related": [
+      "teorema-existencia-unicidade"
+    ],
+    "source": ""
+  },
+  {
+    "id": "intervalo-maximal-linear",
+    "title": "Intervalo Maximal — Caso Linear",
+    "domain": "EDO",
+    "tags": [
+      "linear",
+      "intervalo"
+    ],
+    "content": "Para $y'+p(t)y=g(t)$ com $y(t_0)=y_0$, o intervalo maximal é o componente conexo do conjunto de continuidade de $p,g$ que contém $t_0$.\n\n**Domínio vs. intervalo:** $y=1/x$ tem domínio $\\mathbb{R}\\setminus\\{0\\}$, mas como solução de $xy'+y=0$ está definida em $(-\\infty,0)$ ou $(0,\\infty)$ conforme $x_0$.",
+    "related": [
+      "teorema-existencia-unicidade"
+    ],
+    "source": ""
+  },
+  {
+    "id": "nao-unicidade",
+    "title": "Não-Unicidade de Soluções",
+    "domain": "EDO",
+    "tags": [
+      "unicidade",
+      "contra-exemplos"
+    ],
+    "content": "Quando $\\partial_y f$ é descontínua no dado inicial, múltiplas soluções podem existir.\n\n**Exemplo clássico:** $x'=3x^{2/3}$, $x(0)=0$ admite $x(t)=0$ e $x(t)=t^3$, além de soluções 'esperar e partir': $x(t)=0$ para $t<c$, $(t-c)^3$ para $t\\ge c$.",
+    "related": [
+      "teorema-existencia-unicidade",
+      "metodo-picard"
+    ],
+    "source": ""
+  },
+  {
+    "id": "metodo-picard",
+    "title": "Método de Picard (Aproximações Sucessivas)",
+    "domain": "EDO",
+    "tags": [
+      "picard",
+      "iteracao"
+    ],
+    "content": "$$\\phi_{n+1}(t)=y_0+\\int_{t_0}^t f(s,\\phi_n(s))\\,ds,\\quad \\phi_0(t)=y_0.$$\n\nSob hipóteses do Teorema 2, $\\phi_n\\to\\phi$ uniformemente em $(t_0-h,t_0+h)$. Equivalente a ponto fixo do operador integral via princípio da contração.\n\n**Exemplo:** $x'=x$, $x(0)=1$ gera $\\phi_n(t)=\\sum_{k=0}^n t^k/k!\\to e^t$.",
+    "related": [
+      "teorema-existencia-unicidade",
+      "picard-aplicacoes"
+    ],
+    "source": ""
+  },
+  {
+    "id": "picard-aplicacoes",
+    "title": "Picard em Diversos PVIs",
+    "domain": "EDO",
+    "tags": [
+      "picard",
+      "exemplos"
+    ],
+    "content": "**$y'=2t(1+y)$, $y(0)=0$:** iteradas convergem para $e^{t^2}-1$.\n\n**$x'=x^{4/3}$, $x(0)=1$:** solução $(1-t/3)^{-3}$, blow-up em $t=3$ — Picard só garante intervalo local.\n\n**$x'=\\cos x$, $x(0)=0$:** solução $x(t)=2\\arctan(\\tanh(t/2))\\cdot\\ldots$; iteradas dão Taylor.\n\nLição: Picard prova existência local; o intervalo maximal pode ser muito menor que o de continuidade de $f$.",
+    "related": [
+      "metodo-picard"
+    ],
+    "source": ""
   }
 ]

@@ -18188,5 +18188,1582 @@
         "conica"
       ]
     ]
+  },
+  {
+    "id": 10,
+    "title": "EDO - P1",
+    "slug": "edo-p1",
+    "phases": [
+      {
+        "num": 1,
+        "title": "Técnicas de Resolução"
+      },
+      {
+        "num": 2,
+        "title": "Análise Qualitativa"
+      },
+      {
+        "num": 3,
+        "title": "Prova P1 - Questões Resolvidas"
+      },
+      {
+        "num": 4,
+        "title": "Notas e Exercícios — Lista 1"
+      },
+      {
+        "num": 5,
+        "title": "Notas e Exercícios — Lista 2"
+      }
+    ],
+    "days": [
+      {
+        "id": 1,
+        "phase": 1,
+        "title": "Substituição e Equações Lineares",
+        "icon": "*",
+        "summary": "Reduzindo a equação logística via substituição $u=x^{-1}$ e classificando linearidade.",
+        "key_insight": "A substituição $u=x^{-1}$ transforma $\\dot x = kx-x^2$ em $\\dot u = 1-ku$, linear de 1ª ordem.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Aplique condição inicial $x(0)=x_0$ e expresse $C$.",
+            "detail": "Equação de Bernoulli com $n=2$: divida por $x^2$ e troque $u=x^{-1}$, daí $\\dot u = -x^{-2}\\dot x$. Substituindo dá $\\dot u = 1 - ku$, linear. Resolva por fator integrante $e^{kt}$.",
+            "concepts": [
+              "bernoulli-equation",
+              "linear-ode"
+            ],
+            "notes": [
+              "bernoulli-substituicao",
+              "edo-linear-1a-ordem"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Resolver $\\dot x = kx - x^2$ via substituição $u = x^{-1}$.",
+                "prior_knowledge": "Regra da cadeia e fator integrante para EDOs lineares de 1ª ordem."
+              },
+              "core": {
+                "exposition": "Equação de Bernoulli com $n=2$: divida por $x^2$ e troque $u=x^{-1}$, daí $\\dot u = -x^{-2}\\dot x$. Substituindo dá $\\dot u = 1 - ku$, linear. Resolva por fator integrante $e^{kt}$.",
+                "worked_example": "$\\dot u + ku = 1$. Mult. por $e^{kt}$: $(e^{kt}u)' = e^{kt}$. Integra: $e^{kt}u = e^{kt}/k + C$, logo $u = 1/k + Ce^{-kt}$. Então $x = 1/(1/k + Ce^{-kt})$.",
+                "problem": "Aplique condição inicial $x(0)=x_0$ e expresse $C$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Por que $u=x^{-1}$ lineariza $\\dot x = kx-x^2$?",
+                    "answer": "Porque $\\dot u = -x^{-2}\\dot x = -x^{-2}(kx-x^2) = -k/x + 1 = 1-ku$.",
+                    "concept": "bernoulli-equation"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Qual é a solução geral $u(t)$?",
+                    "answer": "$u(t)=1/k + Ce^{-kt}$.",
+                    "concept": "linear-ode"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explique por que $\\lim_{t\\to\\infty}x(t)=k$ para $k>0$ e $x_0>0$."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Determine $C$ tal que $x(0)=x_0$ e escreva $x(t)$.",
+                "rubric": "Correto se $C = 1/x_0 - 1/k$ e $x(t) = 1/(1/k + (1/x_0-1/k)e^{-kt})$."
+              }
+            }
+          },
+          {
+            "tier": "bronze",
+            "task_index": 1,
+            "text": "Classifique as três equações da Questão 2.",
+            "detail": "Linear: coeficientes dependem só de $x$, e $y, y', y'',\\dots$ aparecem em grau 1, sem produtos entre si nem dentro de funções não lineares.",
+            "concepts": [
+              "ode-classification",
+              "linear-ode"
+            ],
+            "notes": [
+              "criterio-linearidade-edo"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Identificar quais EDOs são lineares.",
+                "prior_knowledge": "Definição: EDO linear é linear em $y$ e suas derivadas."
+              },
+              "core": {
+                "exposition": "Linear: coeficientes dependem só de $x$, e $y, y', y'',\\dots$ aparecem em grau 1, sem produtos entre si nem dentro de funções não lineares.",
+                "worked_example": "(i) $\\sqrt{y}$ é não linear. (ii) $1+y$ é linear (termo constante 1 + termo $y$); $e^x$ é só forçamento. (iii) $y\\,y'$ é produto não linear.",
+                "problem": "Classifique as três equações da Questão 2."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Qual das três é linear?",
+                    "answer": "Apenas (ii); (i) tem $\\sqrt{y}$ e (iii) tem $y\\,y'$.",
+                    "concept": "linear-ode"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Por que $\\cos(x)\\,y'$ não viola linearidade?",
+                    "answer": "Porque $\\cos(x)$ é coeficiente em $x$, não em $y$.",
+                    "concept": "ode-classification"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Se reescrevermos (ii) como $y'' + xy' + y = e^x - 1$, isso muda a classificação?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Justifique a linearidade ou não de cada equação.",
+                "rubric": "Correto se identifica os termos não lineares específicos em (i) e (iii) e confirma (ii) linear."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Atenção: o enunciado escreveu $V(t)$ — leia $V(x(t))$, senão $\\dot E$ tem termo extra $V'(t)$ não cancelado.",
+            "detail": "Sistemas conservativos têm primeira integral $E = \\tfrac12\\dot x^2 + V(x)$. Derivando $E$ no tempo e usando a equação, obtém-se $\\dot E = 0$.",
+            "concepts": [
+              "first-integral",
+              "hamiltonian-system"
+            ],
+            "notes": [
+              "conservacao-energia"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Provar conservação de energia para $\\ddot x = -V'(x)$.",
+                "prior_knowledge": "Regra da cadeia."
+              },
+              "core": {
+                "exposition": "Sistemas conservativos têm primeira integral $E = \\tfrac12\\dot x^2 + V(x)$. Derivando $E$ no tempo e usando a equação, obtém-se $\\dot E = 0$.",
+                "worked_example": "$\\frac{dE}{dt} = \\dot x\\,\\ddot x + V'(x)\\dot x = \\dot x(-V'(x)) + V'(x)\\dot x = 0$. Logo $E$ é constante.",
+                "problem": "Atenção: o enunciado escreveu $V(t)$ — leia $V(x(t))$, senão $\\dot E$ tem termo extra $V'(t)$ não cancelado."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Por que $\\dot E = 0$?",
+                    "answer": "Substituindo $\\ddot x = -V'(x)$ em $\\dot E = \\dot x\\ddot x + V'(x)\\dot x$ os termos cancelam.",
+                    "concept": "first-integral"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "O que significa fisicamente?",
+                    "answer": "Conservação da energia mecânica: cinética + potencial = const.",
+                    "concept": "hamiltonian-system"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Reescreva o sistema como Hamiltoniano em $(x,p)$ e identifique $H$."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Apresente a prova completa de que $E$ é constante.",
+                "rubric": "Correto se calcula $\\dot E$ via regra da cadeia e usa a EDO para concluir cancelamento."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "phase": 2,
+        "title": "Bifurcação e Retrato de Fase",
+        "icon": "*",
+        "summary": "Análise da família $\\dot x = (x-\\mu)(x^2-\\mu)$ e leitura de retratos de fase a partir de $f(y)$.",
+        "key_insight": "Equilíbrios estáveis correspondem a $f'(x^*)<0$; em $\\mu=0$ surge bifurcação onde duas raízes colidem.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Liste os intervalos de $\\mu$ de interesse: $\\mu<0$, $\\mu=0$, $0<\\mu<1$, $\\mu=1$, $\\mu>1$.",
+            "detail": "Equilíbrios: $x=\\mu$ ou $x^2=\\mu$. Para $\\mu<0$: só $x=\\mu$. Para $\\mu=0$: $x=0$ (triplo). Para $\\mu>0$: $x=\\mu, \\pm\\sqrt{\\mu}$. No plano $(\\mu,x)$ tem-se reta $x=\\mu$ e parábola $x^2=\\mu$ que se cruzam em $\\mu=0,1$.",
+            "concepts": [
+              "autonomous-equation",
+              "qualitative-analysis"
+            ],
+            "notes": [
+              "diagrama-bifurcacao",
+              "estabilidade-linearizada"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Encontrar equilíbrios de $\\dot x=(x-\\mu)(x^2-\\mu)$ e traçar diagrama de bifurcação.",
+                "prior_knowledge": "Equilíbrios = zeros de $f$; estabilidade pelo sinal de $f'$."
+              },
+              "core": {
+                "exposition": "Equilíbrios: $x=\\mu$ ou $x^2=\\mu$. Para $\\mu<0$: só $x=\\mu$. Para $\\mu=0$: $x=0$ (triplo). Para $\\mu>0$: $x=\\mu, \\pm\\sqrt{\\mu}$. No plano $(\\mu,x)$ tem-se reta $x=\\mu$ e parábola $x^2=\\mu$ que se cruzam em $\\mu=0,1$.",
+                "worked_example": "$\\mu=1$: equilíbrios $x=1$ (duplo, pois $\\sqrt{1}=1$) e $x=-1$. Em $\\mu=0$ os três ramos colidem em 0.",
+                "problem": "Liste os intervalos de $\\mu$ de interesse: $\\mu<0$, $\\mu=0$, $0<\\mu<1$, $\\mu=1$, $\\mu>1$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Onde se cruzam $x=\\mu$ e $x=\\pm\\sqrt\\mu$?",
+                    "answer": "Em $\\mu=0$ (origem) e $\\mu=1$ (ponto $(1,1)$).",
+                    "concept": "autonomous-equation"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Quantos equilíbrios há para $0<\\mu<1$?",
+                    "answer": "Três: $\\mu, \\sqrt\\mu, -\\sqrt\\mu$, todos distintos.",
+                    "concept": "qualitative-analysis"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que em $\\mu=0$ ocorre uma bifurcação especial e qual seu tipo?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Trace o diagrama de bifurcação no plano $(\\mu,x)$.",
+                "rubric": "Correto se mostra reta $x=\\mu$ e parábola deitada $x=\\pm\\sqrt\\mu$ (só $\\mu\\geq0$) com cruzamentos em $0$ e $1$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Para $\\mu=0$: $f(x)=x\\cdot x^2 = x^3$. Sinal igual ao de $x$: $0$ é instável.",
+            "detail": "Para $\\mu>0$: ordene $-\\sqrt\\mu<\\sqrt\\mu,\\mu$ (com $\\sqrt\\mu<\\mu$ se $\\mu>1$, $>$ se $\\mu<1$). Sinais de $f$ alternam → $-\\sqrt\\mu$ instável, próximo estável, próximo instável. Para $\\mu<0$: $x^2-\\mu>0$, então $\\dot x$ tem sinal de $x-\\mu$, logo $x=\\mu$ é instável.",
+            "concepts": [
+              "qualitative-analysis",
+              "autonomous-equation"
+            ],
+            "notes": [
+              "estabilidade-linearizada",
+              "retrato-fase-1d"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Determinar estabilidade de cada ramo e esboçar retratos de fase para $\\mu=0$ e $\\mu=1$.",
+                "prior_knowledge": "$f'(x^*)<0\\Rightarrow$ estável; sinal de $f$ entre equilíbrios dá direção do fluxo."
+              },
+              "core": {
+                "exposition": "Para $\\mu>0$: ordene $-\\sqrt\\mu<\\sqrt\\mu,\\mu$ (com $\\sqrt\\mu<\\mu$ se $\\mu>1$, $>$ se $\\mu<1$). Sinais de $f$ alternam → $-\\sqrt\\mu$ instável, próximo estável, próximo instável. Para $\\mu<0$: $x^2-\\mu>0$, então $\\dot x$ tem sinal de $x-\\mu$, logo $x=\\mu$ é instável.",
+                "worked_example": "$\\mu=1$: $f(x)=(x-1)(x-1)(x+1)=(x-1)^2(x+1)$. Sinal: $<0$ para $x<-1$, $>0$ para $x>-1$ ($x\\neq1$). Logo $-1$ estável, $1$ semi-estável.",
+                "problem": "Para $\\mu=0$: $f(x)=x\\cdot x^2 = x^3$. Sinal igual ao de $x$: $0$ é instável."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Estabilidade em $\\mu=0$?",
+                    "answer": "Único equilíbrio $x=0$ é instável ($\\dot x=x^3$, foge da origem).",
+                    "concept": "qualitative-analysis"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Para $0<\\mu<1$, qual ramo é estável?",
+                    "answer": "$x=\\sqrt\\mu$ (do meio) é estável; $-\\sqrt\\mu$ e $\\mu$ são instáveis.",
+                    "concept": "autonomous-equation"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Marque no diagrama de bifurcação ramos estáveis (linha cheia) e instáveis (tracejada)."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Esboce retratos de fase para $\\mu=0$ e $\\mu=1$ com setas e classifique equilíbrios.",
+                "rubric": "Correto se $\\mu=0$: 0 instável; $\\mu=1$: $-1$ estável, $1$ semi-estável (atrai pela esquerda, repele pela direita)."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Identifique no gráfico: equilíbrios, sinais de $f$ entre eles, e responda 5d.i e 5d.ii.",
+            "detail": "Equilíbrios são onde $f$ cruza o eixo. Estável: $f$ desce ao cruzar (de $+$ para $-$). Instável: sobe. Bacias: intervalos entre equilíbrios consecutivos onde o fluxo aponta para o ponto-alvo.",
+            "concepts": [
+              "qualitative-analysis",
+              "autonomous-equation"
+            ],
+            "notes": [
+              "bacia-atracao",
+              "retrato-fase-1d"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Ler equilíbrios e bacias de atração a partir do gráfico de $f(y)$.",
+                "prior_knowledge": "Zeros de $f$ = equilíbrios; sinal de $f$ → direção; estável atrai vizinhança."
+              },
+              "core": {
+                "exposition": "Equilíbrios são onde $f$ cruza o eixo. Estável: $f$ desce ao cruzar (de $+$ para $-$). Instável: sobe. Bacias: intervalos entre equilíbrios consecutivos onde o fluxo aponta para o ponto-alvo.",
+                "worked_example": "Suponha equilíbrios típicos em $-5$ (estável), $0$ (instável), $5$ (estável) no intervalo dado. Então $y(t)\\to 5$ se $y_0\\in(0,9]$.",
+                "problem": "Identifique no gráfico: equilíbrios, sinais de $f$ entre eles, e responda 5d.i e 5d.ii."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Como reconhecer um equilíbrio estável no gráfico de $f$?",
+                    "answer": "$f$ cruza o eixo de positivo para negativo (descendente).",
+                    "concept": "qualitative-analysis"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Bacia de atração de um equilíbrio estável $y^*$ em 1D?",
+                    "answer": "Intervalo entre os equilíbrios instáveis vizinhos (incluindo $y^*$).",
+                    "concept": "autonomous-equation"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Para $\\lim_{t\\to-\\infty}y(t)=-5$, por que $-5$ deve ser instável (repulsor) e $y_0$ deve estar na 'bacia para trás'?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Descreva o conjunto de $y_0$ tais que $y(t)\\to 5$ quando $t\\to+\\infty$ e $y(t)\\to -5$ quando $t\\to-\\infty$.",
+                "rubric": "Correto se identifica bacia de atração futura de $5$ (entre instáveis adjacentes) e bacia 'para trás' de $-5$ (intervalo onde $-5$ repele)."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "phase": 3,
+        "title": "Bifurcações de $f(x;\\mu)=(x^2-1)(x^2-\\mu)$",
+        "icon": "*",
+        "summary": "Equilíbrios, estabilidade e diagrama de bifurcação para uma família a um parâmetro com produto de fatores quadráticos.",
+        "key_insight": "Equilíbrios são raízes; bifurcações ocorrem onde ramos se cruzam ($\\mu=1$, transcrítica dupla) ou aparecem/desaparecem ($\\mu=0$, sela-nó dupla).",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Liste todos os equilíbrios para $\\mu=-1$, $\\mu=0$, $\\mu=1/4$ e $\\mu=1$.",
+            "detail": "$f(x;\\mu)=0$ se $x^2=1$ ou $x^2=\\mu$. Logo $x=\\pm 1$ sempre são equilíbrios; $x=\\pm\\sqrt\\mu$ só existem para $\\mu\\geq 0$.",
+            "concepts": [
+              "qualitative-analysis",
+              "autonomous-equation"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Listar os pontos de equilíbrio de $\\dot x=(x^2-1)(x^2-\\mu)$ em função de $\\mu$.",
+                "prior_knowledge": "Equilíbrios são zeros de $f$; raízes de $x^2=a$ existem sse $a\\geq 0$."
+              },
+              "core": {
+                "exposition": "$f(x;\\mu)=0$ se $x^2=1$ ou $x^2=\\mu$. Logo $x=\\pm 1$ sempre são equilíbrios; $x=\\pm\\sqrt\\mu$ só existem para $\\mu\\geq 0$.",
+                "worked_example": "Para $\\mu=4$: $x^2=1\\Rightarrow x=\\pm1$; $x^2=4\\Rightarrow x=\\pm2$. Quatro equilíbrios: $-2,-1,1,2$.",
+                "problem": "Liste todos os equilíbrios para $\\mu=-1$, $\\mu=0$, $\\mu=1/4$ e $\\mu=1$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Quando $x=\\sqrt\\mu$ é um equilíbrio real?",
+                    "answer": "Sse $\\mu\\geq 0$.",
+                    "concept": "autonomous-equation"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Quantos equilíbrios há para $\\mu<0$?",
+                    "answer": "Apenas dois: $x=\\pm 1$.",
+                    "concept": "qualitative-analysis"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Descreva em palavras como o número de equilíbrios muda ao crescer $\\mu$ de $-\\infty$ a $+\\infty$."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Esboce o diagrama de bifurcação no plano $(\\mu,x)$ com os ramos $x=\\pm 1$ (retas) e $x=\\pm\\sqrt\\mu$ (parábola deitada).",
+                "rubric": "Correto se mostra retas horizontais $\\pm 1$, parábola $x^2=\\mu$ apenas para $\\mu\\geq 0$, e marca interseções em $\\mu=1$."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Justifique por que $\\mu=0$ é sela-nó e não tridente, observando que dois pares ($+\\sqrt\\mu,-\\sqrt\\mu$) aparecem simultaneamente, mas longe de $x=\\pm 1$.",
+            "detail": "Bifurcações ocorrem onde a estrutura qualitativa muda: em $\\mu=0$ os equilíbrios $\\pm\\sqrt\\mu$ nascem (par) — sela-nó (dupla, em $x=0$). Em $\\mu=1$ os ramos $\\sqrt\\mu$ e $1$ se cruzam, e $-\\sqrt\\mu$ cruza $-1$ — duas bifurcações transcríticas simultâneas.",
+            "concepts": [
+              "qualitative-analysis"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Identificar os valores de bifurcação e classificar cada um.",
+                "prior_knowledge": "Sela-nó: par de equilíbrios surge/desaparece. Transcrítica: dois ramos se cruzam trocando estabilidade."
+              },
+              "core": {
+                "exposition": "Bifurcações ocorrem onde a estrutura qualitativa muda: em $\\mu=0$ os equilíbrios $\\pm\\sqrt\\mu$ nascem (par) — sela-nó (dupla, em $x=0$). Em $\\mu=1$ os ramos $\\sqrt\\mu$ e $1$ se cruzam, e $-\\sqrt\\mu$ cruza $-1$ — duas bifurcações transcríticas simultâneas.",
+                "worked_example": "Em $\\mu=1$: $f=(x^2-1)^2\\geq 0$, raízes duplas em $\\pm1$ — sinal não muda ao cruzar — típico de transcrítica.",
+                "problem": "Justifique por que $\\mu=0$ é sela-nó e não tridente, observando que dois pares ($+\\sqrt\\mu,-\\sqrt\\mu$) aparecem simultaneamente, mas longe de $x=\\pm 1$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Quais são os valores de bifurcação?",
+                    "answer": "$\\mu=0$ e $\\mu=1$.",
+                    "concept": "qualitative-analysis"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Tipo da bifurcação em $\\mu=1$?",
+                    "answer": "Transcrítica (dupla: em $x=1$ e em $x=-1$).",
+                    "concept": "qualitative-analysis"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que em $\\mu=0$ a bifurcação é sela-nó e não tridente, apesar de surgirem dois ramos $\\pm\\sqrt\\mu$?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Classifique $\\mu=0$ e $\\mu=1$ e justifique em uma frase cada.",
+                "rubric": "Correto se identifica $\\mu=0$ como sela-nó (par nasce) e $\\mu=1$ como transcrítica (cruzamento de ramos)."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Conclua: para quais $\\mu$ vale $x(0)=-2\\Rightarrow x(t)\\to-1$?",
+            "detail": "Intervalos: (i) $\\mu<0$: dois equilíbrios $\\pm 1$. $f(x)=(x^2-1)(x^2-\\mu)$ com $x^2-\\mu>0$ sempre, então sinal de $f$ = sinal de $x^2-1$. Logo $-1$ instável (à esquerda $f>0$, à direita $f<0$? Verificar: para $x<-1$, $x^2>1\\Rightarrow f>0$; entre $-1$ e $1$, $f<0$; $x>1$, $f>0$). Assim $-1$ é estável (atrai pelos dois lados? não: $\\dot x>0$ à esq e $\\dot x<0$ à dir → estável!) e $+1$ instável. (ii) $0<\\mu<1$: ordem $-1<-\\sqrt\\mu<\\sqrt\\mu<1$. Sinais alternam → estáveis: $-1,\\sqrt\\mu$; instáveis: $-\\sqrt\\mu,1$. (iii) $\\mu>1$: ordem $-\\sqrt\\mu<-1<1<\\sqrt\\mu$, estáveis: $-\\sqrt\\mu,1$; instáveis: $-1,\\sqrt\\mu$. Para item (e): com $x(0)=-2$, queremos $\\lim x(t)=-1$. Precisamos $-1$ estável e $-2$ na sua bacia.",
+            "concepts": [
+              "qualitative-analysis",
+              "autonomous-equation"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Determinar estabilidade em cada intervalo de $\\mu$ e responder ao item (e).",
+                "prior_knowledge": "Estabilidade linearizada: $f'(x^*)<0$ estável; $f'(x^*)>0$ instável; senão use sinal de $f$."
+              },
+              "core": {
+                "exposition": "Intervalos: (i) $\\mu<0$: dois equilíbrios $\\pm 1$. $f(x)=(x^2-1)(x^2-\\mu)$ com $x^2-\\mu>0$ sempre, então sinal de $f$ = sinal de $x^2-1$. Logo $-1$ instável (à esquerda $f>0$, à direita $f<0$? Verificar: para $x<-1$, $x^2>1\\Rightarrow f>0$; entre $-1$ e $1$, $f<0$; $x>1$, $f>0$). Assim $-1$ é estável (atrai pelos dois lados? não: $\\dot x>0$ à esq e $\\dot x<0$ à dir → estável!) e $+1$ instável. (ii) $0<\\mu<1$: ordem $-1<-\\sqrt\\mu<\\sqrt\\mu<1$. Sinais alternam → estáveis: $-1,\\sqrt\\mu$; instáveis: $-\\sqrt\\mu,1$. (iii) $\\mu>1$: ordem $-\\sqrt\\mu<-1<1<\\sqrt\\mu$, estáveis: $-\\sqrt\\mu,1$; instáveis: $-1,\\sqrt\\mu$. Para item (e): com $x(0)=-2$, queremos $\\lim x(t)=-1$. Precisamos $-1$ estável e $-2$ na sua bacia.",
+                "worked_example": "Caso $\\mu<0$: $-1$ estável; $x(0)=-2<-1$ está na região $f>0$, então $x$ cresce até $-1$. ✓. Caso $0<\\mu<1$: $-1$ estável; $-2<-1$, $f(-2)=(3)(4-\\mu)>0$, sobe a $-1$. ✓. Caso $\\mu>1$: agora $-\\sqrt\\mu<-1$, e $-1$ é instável; $x(0)=-2$ pode estar à esquerda de $-\\sqrt\\mu$ (se $\\sqrt\\mu<2$, i.e., $\\mu<4$) ou não. Se $1<\\mu<4$: $-\\sqrt\\mu\\in(-2,-1)$, então $-2<-\\sqrt\\mu$ e $x\\to-\\sqrt\\mu\\neq -1$. Se $\\mu=4$: $-2=-\\sqrt\\mu$ equilíbrio. Se $\\mu>4$: $-2>-\\sqrt\\mu$, vai para $-1$? Não — entre $-\\sqrt\\mu$ e $-1$: $f$ tem sinal? $x^2-1>0$ se $|x|>1$; $x^2-\\mu<0$ pois $|x|<\\sqrt\\mu$. Produto $<0$, então $\\dot x<0$, foge de $-1$ rumo a $-\\sqrt\\mu$. Logo NÃO converge a $-1$.",
+                "problem": "Conclua: para quais $\\mu$ vale $x(0)=-2\\Rightarrow x(t)\\to-1$?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Para $0<\\mu<1$, qual a estabilidade de $+1$?",
+                    "answer": "Instável: $f'(1)=2(1)(1-\\mu)>0$.",
+                    "concept": "qualitative-analysis"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Resposta do item (e)?",
+                    "answer": "$\\mu<1$ (i.e., $\\mu\\in(-\\infty,1)$); para $\\mu\\geq 1$ a trajetória não converge a $-1$.",
+                    "concept": "autonomous-equation"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explique por que em $\\mu=1$ o equilíbrio $-1$ deixa de atrair $x_0=-2$, conectando com a bifurcação transcrítica."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Faça o diagrama de bifurcação final marcando ramos estáveis (linha cheia) e instáveis (tracejada).",
+                "rubric": "Correto se: $x=-1$ estável para $\\mu<1$ e instável para $\\mu>1$; $x=1$ instável para $\\mu<1$ e estável para $\\mu>1$; $x=\\sqrt\\mu$ estável próximo de $0^+$ e instável para $\\mu>1$; $x=-\\sqrt\\mu$ instável próximo de $0^+$ e estável para $\\mu>1$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "phase": 3,
+        "title": "Linha de Fase a partir do Gráfico de $f(y)$",
+        "icon": "*",
+        "summary": "Ler equilíbrios e bacias de atração diretamente do gráfico de $f$ numa EDO autônoma 1D.",
+        "key_insight": "Sinal de $f$ entre zeros determina o fluxo; equilíbrios estáveis são zeros onde $f$ passa de + a − (varrendo da esquerda para a direita).",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Para o cenário acima: (i) bacia de $-5$? (ii) condições iniciais com $\\lim_{t\\to-\\infty}y=-2$?",
+            "detail": "Cada zero $y^*$ é equilíbrio. Estável se $f$ vai de $+$ a $-$ ao cruzar $y^*$ (setas convergem); instável se $-$ a $+$. Semi-estável se $f$ toca zero sem trocar sinal. Bacia de $y^*$ estável: maior intervalo aberto em torno de $y^*$ sem outro equilíbrio dentro.",
+            "concepts": [
+              "autonomous-equation",
+              "qualitative-analysis"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Extrair equilíbrios, estabilidade, linha de fase e bacias a partir do gráfico de $f(y)$.",
+                "prior_knowledge": "Em $\\dot y=f(y)$: zeros de $f$ são equilíbrios; setas para a direita onde $f>0$, para a esquerda onde $f<0$."
+              },
+              "core": {
+                "exposition": "Cada zero $y^*$ é equilíbrio. Estável se $f$ vai de $+$ a $-$ ao cruzar $y^*$ (setas convergem); instável se $-$ a $+$. Semi-estável se $f$ toca zero sem trocar sinal. Bacia de $y^*$ estável: maior intervalo aberto em torno de $y^*$ sem outro equilíbrio dentro.",
+                "worked_example": "Suponha (lendo da figura típica) zeros em $y\\approx -5,-2,2,7$. Se $f>0$ em $(-7,-5)$, $f<0$ em $(-5,-2)$, $f>0$ em $(-2,2)$, $f<0$ em $(2,7)$, $f>0$ em $(7,9)$: então $-5,2$ estáveis; $-2,7$ instáveis.",
+                "problem": "Para o cenário acima: (i) bacia de $-5$? (ii) condições iniciais com $\\lim_{t\\to-\\infty}y=-2$?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Bacia de atração de $-5$ (no exemplo)?",
+                    "answer": "$y_0\\in(-7,-2)$: setas apontam para $-5$ a partir de ambos os lados, até o próximo equilíbrio $-2$.",
+                    "concept": "autonomous-equation"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Quais $y_0$ dão $\\lim_{t\\to-\\infty}y(t)=-2$?",
+                    "answer": "$y_0\\in(-5,2)\\setminus\\{-2\\}$: como $-2$ é instável, soluções saem dele para frente no tempo, logo no passado convergem a ele a partir da bacia em tempo invertido $(−5,2)$.",
+                    "concept": "qualitative-analysis"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que $\\lim_{t\\to-\\infty}y(t)=y^*$ caracteriza $y^*$ como equilíbrio instável e a bacia em tempo invertido?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Esboce a linha de fase no eixo $y$ e o retrato no plano $ty$ com curvas tendendo a equilíbrios estáveis quando $t\\to+\\infty$.",
+                "rubric": "Correto se setas alternam direção a cada equilíbrio e trajetórias são monótonas, assintóticas aos níveis estáveis acima/abaixo."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "phase": 3,
+        "title": "PVIs Separáveis e Intervalo Maximal",
+        "icon": "*",
+        "summary": "Resolver $\\dot y=-2t/y$ e $\\dot y=2ty^2$ por separação e analisar como o intervalo de existência depende de $y_0$.",
+        "key_insight": "Após separar e integrar, o intervalo maximal é o maior aberto em torno de $t=0$ onde a fórmula explícita é definida (denominador $\\neq 0$, raiz $\\geq 0$).",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Caso $y_0=0$: o campo $-2t/y$ não está definido — não há solução do PVI.",
+            "detail": "Integrando: $y^2/2=-t^2+C$. Em $t=0$: $C=y_0^2/2$. Logo $y^2=y_0^2-2t^2$, ou seja $y(t)=\\mathrm{sgn}(y_0)\\sqrt{y_0^2-2t^2}$ (preservando sinal de $y_0\\neq 0$).",
+            "concepts": [
+              "ode-classification",
+              "integral-indefinida"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Resolver $\\dot y=-2t/y$, $y(0)=y_0$, e achar o intervalo maximal.",
+                "prior_knowledge": "Equação separável: $y\\,dy=-2t\\,dt$."
+              },
+              "core": {
+                "exposition": "Integrando: $y^2/2=-t^2+C$. Em $t=0$: $C=y_0^2/2$. Logo $y^2=y_0^2-2t^2$, ou seja $y(t)=\\mathrm{sgn}(y_0)\\sqrt{y_0^2-2t^2}$ (preservando sinal de $y_0\\neq 0$).",
+                "worked_example": "Existência exige $y_0^2-2t^2>0$ (estrito, pois $y\\neq 0$ no campo). Então $|t|<|y_0|/\\sqrt 2$. Intervalo maximal: $\\bigl(-|y_0|/\\sqrt 2,\\;|y_0|/\\sqrt 2\\bigr)$.",
+                "problem": "Caso $y_0=0$: o campo $-2t/y$ não está definido — não há solução do PVI."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Forma explícita de $y(t)$?",
+                    "answer": "$y(t)=\\mathrm{sgn}(y_0)\\sqrt{y_0^2-2t^2}$.",
+                    "concept": "ode-classification"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Intervalo maximal?",
+                    "answer": "$|t|<|y_0|/\\sqrt 2$; encolhe a zero quando $y_0\\to 0$.",
+                    "concept": "integral-indefinida"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explique geometricamente por que a solução explode/cessa em $|t|=|y_0|/\\sqrt 2$ — o que acontece com $y$?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Para $y_0=2$, dê $y(t)$ e o intervalo maximal.",
+                "rubric": "Correto: $y(t)=\\sqrt{4-2t^2}$, $t\\in(-\\sqrt 2,\\sqrt 2)$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Compare: $y_0=1$ vs $y_0=-1$ — qual existe globalmente?",
+            "detail": "Se $y_0=0$: $y\\equiv 0$ é solução, definida em $\\mathbb R$. Se $y_0\\neq 0$: $-1/y=t^2+C$, $C=-1/y_0$. Logo $y(t)=\\dfrac{1}{1/y_0-t^2}=\\dfrac{y_0}{1-y_0 t^2}$.",
+            "concepts": [
+              "ode-classification",
+              "integral-indefinida"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Resolver $\\dot y=2ty^2$, $y(0)=y_0$, e descrever o intervalo maximal conforme $y_0$.",
+                "prior_knowledge": "Separável: $dy/y^2=2t\\,dt$ (se $y\\neq 0$)."
+              },
+              "core": {
+                "exposition": "Se $y_0=0$: $y\\equiv 0$ é solução, definida em $\\mathbb R$. Se $y_0\\neq 0$: $-1/y=t^2+C$, $C=-1/y_0$. Logo $y(t)=\\dfrac{1}{1/y_0-t^2}=\\dfrac{y_0}{1-y_0 t^2}$.",
+                "worked_example": "Singularidade onde $1-y_0 t^2=0$. Se $y_0>0$: $t=\\pm 1/\\sqrt{y_0}$, intervalo maximal $(-1/\\sqrt{y_0},1/\\sqrt{y_0})$ — solução explode (blow-up). Se $y_0<0$: $1-y_0 t^2>0$ para todo $t$ (denominador nunca zera), intervalo maximal $\\mathbb R$.",
+                "problem": "Compare: $y_0=1$ vs $y_0=-1$ — qual existe globalmente?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Solução explícita para $y_0\\neq 0$?",
+                    "answer": "$y(t)=y_0/(1-y_0 t^2)$.",
+                    "concept": "ode-classification"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Intervalo maximal se $y_0>0$? E se $y_0<0$?",
+                    "answer": "$y_0>0$: $(-1/\\sqrt{y_0},1/\\sqrt{y_0})$, blow-up. $y_0<0$: todo $\\mathbb R$.",
+                    "concept": "integral-indefinida"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que a equação $\\dot y=2ty^2$ (não linear) pode ter blow-up em tempo finito, ao contrário de equações lineares com coeficientes contínuos?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Para $y_0=2$ e $y_0=-2$, escreva $y(t)$ e o intervalo maximal.",
+                "rubric": "Correto: $y_0=2$: $y=2/(1-2t^2)$, $t\\in(-1/\\sqrt 2,1/\\sqrt 2)$. $y_0=-2$: $y=-2/(1+2t^2)$, $t\\in\\mathbb R$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "phase": 4,
+        "title": "Operadores Lineares e Classificação",
+        "icon": "L",
+        "summary": "Identificar a ordem, linearidade e homogeneidade de EDOs e EDPs reescrevendo-as na forma $\\mathcal{L}[u]=g$.",
+        "key_insight": "Linearidade é uma propriedade do operador $\\mathcal{L}$: testar $\\mathcal{L}[u+v]=\\mathcal{L}[u]+\\mathcal{L}[v]$ e $\\mathcal{L}[cu]=c\\mathcal{L}[u]$.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Classifique $(1+y^2)y''+xy'+y=e^x$.",
+            "detail": "A ordem é a maior derivada presente. A equação é linear se pode ser escrita $\\mathcal{L}[y]=g$ com $\\mathcal{L}$ linear em $y$ e suas derivadas (coeficientes podem depender de $x$). Termos $y^2$, $(y')^2$, $\\sin y$ tornam-na não-linear.",
+            "concepts": [
+              "ode-classification",
+              "linear-ode"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Classificar EDOs por ordem e linearidade.",
+                "prior_knowledge": "Derivada de ordem $n$ e operações algébricas básicas."
+              },
+              "core": {
+                "exposition": "A ordem é a maior derivada presente. A equação é linear se pode ser escrita $\\mathcal{L}[y]=g$ com $\\mathcal{L}$ linear em $y$ e suas derivadas (coeficientes podem depender de $x$). Termos $y^2$, $(y')^2$, $\\sin y$ tornam-na não-linear.",
+                "worked_example": "$x^2y''+xy'+2y=\\sin x$: ordem 2; coeficientes em $x$, linear em $y,y',y''$; não-homogênea (RHS $\\sin x\\neq 0$).",
+                "problem": "Classifique $(1+y^2)y''+xy'+y=e^x$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Qual a ordem e linearidade de $y^{(4)}+y'''+y''+y'+y=1$?",
+                    "answer": "Ordem 4, linear não-homogênea (coeficientes constantes).",
+                    "concept": "ode-classification"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Por que $y''+xy^2=0$ é não-linear?",
+                    "answer": "O termo $y^2$ não é linear em $y$, violando $\\mathcal{L}[cu]=c\\mathcal{L}[u]$.",
+                    "concept": "linear-ode"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explique por que coeficientes podem depender de $x$ sem destruir linearidade, mas não podem depender de $y$."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Classifique cada item de (a)–(e) do Exercício 1.",
+                "rubric": "Acerto se ordem e tipo (linear hom./não-hom./não-linear) corretos para todos."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "$\\mathcal{L}[u]=u_x+u\\,u_y$ é linear?",
+            "detail": "Para testar, aplique $\\mathcal{L}$ a $u+v$ e a $cu$ e veja se se decompõe. Termos como $u\\,u_y$, $(u_y)^2$ ou $\\sqrt{1+u}$ falham.",
+            "concepts": [
+              "operador-linear",
+              "linear-ode"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Testar linearidade de operadores diferenciais.",
+                "prior_knowledge": "Definição: $\\mathcal{L}[u+v]=\\mathcal{L}[u]+\\mathcal{L}[v]$ e $\\mathcal{L}[cu]=c\\mathcal{L}[u]$."
+              },
+              "core": {
+                "exposition": "Para testar, aplique $\\mathcal{L}$ a $u+v$ e a $cu$ e veja se se decompõe. Termos como $u\\,u_y$, $(u_y)^2$ ou $\\sqrt{1+u}$ falham.",
+                "worked_example": "$\\mathcal{L}[u]=u_x+xu_y$: $\\mathcal{L}[u+v]=(u+v)_x+x(u+v)_y=\\mathcal{L}[u]+\\mathcal{L}[v]$. Linear.",
+                "problem": "$\\mathcal{L}[u]=u_x+u\\,u_y$ é linear?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Por que $\\mathcal{L}[u]=u_x+(u_y)^2$ não é linear?",
+                    "answer": "Para $cu$: $(cu_y)^2=c^2 u_y^2\\neq c\\,u_y^2$.",
+                    "concept": "operador-linear"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "$\\mathcal{L}[u]=\\sqrt{1+x^2}(\\cos y)u_x+u_{yxy}-\\arctan(x/y)\\,u$ é linear?",
+                    "answer": "Sim: cada termo é linear em $u$ (coeficientes só em $x,y$).",
+                    "concept": "operador-linear"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que basta verificar $u\\,u_y$ falhar uma das duas propriedades para concluir não-linearidade?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Resolva o Exercício 2 (a–d) classificando cada operador.",
+                "rubric": "Correto se identificar (a) linear, (b) não-linear, (c) não-linear, (d) linear."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Prove o Exercício 4 detalhando cada uso de linearidade.",
+            "detail": "Se $u_1,u_2$ resolvem $\\mathcal{L}[u]=g$, então $w=u_1-u_2$ satisfaz $\\mathcal{L}[w]=\\mathcal{L}[u_1]-\\mathcal{L}[u_2]=g-g=0$. Logo $w$ resolve a homogênea associada.",
+            "concepts": [
+              "linear-ode"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Demonstrar a estrutura afim das soluções de $\\mathcal{L}[u]=g$.",
+                "prior_knowledge": "Definição de operador linear."
+              },
+              "core": {
+                "exposition": "Se $u_1,u_2$ resolvem $\\mathcal{L}[u]=g$, então $w=u_1-u_2$ satisfaz $\\mathcal{L}[w]=\\mathcal{L}[u_1]-\\mathcal{L}[u_2]=g-g=0$. Logo $w$ resolve a homogênea associada.",
+                "worked_example": "Solução geral = $u_p$ (particular) + $u_h$ (espaço solução homogêneo).",
+                "problem": "Prove o Exercício 4 detalhando cada uso de linearidade."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Qual propriedade de $\\mathcal{L}$ é usada em $\\mathcal{L}[u_1-u_2]=\\mathcal{L}[u_1]-\\mathcal{L}[u_2]$?",
+                    "answer": "Aditividade combinada com $\\mathcal{L}[-u_2]=-\\mathcal{L}[u_2]$ (homogeneidade com $c=-1$).",
+                    "concept": "operador-linear"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Como isso descreve a solução geral de $\\mathcal{L}[u]=g$?",
+                    "answer": "Solução geral = uma particular + solução geral da homogênea.",
+                    "concept": "linear-ode"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Compare com $Ax=b$: por que a estrutura é a mesma?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Escreva a prova completa do Exercício 4.",
+                "rubric": "Correto se cita aditividade e homogeneidade explicitamente."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "phase": 4,
+        "title": "Verificação de Soluções e Ansatz $e^{rx}$, $x^r$",
+        "icon": "V",
+        "summary": "Substituir candidatos para verificar soluções e achar parâmetros via equação característica.",
+        "key_insight": "Para coeficientes constantes tente $y=e^{rx}$; para Cauchy-Euler ($x^2y''+\\dots$) tente $y=x^r$.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Verifique $y_2=\\cosh x$ em $y''-y=0$.",
+            "detail": "Calcule as derivadas, substitua na EDO e simplifique. Se resultar identidade, é solução.",
+            "concepts": [
+              "linear-ode",
+              "derivada"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Verificar por substituição se uma função é solução.",
+                "prior_knowledge": "Derivadas de $e^x$, $\\cosh x$, polinômios."
+              },
+              "core": {
+                "exposition": "Calcule as derivadas, substitua na EDO e simplifique. Se resultar identidade, é solução.",
+                "worked_example": "$y''-y=0$, $y_1=e^x$: $y_1''=e^x$, $e^x-e^x=0$. ✓",
+                "problem": "Verifique $y_2=\\cosh x$ em $y''-y=0$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Verifique $y=3x+x^2$ em $xy'-y=x^2$.",
+                    "answer": "$y'=3+2x$; $x(3+2x)-(3x+x^2)=3x+2x^2-3x-x^2=x^2$. ✓",
+                    "concept": "derivada"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Em $2x^2y''+3xy'-y=0$, $y_1=x^{1/2}$ funciona?",
+                    "answer": "$y_1'=\\tfrac12x^{-1/2}$, $y_1''=-\\tfrac14x^{-3/2}$; soma: $-\\tfrac12 x^{1/2}+\\tfrac32 x^{1/2}-x^{1/2}=0$. ✓",
+                    "concept": "linear-ode"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que verificar não basta para achar todas as soluções, apenas para confirmar candidatas?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Resolva o Exercício 5 (a)–(d).",
+                "rubric": "Correto se cada substituição leva a identidade."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Ache $r$ para $y''+y'-6y=0$.",
+            "detail": "Substituindo $y=e^{rx}$ obtem-se um polinômio em $r$ (equação característica). Suas raízes dão soluções.",
+            "concepts": [
+              "linear-ode"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Achar $r$ tal que $y=e^{rx}$ resolve a EDO linear de coef. constantes.",
+                "prior_knowledge": "$(e^{rx})^{(k)}=r^k e^{rx}$."
+              },
+              "core": {
+                "exposition": "Substituindo $y=e^{rx}$ obtem-se um polinômio em $r$ (equação característica). Suas raízes dão soluções.",
+                "worked_example": "$y'+2y=0$: $re^{rx}+2e^{rx}=0\\Rightarrow r=-2$.",
+                "problem": "Ache $r$ para $y''+y'-6y=0$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Equação característica de $y''+y'-6y=0$?",
+                    "answer": "$r^2+r-6=0\\Rightarrow r=2$ ou $r=-3$.",
+                    "concept": "linear-ode"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Por que $e^{rx}$ é ansatz natural para coef. constantes?",
+                    "answer": "Porque derivar reproduz $e^{rx}$ a menos de constante, transformando a EDO em equação algébrica.",
+                    "concept": "linear-ode"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "O que muda quando os coeficientes são $x^k$ multiplicando $y^{(k)}$?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Resolva o Exercício 6.",
+                "rubric": "Correto: (a) $r=-2$; (b) $r=2,-3$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Ache $r$ para $x^2y''-4xy'+4y=0$.",
+            "detail": "Para $x^2y''+axy'+by=0$, $y=x^r$ dá $r(r-1)+ar+b=0$, polinômio em $r$.",
+            "concepts": [
+              "linear-ode"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Aplicar ansatz $y=x^r$ para Cauchy-Euler.",
+                "prior_knowledge": "$(x^r)^{(k)}=r(r-1)\\cdots(r-k+1)x^{r-k}$."
+              },
+              "core": {
+                "exposition": "Para $x^2y''+axy'+by=0$, $y=x^r$ dá $r(r-1)+ar+b=0$, polinômio em $r$.",
+                "worked_example": "$x^2y''+4xy'+2y=0$: $r(r-1)+4r+2=r^2+3r+2=0\\Rightarrow r=-1,-2$.",
+                "problem": "Ache $r$ para $x^2y''-4xy'+4y=0$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Equação indicial de $x^2y''-4xy'+4y=0$?",
+                    "answer": "$r(r-1)-4r+4=r^2-5r+4=0\\Rightarrow r=1,4$.",
+                    "concept": "linear-ode"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Verifique que $u_n(x,y)=\\sin(nx)\\sinh(ny)$ resolve $u_{xx}+u_{yy}=0$.",
+                    "answer": "$u_{xx}=-n^2\\sin(nx)\\sinh(ny)$, $u_{yy}=n^2\\sin(nx)\\sinh(ny)$; soma $=0$.",
+                    "concept": "linear-ode"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que $\\sinh$ (e não $\\sin$) aparece em $y$ na equação de Laplace?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Resolva Exercícios 7 e 8.",
+                "rubric": "Correto se raízes $r$ certas e verificação de Laplace explícita."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "phase": 4,
+        "title": "EDOs Lineares de 1ª Ordem e Análise Qualitativa",
+        "icon": "Q",
+        "summary": "Resolver $\\dot x = ax + b$ e classificar equilíbrios como atratores ou repulsores conforme sinal de $a$.",
+        "key_insight": "Para $\\dot x=ax+b$: equilíbrio em $x^*=-b/a$; estável se $a<0$, instável se $a>0$.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Classifique o equilíbrio de $\\dot x=3x$.",
+            "detail": "Solução geral $x(t)=Ce^{at}$. Equilíbrio: $x^*=0$. Se $a<0$, todas trajetórias $\\to 0$ (poço/atrator); se $a>0$, divergem (fonte/repulsor); $a=0$: linha de equilíbrios.",
+            "concepts": [
+              "linear-ode",
+              "autonomous-equation"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Resolver $\\dot x=ax$ e classificar o equilíbrio.",
+                "prior_knowledge": "Separação de variáveis e $\\int dx/x=\\ln|x|$."
+              },
+              "core": {
+                "exposition": "Solução geral $x(t)=Ce^{at}$. Equilíbrio: $x^*=0$. Se $a<0$, todas trajetórias $\\to 0$ (poço/atrator); se $a>0$, divergem (fonte/repulsor); $a=0$: linha de equilíbrios.",
+                "worked_example": "$\\dot x=-2x$: $x(t)=Ce^{-2t}\\to 0$. Atrator.",
+                "problem": "Classifique o equilíbrio de $\\dot x=3x$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Solução geral de $\\dot x=ax$?",
+                    "answer": "$x(t)=Ce^{at}$ com $C=x(0)$.",
+                    "concept": "linear-ode"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Para qual sinal de $a$ o equilíbrio é poço?",
+                    "answer": "$a<0$: trajetórias decaem ao equilíbrio.",
+                    "concept": "qualitative-analysis"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que $a=0$ é caso degenerado (não hiperbólico)?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Resolva o Exercício 9.",
+                "rubric": "Correto se solução $Ce^{at}$, equilíbrio em $0$, classificação por sinal de $a$."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Para $a=2$, classifique o equilíbrio.",
+            "detail": "Equilíbrio: $ax^*+3=0\\Rightarrow x^*=-3/a$ (para $a\\neq 0$). Mudança $y=x-x^*$ dá $\\dot y=ay$, com solução $y=Ce^{at}$, então $x(t)=-3/a+Ce^{at}$.",
+            "concepts": [
+              "linear-ode",
+              "autonomous-equation",
+              "qualitative-analysis"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Resolver $\\dot x=ax+3$ e analisar equilíbrio dependente de $a$.",
+                "prior_knowledge": "Fator integrante ou translação $y=x-x^*$."
+              },
+              "core": {
+                "exposition": "Equilíbrio: $ax^*+3=0\\Rightarrow x^*=-3/a$ (para $a\\neq 0$). Mudança $y=x-x^*$ dá $\\dot y=ay$, com solução $y=Ce^{at}$, então $x(t)=-3/a+Ce^{at}$.",
+                "worked_example": "$a=-1$: $x^*=3$, $x(t)=3+Ce^{-t}\\to 3$. Atrator.",
+                "problem": "Para $a=2$, classifique o equilíbrio."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Onde está o equilíbrio de $\\dot x=ax+3$?",
+                    "answer": "$x^*=-3/a$ (se $a\\neq 0$); $a=0$ gera $\\dot x=3$, sem equilíbrio.",
+                    "concept": "autonomous-equation"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Estabilidade depende de quê?",
+                    "answer": "Do sinal de $a$: $a<0$ atrator, $a>0$ repulsor — independente de $b$.",
+                    "concept": "qualitative-analysis"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explique por que a translação $y=x-x^*$ reduz não-homogênea a homogênea."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Resolva o Exercício 10 completo.",
+                "rubric": "Correto se: solução geral, $x^*=-3/a$, atrator para $a<0$, repulsor para $a>0$, e caso $a=0$ comentado."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Verifique a superposição explicitamente para o Exercício 11.",
+            "detail": "$\\sin x$ e $\\cos x$ são soluções. Como o operador $\\mathcal{L}[y]=y''+y$ é linear, $C_1\\sin x+C_2\\cos x$ também é solução — princípio da superposição.",
+            "concepts": [
+              "linear-ode"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Identificar e usar superposição em $y''=-y$.",
+                "prior_knowledge": "$(\\sin x)''=-\\sin x$, $(\\cos x)''=-\\cos x$."
+              },
+              "core": {
+                "exposition": "$\\sin x$ e $\\cos x$ são soluções. Como o operador $\\mathcal{L}[y]=y''+y$ é linear, $C_1\\sin x+C_2\\cos x$ também é solução — princípio da superposição.",
+                "worked_example": "$y=C_1\\sin x+C_2\\cos x\\Rightarrow y''=-C_1\\sin x-C_2\\cos x=-y$. ✓",
+                "problem": "Verifique a superposição explicitamente para o Exercício 11."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Por que $C_1y_1+C_2y_2$ é solução de $\\mathcal{L}[y]=0$ se $y_1,y_2$ são?",
+                    "answer": "Por linearidade: $\\mathcal{L}[C_1y_1+C_2y_2]=C_1\\mathcal{L}[y_1]+C_2\\mathcal{L}[y_2]=0$.",
+                    "concept": "operador-linear"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "A superposição vale para equação não-homogênea $\\mathcal{L}[y]=g$?",
+                    "answer": "Não diretamente; só a diferença de duas soluções resolve a homogênea.",
+                    "concept": "linear-ode"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Como o espaço-solução de $y''+y=0$ é um $\\mathbb{R}$-espaço vetorial de dimensão 2?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Escreva a verificação completa do Exercício 11.",
+                "rubric": "Correto se identifica $\\sin,\\cos$ como soluções, e prova superposição via linearidade."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "phase": 5,
+        "title": "Existência e Unicidade — Caso Linear e Geral",
+        "icon": "*",
+        "summary": "Teoremas 1 e 2: hipóteses, regiões de unicidade e intervalo de definição.",
+        "key_insight": "Continuidade de $f$ e $\\partial f/\\partial y$ garante unicidade local; no caso linear, a continuidade de $p,g$ garante existência em todo o intervalo.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Para $y'+(\\tan t)y=\\sin t$, $y(0)=1$, qual o maior intervalo garantido pelo Teorema 1?",
+            "detail": "Teorema 1: se $p,g$ são contínuas em $I$ aberto contendo $t_0$, então $y'+p(t)y=g(t)$ com $y(t_0)=y_0$ tem solução única em todo $I$. Teorema 2: se $f$ e $\\partial_y f$ são contínuas em região $D\\ni(t_0,y_0)$, há solução única em $(t_0-h,t_0+h)$ para algum $h>0$.",
+            "concepts": [
+              "picard-theorem",
+              "linear-ode"
+            ],
+            "notes": [
+              "teorema-existencia-unicidade"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Enunciar Teorema 1 (caso linear) e Teorema 2 (geral).",
+                "prior_knowledge": "EDOs de 1ª ordem e fator integrante."
+              },
+              "core": {
+                "exposition": "Teorema 1: se $p,g$ são contínuas em $I$ aberto contendo $t_0$, então $y'+p(t)y=g(t)$ com $y(t_0)=y_0$ tem solução única em todo $I$. Teorema 2: se $f$ e $\\partial_y f$ são contínuas em região $D\\ni(t_0,y_0)$, há solução única em $(t_0-h,t_0+h)$ para algum $h>0$.",
+                "worked_example": "Para $y'+\\frac{1}{t}y=0$, $p(t)=1/t$ é contínua em $(0,\\infty)$ e $(-\\infty,0)$. Se $y(1)=y_0$, solução única em $(0,\\infty)$.",
+                "problem": "Para $y'+(\\tan t)y=\\sin t$, $y(0)=1$, qual o maior intervalo garantido pelo Teorema 1?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "No Teorema 2, qual a diferença entre o intervalo de definição e a região $D$?",
+                    "answer": "$D$ é uma região do plano $ty$ onde $f,\\partial_y f$ são contínuas; o intervalo $(t_0-h,t_0+h)$ é apenas local em $t$.",
+                    "concept": "picard-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Por que o caso linear é mais forte?",
+                    "answer": "A solução existe em TODO o intervalo de continuidade de $p,g$, não apenas localmente.",
+                    "concept": "linear-ode"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explique por que as hipóteses do Teorema 2 são suficientes mas não necessárias, dando um exemplo."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Enuncie precisamente o Teorema 1 e contraste com o Teorema 2.",
+                "rubric": "Mencionar continuidade de $p,g$, intervalo aberto, existência global em $I$ vs. local."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Determine a região de unicidade para $(4-y^2)y'=x^2$.",
+            "detail": "Para cada EDO $y'=f(x,y)$, identificar onde $f$ e $\\partial_y f$ são contínuas. A região é o domínio comum, excluindo singularidades.",
+            "concepts": [
+              "picard-theorem"
+            ],
+            "notes": [
+              "regiao-unicidade"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Determinar regiões do plano onde unicidade é garantida.",
+                "prior_knowledge": "Teorema 2."
+              },
+              "core": {
+                "exposition": "Para cada EDO $y'=f(x,y)$, identificar onde $f$ e $\\partial_y f$ são contínuas. A região é o domínio comum, excluindo singularidades.",
+                "worked_example": "$y'=\\sqrt{xy}$: $f$ requer $xy\\ge 0$; $\\partial_y f=\\frac{1}{2}\\sqrt{x/y}$ requer $y>0,x\\ge 0$ ou $y<0,x\\le 0$. Região: $\\{x>0,y>0\\}\\cup\\{x<0,y<0\\}$.",
+                "problem": "Determine a região de unicidade para $(4-y^2)y'=x^2$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Para $x\\,dy/dx=y$, qual região exclui-se?",
+                    "answer": "A reta $x=0$, pois $f(x,y)=y/x$ não está definida.",
+                    "concept": "picard-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Para $(4-y^2)y'=x^2$, quais retas excluir?",
+                    "answer": "$y=\\pm 2$, onde o coeficiente se anula e $\\partial_y f$ explode.",
+                    "concept": "picard-theorem"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que basta excluir um conjunto fechado de medida nula para aplicar o teorema na região aberta restante?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Para $y'=\\frac{3x^2+4x+2}{2(y-1)}$, $y(0)=-1$, identifique a região.",
+                "rubric": "Excluir $y=1$; $(0,-1)$ está em $y<1$, semiplano inferior."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Resolva $ty'+2y=4t^2$, $y(1)=2$ e justifique $I=(0,\\infty)$.",
+            "detail": "Resolva o PVI; o intervalo é o componente conexo dos pontos de continuidade de $p,g$ que contém $t_0$.",
+            "concepts": [
+              "picard-theorem",
+              "linear-ode"
+            ],
+            "notes": [
+              "intervalo-maximal-linear"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Encontrar o intervalo maximal de PVI linear.",
+                "prior_knowledge": "Fator integrante."
+              },
+              "core": {
+                "exposition": "Resolva o PVI; o intervalo é o componente conexo dos pontos de continuidade de $p,g$ que contém $t_0$.",
+                "worked_example": "$ty'+2y=4t^2$, $y(1)=2$: $p=2/t$, contínua em $(0,\\infty)$ e $(-\\infty,0)$. Como $t_0=1>0$, $I=(0,\\infty)$. Solução: $y=t^2+1/t^2$.",
+                "problem": "Resolva $ty'+2y=4t^2$, $y(1)=2$ e justifique $I=(0,\\infty)$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Por que a solução $y=t^2+1/t^2$ não se estende a $t=0$?",
+                    "answer": "Diverge em $t=0$ e $p(t)=2/t$ é descontínua aí.",
+                    "concept": "linear-ode"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Se $y(-1)=2$, qual seria $I$?",
+                    "answer": "$(-\\infty,0)$.",
+                    "concept": "linear-ode"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explique a diferença entre domínio de uma função e intervalo de definição de uma solução, usando $y=1/x$."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Resolva $xy'+2y=4x^2$, $y(1)=2$ e dê $I$.",
+                "rubric": "$y=x^2+1/x^2$, $I=(0,\\infty)$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "phase": 5,
+        "title": "Não-Unicidade e Método de Picard",
+        "icon": "*",
+        "summary": "Falhas de unicidade e iterações de Picard.",
+        "key_insight": "Quando $\\partial_y f$ falha, múltiplas soluções podem brotar de um mesmo dado inicial; Picard constrói a solução iterativamente quando as hipóteses valem.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Mostre que $x'=x^{1/2}-1$ admite $x(t)=1$ como solução com $x(0)=1$. A unicidade está garantida?",
+            "detail": "Quando $\\partial_y f$ é descontínua no dado inicial, o teorema não se aplica e podem existir várias soluções.",
+            "concepts": [
+              "picard-theorem"
+            ],
+            "notes": [
+              "nao-unicidade"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Identificar PVIs com não-unicidade.",
+                "prior_knowledge": "Teorema 2."
+              },
+              "core": {
+                "exposition": "Quando $\\partial_y f$ é descontínua no dado inicial, o teorema não se aplica e podem existir várias soluções.",
+                "worked_example": "$x'=3x^{2/3}$, $x(0)=0$: $\\partial_x f=2x^{-1/3}$ explode em 0. Soluções: $x(t)=0$ e $x(t)=t^3$, e até soluções mistas.",
+                "problem": "Mostre que $x'=x^{1/2}-1$ admite $x(t)=1$ como solução com $x(0)=1$. A unicidade está garantida?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Por que $x'=3x^{2/3}$, $x(0)=0$ tem múltiplas soluções?",
+                    "answer": "$\\partial_x f=2x^{-1/3}$ é descontínua em $x=0$, violando hipótese do Teorema 2.",
+                    "concept": "picard-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Para $x'=x^{1/2}-1$, $x(0)=1$, $\\partial_x f$ é contínua?",
+                    "answer": "Não em $x=1$ (derivada $\\frac{1}{2}x^{-1/2}$ é finita aí, mas analise $f$ perto). De fato é finita; verifique cuidadosamente.",
+                    "concept": "picard-theorem"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Construa duas soluções diferentes de $x'=3x^{2/3}$, $x(0)=0$, e explique geometricamente."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Dê um exemplo de PVI com infinitas soluções e justifique.",
+                "rubric": "Ex.: $x'=3x^{2/3}$, $x(0)=0$, $x(t)=0$ ou $(t-c)^3$ para $t\\ge c$."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Aplique Picard a $y'=2t(1+y)$, $y(0)=0$ e identifique a série.",
+            "detail": "Picard: $\\phi_{n+1}(t)=y_0+\\int_{t_0}^t f(s,\\phi_n(s))\\,ds$, partindo de $\\phi_0(t)=y_0$. Sob hipóteses do Teorema 2, $\\phi_n\\to\\phi$ uniformemente.",
+            "concepts": [
+              "picard-theorem",
+              "contraction-mapping"
+            ],
+            "notes": [
+              "metodo-picard"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Aplicar iteração de Picard.",
+                "prior_knowledge": "Integral indefinida."
+              },
+              "core": {
+                "exposition": "Picard: $\\phi_{n+1}(t)=y_0+\\int_{t_0}^t f(s,\\phi_n(s))\\,ds$, partindo de $\\phi_0(t)=y_0$. Sob hipóteses do Teorema 2, $\\phi_n\\to\\phi$ uniformemente.",
+                "worked_example": "$x'=x$, $x(0)=1$: $\\phi_0=1$, $\\phi_1=1+t$, $\\phi_2=1+t+t^2/2$, ... $\\to e^t$.",
+                "problem": "Aplique Picard a $y'=2t(1+y)$, $y(0)=0$ e identifique a série."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Qual a fórmula recursiva de Picard?",
+                    "answer": "$\\phi_{n+1}(t)=y_0+\\int_{t_0}^t f(s,\\phi_n(s))\\,ds$.",
+                    "concept": "picard-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Para $x'=x$, $x(0)=1$, qual o limite das iteradas?",
+                    "answer": "$e^t$, pela série de Taylor.",
+                    "concept": "picard-theorem"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que o método é chamado de 'aproximações sucessivas' e relaciona-se com contração?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Calcule $\\phi_1,\\phi_2,\\phi_3$ para $x'=x+2$, $x(0)=2$.",
+                "rubric": "$\\phi_1=2+4t$, $\\phi_2=2+4t+2t^2$, etc.; comparar com $4e^t-2$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Resolva $y'-2xy=x$, $y(0)=0$, e compare com Picard nas três primeiras iteradas.",
+            "detail": "Para cada PVI escolha o método mais eficiente; Picard ilustra existência mas raramente é o método prático.",
+            "concepts": [
+              "picard-theorem",
+              "linear-ode"
+            ],
+            "notes": [
+              "picard-aplicacoes"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Resolver PVIs combinando Picard, separação e fator integrante.",
+                "prior_knowledge": "Lista 2 itens 6,7,15."
+              },
+              "core": {
+                "exposition": "Para cada PVI escolha o método mais eficiente; Picard ilustra existência mas raramente é o método prático.",
+                "worked_example": "$y'=2t(1+y)$, $y(0)=0$: separável, $\\ln(1+y)=t^2$, $y=e^{t^2}-1$. Picard: $\\phi_1=t^2$, $\\phi_2=t^2+t^4/2$, ... série de $e^{t^2}-1$.",
+                "problem": "Resolva $y'-2xy=x$, $y(0)=0$, e compare com Picard nas três primeiras iteradas."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Para $x'=x^{4/3}$, $x(0)=0$, qual a solução constante e por que Picard a recupera?",
+                    "answer": "$x(t)=0$; iteradas $\\phi_n\\equiv 0$, ponto fixo trivial.",
+                    "concept": "picard-theorem"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Para $x'=x^{4/3}$, $x(0)=1$, a solução existe globalmente?",
+                    "answer": "Não: $x(t)=(1-t/3)^{-3}$ explode em $t=3$.",
+                    "concept": "picard-theorem"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Compare o intervalo de definição obtido por Picard (local) com o efetivo, para $x'=x^{4/3}$, $x(0)=1$."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Resolva $y'+2y=e^{-x}$, $y(0)=3/4$.",
+                "rubric": "Fator integrante $e^{2x}$; $y=e^{-x}-(1/4)e^{-2x}$."
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "concepts": [
+      {
+        "id": "bernoulli-equation",
+        "label": "Equação de Bernoulli"
+      },
+      {
+        "id": "linear-ode",
+        "label": "EDO Linear"
+      },
+      {
+        "id": "ode-classification",
+        "label": "Classificação de EDOs"
+      },
+      {
+        "id": "first-integral",
+        "label": "Integral Primeira"
+      },
+      {
+        "id": "hamiltonian-system",
+        "label": "Sistema Hamiltoniano"
+      },
+      {
+        "id": "autonomous-equation",
+        "label": "Equação Autônoma"
+      },
+      {
+        "id": "qualitative-analysis",
+        "label": "Análise Qualitativa"
+      }
+    ],
+    "prereqs": [
+      [
+        "bernoulli-equation",
+        "linear-ode"
+      ],
+      [
+        "hamiltonian-system",
+        "first-integral"
+      ],
+      [
+        "qualitative-analysis",
+        "autonomous-equation"
+      ],
+      [
+        "qualitative-analysis",
+        "autonomous-equation"
+      ],
+      [
+        "autonomous-equation",
+        "ode-classification"
+      ],
+      [
+        "linear-ode",
+        "operador-linear"
+      ],
+      [
+        "linear-ode",
+        "derivada"
+      ],
+      [
+        "qualitative-analysis",
+        "autonomous-equation"
+      ],
+      [
+        "autonomous-equation",
+        "linear-ode"
+      ],
+      [
+        "picard-theorem",
+        "linear-ode"
+      ],
+      [
+        "picard-theorem",
+        "contraction-mapping"
+      ]
+    ]
   }
 ]

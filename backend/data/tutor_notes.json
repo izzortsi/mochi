@@ -12,5 +12,12 @@
     "body": "Articulou bem: regra da potência quebra em n=-1; ln preenche lacuna; 1/b compensa cadeia",
     "source": "tutor",
     "created_at": "2026-04-26T14:45:34.645881"
+  },
+  {
+    "id": "llivhfee",
+    "card_uid": "c8-d12-bronze-0",
+    "body": "Initially guessed α=−n+2 for Bernoulli sub; corrected to α=1−n by matching exponent to zero.",
+    "source": "tutor",
+    "created_at": "2026-05-03T18:21:37.534538"
   }
 ]

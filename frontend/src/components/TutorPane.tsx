@@ -1,13 +1,14 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
-import { Send, Database, X, Maximize2, Minimize2 } from "lucide-react";
+import { Send, Database, X, Maximize2, Minimize2, Sigma } from "lucide-react";
 import type { ChatMessage, ConnectionStatus } from "@/lib/types";
 import { api } from "@/lib/api";
 import { segmentAssistantContent } from "@/lib/artifacts";
 import { MathText } from "./MathText";
 import { MarkdownContent } from "./MarkdownContent";
 import { ArtifactBlock } from "./ArtifactBlock";
+import { MathInputPopover } from "./MathInputPopover";
 
 /* Presentational chat pane — header (title + memory link + status dot),
  * scrollable message list, input row. No state of its own; the desktop
@@ -70,6 +71,31 @@ export function TutorPane({
 }: Props) {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [mathOpen, setMathOpen] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  // Splice a $...$ math snippet into the textarea at the current cursor.
+  // Falls back to appending when the textarea hasn't been focused yet
+  // (selectionStart is null on unmounted/never-focused elements).
+  const insertMath = (latex: string) => {
+    const ta = textareaRef.current;
+    const wrapped = `$${latex}$`;
+    if (!ta) {
+      onInput(input + wrapped);
+      return;
+    }
+    const start = ta.selectionStart ?? input.length;
+    const end = ta.selectionEnd ?? input.length;
+    const next = input.slice(0, start) + wrapped + input.slice(end);
+    onInput(next);
+    // Restore cursor to just after the inserted snippet on the next tick,
+    // once React has re-rendered with the new value.
+    setTimeout(() => {
+      const cursor = start + wrapped.length;
+      ta.focus();
+      ta.setSelectionRange(cursor, cursor);
+    }, 0);
+  };
 
   const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
     const items = Array.from(e.clipboardData?.items ?? []);
@@ -231,11 +257,19 @@ export function TutorPane({
       )}
       <div className="border-t border-[#1a1a1a] p-2 flex gap-2">
         <textarea
+          ref={textareaRef}
           className="flex-1 bg-[#050505] border border-[#1a1a1a] rounded px-2 py-1 text-sm resize-none outline-none focus:border-[#2a2a2a]"
           rows={2}
           value={input}
           onChange={(e) => onInput(e.target.value)}
           onKeyDown={(e) => {
+            // Cmd/Ctrl+M opens the math editor; same shortcut works
+            // when focus is in the textarea even while it's empty.
+            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "m") {
+              e.preventDefault();
+              setMathOpen(true);
+              return;
+            }
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
               onSend();
@@ -245,6 +279,14 @@ export function TutorPane({
           placeholder={placeholder}
         />
         <button
+          onClick={() => setMathOpen(true)}
+          className="px-2 text-neutral-400 hover:text-amber-300"
+          title="Insert math (⌘M)"
+          aria-label="Insert math"
+        >
+          <Sigma className="w-4 h-4" />
+        </button>
+        <button
           onClick={onSend}
           disabled={busy}
           className="px-2 disabled:opacity-30 text-neutral-300 hover:text-neutral-100"
@@ -253,6 +295,15 @@ export function TutorPane({
           <Send className="w-4 h-4" />
         </button>
       </div>
+      {mathOpen && (
+        <MathInputPopover
+          onCommit={(latex) => {
+            insertMath(latex);
+            setMathOpen(false);
+          }}
+          onCancel={() => setMathOpen(false)}
+        />
+      )}
     </div>
   );
 }

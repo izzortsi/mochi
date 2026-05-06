@@ -26,18 +26,25 @@ from pathlib import Path
 from app.config import settings
 
 
-# Files written by the backend at runtime that we sync from git on every
-# deploy. Anything not in this list is left alone. Keep it explicit so a
-# stray file in backend/data/ can't sneak into production.
-SEED_FILES = (
+# Catalog files: overwritten on every backend startup so a `git push` of
+# new courses / concept aliases reaches the live app.
+CATALOG_SEED_FILES = (
     "courses.json",
+    "aliases.json",
+)
+
+# Runtime-state files: seeded only when missing on disk. The backend
+# writes them as the user studies; clobbering them on every cold start
+# would erase every chat / progress / pet tick made between deploys.
+# To force-push local state, `rm /data/<name>.json` in the Render shell
+# and redeploy — the seed will recreate the file from the bundled copy.
+RUNTIME_SEED_FILES = (
     "progress.json",
     "pet.json",
     "chat.json",
     "notes.json",
     "tutor_notes.json",
     "srs.json",
-    "aliases.json",
 )
 
 
@@ -52,11 +59,22 @@ def seed_data_dir() -> None:
     if BUNDLED_DATA_DIR == target:
         return
     target.mkdir(parents=True, exist_ok=True)
-    for name in SEED_FILES:
+    # Catalog: aggressive overwrite. The local checkout is the source
+    # of truth for course content, so push a course edit and it lands
+    # on the live app on the next deploy.
+    for name in CATALOG_SEED_FILES:
         src = BUNDLED_DATA_DIR / name
         if not src.exists():
             continue
         shutil.copy2(src, target / name)
+    # Runtime: bootstrap on first deploy, then keep hands off so chat
+    # turns and progress survive cold starts.
+    for name in RUNTIME_SEED_FILES:
+        src = BUNDLED_DATA_DIR / name
+        dst = target / name
+        if not src.exists() or dst.exists():
+            continue
+        shutil.copy2(src, dst)
 
 
 def seed_oauth_tokens() -> None:

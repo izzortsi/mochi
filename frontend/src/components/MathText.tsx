@@ -1,6 +1,7 @@
 "use client";
 import katex from "katex";
 import { useEffect, useMemo } from "react";
+import { KATEX_MACROS } from "@/lib/katex-macros";
 
 // One-time client-only init for katex/contrib/copy-tex. The module's
 // top-level executes `document.addEventListener("copy", …)` to swap
@@ -55,6 +56,7 @@ function renderSegment(seg: Segment, idx: number): React.ReactElement {
     throwOnError: false,
     displayMode: seg.type === "display",
     output: "htmlAndMathml",
+    macros: KATEX_MACROS,
   });
   return <span key={idx} dangerouslySetInnerHTML={{ __html: html }} />;
 }

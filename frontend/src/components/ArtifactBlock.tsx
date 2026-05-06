@@ -23,6 +23,9 @@ const KATEX_INJECT = `
           { left: "$", right: "$", display: false },
           { left: "\\\\(", right: "\\\\)", display: false }
         ],
+        macros: {
+          "\\\\displaylines": "\\\\begin{gathered}#1\\\\end{gathered}"
+        },
         throwOnError: false
       });
     }
