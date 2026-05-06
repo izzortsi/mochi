@@ -2,7 +2,7 @@ from __future__ import annotations
 import json
 import threading
 from pathlib import Path
-from app.models import CourseDef, Progress, ChatMessage, Note, ConceptAlias, TutorNote
+from app.models import CourseDef, Progress, ChatMessage, ChatChannel, Note, ConceptAlias, TutorNote, Artifact
 from app.config import settings
 
 
@@ -78,17 +78,46 @@ def save_progress(progress: Progress):
         _write_json(_progress_path(), progress.model_dump())
 
 
-def load_chat() -> dict[int, list[ChatMessage]]:
+def _migrate_chat_shape(raw: dict) -> dict[int, list[ChatChannel]]:
+    """Adapt legacy `{courseId: [msg, ...]}` to `{courseId: [channel, ...]}`.
+
+    The migration wraps each course's flat message list in a single
+    "default" channel so existing conversations remain visible. Once the
+    file is rewritten to the new shape, this branch becomes a no-op.
+    """
+    from datetime import datetime
+    out: dict[int, list[ChatChannel]] = {}
+    for k, v in raw.items():
+        course_id = int(k)
+        if isinstance(v, list) and v and isinstance(v[0], dict) and "role" in v[0]:
+            # Legacy flat list of messages.
+            out[course_id] = [
+                ChatChannel(
+                    id="default",
+                    name="Default",
+                    created_at=datetime.now().isoformat(),
+                    messages=[ChatMessage(**m) for m in v],
+                )
+            ]
+        elif isinstance(v, list):
+            # New shape: list of channels.
+            out[course_id] = [ChatChannel(**c) for c in v]
+        else:
+            out[course_id] = []
+    return out
+
+
+def load_chat() -> dict[int, list[ChatChannel]]:
     with _lock:
         raw = _read_json(_chat_path(), {})
-    return {int(k): [ChatMessage(**m) for m in v] for k, v in raw.items()}
+    return _migrate_chat_shape(raw)
 
 
-def save_chat(chat: dict[int, list[ChatMessage]]):
+def save_chat(chat: dict[int, list[ChatChannel]]):
     with _lock:
         _write_json(
             _chat_path(),
-            {str(k): [m.model_dump() for m in v] for k, v in chat.items()},
+            {str(k): [c.model_dump() for c in v] for k, v in chat.items()},
         )
 
 
@@ -170,3 +199,18 @@ def load_tutor_notes() -> list[TutorNote]:
 def save_tutor_notes(notes: list[TutorNote]):
     with _lock:
         _write_json(_tutor_notes_path(), [n.model_dump() for n in notes])
+
+
+def _artifacts_path() -> Path:
+    return settings.data_dir / "artifacts.json"
+
+
+def load_artifacts() -> list[Artifact]:
+    with _lock:
+        raw = _read_json(_artifacts_path(), [])
+    return [Artifact(**a) for a in raw]
+
+
+def save_artifacts(artifacts: list[Artifact]):
+    with _lock:
+        _write_json(_artifacts_path(), [a.model_dump() for a in artifacts])

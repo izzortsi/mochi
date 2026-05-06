@@ -7,7 +7,7 @@ import { StreakBadge } from "./StreakBadge";
 import { Settings } from "./Settings";
 import { PetCreature } from "./PetCreature";
 import { ShellModeToggle } from "./ShellModeToggle";
-import { CoursesIcon, ReviewIcon, MemoryIcon, ConceptsIcon, NotesIcon } from "./Icons";
+import { CoursesIcon, ReviewIcon, MemoryIcon, ConceptsIcon, NotesIcon, ArtifactsIcon } from "./Icons";
 import { useProgress } from "@/lib/progress-context";
 
 export function Header() {
@@ -58,6 +58,7 @@ export function Header() {
               <Link href="/memory" className="flex items-center gap-1.5 hover:opacity-100 hover:text-neutral-100"><MemoryIcon className="w-3.5 h-3.5" />memory</Link>
               <Link href="/concept-map" className="flex items-center gap-1.5 hover:opacity-100 hover:text-neutral-100"><ConceptsIcon className="w-3.5 h-3.5" />concepts</Link>
               <Link href="/notes" className="flex items-center gap-1.5 hover:opacity-100 hover:text-neutral-100"><NotesIcon className="w-3.5 h-3.5" />notes</Link>
+              <Link href="/artifacts" className="flex items-center gap-1.5 hover:opacity-100 hover:text-neutral-100"><ArtifactsIcon className="w-3.5 h-3.5" />artifacts</Link>
             </nav>
             {progress && (
               <div className="ml-auto flex items-center gap-3">

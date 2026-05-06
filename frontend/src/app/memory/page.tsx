@@ -51,15 +51,21 @@ export default function MemoryPage() {
   const courseById: Record<number, CourseSummary> = {};
   for (const c of courses) courseById[c.id] = c;
 
-  const deleteTurn = async (courseId: number, index: number) => {
-    await api.memory.deleteChatTurn(courseId, index);
+  const deleteTurn = async (courseId: number, channelId: string, index: number) => {
+    await api.memory.deleteChatTurn(courseId, channelId, index);
     refresh();
   };
 
   const wipeCourse = async (courseId: number) => {
     const title = courseById[courseId]?.title ?? `course ${courseId}`;
-    if (!confirm(`Wipe all chat for ${title}?`)) return;
+    if (!confirm(`Wipe ALL channels for ${title}?`)) return;
     await api.memory.wipeChat(courseId);
+    refresh();
+  };
+
+  const deleteChannel = async (courseId: number, channelId: string, name: string) => {
+    if (!confirm(`Delete channel "${name || channelId}"?`)) return;
+    await api.memory.deleteChannel(courseId, channelId);
     refresh();
   };
 
@@ -137,6 +143,10 @@ export default function MemoryPage() {
                 course deleted
               </span>
             );
+            const totalTurns = t.channels.reduce(
+              (sum, c) => sum + (c.messages?.length ?? c.messageCount ?? 0),
+              0,
+            );
             return (
               <div key={t.courseId} className="border border-[#1a1a1a] bg-[#0c0c0c]">
                 <div className="flex items-center justify-between gap-3 px-3 py-2 border-b border-[#1a1a1a]">
@@ -146,7 +156,7 @@ export default function MemoryPage() {
                     </span>
                     {titleNode}
                     <span className="text-[10px] font-mono opacity-40 flex-shrink-0">
-                      · {t.messages.length} turn{t.messages.length === 1 ? "" : "s"}
+                      · {t.channels.length} channel{t.channels.length === 1 ? "" : "s"}, {totalTurns} turn{totalTurns === 1 ? "" : "s"}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 flex-shrink-0">
@@ -162,41 +172,69 @@ export default function MemoryPage() {
                       onClick={() => wipeCourse(t.courseId)}
                       className="text-[10px] uppercase tracking-wider font-mono text-red-400 hover:text-red-300"
                     >
-                      wipe
+                      wipe all
                     </button>
                   </div>
                 </div>
                 <div className="divide-y divide-[#1a1a1a]">
-                  {t.messages.map((m, i) => (
-                    <div key={i} className="flex items-start gap-3 px-3 py-2 hover:bg-[#0f0f0f]">
-                      <span className="text-[10px] uppercase tracking-wider font-mono opacity-50 min-w-[60px] mt-0.5">
-                        {m.role}
-                      </span>
-                      <div className="flex-1 text-sm min-w-0">
-                        {m.role === "assistant" ? (
-                          <div className="text-neutral-200">
-                            <MarkdownContent content={m.content} compact />
+                  {t.channels.map((channel) => {
+                    const messages = channel.messages ?? [];
+                    return (
+                      <details key={channel.id} className="group">
+                        <summary className="px-3 py-2 cursor-pointer hover:bg-[#0f0f0f] flex items-center justify-between gap-3">
+                          <div className="flex items-baseline gap-2 min-w-0">
+                            <span className="text-sm font-display truncate text-neutral-100">
+                              {channel.name || <span className="opacity-40 italic">(unnamed)</span>}
+                            </span>
+                            <span className="text-[10px] font-mono opacity-40 flex-shrink-0">
+                              · {messages.length} turn{messages.length === 1 ? "" : "s"}
+                            </span>
                           </div>
-                        ) : m.role === "tool" ? (
-                          <pre className="font-mono text-xs opacity-60 whitespace-pre-wrap break-words m-0">
-                            {m.content}
-                          </pre>
-                        ) : (
-                          <div className="text-neutral-100 whitespace-pre-wrap">{m.content}</div>
-                        )}
-                        {m.timestamp && (
-                          <div className="text-[10px] opacity-30 font-mono mt-1">{m.timestamp}</div>
-                        )}
-                      </div>
-                      <button
-                        onClick={() => deleteTurn(t.courseId, i)}
-                        className="opacity-20 hover:opacity-70 transition-opacity flex-shrink-0"
-                        aria-label="delete turn"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  ))}
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              deleteChannel(t.courseId, channel.id, channel.name);
+                            }}
+                            className="text-[10px] uppercase tracking-wider font-mono text-red-400 hover:text-red-300 flex-shrink-0"
+                          >
+                            delete
+                          </button>
+                        </summary>
+                        <div className="divide-y divide-[#1a1a1a] border-t border-[#1a1a1a] bg-[#080808]">
+                          {messages.map((m, i) => (
+                            <div key={i} className="flex items-start gap-3 px-3 py-2 hover:bg-[#0f0f0f]">
+                              <span className="text-[10px] uppercase tracking-wider font-mono opacity-50 min-w-[60px] mt-0.5">
+                                {m.role}
+                              </span>
+                              <div className="flex-1 text-sm min-w-0">
+                                {m.role === "assistant" ? (
+                                  <div className="text-neutral-200">
+                                    <MarkdownContent content={m.content} compact />
+                                  </div>
+                                ) : m.role === "tool" ? (
+                                  <pre className="font-mono text-xs opacity-60 whitespace-pre-wrap break-words m-0">
+                                    {m.content}
+                                  </pre>
+                                ) : (
+                                  <div className="text-neutral-100 whitespace-pre-wrap">{m.content}</div>
+                                )}
+                                {m.timestamp && (
+                                  <div className="text-[10px] opacity-30 font-mono mt-1">{m.timestamp}</div>
+                                )}
+                              </div>
+                              <button
+                                onClick={() => deleteTurn(t.courseId, channel.id, i)}
+                                className="opacity-20 hover:opacity-70 transition-opacity flex-shrink-0"
+                                aria-label="delete turn"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </details>
+                    );
+                  })}
                 </div>
               </div>
             );

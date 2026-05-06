@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Menu } from "lucide-react";
 import { useState } from "react";
-import { CoursesIcon, ReviewIcon, MemoryIcon, ConceptsIcon, NotesIcon } from "./Icons";
+import { CoursesIcon, ReviewIcon, MemoryIcon, ConceptsIcon, NotesIcon, ArtifactsIcon } from "./Icons";
 import { ShellModeToggle } from "./ShellModeToggle";
 import { MobileTutor } from "./MobileTutor";
 
@@ -59,9 +59,13 @@ export function MobileShell({ children }: { children: ReactNode }) {
               <ConceptsIcon className="w-3.5 h-3.5" />
               concepts
             </Link>
-            <Link href="/notes" className="flex items-center gap-2 px-4 py-3 hover:bg-[#0f0f0f]">
+            <Link href="/notes" className="flex items-center gap-2 px-4 py-3 border-b border-[#1a1a1a] hover:bg-[#0f0f0f]">
               <NotesIcon className="w-3.5 h-3.5" />
               notes
+            </Link>
+            <Link href="/artifacts" className="flex items-center gap-2 px-4 py-3 hover:bg-[#0f0f0f]">
+              <ArtifactsIcon className="w-3.5 h-3.5" />
+              artifacts
             </Link>
           </nav>
         )}

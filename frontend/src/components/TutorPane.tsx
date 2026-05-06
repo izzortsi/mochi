@@ -9,6 +9,7 @@ import { MathText } from "./MathText";
 import { MarkdownContent } from "./MarkdownContent";
 import { ArtifactBlock } from "./ArtifactBlock";
 import { MathInputPopover } from "./MathInputPopover";
+import { ThreadPicker } from "./ThreadPicker";
 
 /* Presentational chat pane — header (title + memory link + status dot),
  * scrollable message list, input row. No state of its own; the desktop
@@ -125,8 +126,9 @@ export function TutorPane({
   return (
     <div className="flex-1 min-h-0 flex flex-col">
       <div className="px-3 py-2 border-b border-[#1a1a1a] flex items-center justify-between gap-2">
-        <span className="font-display text-sm tracking-wide">{title}</span>
+        <span className="font-display text-sm tracking-wide truncate">{title}</span>
         <div className="flex items-center gap-3">
+          <ThreadPicker />
           <Link
             href="/memory"
             target="_blank"

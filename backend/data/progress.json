@@ -1,8 +1,8 @@
 {
-  "xp": 671,
+  "xp": 751,
   "streak": 1,
   "best_streak": 3,
-  "last_completed": "2026-05-04",
+  "last_completed": "2026-05-06",
   "completed_tasks": {
     "c5-d1-bronze-0": true,
     "c4-d1-bronze-0": true,
@@ -25,7 +25,9 @@
     "c10-d1-bronze-1": true,
     "c10-d1-silver-0": true,
     "c10-d1-gold-2": true,
-    "c10-d2-silver-0": true
+    "c10-d2-silver-0": true,
+    "c10-d2-gold-1": true,
+    "c10-d2-gold-2": true
   },
   "completed_phases": {
     "c5-d1-bronze-0": {
@@ -197,7 +199,17 @@
     },
     "c10-d2-gold-1": {
       "prime": true,
-      "core": true
+      "core": true,
+      "retrieval": true,
+      "elaborate": true,
+      "check": true
+    },
+    "c10-d2-gold-2": {
+      "prime": true,
+      "core": true,
+      "retrieval": true,
+      "elaborate": true,
+      "check": true
     }
   },
   "day_tiers": {
@@ -213,7 +225,7 @@
     "3.4": "gold",
     "8.12": "bronze",
     "10.1": "gold",
-    "10.2": "silver"
+    "10.2": "gold"
   },
   "generated_tasks": [],
   "attempts": [

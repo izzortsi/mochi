@@ -200,9 +200,28 @@ export interface TutorNote {
   createdAt: string;
 }
 
+export interface ChatChannel {
+  id: string;
+  name: string;
+  createdAt: string;
+  messageCount: number;
+  // Messages are present when the channel was fetched in "include
+  // messages" mode (the default) and absent for summary-only listings.
+  messages?: ChatMessage[];
+}
+
 export interface ChatThread {
   courseId: number;
-  messages: ChatMessage[];
+  channels: ChatChannel[];
+}
+
+export interface ArtifactRecord {
+  id: string;
+  type: string;
+  title: string;
+  body: string;
+  courseId: number;
+  createdAt: string;
 }
 
 export type LlmProvider = "zai" | "anthropic-oauth";

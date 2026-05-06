@@ -45,6 +45,7 @@ RUNTIME_SEED_FILES = (
     "notes.json",
     "tutor_notes.json",
     "srs.json",
+    "artifacts.json",
 )
 
 

@@ -16,11 +16,18 @@ export const appendGeneratedTaskSchema = z.object({
 });
 export const appendChatSchema = z.object({
   courseId: z.number(),
+  // The engine injects this so the LLM doesn't need to know about
+  // channels. Optional so other callers (none today, but keeps the
+  // schema honest) don't have to thread it through.
+  channelId: z.string().nullable().optional(),
   role: z.enum(["user", "assistant", "tool"]),
   content: z.string(),
   toolName: z.string().nullable(),
 });
-export const getChatSchema = z.object({ courseId: z.number() });
+export const getChatSchema = z.object({
+  courseId: z.number(),
+  channelId: z.string().nullable().optional(),
+});
 export const getProgressSchema = z.object({});
 export const recordTutorNoteSchema = z.object({
   cardUid: z.string(),

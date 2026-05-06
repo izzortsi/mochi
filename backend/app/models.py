@@ -121,6 +121,21 @@ class ChatMessage(BaseModel):
     images: list[str] = []
 
 
+class ChatChannel(BaseModel):
+    """One discrete conversation inside a course's chat thread.
+
+    Channels exist so the LLM context window doesn't grow unbounded as
+    the user sticks with the tutor across weeks. Each channel has its
+    own message log; switching channels is the user's "new context"
+    affordance. Channel names default to empty and are filled in either
+    manually (rename) or by auto-deriving from the first user message.
+    """
+    id: str
+    name: str = ""
+    created_at: str = ""
+    messages: list[ChatMessage] = []
+
+
 class ConceptNode(BaseModel):
     id: ConceptId
     label: str
@@ -203,4 +218,20 @@ class TutorNote(BaseModel):
     card_uid: CardUid
     body: str
     source: str = "tutor"  # "tutor" | "user"
+    created_at: str = ""
+
+
+class Artifact(BaseModel):
+    """A self-contained interactive document the tutor authored mid-chat.
+
+    The chat stream itself still owns the rendering (segmented out of an
+    assistant message and mounted in a sandboxed iframe), but we mirror
+    each artifact into a separate store so they survive thread wipes
+    and can be browsed from a top-level Artifacts tab.
+    """
+    id: str
+    type: str = "html"
+    title: str = ""
+    body: str
+    course_id: int = 0   # the chat thread it was emitted in
     created_at: str = ""

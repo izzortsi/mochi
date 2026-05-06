@@ -345,12 +345,20 @@ def _append_generated_task(args):
 
 
 def _append_chat(args):
-    course_id = args.get("courseId") or args.get("course-id", 0)
+    """Tool the LLM uses to write to the chat from inside its own turn.
+
+    We don't expose channel-ids to the model — channels are a UI concept.
+    The append routes to the active channel passed in by the engine when
+    `channel-id` is given, otherwise falls back to the course's most
+    recent channel (creating "Default" if none exists)."""
+    course_id = int(args.get("courseId") or args.get("course-id", 0))
+    channel_id = args.get("channelId") or args.get("channel-id")
     from app.models import ChatMessage
+    from app.routers.memory import _ensure_channel
 
     chat = store.load_chat()
-    msgs = chat.setdefault(course_id, [])
-    msgs.append(
+    channel = _ensure_channel(chat, course_id, channel_id)
+    channel.messages.append(
         ChatMessage(
             role=args.get("role", "user"),
             content=args.get("content", ""),
@@ -363,9 +371,21 @@ def _append_chat(args):
 
 
 def _get_chat(args):
-    course_id = args.get("courseId") or args.get("course-id", 0)
+    """Read back the chat the LLM is currently inside. Routes to the
+    same channel as `_append_chat` for symmetry — the model sees what
+    the user sees."""
+    course_id = int(args.get("courseId") or args.get("course-id", 0))
+    channel_id = args.get("channelId") or args.get("channel-id")
     chat = store.load_chat()
-    msgs = chat.get(course_id, [])
+    channels = chat.get(course_id, [])
+    msgs: list = []
+    if channel_id:
+        for c in channels:
+            if c.id == channel_id:
+                msgs = c.messages
+                break
+    elif channels:
+        msgs = channels[-1].messages
     return {
         "messages": [
             {

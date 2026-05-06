@@ -78,6 +78,27 @@ export function ConceptsIcon(props: IconProps) {
   );
 }
 
+// Sparkle / starburst — artifacts (interactive documents the tutor authored)
+export function ArtifactsIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      {/* central diamond */}
+      <rect x="7" y="6" width="2" height="4" />
+      <rect x="6" y="7" width="4" height="2" />
+      {/* cardinal arms */}
+      <rect x="7" y="2" width="2" height="3" />
+      <rect x="7" y="11" width="2" height="3" />
+      <rect x="2" y="7" width="3" height="2" />
+      <rect x="11" y="7" width="3" height="2" />
+      {/* corner sparks */}
+      <rect x="3" y="3" width="1" height="1" />
+      <rect x="12" y="3" width="1" height="1" />
+      <rect x="3" y="12" width="1" height="1" />
+      <rect x="12" y="12" width="1" height="1" />
+    </svg>
+  );
+}
+
 // Stacked horizontal lines — notes (page of text)
 export function NotesIcon(props: IconProps) {
   return (
