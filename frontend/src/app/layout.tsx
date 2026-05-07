@@ -12,6 +12,15 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#000000",
+  // Lock to the device's actual portrait width so the mobile shell
+  // matches the viewport instead of the browser's default ~980px
+  // desktop assumption. `interactiveWidget: "resizes-content"` keeps
+  // the layout from getting shoved by the virtual keyboard when the
+  // math popover or chat input is focused.
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  interactiveWidget: "resizes-content",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

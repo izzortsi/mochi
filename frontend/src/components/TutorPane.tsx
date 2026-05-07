@@ -1,8 +1,10 @@
 "use client";
 import { useRef, useState } from "react";
 import Link from "next/link";
-import { Send, Database, X, Maximize2, Minimize2, Sigma } from "lucide-react";
-import type { ChatMessage, ConnectionStatus } from "@/lib/types";
+import {
+  Send, Database, X, Maximize2, Minimize2, Sigma, Paperclip, FileText,
+} from "lucide-react";
+import type { ChatMessage, ConnectionStatus, PdfAttachment } from "@/lib/types";
 import { api } from "@/lib/api";
 import { segmentAssistantContent } from "@/lib/artifacts";
 import { MathText } from "./MathText";
@@ -41,6 +43,12 @@ interface Props {
   pendingImages: string[];
   onAddImage: (url: string) => void;
   onRemoveImage: (url: string) => void;
+  // PDF attachments for the next user turn. Same shape as images but
+  // uploaded via a paperclip-triggered file picker (paste of arbitrary
+  // files is unreliable cross-browser, especially on mobile).
+  pendingPdfs: PdfAttachment[];
+  onAddPdf: (pdf: PdfAttachment) => void;
+  onRemovePdf: (url: string) => void;
 }
 
 // Remove <tool>…</tool> blocks from an assistant message's raw content
@@ -69,11 +77,13 @@ function ToolChip({ name, ok }: { name: string; ok: boolean }) {
 export function TutorPane({
   title, placeholder, messages, input, onInput, onSend, busy, status, onClose,
   onToggleExpand, expanded, pendingImages, onAddImage, onRemoveImage,
+  pendingPdfs, onAddPdf, onRemovePdf,
 }: Props) {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [mathOpen, setMathOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // Splice a $...$ math snippet into the textarea at the current cursor.
   // Falls back to appending when the textarea hasn't been focused yet
@@ -116,6 +126,44 @@ export function TutorPane({
       setUploadError(err instanceof Error ? err.message : String(err));
     } finally {
       setUploading(false);
+    }
+  };
+
+  // Paperclip-triggered upload. Routes the file to the right endpoint
+  // by mime type — images keep the existing flow, PDFs go through the
+  // new endpoint and queue as PdfAttachment chips. Anything else gets
+  // an inline error.
+  const handlePickedFiles = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    setUploadError(null);
+    setUploading(true);
+    try {
+      for (const file of Array.from(files)) {
+        // iOS Safari frequently delivers PDFs picked from the Files app
+        // with an empty file.type. Use the filename extension as a
+        // fallback so the dispatch doesn't bail to "unsupported".
+        const lower = file.name.toLowerCase();
+        const isPdf =
+          file.type === "application/pdf" || lower.endsWith(".pdf");
+        const isImage =
+          file.type.startsWith("image/") ||
+          /\.(png|jpe?g|gif|webp)$/.test(lower);
+        if (isPdf) {
+          const { url, label } = await api.uploadChatPdf(file);
+          onAddPdf({ url, label });
+        } else if (isImage) {
+          const { url } = await api.uploadChatImage(file);
+          onAddImage(url);
+        } else {
+          setUploadError(`unsupported file type: ${file.type || file.name}`);
+        }
+      }
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setUploading(false);
+      // Reset the input so picking the same file twice in a row still fires onChange.
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
   const statusDot =
@@ -224,11 +272,28 @@ export function TutorPane({
                   ))}
                 </div>
               )}
+              {m.pdfs && m.pdfs.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mt-1">
+                  {m.pdfs.map((pdf) => (
+                    <a
+                      key={pdf.url}
+                      href={pdf.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-2 py-1 rounded border border-[#1f1f1f] bg-[#0a0a0a] text-xs font-mono hover:border-amber-700/60"
+                      title={pdf.label}
+                    >
+                      <FileText className="w-3.5 h-3.5 text-amber-300" />
+                      <span className="max-w-[14rem] truncate">{pdf.label}</span>
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
           );
         })}
       </div>
-      {(pendingImages.length > 0 || uploading || uploadError) && (
+      {(pendingImages.length > 0 || pendingPdfs.length > 0 || uploading || uploadError) && (
         <div className="border-t border-[#1a1a1a] px-2 py-2 flex flex-wrap items-center gap-2">
           {pendingImages.map((url) => (
             <div key={url} className="relative">
@@ -241,6 +306,23 @@ export function TutorPane({
               <button
                 onClick={() => onRemoveImage(url)}
                 aria-label="Remove attachment"
+                className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-black/90 border border-[#2a2a2a] flex items-center justify-center hover:bg-red-900/70"
+              >
+                <X className="w-2.5 h-2.5 opacity-70" />
+              </button>
+            </div>
+          ))}
+          {pendingPdfs.map((pdf) => (
+            <div
+              key={pdf.url}
+              className="relative inline-flex items-center gap-1.5 px-2 py-1 rounded border border-[#1f1f1f] bg-[#0a0a0a] text-xs font-mono pr-5"
+              title={pdf.label}
+            >
+              <FileText className="w-3.5 h-3.5 text-amber-300 flex-shrink-0" />
+              <span className="max-w-[10rem] truncate">{pdf.label}</span>
+              <button
+                onClick={() => onRemovePdf(pdf.url)}
+                aria-label="Remove PDF"
                 className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-black/90 border border-[#2a2a2a] flex items-center justify-center hover:bg-red-900/70"
               >
                 <X className="w-2.5 h-2.5 opacity-70" />
@@ -280,6 +362,22 @@ export function TutorPane({
           onPaste={handlePaste}
           placeholder={placeholder}
         />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="application/pdf,image/png,image/jpeg,image/gif,image/webp"
+          multiple
+          hidden
+          onChange={(e) => handlePickedFiles(e.target.files)}
+        />
+        <button
+          onClick={() => fileInputRef.current?.click()}
+          className="px-2 text-neutral-400 hover:text-amber-300"
+          title="Attach PDF or image"
+          aria-label="Attach PDF or image"
+        >
+          <Paperclip className="w-4 h-4" />
+        </button>
         <button
           onClick={() => setMathOpen(true)}
           className="px-2 text-neutral-400 hover:text-amber-300"

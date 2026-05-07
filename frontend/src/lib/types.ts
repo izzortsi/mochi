@@ -119,6 +119,11 @@ export interface ConceptPageData {
 
 export type ChatRole = "user" | "assistant" | "tool";
 
+export interface PdfAttachment {
+  url: string;     // e.g. "/api/chat-pdf/abc123.pdf"
+  label: string;   // original filename for display
+}
+
 export interface ChatMessage {
   role: ChatRole;
   content: string;
@@ -129,6 +134,10 @@ export interface ChatMessage {
   // re-embedded into the LLM context as multimodal content blocks on
   // every turn that references them.
   images?: string[];
+  // Same idea for PDFs — Anthropic-only. Each entry carries the storage
+  // URL plus the original filename so the chat UI can show a recognizable
+  // chip without round-tripping to the backend.
+  pdfs?: PdfAttachment[];
 }
 
 export interface NoteSummary {

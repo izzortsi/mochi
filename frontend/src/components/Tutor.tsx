@@ -30,6 +30,9 @@ export function Tutor() {
         pendingImages={engine.pendingImages}
         onAddImage={engine.addPendingImage}
         onRemoveImage={engine.removePendingImage}
+        pendingPdfs={engine.pendingPdfs}
+        onAddPdf={engine.addPendingPdf}
+        onRemovePdf={engine.removePendingPdf}
       />
     </div>
   );

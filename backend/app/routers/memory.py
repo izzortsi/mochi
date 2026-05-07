@@ -15,6 +15,7 @@ def _chat_dict(m: ChatMessage) -> dict:
         "tool-name": m.tool_name,
         "timestamp": m.timestamp,
         "images": list(m.images or []),
+        "pdfs": list(m.pdfs or []),
     }
 
 
@@ -143,6 +144,9 @@ def append_chat(body: dict):
     images = body.get("images") or []
     if not isinstance(images, list):
         images = []
+    pdfs = body.get("pdfs") or []
+    if not isinstance(pdfs, list):
+        pdfs = []
 
     chat = store.load_chat()
     channel = _ensure_channel(chat, course_id, channel_id)
@@ -153,6 +157,7 @@ def append_chat(body: dict):
             tool_name=tool_name,
             timestamp=timestamp,
             images=[str(x) for x in images],
+            pdfs=[p for p in pdfs if isinstance(p, dict) and p.get("url")],
         )
     )
     store.save_chat(chat)

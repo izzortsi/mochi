@@ -3,9 +3,9 @@ import type { LlmConfig, LlmProvider } from "./types";
 const STORAGE_KEY = "study-plan-settings";
 
 const DEFAULT_CONFIG: LlmConfig = {
-  provider: "zai",
+  provider: "anthropic-oauth",
   apiKey: "",
-  model: "GLM-5.1",
+  model: "claude-opus-4-7",
   baseUrl: "https://api.z.ai/api/coding/paas/v4",
 };
 
@@ -45,7 +45,9 @@ export function loadConfig(): LlmConfig {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return DEFAULT_CONFIG;
     const parsed = JSON.parse(raw) as Partial<LlmConfig>;
-    const provider: LlmProvider = isProvider(parsed.provider) ? parsed.provider : "zai";
+    const provider: LlmProvider = isProvider(parsed.provider)
+      ? parsed.provider
+      : DEFAULT_CONFIG.provider;
     return {
       provider,
       apiKey: parsed.apiKey ?? DEFAULT_CONFIG.apiKey,

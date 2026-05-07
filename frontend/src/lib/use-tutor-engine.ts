@@ -11,7 +11,9 @@ import {
   CHAT_APPENDED_EVENT,
   type ChatAppendedDetail,
 } from "@/components/SessionCard";
-import type { ChatChannel, ChatMessage, ConnectionStatus } from "./types";
+import type {
+  ChatChannel, ChatMessage, ConnectionStatus, PdfAttachment,
+} from "./types";
 
 // Fired whenever the engine has persisted a fresh artifact emission. The
 // /artifacts page listens so it can refresh in the background while the
@@ -80,6 +82,11 @@ export interface TutorEngine {
   pendingImages: string[];
   addPendingImage: (url: string) => void;
   removePendingImage: (url: string) => void;
+  // PDFs queued for the next user turn. Anthropic-only; the engine
+  // refuses to send if pendingPdfs is non-empty under any other provider.
+  pendingPdfs: PdfAttachment[];
+  addPendingPdf: (pdf: PdfAttachment) => void;
+  removePendingPdf: (url: string) => void;
   // Effective chat coordinates (resolved from pin or page).
   threadId: number;
   channel: ChatChannel | null;
@@ -103,6 +110,7 @@ export function useTutorEngine(): TutorEngine {
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState<ConnectionStatus>("disconnected");
   const [pendingImages, setPendingImages] = useState<string[]>([]);
+  const [pendingPdfs, setPendingPdfs] = useState<PdfAttachment[]>([]);
   const wsRef = useRef<WsClient | null>(null);
   const pendingRef = useRef<Map<string, (resp: string) => void>>(new Map());
   // The id we asked for last so the resolver effect can decide whether
@@ -119,6 +127,14 @@ export function useTutorEngine(): TutorEngine {
   }, []);
   const removePendingImage = useCallback((url: string) => {
     setPendingImages((cur) => cur.filter((u) => u !== url));
+  }, []);
+  const addPendingPdf = useCallback((pdf: PdfAttachment) => {
+    setPendingPdfs((cur) =>
+      cur.some((p) => p.url === pdf.url) ? cur : [...cur, pdf],
+    );
+  }, []);
+  const removePendingPdf = useCallback((url: string) => {
+    setPendingPdfs((cur) => cur.filter((p) => p.url !== url));
   }, []);
 
   useEffect(() => {
@@ -258,15 +274,33 @@ export function useTutorEngine(): TutorEngine {
   }, [courseId]);
 
   const send = useCallback(async () => {
-    // Allow sending image-only turns (no text) — useful for "what is in
-    // this image?" prompts. Block only when both are empty.
-    if (!input.trim() && pendingImages.length === 0) return;
+    // Allow attachment-only turns (no text) — useful for "what is in
+    // this image / pdf?" prompts. Block only when everything is empty.
+    if (
+      !input.trim() &&
+      pendingImages.length === 0 &&
+      pendingPdfs.length === 0
+    ) return;
     if (busy) return;
     const config = loadConfig();
     if (!isConfigured(config)) {
       const errMsg: ChatMessage = {
         role: "assistant",
         content: "Configure your API key in Settings first.",
+        toolName: null,
+        timestamp: new Date().toISOString(),
+      };
+      setMessages((m) => [...m, errMsg]);
+      return;
+    }
+    // PDFs are anthropic-only — Anthropic's content blocks are the
+    // only path that supports `document` source. Refuse early so the
+    // user gets a clear message instead of a 400 from the backend.
+    if (pendingPdfs.length > 0 && config.provider !== "anthropic-oauth") {
+      const errMsg: ChatMessage = {
+        role: "assistant",
+        content:
+          "PDF attachments require the Anthropic provider. Switch in Settings, or remove the PDF chip and resend.",
         toolName: null,
         timestamp: new Date().toISOString(),
       };
@@ -337,12 +371,14 @@ export function useTutorEngine(): TutorEngine {
       toolName: null,
       timestamp: new Date().toISOString(),
       images: pendingImages.length ? [...pendingImages] : undefined,
+      pdfs: pendingPdfs.length ? [...pendingPdfs] : undefined,
     };
     setMessages((m) => [...m, userMsg]);
     api.memory.appendChat(courseId, userMsg, activeChannel.id).catch(() => {});
 
     setInput("");
     setPendingImages([]);
+    setPendingPdfs([]);
     setBusy(true);
 
     // Local history snapshot we extend synchronously across the loop —
@@ -403,12 +439,13 @@ export function useTutorEngine(): TutorEngine {
     }
   }, [
     input, busy, messages, pageContext, callTool, onToolCall, pendingImages,
-    channel, courseId, pinnedChannel, pinChannel, persistArtifacts,
+    pendingPdfs, channel, courseId, pinnedChannel, pinChannel, persistArtifacts,
   ]);
 
   return {
     messages, input, setInput, send, busy, status,
     pendingImages, addPendingImage, removePendingImage,
+    pendingPdfs, addPendingPdf, removePendingPdf,
     threadId: courseId,
     channel,
     channelPinned: pinnedChannel !== null,

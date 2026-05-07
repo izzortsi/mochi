@@ -4,6 +4,7 @@ import base64
 from fastapi import APIRouter, HTTPException
 from app.services import llm, llm_anthropic
 from app.routers.chat_images import resolve_image_path, ALLOWED_MEDIA_TYPES
+from app.routers.chat_pdfs import resolve_pdf_path, ALLOWED_MEDIA_TYPE as PDF_MEDIA_TYPE
 
 
 router = APIRouter()
@@ -14,16 +15,21 @@ router = APIRouter()
 _EXT_TO_MEDIA = {ext: media for media, ext in ALLOWED_MEDIA_TYPES.items()}
 
 
-def _attach_images_anthropic(messages: list[dict]) -> list[dict]:
-    """Replace each message's content with a block list when it carries
-    images. Reads each referenced image off disk and inlines it as a
-    base64 source block. Anthropic-only — other providers don't get this.
+def _attach_attachments_anthropic(messages: list[dict]) -> list[dict]:
+    """Fold image and pdf refs into Anthropic content blocks.
+
+    Each message that carries `images` and/or `pdfs` is rewritten so
+    `content` becomes a list with the prose text first, then `image`
+    blocks, then `document` (pdf) blocks. Refs that fail to resolve on
+    disk are silently dropped so a stale chat history can't poison
+    future turns.
     """
     out: list[dict] = []
     for m in messages:
         images = m.get("images") or []
-        rest = {k: v for k, v in m.items() if k != "images"}
-        if not images:
+        pdfs = m.get("pdfs") or []
+        rest = {k: v for k, v in m.items() if k not in ("images", "pdfs")}
+        if not images and not pdfs:
             out.append(rest)
             continue
         text = str(m.get("content", ""))
@@ -31,14 +37,11 @@ def _attach_images_anthropic(messages: list[dict]) -> list[dict]:
         if text:
             blocks.append({"type": "text", "text": text})
         for ref in images:
-            # Reference is either a bare filename or a "/api/chat-image/..."
-            # URL. Pull just the trailing component for the disk lookup.
             name = str(ref).rsplit("/", 1)[-1]
             try:
                 path = resolve_image_path(name)
             except HTTPException:
-                continue  # silently drop missing images so a stale chat
-                          # history doesn't poison the next turn
+                continue
             ext = path.suffix.lower()
             media = _EXT_TO_MEDIA.get(ext, "image/png")
             data = base64.standard_b64encode(path.read_bytes()).decode("ascii")
@@ -46,14 +49,35 @@ def _attach_images_anthropic(messages: list[dict]) -> list[dict]:
                 "type": "image",
                 "source": {"type": "base64", "media_type": media, "data": data},
             })
+        for ref in pdfs:
+            # PDF refs are {url, label} dicts; URL trailing component
+            # is the disk filename. Tolerate plain-string entries too
+            # (older clients, manual edits) by treating the string as
+            # the URL.
+            url = ref.get("url") if isinstance(ref, dict) else str(ref)
+            if not url:
+                continue
+            name = url.rsplit("/", 1)[-1]
+            try:
+                path = resolve_pdf_path(name)
+            except HTTPException:
+                continue
+            data = base64.standard_b64encode(path.read_bytes()).decode("ascii")
+            blocks.append({
+                "type": "document",
+                "source": {"type": "base64", "media_type": PDF_MEDIA_TYPE, "data": data},
+            })
         rest["content"] = blocks
         out.append(rest)
     return out
 
 
-def _strip_images(messages: list[dict]) -> list[dict]:
-    """Drop the `images` field for providers that don't support multimodal."""
-    return [{k: v for k, v in m.items() if k != "images"} for m in messages]
+def _strip_attachments(messages: list[dict]) -> list[dict]:
+    """Drop attachment fields for providers that don't support multimodal."""
+    return [
+        {k: v for k, v in m.items() if k not in ("images", "pdfs")}
+        for m in messages
+    ]
 
 
 def _normalize_messages(messages: list[dict]) -> list[dict]:
@@ -127,12 +151,12 @@ async def chat(body: dict):
     if not isinstance(messages, list) or not messages:
         raise HTTPException(400, "messages required")
 
-    # Image attachment runs BEFORE _normalize_messages — once normalize
-    # rewrites a message it strips unknown fields (like `images`), so we
-    # need to fold them into the content blocks first.
+    # Attachment folding (images + pdfs) runs BEFORE _normalize_messages
+    # — once normalize rewrites a message it strips unknown fields, so
+    # we need to bake them into the content blocks first.
     try:
         if provider == "anthropic-oauth":
-            messages = _attach_images_anthropic(messages)
+            messages = _attach_attachments_anthropic(messages)
             messages = _normalize_messages(messages)
             content = await asyncio.to_thread(
                 llm_anthropic.chat, model, messages, 32000
@@ -141,9 +165,11 @@ async def chat(body: dict):
             api_key = (body.get("api-key") or body.get("apiKey") or "").strip()
             if not api_key:
                 raise HTTPException(400, "api-key required for zai provider")
-            # zai's GLM models are mostly text-only; drop image refs so the
-            # provider doesn't reject the request.
-            messages = _strip_images(messages)
+            # zai's GLM models are text-only; drop image + pdf refs so
+            # the provider doesn't reject the request. The frontend
+            # blocks pdf upload on zai but a stale chat history might
+            # still carry refs.
+            messages = _strip_attachments(messages)
             messages = _normalize_messages(messages)
             content = await llm.call_openai_chat(
                 api_key=api_key,
