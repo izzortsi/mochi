@@ -59,6 +59,7 @@ def dispatch(tool: str, args: dict):
         "fetch-card": _fetch_card,
         "mark-task-complete": _mark_task_complete,
         "grade-attempt": _grade_attempt,
+        "reward-pet": _reward_pet,
         "append-generated-task": _append_generated_task,
         "append-chat": _append_chat,
         "get-chat": _get_chat,
@@ -311,6 +312,8 @@ def _mark_task_complete(args):
 
 
 def _grade_attempt(args):
+    from app.routers import pet as pet_router
+
     card_uid = args.get("cardUid") or args.get("card-uid", "")
     verdict = args.get("verdict", "")
     comment = args.get("comment", "")
@@ -324,7 +327,24 @@ def _grade_attempt(args):
         }
     )
     store.save_progress(progress)
+    # A graded attempt is also a recognition signal — bump the pet so a
+    # purely-chat-based grading session doesn't starve the creature.
+    # "wrong" verdicts are silently skipped: don't penalize trying.
+    kind_map = {"correct": "correct", "partial": "partial"}
+    kind = kind_map.get(verdict.lower())
+    if kind:
+        pet_router.feed_pet_chat_recognition(kind)
     return "ok"
+
+
+def _reward_pet(args):
+    """Tutor-facing tool that bumps pet stats when the user demonstrates
+    correct reasoning mid-chat (no card-uid required). Throttled at
+    CHAT_RECOGNITION_PER_HOUR/hour so a confused tutor can't spam-feed."""
+    from app.routers import pet as pet_router
+
+    kind = (args.get("kind") or "").strip().lower()
+    return pet_router.feed_pet_chat_recognition(kind)
 
 
 def _append_generated_task(args):

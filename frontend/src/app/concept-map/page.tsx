@@ -14,7 +14,7 @@ export default function GlobalConceptMapPage() {
   if (!data) return <div className="opacity-50">loading…</div>;
 
   return (
-    <div className="ml-[-6rem] mr-[calc(50%-50vw+11.5rem)]">
+    <div className="md:ml-[-6rem] md:mr-[calc(50%-50vw+11.5rem)]">
       <div className="mx-auto max-w-3xl text-center">
         <h1 className="font-display text-3xl mb-2">Concept map</h1>
         <p className="text-sm opacity-60 mb-4">Every concept across every course. Click a node to open its page. Drag to reposition, scroll to zoom.</p>

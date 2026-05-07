@@ -1,5 +1,5 @@
 from __future__ import annotations
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter, HTTPException
 from app import store
 from app.services import pet_art, pet_stats
@@ -70,6 +70,28 @@ TIER_XP_BUMP = {
 
 # Joy bump when the day is fully completed (all three tiers cleared).
 DAY_COMPLETE_JOY = 25.0
+
+# Chat-recognition feeds. The tutor calls reward-pet when the user
+# demonstrates real understanding mid-conversation, even without a
+# card-completion event firing. These are conservative on purpose —
+# the formal session-completion path is still the dominant signal,
+# but a long study chat with a few correct answers should keep the
+# pet alive on its own. Calibrated so ~3 correct answers / hour offsets
+# typical health decay (~14% over an hour at the default rate).
+CHAT_RECOGNITION_HEALTH = {
+    "correct": 6.0,   # solved a problem, got the right answer
+    "partial": 3.0,   # right idea with minor gaps
+    "insight": 4.0,   # made a non-obvious connection or generalization
+}
+CHAT_RECOGNITION_JOY = {
+    "correct": 3.0,
+    "partial": 1.5,
+    "insight": 3.5,
+}
+# Cap recognitions per hour so a confused tutor can't spam-feed the
+# pet to immortality. The tutor sees an explicit "[reward-pet failed]"
+# tool result when this clamps so it stops trying.
+CHAT_RECOGNITION_PER_HOUR = 12
 
 # Right-click-to-pet interaction.
 PET_JOY_BUMP = 3.0
@@ -364,6 +386,60 @@ def feed_pet_day_complete():
         return
     _apply_feed(pet, happiness_delta=DAY_COMPLETE_JOY)
     store.save_pet(pet)
+
+
+def feed_pet_chat_recognition(kind: str) -> dict:
+    """Reward the pet when the tutor recognizes correct work mid-chat.
+
+    Returns a structured result the WS handler echoes back to the LLM:
+    `ok` is False with a `reason` when the call was rejected (no live
+    pet, hourly cap reached, or unknown kind) so the model can stop
+    asking. Otherwise `ok=True` and the new stat snapshot rides along.
+    """
+    if kind not in CHAT_RECOGNITION_HEALTH:
+        return {"ok": False, "reason": f"unknown kind: {kind}"}
+    pet = _alive_pet()
+    if not pet:
+        return {"ok": False, "reason": "no live pet"}
+
+    # Per-hour cap. We track timestamps inline on the pet record so a
+    # cold restart doesn't lose the throttling. List of ISO datetimes,
+    # pruned to the trailing hour on every call.
+    now_dt = datetime.now(timezone.utc)
+    history = pet.get("recognitionHistory") or []
+    cutoff = now_dt - timedelta(hours=1)
+    pruned: list[str] = []
+    for ts in history:
+        try:
+            t = datetime.fromisoformat(ts)
+        except ValueError:
+            continue
+        if t.tzinfo is None:
+            t = t.replace(tzinfo=timezone.utc)
+        if t >= cutoff:
+            pruned.append(ts)
+    if len(pruned) >= CHAT_RECOGNITION_PER_HOUR:
+        pet["recognitionHistory"] = pruned
+        store.save_pet(pet)
+        return {
+            "ok": False,
+            "reason": f"hourly cap reached ({CHAT_RECOGNITION_PER_HOUR} feeds/hr)",
+        }
+
+    pruned.append(now_dt.isoformat())
+    pet["recognitionHistory"] = pruned
+    _apply_feed(
+        pet,
+        health_delta=CHAT_RECOGNITION_HEALTH[kind],
+        happiness_delta=CHAT_RECOGNITION_JOY[kind],
+    )
+    store.save_pet(pet)
+    return {
+        "ok": True,
+        "kind": kind,
+        "health": round(pet.get("health", 100), 1),
+        "happiness": round(pet.get("happiness", 100), 1),
+    }
 
 
 PET_QUOTE_MODEL = "claude-haiku-4-5-20251001"

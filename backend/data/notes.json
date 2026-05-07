@@ -3862,5 +3862,174 @@
       "metodo-picard"
     ],
     "source": ""
+  },
+  {
+    "id": "espaco-amostral",
+    "title": "Espaço Amostral",
+    "domain": "probabilidade",
+    "tags": [
+      "fundamentos"
+    ],
+    "content": "O **espaço amostral** $S$ de um experimento é o conjunto de todos os resultados possíveis. Pode ser finito (dois dados: 36), infinito enumerável (dado até sair 6) ou contínuo. Eventos são subconjuntos de $S$. Para experimentos com regra de parada, $S$ inclui sequências finitas que satisfazem a regra mais possíveis sequências infinitas que nunca a satisfazem.",
+    "related": [
+      "operacoes-eventos"
+    ],
+    "source": ""
+  },
+  {
+    "id": "operacoes-eventos",
+    "title": "Operações com Eventos",
+    "domain": "probabilidade",
+    "tags": [
+      "fundamentos"
+    ],
+    "content": "Eventos são subconjuntos de $S$. Operações: $A\\cap B$ (ambos), $A\\cup B$ (um ou outro), $A^c$ (complemento), $A\\setminus B = A\\cap B^c$. Leis de De Morgan: $(A\\cup B)^c=A^c\\cap B^c$. Eventos são **disjuntos** se $A\\cap B=\\emptyset$.",
+    "related": [
+      "espaco-amostral",
+      "lei-aditiva"
+    ],
+    "source": ""
+  },
+  {
+    "id": "sistemas-binarios",
+    "title": "Sistemas com Componentes Binários",
+    "domain": "probabilidade",
+    "tags": [
+      "aplicacao"
+    ],
+    "content": "Um sistema de $n$ componentes em estados $\\{0,1\\}$ tem $|S|=2^n$. Funções estruturais $\\phi:\\{0,1\\}^n\\to\\{0,1\\}$ codificam quando o sistema funciona — ex.: paralelo $1-2$ em série com paralelo $3-4$, ou caminho $1-3-5$. O evento 'sistema funciona' é a união dos resultados onde $\\phi=1$.",
+    "related": [
+      "espaco-amostral"
+    ],
+    "source": ""
+  },
+  {
+    "id": "lei-aditiva",
+    "title": "Lei Aditiva",
+    "domain": "probabilidade",
+    "tags": [
+      "axiomas"
+    ],
+    "content": "Se $A\\cap B=\\emptyset$, então $P(A\\cup B)=P(A)+P(B)$. Geral: $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$. Consequência: $P(A^c)=1-P(A)$, $P(A\\setminus B)=P(A)-P(A\\cap B)$.",
+    "related": [
+      "inclusao-exclusao"
+    ],
+    "source": ""
+  },
+  {
+    "id": "inclusao-exclusao",
+    "title": "Inclusão–Exclusão",
+    "domain": "probabilidade",
+    "tags": [
+      "combinatoria"
+    ],
+    "content": "Para $n$ eventos: $P(\\bigcup_i A_i)=\\sum P(A_i)-\\sum_{i<j}P(A_i\\cap A_j)+\\cdots+(-1)^{n+1}P(\\bigcap A_i)$. Útil para 'pelo menos um', 'exatamente um', e o problema das coincidências (derangements).",
+    "related": [
+      "lei-aditiva",
+      "casais-arranjos"
+    ],
+    "source": ""
+  },
+  {
+    "id": "maos-poquer",
+    "title": "Mãos de Pôquer",
+    "domain": "combinatoria",
+    "tags": [
+      "aplicacao"
+    ],
+    "content": "Total de mãos de 5 cartas: $\\binom{52}{5}=2598960$. Estratégia geral: escolher os valores das cartas que repetem, escolher os naipes (via $\\binom{4}{k}$), e completar com kickers. Ex.: par $=13\\binom{4}{2}\\binom{12}{3}4^3$.",
+    "related": [
+      "poquer-dados"
+    ],
+    "source": ""
+  },
+  {
+    "id": "poquer-dados",
+    "title": "Pôquer com Dados",
+    "domain": "combinatoria",
+    "tags": [
+      "aplicacao"
+    ],
+    "content": "5 dados rolados: $|S|=6^5=7776$. Categorias análogas a pôquer: nenhum igual ($720$), um par, dois pares, trinca, full house, quadra, yahtzee. Soma das probabilidades = 1.",
+    "related": [
+      "maos-poquer"
+    ],
+    "source": ""
+  },
+  {
+    "id": "urnas-amostragem",
+    "title": "Amostragem em Urnas",
+    "domain": "probabilidade",
+    "tags": [
+      "combinatoria"
+    ],
+    "content": "Sem reposição, escolhendo $k$ de $n$ bolas: $\\binom{n}{k}$ resultados equiprováveis. Com reposição: $n^k$ sequências. Em geral P(mesma cor) é maior com reposição que sem, pois remover sem reposição cria correlação negativa.",
+    "related": [
+      "jogadores-alternados"
+    ],
+    "source": ""
+  },
+  {
+    "id": "jogadores-alternados",
+    "title": "Jogadores Alternados",
+    "domain": "probabilidade",
+    "tags": [
+      "aplicacao"
+    ],
+    "content": "Quando jogadores alternam retiradas de urna sem reposição até atingir condição, P(jogador $j$ ganha) é soma sobre suas posições de P(condição na posição $k$ pela primeira vez). Quem joga primeiro tipicamente tem vantagem.",
+    "related": [
+      "urnas-amostragem"
+    ],
+    "source": ""
+  },
+  {
+    "id": "aniversarios",
+    "title": "Paradoxo dos Aniversários",
+    "domain": "probabilidade",
+    "tags": [
+      "classico"
+    ],
+    "content": "Com $n$ pessoas e 365 dias equiprováveis, $P(\\text{todos diferentes})=\\prod_{k=0}^{n-1}(365-k)/365$. Para $n=23$, isso cruza $1/2$, então P(coincidência) supera 50%. A intuição falha porque comparamos pares: $\\binom{23}{2}=253$.",
+    "related": [],
+    "source": ""
+  },
+  {
+    "id": "casais-arranjos",
+    "title": "Arranjos com Restrição",
+    "domain": "combinatoria",
+    "tags": [
+      "aplicacao"
+    ],
+    "content": "Para 'nenhum casal adjacente' em fila, definir $A_i$ = casal $i$ junto. Tratar casal como bloco dá $|A_i|=2(n-1)!$ em $n$ pessoas. Inclusão-exclusão fornece $P(\\bigcap A_i^c)=1-P(\\bigcup A_i)$.",
+    "related": [
+      "inclusao-exclusao"
+    ],
+    "source": ""
+  },
+  {
+    "id": "bridge-cartas",
+    "title": "Distribuição no Bridge",
+    "domain": "combinatoria",
+    "tags": [
+      "aplicacao"
+    ],
+    "content": "No bridge, 52 cartas são distribuídas igualmente entre 4 jogadores: $\\binom{52}{13,13,13,13}=52!/(13!)^4$ distribuições. Eventos típicos: um jogador receber todo um naipe, ou cada jogador receber pelo menos um ás (≈10.5%).",
+    "related": [
+      "maos-poquer"
+    ],
+    "source": ""
+  },
+  {
+    "id": "conditional-probability-note",
+    "title": "Probabilidade Condicional e Bayes",
+    "domain": "Probabilidade",
+    "tags": [
+      "condicional",
+      "bayes",
+      "independência"
+    ],
+    "content": "## Definição\n$P(A\\mid B)=\\dfrac{P(A\\cap B)}{P(B)}$, $P(B)>0$.\n\n## Regra do Produto\n$P(A_1\\cap\\cdots\\cap A_n)=P(A_1)P(A_2\\mid A_1)\\cdots P(A_n\\mid A_1\\cdots A_{n-1})$.\n\n## Lei do Total\nSe $\\{B_i\\}$ é partição: $P(A)=\\sum_i P(A\\mid B_i)P(B_i)$.\n\n## Bayes\n$$P(B_i\\mid A)=\\frac{P(A\\mid B_i)P(B_i)}{\\sum_j P(A\\mid B_j)P(B_j)}.$$\n\n## Independência\n$A\\perp B \\iff P(A\\cap B)=P(A)P(B)$. Equivalente a $P(A\\mid B)=P(A)$ quando $P(B)>0$.\n\n## Estratégia Geral\n1. Identifique a partição natural (causas/cenários).\n2. Escreva $P(\\text{causa})$ e $P(\\text{evidência}\\mid\\text{causa})$.\n3. Combine com lei do total ou Bayes.\n4. Em múltiplas evidências independentes, multiplique verossimilhanças.",
+    "related": [],
+    "source": ""
   }
 ]

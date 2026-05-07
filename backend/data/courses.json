@@ -19765,5 +19765,1506 @@
         "contraction-mapping"
       ]
     ]
+  },
+  {
+    "id": 11,
+    "title": "Cálculo das Probabilidades - P1",
+    "slug": "calculo-probabilidades-p1",
+    "phases": [
+      {
+        "num": 1,
+        "title": "Espaços Amostrais e Eventos"
+      },
+      {
+        "num": 2,
+        "title": "Probabilidade e Combinatória"
+      },
+      {
+        "num": 3,
+        "title": "Problemas Clássicos"
+      },
+      {
+        "num": 4,
+        "title": "Probabilidade Condicional"
+      },
+      {
+        "num": 5,
+        "title": "Independência e Multiplicação"
+      },
+      {
+        "num": 6,
+        "title": "Fórmula de Bayes"
+      }
+    ],
+    "days": [
+      {
+        "id": 1,
+        "phase": 1,
+        "title": "Espaços Amostrais",
+        "icon": "S",
+        "summary": "Construindo $S$ para experimentos discretos: dado até sair 6, moeda alternada, componentes binários.",
+        "key_insight": "O espaço amostral $S$ lista todos os resultados possíveis; eventos são subconjuntos de $S$.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Quantos pontos tem $E_3$?",
+            "detail": "O espaço amostral é o conjunto de todos os resultados possíveis. Para experimentos com paragem condicional, $S$ pode ser infinito enumerável. $E_n$ é o evento 'parou na $n$-ésima jogada'.",
+            "concepts": [
+              "sample-space",
+              "elementary-event"
+            ],
+            "notes": [
+              "espaco-amostral"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Descrever $S$ para o experimento de rolar um dado até sair 6.",
+                "prior_knowledge": "Conjuntos enumeráveis e sequências finitas."
+              },
+              "core": {
+                "exposition": "O espaço amostral é o conjunto de todos os resultados possíveis. Para experimentos com paragem condicional, $S$ pode ser infinito enumerável. $E_n$ é o evento 'parou na $n$-ésima jogada'.",
+                "worked_example": "Rola dado até sair 6. $S=\\{(x_1,\\ldots,x_n): x_i\\in\\{1,\\ldots,5\\}, x_n=6\\}\\cup\\{\\text{nunca sai 6}\\}$. $E_n$ tem $5^{n-1}$ pontos. $(\\bigcup E_n)^c$ = sequência infinita sem 6.",
+                "problem": "Quantos pontos tem $E_3$?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "O que é $E_n$ no experimento do dado?",
+                    "answer": "Evento de parar exatamente na $n$-ésima rolagem: as $n-1$ primeiras não são 6 e a $n$-ésima é 6.",
+                    "concept": "elementary-event"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "O que representa $(\\bigcup_{n=1}^\\infty E_n)^c$?",
+                    "answer": "O resultado em que o 6 nunca aparece — sequência infinita de não-6.",
+                    "concept": "sample-space"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que $S$ precisa incluir o resultado 'nunca sai 6' apesar de ter probabilidade zero?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Defina $S$ para 3 moedas lançadas alternadamente (A,B,C) até sair cara.",
+                "rubric": "Listar sequências de coroas terminando em cara, mais a sequência infinita."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Liste $E\\cap F^c$: soma ímpar sem nenhum 1.",
+            "detail": "Eventos são subconjuntos; $\\cap$ é 'e', $\\cup$ é 'ou', $E^c$ é 'não-E'. Identificar pares $(i,j)$ que satisfazem cada condição.",
+            "concepts": [
+              "event-algebra",
+              "sample-space"
+            ],
+            "notes": [
+              "operacoes-eventos"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Operar uniões, interseções e complementos de eventos em dois dados.",
+                "prior_knowledge": "Espaço amostral de dois dados tem 36 pontos."
+              },
+              "core": {
+                "exposition": "Eventos são subconjuntos; $\\cap$ é 'e', $\\cup$ é 'ou', $E^c$ é 'não-E'. Identificar pares $(i,j)$ que satisfazem cada condição.",
+                "worked_example": "$E$=soma ímpar, $F$=algum 1, $G$=soma 5. $F\\cap G=\\{(1,4),(4,1)\\}$. $E\\cap F\\cap G=\\{(1,4),(4,1)\\}$ pois 5 é ímpar.",
+                "problem": "Liste $E\\cap F^c$: soma ímpar sem nenhum 1."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Quantos pontos tem $E\\cap F\\cap G$?",
+                    "answer": "Dois: $(1,4)$ e $(4,1)$.",
+                    "concept": "event-algebra"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "$E\\cup F$ contém $(2,2)$?",
+                    "answer": "Não — soma 4 é par e nenhum dado é 1.",
+                    "concept": "event-algebra"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que $F\\cap G\\subseteq E$ neste problema?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Descreva em palavras $E^c\\cap F$.",
+                "rubric": "Soma par e algum dado é 1."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "phase": 1,
+        "title": "Eventos em Sistemas",
+        "icon": "C",
+        "summary": "Codificando estados de componentes binários como vetores; identificando o evento 'sistema funciona'.",
+        "key_insight": "Para $n$ componentes binários, $|S|=2^n$.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Quantos resultados estão em $A$?",
+            "detail": "Cada componente está em $\\{0,1\\}$. $|S|=32$. $W$ = (1,2 ok) ou (3,4 ok) ou (1,3,5 ok). $A$ = $x_4=x_5=0$, então $|A|=2^3=8$.",
+            "concepts": [
+              "sample-space",
+              "event-algebra"
+            ],
+            "notes": [
+              "sistemas-binarios"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Enumerar resultados de um sistema de 5 componentes e identificar $W=\\{\\text{funciona}\\}$.",
+                "prior_knowledge": "Princípio multiplicativo: $2^5=32$."
+              },
+              "core": {
+                "exposition": "Cada componente está em $\\{0,1\\}$. $|S|=32$. $W$ = (1,2 ok) ou (3,4 ok) ou (1,3,5 ok). $A$ = $x_4=x_5=0$, então $|A|=2^3=8$.",
+                "worked_example": "$A\\cap W$: $x_4=x_5=0$ e sistema funciona. Componentes 3,4 não funcionam (pois $x_4=0$). Logo precisa $x_1=x_2=1$ ou $x_1=x_3=1, x_5=1$ — mas $x_5=0$. Resta $x_1=x_2=1$, $x_3$ livre. Resultados: $(1,1,0,0,0),(1,1,1,0,0)$.",
+                "problem": "Quantos resultados estão em $A$?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Tamanho de $S$?",
+                    "answer": "$2^5=32$.",
+                    "concept": "sample-space"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "$|A|$ onde $A=\\{x_4=x_5=0\\}$?",
+                    "answer": "$2^3=8$, pois $x_1,x_2,x_3$ são livres.",
+                    "concept": "event-algebra"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que $|A\\cap W|=2$ e não maior?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Liste $A\\cap W$.",
+                "rubric": "$(1,1,0,0,0)$ e $(1,1,1,0,0)$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "phase": 2,
+        "title": "Eventos Disjuntos e Inclusão-Exclusão",
+        "icon": "U",
+        "summary": "Lei aditiva para disjuntos e fórmula geral de inclusão–exclusão para 2 e 3 conjuntos.",
+        "key_insight": "$P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$; soma alternada para 3 conjuntos.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Se $P(A)=0.4, P(B)=0.3$ disjuntos, qual $P(A^c\\cap B^c)$?",
+            "detail": "Para disjuntos: $P(A\\cup B)=P(A)+P(B)$. $P(A\\setminus B)=P(A)$ pois $A\\cap B=\\emptyset$. $P(A\\cap B)=0$.",
+            "concepts": [
+              "mutually-exclusive",
+              "addition-law"
+            ],
+            "notes": [
+              "lei-aditiva"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Computar probabilidades com eventos disjuntos.",
+                "prior_knowledge": "Disjuntos: $A\\cap B=\\emptyset$."
+              },
+              "core": {
+                "exposition": "Para disjuntos: $P(A\\cup B)=P(A)+P(B)$. $P(A\\setminus B)=P(A)$ pois $A\\cap B=\\emptyset$. $P(A\\cap B)=0$.",
+                "worked_example": "$P(A)=0.3, P(B)=0.5$, disjuntos. (a) $P(A\\cup B)=0.8$. (b) $P(A\\cap B^c)=P(A)=0.3$. (c) $P(A\\cap B)=0$.",
+                "problem": "Se $P(A)=0.4, P(B)=0.3$ disjuntos, qual $P(A^c\\cap B^c)$?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Disjuntos implica $P(A\\cap B)=?$",
+                    "answer": "Zero.",
+                    "concept": "mutually-exclusive"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Lei aditiva geral?",
+                    "answer": "$P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$.",
+                    "concept": "addition-law"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Disjuntos é o mesmo que independentes? Por quê?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Disjuntos com $P>0$ podem ser independentes?",
+                "rubric": "Não — $P(A\\cap B)=0\\ne P(A)P(B)$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Quantas pessoas (de 100k) não leem nenhum jornal?",
+            "detail": "$P(A\\cup B\\cup C)=\\sum P(A_i)-\\sum P(A_i\\cap A_j)+P(A\\cap B\\cap C)$. 'Exatamente um' = soma das probabilidades menos as duplas (com sinais).",
+            "concepts": [
+              "inclusion-exclusion"
+            ],
+            "notes": [
+              "inclusao-exclusao"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Aplicar inclusão-exclusão ao problema de jornais/línguas.",
+                "prior_knowledge": "Soma alternada de interseções."
+              },
+              "core": {
+                "exposition": "$P(A\\cup B\\cup C)=\\sum P(A_i)-\\sum P(A_i\\cap A_j)+P(A\\cap B\\cap C)$. 'Exatamente um' = soma das probabilidades menos as duplas (com sinais).",
+                "worked_example": "Jornais I,II,III: $|I\\cup II\\cup III|=10+8+4-6-3-2+1=12\\%$. Apenas um: para I, $|I|-|I\\cap II|-|I\\cap III|+|I\\cap II\\cap III|=10-6-3+1=2\\%$. Total apenas-um: $2+1+0=$ recalcular cuidadosamente.",
+                "problem": "Quantas pessoas (de 100k) não leem nenhum jornal?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Fórmula para $|A\\cup B\\cup C|$?",
+                    "answer": "Somas individuais menos as duplas mais a tripla.",
+                    "concept": "inclusion-exclusion"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Línguas: 28+26+16-12-4-6+2 = ?",
+                    "answer": "50 — alunos em pelo menos um curso; 50 não estão em nenhum.",
+                    "concept": "inclusion-exclusion"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que somamos a tripla no final?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Pelo menos dois jornais (de 100k)?",
+                "rubric": "$|I\\cap II|+|I\\cap III|+|II\\cap III|-2|\\text{tripla}|=6+3+2-2=9\\%=9000$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "phase": 2,
+        "title": "Pôquer e Mãos de Cartas",
+        "icon": "P",
+        "summary": "Probabilidades clássicas de mãos de pôquer com $\\binom{52}{5}$.",
+        "key_insight": "Combinatória multiplicativa: escolher valores, escolher naipes, dividir por $\\binom{52}{5}=2598960$.",
+        "cards": [
+          {
+            "tier": "gold",
+            "task_index": 0,
+            "text": "Calcule P(dois pares).",
+            "detail": "Estratégia: escolher valor(es), escolher cartas dentro desses valores, escolher os 'kickers' restantes. Flush: $4\\binom{13}{5}/\\binom{52}{5}$.",
+            "concepts": [
+              "equiprobable-outcome",
+              "combination"
+            ],
+            "notes": [
+              "maos-poquer"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Computar P(par), P(dois pares), P(trinca), P(quadra) em pôquer 5 cartas.",
+                "prior_knowledge": "$\\binom{52}{5}=2598960$."
+              },
+              "core": {
+                "exposition": "Estratégia: escolher valor(es), escolher cartas dentro desses valores, escolher os 'kickers' restantes. Flush: $4\\binom{13}{5}/\\binom{52}{5}$.",
+                "worked_example": "Um par: $13\\cdot\\binom{4}{2}\\cdot\\binom{12}{3}\\cdot 4^3 / \\binom{52}{5} \\approx 0.4226$. Quadra: $13\\cdot\\binom{4}{4}\\cdot 48/\\binom{52}{5}\\approx 0.00024$.",
+                "problem": "Calcule P(dois pares)."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Numerador para dois pares?",
+                    "answer": "$\\binom{13}{2}\\binom{4}{2}^2\\cdot 11\\cdot 4$.",
+                    "concept": "combination"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Por que $13\\binom{4}{4}\\cdot 48$ na quadra?",
+                    "answer": "13 valores para a quadra, todas 4 cartas, 48 cartas restantes para a 5ª.",
+                    "concept": "combination"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que dividir $\\binom{13}{2}$ em vez de $13\\cdot 12$ para dois pares?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Calcule P(flush).",
+                "rubric": "$4\\binom{13}{5}/\\binom{52}{5}\\approx 0.00198$."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Verifique P(um par)=0.4630.",
+            "detail": "Sem repetição: $6\\cdot 5\\cdot 4\\cdot 3\\cdot 2/6^5$. Trinca: $\\binom{5}{3}\\cdot 6\\cdot 5\\cdot 4/6^5$ — escolha posições, valor da trinca, dois outros valores distintos.",
+            "concepts": [
+              "equiprobable-outcome",
+              "multinomial-coefficient"
+            ],
+            "notes": [
+              "poquer-dados"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Calcular probabilidades em 5 dados (pôquer com dados).",
+                "prior_knowledge": "$|S|=6^5=7776$."
+              },
+              "core": {
+                "exposition": "Sem repetição: $6\\cdot 5\\cdot 4\\cdot 3\\cdot 2/6^5$. Trinca: $\\binom{5}{3}\\cdot 6\\cdot 5\\cdot 4/6^5$ — escolha posições, valor da trinca, dois outros valores distintos.",
+                "worked_example": "P(nenhum igual)$=720/7776=0.0926$. P(quadra)$=\\binom{5}{4}\\cdot 6\\cdot 5/6^5=150/7776=0.0193$.",
+                "problem": "Verifique P(um par)=0.4630."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "$|S|$ de 5 dados?",
+                    "answer": "$6^5=7776$.",
+                    "concept": "equiprobable-outcome"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "P(5 iguais)?",
+                    "answer": "$6/7776\\approx 0.00077$.",
+                    "concept": "equiprobable-outcome"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que P(par)+P(dois pares)+...+P(yahtzee)+P(nenhum)=1?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Compute P(uma trinca e um par) — full house.",
+                "rubric": "$\\binom{5}{3}\\cdot 6\\cdot 5/6^5=300/7776\\approx 0.0386$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "phase": 3,
+        "title": "Urnas e Amostragem",
+        "icon": "B",
+        "summary": "Bolas coloridas, jogadores alternados, amostragem com e sem reposição.",
+        "key_insight": "Sem reposição usa $\\binom{n}{k}$; com reposição multiplica probabilidades.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Em urna com $n$ brancas e $m$ pretas, P(mesma cor) sem reposição?",
+            "detail": "Urna 5R+6A+8V=19. $\\binom{19}{3}=969$. Mesma cor: $\\binom{5}{3}+\\binom{6}{3}+\\binom{8}{3}$. Cores diferentes: $5\\cdot 6\\cdot 8$.",
+            "concepts": [
+              "combination",
+              "equiprobable-outcome"
+            ],
+            "notes": [
+              "urnas-amostragem"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Calcular probabilidades de cores em urna sem reposição.",
+                "prior_knowledge": "$\\binom{n}{k}$ para escolher subconjuntos."
+              },
+              "core": {
+                "exposition": "Urna 5R+6A+8V=19. $\\binom{19}{3}=969$. Mesma cor: $\\binom{5}{3}+\\binom{6}{3}+\\binom{8}{3}$. Cores diferentes: $5\\cdot 6\\cdot 8$.",
+                "worked_example": "(a) $(10+20+56)/969=86/969\\approx 0.0888$. (b) $240/969\\approx 0.2476$.",
+                "problem": "Em urna com $n$ brancas e $m$ pretas, P(mesma cor) sem reposição?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "P(mesma cor) com $n$ B e $m$ P, sem reposição?",
+                    "answer": "$[\\binom{n}{2}+\\binom{m}{2}]/\\binom{n+m}{2}$.",
+                    "concept": "combination"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Com reposição, P(mesma cor)?",
+                    "answer": "$(n^2+m^2)/(n+m)^2$.",
+                    "concept": "equiprobable-outcome"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que P(mesma cor) com reposição é sempre maior do que sem?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Mostre $(n^2+m^2)/(n+m)^2 \\geq [\\binom{n}{2}+\\binom{m}{2}]/\\binom{n+m}{2}$.",
+                "rubric": "Reduzir e usar $(n-m)^2\\geq 0$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Compute exatamente $P(A)$.",
+            "detail": "A tira nas posições 1,3,5,7,9. P(vermelha na posição $k$)=3/10 por simetria, mas eventos 'primeira vermelha' são disjuntos. $P(A)=\\sum_{k\\,\\text{ímpar}} P(\\text{primeira V na pos }k)$.",
+            "concepts": [
+              "addition-law",
+              "combination"
+            ],
+            "notes": [
+              "jogadores-alternados"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "P(A tira a primeira vermelha) em urna 3R+7P, alternando A,B sem reposição.",
+                "prior_knowledge": "Soma de probabilidades dos eventos disjuntos 'A ganha na rodada $k$'."
+              },
+              "core": {
+                "exposition": "A tira nas posições 1,3,5,7,9. P(vermelha na posição $k$)=3/10 por simetria, mas eventos 'primeira vermelha' são disjuntos. $P(A)=\\sum_{k\\,\\text{ímpar}} P(\\text{primeira V na pos }k)$.",
+                "worked_example": "P(prim V na pos 1)=3/10. P(pos 2)=7/10·3/9. P(pos 3)=7/10·6/9·3/8. Soma das ímpares dá $\\approx 0.583$.",
+                "problem": "Compute exatamente $P(A)$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "P(primeira vermelha na posição 3)?",
+                    "answer": "$\\frac{7}{10}\\cdot\\frac{6}{9}\\cdot\\frac{3}{8}=7/40$.",
+                    "concept": "combination"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Por que A tem vantagem?",
+                    "answer": "Joga primeiro — soma das ímpares é maior.",
+                    "concept": "addition-law"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Como mudaria se houvesse reposição?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Calcule $P(A)$ na urna 3R+7P.",
+                "rubric": "$\\approx 7/12$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "phase": 3,
+        "title": "Aniversários e Arranjos",
+        "icon": "A",
+        "summary": "Paradoxo dos aniversários, casais lado-a-lado, distribuição de cartas no bridge.",
+        "key_insight": "Complemento + inclusão-exclusão resolvem 'pelo menos um' de forma limpa.",
+        "cards": [
+          {
+            "tier": "gold",
+            "task_index": 0,
+            "text": "Verifique para $n=23$.",
+            "detail": "P(todos diferentes)$=\\frac{365\\cdot 364\\cdots(365-n+1)}{365^n}$. Quer-se o menor $n$ com isso $\\leq 1/2$.",
+            "concepts": [
+              "equiprobable-outcome",
+              "permutation"
+            ],
+            "notes": [
+              "aniversarios"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Quantas pessoas para P(coincidência)≥1/2?",
+                "prior_knowledge": "Complemento: P(todos diferentes)."
+              },
+              "core": {
+                "exposition": "P(todos diferentes)$=\\frac{365\\cdot 364\\cdots(365-n+1)}{365^n}$. Quer-se o menor $n$ com isso $\\leq 1/2$.",
+                "worked_example": "$n=22$: ≈0.524 (todos diferentes). $n=23$: ≈0.493. Logo $n=23$.",
+                "problem": "Verifique para $n=23$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Por que usar complemento?",
+                    "answer": "'Pelo menos uma coincidência' tem muitos casos; 'todos diferentes' é só um produto.",
+                    "concept": "equiprobable-outcome"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Resposta para 1/2?",
+                    "answer": "$n=23$.",
+                    "concept": "permutation"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que apenas 23 pessoas surpreende intuição?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "P(coincidência) com $n=10$?",
+                "rubric": "$1-365!/(355!\\cdot 365^{10})\\approx 0.117$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Calcule numericamente.",
+            "detail": "$|S|=8!$. $A_i$: tratar casal $i$ como bloco — $2\\cdot 7!$. Por inclusão-exclusão: $P(\\cup A_i)=\\sum (-1)^{k+1}\\binom{4}{k}2^k(8-k)!/8!$.",
+            "concepts": [
+              "permutation",
+              "inclusion-exclusion"
+            ],
+            "notes": [
+              "casais-arranjos"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "P(nenhum casal adjacente) com 4 casais em fila.",
+                "prior_knowledge": "Inclusão-exclusão sobre eventos $A_i$ = casal $i$ junto."
+              },
+              "core": {
+                "exposition": "$|S|=8!$. $A_i$: tratar casal $i$ como bloco — $2\\cdot 7!$. Por inclusão-exclusão: $P(\\cup A_i)=\\sum (-1)^{k+1}\\binom{4}{k}2^k(8-k)!/8!$.",
+                "worked_example": "$P(\\cup A_i)=4\\cdot 2\\cdot 7!/8!-\\binom{4}{2}2^2\\cdot 6!/8!+\\binom{4}{3}2^3\\cdot 5!/8!-2^4\\cdot 4!/8!$. Resposta: $1-P(\\cup A_i)$.",
+                "problem": "Calcule numericamente."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Por que $2\\cdot 7!$ em $|A_i|$?",
+                    "answer": "Bloco do casal pode ser ordenado em 2 modos, e há 7! arranjos do bloco mais 6 pessoas.",
+                    "concept": "permutation"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Sinal alternado por quê?",
+                    "answer": "Inclusão-exclusão.",
+                    "concept": "inclusion-exclusion"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Como generaliza para $n$ casais?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Resposta numérica.",
+                "rubric": "$\\approx 0.1143$."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 2,
+            "text": "Verifique (b).",
+            "detail": "Total de distribuições: $52!/(13!)^4$. (a) 4 escolhas de jogador, então distribuir restante. (b) Distribuir 4 ases (4! modos) e 48 cartas restantes em 4 mãos de 12.",
+            "concepts": [
+              "combination",
+              "multinomial-coefficient"
+            ],
+            "notes": [
+              "bridge-cartas"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Bridge: P(um jogador recebe todas as espadas) e P(cada jogador recebe um ás).",
+                "prior_knowledge": "Coeficiente multinomial $\\binom{52}{13,13,13,13}$."
+              },
+              "core": {
+                "exposition": "Total de distribuições: $52!/(13!)^4$. (a) 4 escolhas de jogador, então distribuir restante. (b) Distribuir 4 ases (4! modos) e 48 cartas restantes em 4 mãos de 12.",
+                "worked_example": "(a) $4\\cdot\\binom{39}{13,13,13}/\\binom{52}{13,13,13,13}\\approx 6.3\\cdot 10^{-12}$. (b) $4!\\cdot 48!/(12!)^4 \\div 52!/(13!)^4\\approx 0.105$.",
+                "problem": "Verifique (b)."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Quantas distribuições no bridge?",
+                    "answer": "$52!/(13!)^4$.",
+                    "concept": "multinomial-coefficient"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "P(cada jogador um ás) ≈?",
+                    "answer": "$\\approx 0.105$.",
+                    "concept": "combination"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que 4! ao distribuir os ases?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "P(um jogador específico todas as espadas).",
+                "rubric": "$\\binom{39}{13,13,13}/\\binom{52}{13,13,13,13}=39!\\cdot 13!/(52!/(13!)^3)$, dividir por 4 modos."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "phase": 4,
+        "title": "Definição de Probabilidade Condicional",
+        "icon": "*",
+        "summary": "Restringir o espaço amostral por uma informação dada.",
+        "key_insight": "$P(A\\mid B)=P(A\\cap B)/P(B)$ é apenas re-normalizar pelo evento condicionante.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Para soma $=8$, qual a probabilidade de que pelo menos um dado mostre 6?",
+            "detail": "Quando sabemos que $B$ ocorreu, o espaço amostral efetivo passa a ser $B$. Então $P(A\\mid B)=\\dfrac{P(A\\cap B)}{P(B)}$, definida quando $P(B)>0$. Em casos equiprováveis, basta contar resultados favoráveis dentro de $B$.",
+            "concepts": [
+              "conditional-probability",
+              "sample-space"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Definir e aplicar $P(A\\mid B)$.",
+                "prior_knowledge": "Probabilidade em espaços equiprováveis."
+              },
+              "core": {
+                "exposition": "Quando sabemos que $B$ ocorreu, o espaço amostral efetivo passa a ser $B$. Então $P(A\\mid B)=\\dfrac{P(A\\cap B)}{P(B)}$, definida quando $P(B)>0$. Em casos equiprováveis, basta contar resultados favoráveis dentro de $B$.",
+                "worked_example": "Dois dados, soma $=7$. Dos 6 pares com soma 7, dois contêm um 6 ($(1,6),(6,1)$). Logo $P(\\text{algum }6\\mid \\text{soma}=7)=2/6=1/3$.",
+                "problem": "Para soma $=8$, qual a probabilidade de que pelo menos um dado mostre 6?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Fórmula de $P(A\\mid B)$?",
+                    "answer": "$P(A\\cap B)/P(B)$ se $P(B)>0$.",
+                    "concept": "conditional-probability"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Em soma=4, qual $P(\\text{algum 6}\\mid \\text{soma}=4)$?",
+                    "answer": "$0$, pois nenhum par soma 4 com um 6.",
+                    "concept": "conditional-probability"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que condicionar é equivalente a restringir o espaço amostral?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Calcule $P(\\text{algum }6\\mid \\text{soma}=i)$ para $i=2,\\dots,12$.",
+                "rubric": "Acerta os 11 valores listando os pares de soma $i$."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Calcule numericamente o valor acima.",
+            "detail": "A regra do produto: $P(A_1\\cap\\cdots\\cap A_n)=P(A_1)P(A_2\\mid A_1)\\cdots P(A_n\\mid A_1\\cdots A_{n-1})$. Útil em sorteios sem reposição.",
+            "concepts": [
+              "conditional-probability",
+              "multiplication-rule"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Usar a regra do produto em retiradas sequenciais.",
+                "prior_knowledge": "Definição de probabilidade condicional."
+              },
+              "core": {
+                "exposition": "A regra do produto: $P(A_1\\cap\\cdots\\cap A_n)=P(A_1)P(A_2\\mid A_1)\\cdots P(A_n\\mid A_1\\cdots A_{n-1})$. Útil em sorteios sem reposição.",
+                "worked_example": "Urna 6B, 9P; 4 retiradas sem reposição. $P(BBPP)=\\tfrac{6}{15}\\cdot\\tfrac{5}{14}\\cdot\\tfrac{9}{13}\\cdot\\tfrac{8}{12}$.",
+                "problem": "Calcule numericamente o valor acima."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Regra do produto para 3 eventos?",
+                    "answer": "$P(A)P(B\\mid A)P(C\\mid A\\cap B)$.",
+                    "concept": "multiplication-rule"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Probabilidade da 1ª branca na urna 6B/9P?",
+                    "answer": "$6/15=2/5$.",
+                    "concept": "conditional-probability"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que sem reposição as probabilidades mudam a cada extração?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Avalie $\\tfrac{6\\cdot 5\\cdot 9\\cdot 8}{15\\cdot 14\\cdot 13\\cdot 12}$ como fração simplificada.",
+                "rubric": "Resultado $=6/91$ aproximadamente."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Calcule $P(B<A<V)$ sem condicionamento.",
+            "detail": "Quando o condicionante envolve eventos compostos, conte primeiro os resultados consistentes com a condição e depois os favoráveis.",
+            "concepts": [
+              "conditional-probability",
+              "inclusion-exclusion"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Combinar contagem com condicionamento em problemas com restrições.",
+                "prior_knowledge": "Princípio aditivo e contagem em dados."
+              },
+              "core": {
+                "exposition": "Quando o condicionante envolve eventos compostos, conte primeiro os resultados consistentes com a condição e depois os favoráveis.",
+                "worked_example": "Três dados (A,V,Az). $P(\\text{nenhum repete})=6\\cdot 5\\cdot 4/216=5/9$. Dado isso, há $3!=6$ ordenações, então $P(B<A<V\\mid \\text{distintos})=1/6$.",
+                "problem": "Calcule $P(B<A<V)$ sem condicionamento."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Quantas triplas distintas em 3 dados?",
+                    "answer": "$6\\cdot 5\\cdot 4=120$.",
+                    "concept": "permutation"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "$P(B<A<V)$ direta?",
+                    "answer": "$120/216\\cdot 1/6=5/54$.",
+                    "concept": "conditional-probability"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explique por que dividir por $3!$ funciona quando todos são distintos."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Generalize: três dados de $n$ faces, $P(B<A<V)=?$",
+                "rubric": "$\\binom{n}{3}/n^3$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "phase": 4,
+        "title": "Aplicações de Condicionamento",
+        "icon": "*",
+        "summary": "Tabelas de contingência e fórmula da multiplicação na prática.",
+        "key_insight": "Tabela conjunta + lei do total resolve a maioria dos problemas aplicados.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Dado marido$>$25k, prob. de esposa$>$25k? (use 198, 54)",
+            "detail": "Numa tabela conjunta, divida cada célula pelo total para obter $P(A\\cap B)$. Probabilidades condicionais saem dividindo a célula pelo total marginal apropriado.",
+            "concepts": [
+              "conditional-probability"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Ler tabelas de contingência como probabilidades conjuntas.",
+                "prior_knowledge": "Definição de $P(A\\mid B)$."
+              },
+              "core": {
+                "exposition": "Numa tabela conjunta, divida cada célula pelo total para obter $P(A\\cap B)$. Probabilidades condicionais saem dividindo a célula pelo total marginal apropriado.",
+                "worked_example": "500 casais; marido$<$25k = $212+36=248$. $P(M<25k)=248/500=0{,}496$.",
+                "problem": "Dado marido$>$25k, prob. de esposa$>$25k? (use 198, 54)"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Total marido$>$25k?",
+                    "answer": "$198+54=252$.",
+                    "concept": "conditional-probability"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "$P(E>25k\\mid M>25k)$?",
+                    "answer": "$54/252=3/14$.",
+                    "concept": "conditional-probability"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Como uma tabela conjunta codifica todas as probabilidades marginais e condicionais?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Calcule $P(E>25k\\mid M<25k)$.",
+                "rubric": "$36/248=9/62$."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Se 5% da faculdade faz CC, 52% mulheres, 2% mulheres em CC, calcule $P(\\text{mulher}\\mid CC)$ e $P(CC\\mid \\text{mulher})$.",
+            "detail": "Se $P(D)=0{,}36$ e $P(G\\mid D)=0{,}22$, então $P(D\\cap G)=0{,}36\\cdot 0{,}22$. Inverter o condicionamento usa $P(D\\mid G)=P(D\\cap G)/P(G)$.",
+            "concepts": [
+              "conditional-probability",
+              "multiplication-rule"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Combinar duas variáveis condicionando.",
+                "prior_knowledge": "Tabelas de contingência."
+              },
+              "core": {
+                "exposition": "Se $P(D)=0{,}36$ e $P(G\\mid D)=0{,}22$, então $P(D\\cap G)=0{,}36\\cdot 0{,}22$. Inverter o condicionamento usa $P(D\\mid G)=P(D\\cap G)/P(G)$.",
+                "worked_example": "$P(D\\cap G)=0{,}36\\cdot 0{,}22=0{,}0792$. Com $P(G)=0{,}30$: $P(D\\mid G)=0{,}0792/0{,}30=0{,}264$.",
+                "problem": "Se 5% da faculdade faz CC, 52% mulheres, 2% mulheres em CC, calcule $P(\\text{mulher}\\mid CC)$ e $P(CC\\mid \\text{mulher})$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "$P(\\text{mulher}\\mid CC)$ no exemplo?",
+                    "answer": "$0{,}02/0{,}05=0{,}4$.",
+                    "concept": "conditional-probability"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "$P(CC\\mid \\text{mulher})$?",
+                    "answer": "$0{,}02/0{,}52\\approx 0{,}0385$.",
+                    "concept": "conditional-probability"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que $P(A\\mid B)\\neq P(B\\mid A)$ em geral?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Curso de cigarro: 48% mulh., 37% homens permanecem; 62% homens. Que % participantes de festa são mulheres?",
+                "rubric": "Use lei do total: $0{,}38\\cdot 0{,}48/(0{,}38\\cdot 0{,}48+0{,}62\\cdot 0{,}37)\\approx 44{,}3\\%$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "phase": 5,
+        "title": "Lei da Probabilidade Total",
+        "icon": "*",
+        "summary": "Decompor um evento por uma partição do espaço.",
+        "key_insight": "$P(A)=\\sum_i P(A\\mid B_i)P(B_i)$ é a 'média ponderada' de cenários.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Sobrevivência: 98% sobrevivem; 15% cesárea ($C$) com 96% sobrevivência. Calcule $P(\\text{sobrev}\\mid \\bar C)$.",
+            "detail": "Se $\\{B_i\\}$ particiona $\\Omega$, então $P(A)=\\sum_i P(A\\mid B_i)P(B_i)$. Útil quando o problema descreve cenários disjuntos.",
+            "concepts": [
+              "total-probability",
+              "conditional-probability"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Calcular $P(A)$ via partição $\\{B_i\\}$.",
+                "prior_knowledge": "Regra do produto."
+              },
+              "core": {
+                "exposition": "Se $\\{B_i\\}$ particiona $\\Omega$, então $P(A)=\\sum_i P(A\\mid B_i)P(B_i)$. Útil quando o problema descreve cenários disjuntos.",
+                "worked_example": "Joe atrasa: $P(\\text{cedo})=P(\\text{cedo}\\mid C)P(C)+P(\\text{cedo}\\mid \\bar C)P(\\bar C)=0{,}3\\cdot 0{,}7+0{,}9\\cdot 0{,}3=0{,}48$.",
+                "problem": "Sobrevivência: 98% sobrevivem; 15% cesárea ($C$) com 96% sobrevivência. Calcule $P(\\text{sobrev}\\mid \\bar C)$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Lei do total para $A$ com partição $\\{B_1,B_2\\}$?",
+                    "answer": "$P(A\\mid B_1)P(B_1)+P(A\\mid B_2)P(B_2)$.",
+                    "concept": "total-probability"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "No problema da cesárea, $P(\\text{sobrev}\\mid \\bar C)=$?",
+                    "answer": "$(0{,}98-0{,}15\\cdot 0{,}96)/0{,}85\\approx 0{,}9835$.",
+                    "concept": "total-probability"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que os $B_i$ precisam ser disjuntos e cobrir $\\Omega$?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Presente no 2º andar: mãe (0,6) com 70%, pai (0,4) com 50%. $P(\\text{2º})=$?",
+                "rubric": "$0{,}6\\cdot 0{,}7+0{,}4\\cdot 0{,}5=0{,}62$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Caixa 1 (1B,1P) ou caixa 2 (2P), igualmente provável. $P(\\text{preta})=$?",
+            "detail": "Em problemas multi-etapa, defina cenários pelo que ocorre na etapa intermediária e some.",
+            "concepts": [
+              "total-probability",
+              "multiplication-rule"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Aplicar lei do total em problemas com transferência/etapas.",
+                "prior_knowledge": "Multiplicação e partições."
+              },
+              "core": {
+                "exposition": "Em problemas multi-etapa, defina cenários pelo que ocorre na etapa intermediária e some.",
+                "worked_example": "Urna I (2B,4V) → bola para urna II (1B,1V). $P(\\text{branca de II})=\\tfrac{2}{6}\\cdot\\tfrac{2}{3}+\\tfrac{4}{6}\\cdot\\tfrac{1}{3}=\\tfrac{4}{18}+\\tfrac{4}{18}=\\tfrac{4}{9}$.",
+                "problem": "Caixa 1 (1B,1P) ou caixa 2 (2P), igualmente provável. $P(\\text{preta})=$?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "$P(\\text{preta})$ no exemplo das caixas?",
+                    "answer": "$\\tfrac12\\cdot\\tfrac12+\\tfrac12\\cdot 1=3/4$.",
+                    "concept": "total-probability"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Quais cenários particionam o problema da urna transferida?",
+                    "answer": "Bola transferida ser branca ou vermelha.",
+                    "concept": "total-probability"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Como identificar a partição 'natural' em um problema?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Seguro: P(acidente)=0,05·0,2+0,15·0,5+0,30·0,3.",
+                "rubric": "$=0{,}175$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "phase": 5,
+        "title": "Independência",
+        "icon": "*",
+        "summary": "Quando uma informação não altera a probabilidade.",
+        "key_insight": "$A,B$ independentes $\\iff P(A\\cap B)=P(A)P(B)$.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Calouros (4H,6M), veteranos (6H,?M). Quantas veteranas $x$ tornam sexo e condição independentes?",
+            "detail": "$A,B$ são independentes se $P(A\\cap B)=P(A)P(B)$, equivalentemente $P(A\\mid B)=P(A)$. Estende-se a vários eventos exigindo fatoração de toda subfamília.",
+            "concepts": [
+              "independence",
+              "conditional-probability"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Reconhecer e usar independência.",
+                "prior_knowledge": "Probabilidade condicional."
+              },
+              "core": {
+                "exposition": "$A,B$ são independentes se $P(A\\cap B)=P(A)P(B)$, equivalentemente $P(A\\mid B)=P(A)$. Estende-se a vários eventos exigindo fatoração de toda subfamília.",
+                "worked_example": "Casal: cada um acerta com prob $p$ independentemente. Estratégia (a) acerta com prob $p$. Estratégia (b): acerta se concordam corretamente $p^2$ ou discordam e moeda dá certo $2p(1-p)\\cdot\\tfrac12=p(1-p)$, total $p^2+p(1-p)=p$.",
+                "problem": "Calouros (4H,6M), veteranos (6H,?M). Quantas veteranas $x$ tornam sexo e condição independentes?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Definição de independência?",
+                    "answer": "$P(A\\cap B)=P(A)P(B)$.",
+                    "concept": "independence"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Independência implica $P(A\\mid B)=?$",
+                    "answer": "$P(A)$.",
+                    "concept": "independence"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Diferença entre disjuntos e independentes?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Resolva o problema das veteranas.",
+                "rubric": "Razão H/M precisa coincidir entre calouros e veteranos: $4/6=6/x\\Rightarrow x=9$."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Calcule $P(B)$ e $P(C)$ no mesmo jogo (com reposição).",
+            "detail": "Em $n$ tentativas independentes com sucesso $p$: $P(\\text{nenhum sucesso})=(1-p)^n$. Em jogos de turnos, soma geométrica resolve quem ganha.",
+            "concepts": [
+              "independence",
+              "multiplication-rule"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Calcular probabilidades em ensaios independentes repetidos.",
+                "prior_knowledge": "Independência básica."
+              },
+              "core": {
+                "exposition": "Em $n$ tentativas independentes com sucesso $p$: $P(\\text{nenhum sucesso})=(1-p)^n$. Em jogos de turnos, soma geométrica resolve quem ganha.",
+                "worked_example": "Jogadores A,B,C com reposição (4 brancas em 12). $p=1/3$. $P(A)=p+(1-p)^3 p+\\cdots = p/(1-(1-p)^3)=(1/3)/(1-8/27)=9/19$.",
+                "problem": "Calcule $P(B)$ e $P(C)$ no mesmo jogo (com reposição)."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "$P(\\text{primeiro sucesso na jogada }k)$?",
+                    "answer": "$(1-p)^{k-1}p$.",
+                    "concept": "independence"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Soma geométrica $\\sum_{k\\ge 0}r^k$?",
+                    "answer": "$1/(1-r)$ se $|r|<1$.",
+                    "concept": "independence"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que ensaios com reposição são independentes mas sem reposição não?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "$P(B)$ e $P(C)$?",
+                "rubric": "$P(B)=(2/3)P(A)\\cdot\\,$? Calcule corretamente: $P(B)=(1-p)p/(1-(1-p)^3)=6/19$, $P(C)=4/19$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "phase": 6,
+        "title": "Fórmula de Bayes",
+        "icon": "*",
+        "summary": "Inverter o condicionamento usando lei do total.",
+        "key_insight": "$P(B_i\\mid A)=\\dfrac{P(A\\mid B_i)P(B_i)}{\\sum_j P(A\\mid B_j)P(B_j)}$.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Gravidez ectópica: 2× mais provável em fumantes; 32% são fumantes. % de ectópicas que são fumantes?",
+            "detail": "Bayes: $P(B_i\\mid A)=\\dfrac{P(A\\mid B_i)P(B_i)}{\\sum_j P(A\\mid B_j)P(B_j)}$. Numerador é o cenário $i$; denominador é a lei do total.",
+            "concepts": [
+              "bayes-rule",
+              "total-probability"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Aplicar Bayes em problemas de diagnóstico.",
+                "prior_knowledge": "Lei da probabilidade total."
+              },
+              "core": {
+                "exposition": "Bayes: $P(B_i\\mid A)=\\dfrac{P(A\\mid B_i)P(B_i)}{\\sum_j P(A\\mid B_j)P(B_j)}$. Numerador é o cenário $i$; denominador é a lei do total.",
+                "worked_example": "Daltonismo: $P(H)=2/3$, $P(M)=1/3$, $P(D\\mid H)=0{,}05$, $P(D\\mid M)=0{,}0025$. $P(H\\mid D)=\\frac{0{,}05\\cdot 2/3}{0{,}05\\cdot 2/3+0{,}0025\\cdot 1/3}=\\frac{0{,}0333}{0{,}0341}\\approx 0{,}9756$.",
+                "problem": "Gravidez ectópica: 2× mais provável em fumantes; 32% são fumantes. % de ectópicas que são fumantes?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Fórmula de Bayes?",
+                    "answer": "$P(B_i\\mid A)=P(A\\mid B_i)P(B_i)/P(A)$.",
+                    "concept": "bayes-rule"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "% fumantes entre ectópicas?",
+                    "answer": "$\\tfrac{2\\cdot 0{,}32}{2\\cdot 0{,}32+0{,}68}=\\tfrac{0{,}64}{1{,}32}\\approx 48{,}5\\%$.",
+                    "concept": "bayes-rule"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que Bayes é apenas reorganização da regra do produto?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "PSA: prior 0,7; $P(+\\mid C)=0{,}268$, $P(+\\mid \\bar C)=0{,}135$. $P(C\\mid +)=$?",
+                "rubric": "$\\frac{0{,}268\\cdot 0{,}7}{0{,}268\\cdot 0{,}7+0{,}135\\cdot 0{,}3}\\approx 0{,}822$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "10 moedas, $i$-ésima dá cara com $p=i/10$. Selecionada uma e deu cara: $P(\\text{quinta}\\mid \\text{cara})=$?",
+            "detail": "Após cada evidência, o posterior vira o novo prior. Para evidências condicionalmente independentes dado a hipótese, multiplica-se as verossimilhanças.",
+            "concepts": [
+              "bayes-rule",
+              "independence"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Atualização sequencial bayesiana.",
+                "prior_knowledge": "Bayes e independência condicional."
+              },
+              "core": {
+                "exposition": "Após cada evidência, o posterior vira o novo prior. Para evidências condicionalmente independentes dado a hipótese, multiplica-se as verossimilhanças.",
+                "worked_example": "Moedas: honesta $H$ ($p=1/2$) ou duas-caras $D$ ($p=1$), prior $1/2$. Após 1 cara: $P(H\\mid c)=\\frac{1/2\\cdot 1/2}{1/2\\cdot 1/2+1/2\\cdot 1}=1/3$. Após 2 caras: $1/5$. Após coroa: certeza $H$, $P(H)=1$.",
+                "problem": "10 moedas, $i$-ésima dá cara com $p=i/10$. Selecionada uma e deu cara: $P(\\text{quinta}\\mid \\text{cara})=$?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Como atualizar prior após nova evidência?",
+                    "answer": "Posterior anterior vira prior; multiplique por nova verossimilhança e renormalize.",
+                    "concept": "bayes-rule"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Numerador e denominador no problema das 10 moedas?",
+                    "answer": "Num: $\\tfrac{1}{10}\\cdot\\tfrac{5}{10}=1/20$; Den: $\\sum_{i=1}^{10}\\tfrac{1}{10}\\cdot\\tfrac{i}{10}=55/100$.",
+                    "concept": "bayes-rule"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que coroa elimina completamente a moeda de duas caras?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Resposta numérica do problema das 10 moedas.",
+                "rubric": "$\\tfrac{5/100}{55/100}=5/55=1/11$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "3 moedas: justa, duas-caras, viciada (75% caras). Sai cara. $P(\\text{duas-caras}\\mid \\text{cara})=$?",
+            "detail": "Identifique a partição (causa), calcule $P(\\text{evidência}\\mid \\text{causa})$ via lei do total interna se necessário, e aplique Bayes.",
+            "concepts": [
+              "bayes-rule",
+              "total-probability"
+            ],
+            "notes": [],
+            "phases": {
+              "prime": {
+                "goal": "Bayes em sistemas multi-etapa.",
+                "prior_knowledge": "Lei do total composta."
+              },
+              "core": {
+                "exposition": "Identifique a partição (causa), calcule $P(\\text{evidência}\\mid \\text{causa})$ via lei do total interna se necessário, e aplique Bayes.",
+                "worked_example": "Cozinheiros A,B,C: $P(F\\mid A)=0{,}02$, etc.; $P(A)=0{,}5$, $P(B)=0{,}3$, $P(C)=0{,}2$. $P(F)=0{,}01+0{,}009+0{,}010=0{,}029$. $P(A\\mid F)=0{,}01/0{,}029\\approx 0{,}345$.",
+                "problem": "3 moedas: justa, duas-caras, viciada (75% caras). Sai cara. $P(\\text{duas-caras}\\mid \\text{cara})=$?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "$P(\\text{cara})$ na seleção uniforme das 3 moedas?",
+                    "answer": "$\\tfrac{1}{3}(0{,}5+1+0{,}75)=0{,}75$.",
+                    "concept": "total-probability"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "$P(\\text{duas-caras}\\mid \\text{cara})$?",
+                    "answer": "$\\tfrac{1/3}{0{,}75}=4/9$.",
+                    "concept": "bayes-rule"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que prior uniforme não implica posterior uniforme?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Hemofilia: prior 1/2 portadora; 3 filhos saudáveis. $P(\\text{portadora}\\mid 3\\text{ saud.})=$?",
+                "rubric": "$\\frac{(1/2)(1/8)}{(1/2)(1/8)+(1/2)(1)}=1/9$."
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "concepts": [
+      {
+        "id": "sample-space",
+        "label": "Espaço Amostral"
+      },
+      {
+        "id": "elementary-event",
+        "label": "Evento Elementar"
+      },
+      {
+        "id": "event-algebra",
+        "label": "Álgebra de Eventos"
+      },
+      {
+        "id": "mutually-exclusive",
+        "label": "Eventos Disjuntos"
+      },
+      {
+        "id": "addition-law",
+        "label": "Lei Aditiva"
+      },
+      {
+        "id": "inclusion-exclusion",
+        "label": "Inclusão–Exclusão"
+      },
+      {
+        "id": "equiprobable-outcome",
+        "label": "Resultados Equiprováveis"
+      },
+      {
+        "id": "combination",
+        "label": "Combinação"
+      },
+      {
+        "id": "permutation",
+        "label": "Permutação"
+      },
+      {
+        "id": "multinomial-coefficient",
+        "label": "Coeficiente Multinomial"
+      },
+      {
+        "id": "probability",
+        "label": "Probabilidade"
+      },
+      {
+        "id": "conditional-probability",
+        "label": "Probabilidade Condicional"
+      },
+      {
+        "id": "independence",
+        "label": "Independência"
+      },
+      {
+        "id": "multiplication-rule",
+        "label": "Regra do Produto"
+      },
+      {
+        "id": "total-probability",
+        "label": "Lei da Probabilidade Total"
+      },
+      {
+        "id": "bayes-rule",
+        "label": "Fórmula de Bayes"
+      }
+    ],
+    "prereqs": [
+      [
+        "elementary-event",
+        "sample-space"
+      ],
+      [
+        "event-algebra",
+        "sample-space"
+      ],
+      [
+        "addition-law",
+        "event-algebra"
+      ],
+      [
+        "mutually-exclusive",
+        "event-algebra"
+      ],
+      [
+        "inclusion-exclusion",
+        "addition-law"
+      ],
+      [
+        "equiprobable-outcome",
+        "sample-space"
+      ],
+      [
+        "combination",
+        "permutation"
+      ],
+      [
+        "multinomial-coefficient",
+        "combination"
+      ],
+      [
+        "probability",
+        "sample-space"
+      ],
+      [
+        "conditional-probability",
+        "probability"
+      ],
+      [
+        "conditional-probability",
+        "sample-space"
+      ],
+      [
+        "multiplication-rule",
+        "conditional-probability"
+      ],
+      [
+        "independence",
+        "conditional-probability"
+      ],
+      [
+        "total-probability",
+        "conditional-probability"
+      ],
+      [
+        "total-probability",
+        "mutually-exclusive"
+      ],
+      [
+        "bayes-rule",
+        "total-probability"
+      ],
+      [
+        "bayes-rule",
+        "conditional-probability"
+      ]
+    ]
   }
 ]

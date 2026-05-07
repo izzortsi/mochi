@@ -4714,6 +4714,70 @@
           "timestamp": "2026-05-07T01:11:34.313Z",
           "images": [],
           "pdfs": []
+        },
+        {
+          "role": "user",
+          "content": "$\\displaylines{\\dot{u}=-2x^{-2}\\dot{x}\\\\ }$",
+          "tool_name": null,
+          "timestamp": "2026-05-07T01:20:14.534Z",
+          "images": [],
+          "pdfs": []
+        },
+        {
+          "role": "assistant",
+          "content": "Quase! Cuidado com a regra da potência: $\\frac{d}{dt}(x^{-1}) = -1 \\cdot x^{-2} \\cdot \\dot x$, não $-2$.\n\nO expoente $-1$ desce como coeficiente, e o novo expoente é $-1-1 = -2$. Então:\n\n$$\\dot u = -x^{-2}\\,\\dot x$$\n\nAgora o passo seguinte: substitua $\\dot x = kx - x^2$ aqui dentro e veja o que sai. Lembra que você quer chegar em $\\dot u = 1 - ku$, então em algum momento vai precisar trocar $x^{-1}$ por $u$. Tenta.",
+          "tool_name": null,
+          "timestamp": "2026-05-07T01:20:25.466Z",
+          "images": [],
+          "pdfs": []
+        },
+        {
+          "role": "user",
+          "content": "qual a integral de du/(1-ku) mmesmo?",
+          "tool_name": null,
+          "timestamp": "2026-05-07T03:49:34.315Z",
+          "images": [],
+          "pdfs": []
+        },
+        {
+          "role": "assistant",
+          "content": "Substituição $w = 1 - ku$, então $dw = -k\\,du$, ou seja $du = -\\tfrac{1}{k}dw$:\n\n$$\\int \\frac{du}{1-ku} = -\\frac{1}{k}\\int \\frac{dw}{w} = -\\frac{1}{k}\\ln|1-ku| + C$$",
+          "tool_name": null,
+          "timestamp": "2026-05-07T03:49:39.593Z",
+          "images": [],
+          "pdfs": []
+        },
+        {
+          "role": "user",
+          "content": "u = (exp(-(kt+kC)) -1)/k?",
+          "tool_name": null,
+          "timestamp": "2026-05-07T03:55:02.819Z",
+          "images": [],
+          "pdfs": []
+        },
+        {
+          "role": "assistant",
+          "content": "Vamos conferir o sinal com calma. Você tinha (presumo):\n\n$$\\int \\frac{du}{1-ku} = \\int dt \\implies -\\frac{1}{k}\\ln|1-ku| = t + C$$\n\nMultiplicando por $-k$:\n\n$$\\ln|1-ku| = -kt - kC$$\n\nExponenciando:\n\n$$1 - ku = A e^{-kt}, \\qquad A = \\pm e^{-kC}$$\n\nIsolando $u$:\n\n$$u(t) = \\frac{1 - A e^{-kt}}{k}$$\n\nVocê tinha $u = \\frac{e^{-(kt+kC)} - 1}{k}$ — o sinal do numerador tá trocado. Note que $1 - ku = Ae^{-kt}$ dá $ku = 1 - Ae^{-kt}$, então o $1$ vem **primeiro** e o exponencial vem subtraído (com a constante $A$ absorvendo o sinal).\n\nAgora o último passo: $x = 1/u$, então\n\n$$x(t) = \\frac{k}{1 - A e^{-kt}}$$\n\nQuer fechar amarrando $A$ a uma condição inicial $x(0) = x_0$?",
+          "tool_name": null,
+          "timestamp": "2026-05-07T03:55:12.769Z",
+          "images": [],
+          "pdfs": []
+        },
+        {
+          "role": "user",
+          "content": "Sim",
+          "tool_name": null,
+          "timestamp": "2026-05-07T03:57:14.114Z",
+          "images": [],
+          "pdfs": []
+        },
+        {
+          "role": "assistant",
+          "content": "Em $t=0$:\n\n$$x(0) = \\frac{k}{1 - A} = x_0 \\implies 1 - A = \\frac{k}{x_0} \\implies A = 1 - \\frac{k}{x_0} = \\frac{x_0 - k}{x_0}$$\n\nSubstituindo:\n\n$$x(t) = \\frac{k}{1 - \\dfrac{x_0-k}{x_0}e^{-kt}} = \\frac{k x_0}{x_0 - (x_0-k)e^{-kt}}$$\n\n**Sanity check rápido:**\n- $t=0$: denominador $= x_0 - (x_0-k) = k$, então $x(0) = kx_0/k = x_0$. ✓\n- $t \\to \\infty$ (com $k>0$): $e^{-kt}\\to 0$, então $x(t) \\to k$. Isso bate com a análise qualitativa: $\\dot x = x(k-x)$ tem equilíbrios em $0$ e $k$, e $k$ é estável quando $k>0$. ✓\n- Equilíbrios: $x_0 = 0$ dá $A$ indefinido (singular, ok — $x=0$ é equilíbrio, não passa pela substituição $u=1/x$); $x_0 = k$ dá $A=0$ e $x(t) \\equiv k$. ✓\n\nFechado. Quer atacar a Q2 (linearidade) ou pular pra Q4 (bifurcação, que é o tema do dia)?",
+          "tool_name": null,
+          "timestamp": "2026-05-07T03:57:36.574Z",
+          "images": [],
+          "pdfs": []
         }
       ]
     }

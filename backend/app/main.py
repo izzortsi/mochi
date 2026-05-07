@@ -1,6 +1,6 @@
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import progress, courses, import_, ws, pet, notes, llm, srs, memory, chat_images, chat_pdfs, artifacts
+from app.routers import progress, courses, import_, ws, pet, notes, llm, srs, memory, chat_images, chat_pdfs, artifacts, oauth
 from app.seed import seed_data_dir, seed_oauth_tokens
 
 # Sync git-tracked data files into the runtime data dir before any router
@@ -32,6 +32,7 @@ app.include_router(memory.router)
 app.include_router(chat_images.router)
 app.include_router(chat_pdfs.router)
 app.include_router(artifacts.router)
+app.include_router(oauth.router)
 
 
 @app.websocket("/ws")

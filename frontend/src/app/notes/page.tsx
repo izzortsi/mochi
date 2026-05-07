@@ -83,7 +83,7 @@ export default function NotesPage() {
   if (error && !graphData) return <div className="opacity-50">{error}</div>;
 
   return (
-    <div className="ml-[-6rem] mr-[calc(50%-50vw+11.5rem)]">
+    <div className="md:ml-[-6rem] md:mr-[calc(50%-50vw+11.5rem)]">
       <div className="mx-auto max-w-3xl text-center">
         <h1 className="font-display text-3xl mb-2">Knowledge Base</h1>
         <p className="text-sm opacity-60 mb-4">Atomic notes extracted from your courses. Click a node to read.</p>

@@ -1,17 +1,16 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { X, Check } from "lucide-react";
-
-/* MathLive-backed editor used as a transient popover from the chat
- * input. The user authors a math snippet here; on commit the LaTeX
- * source is handed back to the textarea wrapped in $...$.
- *
- * MathLive is a web component that calls customElements.define at
- * module load — that requires a DOM, so we dynamic-import it inside
- * useEffect to avoid crashing Next.js prerender. The math-field
- * itself is mounted only after that import resolves.
- */
+// Static side-effect import. MathLive registers <math-field> via
+// customElements.define on module load, which requires a DOM. This
+// file is only ever reachable through `next/dynamic` with ssr:false
+// (see TutorPane), so this side effect never runs on the server.
+// Importing statically (vs. an in-effect dynamic import) lets Next
+// fold mathlive into a single, stably-named chunk — without that, HMR
+// rebuilds shifted chunk hashes around it and the browser would 404
+// on stale chunk URLs.
+import "mathlive";
 
 interface Props {
   initial?: string;
@@ -39,26 +38,17 @@ declare module "react" {
 
 export function MathInputPopover({ initial = "", onCommit, onCancel }: Props) {
   const fieldRef = useRef<MathfieldElement | null>(null);
-  const [ready, setReady] = useState(false);
 
+  // The math-field element is ready as soon as it mounts — mathlive's
+  // side effects ran at module load above. Push the initial LaTeX in
+  // and focus on next tick so the custom element has finished its own
+  // initial render.
   useEffect(() => {
-    let alive = true;
-    // Dynamic import — the custom element registration touches
-    // window/customElements which don't exist during SSR.
-    import("mathlive").then(() => {
-      if (alive) setReady(true);
-    });
-    return () => { alive = false; };
-  }, []);
-
-  // Once the field exists, push the initial LaTeX in and focus.
-  useEffect(() => {
-    if (!ready) return;
     const el = fieldRef.current;
     if (!el) return;
     if (initial) el.value = initial;
     setTimeout(() => el.focus(), 0);
-  }, [ready, initial]);
+  }, [initial]);
 
   const commit = () => {
     const el = fieldRef.current;
@@ -115,26 +105,20 @@ export function MathInputPopover({ initial = "", onCommit, onCancel }: Props) {
           </span>
         </div>
         <div className="p-3">
-          {ready ? (
-            <math-field
-              ref={fieldRef}
-              style={{
-                width: "100%",
-                fontSize: "20px",
-                background: "#050505",
-                color: "#fafafa",
-                border: "1px solid #1f1f1f",
-                borderRadius: "4px",
-                padding: "8px",
-              }}
-            >
-              {initial}
-            </math-field>
-          ) : (
-            <div className="text-[10px] uppercase tracking-wider font-mono opacity-50 py-4 text-center">
-              loading…
-            </div>
-          )}
+          <math-field
+            ref={fieldRef}
+            style={{
+              width: "100%",
+              fontSize: "20px",
+              background: "#050505",
+              color: "#fafafa",
+              border: "1px solid #1f1f1f",
+              borderRadius: "4px",
+              padding: "8px",
+            }}
+          >
+            {initial}
+          </math-field>
         </div>
       </div>
     </div>,

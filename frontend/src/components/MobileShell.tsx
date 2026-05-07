@@ -1,11 +1,12 @@
 "use client";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { Menu } from "lucide-react";
+import { Menu, Settings as SettingsIcon } from "lucide-react";
 import { useState } from "react";
 import { CoursesIcon, ReviewIcon, MemoryIcon, ConceptsIcon, NotesIcon, ArtifactsIcon } from "./Icons";
 import { ShellModeToggle } from "./ShellModeToggle";
 import { MobileTutor } from "./MobileTutor";
+import { Settings } from "./Settings";
 
 /* Mobile chrome — single-row top bar with a hamburger menu. No Tutor
  * surface yet (next iteration: bottom-sheet or /chat fullscreen). No
@@ -15,6 +16,7 @@ import { MobileTutor } from "./MobileTutor";
  */
 export function MobileShell({ children }: { children: ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   return (
     <>
@@ -29,6 +31,13 @@ export function MobileShell({ children }: { children: ReactNode }) {
           </Link>
           <div className="ml-auto flex items-center gap-1">
             <ShellModeToggle />
+            <button
+              onClick={() => setShowSettings(true)}
+              aria-label="Settings"
+              className="p-1 rounded hover:bg-[#1a1a1a]"
+            >
+              <SettingsIcon className="w-5 h-5 opacity-70" />
+            </button>
             <button
               onClick={() => setMenuOpen((v) => !v)}
               aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -71,7 +80,11 @@ export function MobileShell({ children }: { children: ReactNode }) {
         )}
       </header>
       <main
-        className="px-4 py-4"
+        // overflow-x-hidden is a belt-and-suspenders clamp so a stray
+        // wide element (a desktop-bleed div, an unwrapped <pre>, an
+        // overflowing iframe artifact) can't blow out the viewport
+        // and force the browser to scale the whole page down.
+        className="px-4 py-4 overflow-x-hidden"
         // MobileTutor publishes --mochi-sheet-h while the sheet is open so
         // the bottom of the page is reachable by scrolling cards up past
         // the sheet. Defaults to 0 when the sheet is closed.
@@ -80,6 +93,7 @@ export function MobileShell({ children }: { children: ReactNode }) {
         {children}
       </main>
       <MobileTutor />
+      {showSettings && <Settings onClose={() => setShowSettings(false)} />}
     </>
   );
 }

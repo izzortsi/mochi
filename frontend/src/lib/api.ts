@@ -200,6 +200,20 @@ export const api = {
     }
     return camelizeKeys<{ name: string; url: string; label: string }>(await res.json());
   },
+  refreshOauth: () =>
+    postJson<{ ok: boolean; valid: boolean; path: string }>(
+      "/api/oauth/refresh",
+      {},
+    ),
+  uploadOauthTokens: async (file: File) => {
+    const fd = new FormData();
+    fd.append("file", file);
+    const res = await fetch("/api/oauth/upload", { method: "POST", body: fd });
+    if (!res.ok) throw new Error((await res.text()).slice(0, 300));
+    return camelizeKeys<{ ok: boolean; valid: boolean; path: string }>(
+      await res.json(),
+    );
+  },
   petPet: () =>
     fetch("/api/pet/pet", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" })
       .then(async (r) => {

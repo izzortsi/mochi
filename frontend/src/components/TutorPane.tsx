@@ -10,8 +10,18 @@ import { segmentAssistantContent } from "@/lib/artifacts";
 import { MathText } from "./MathText";
 import { MarkdownContent } from "./MarkdownContent";
 import { ArtifactBlock } from "./ArtifactBlock";
-import { MathInputPopover } from "./MathInputPopover";
+import dynamic from "next/dynamic";
 import { ThreadPicker } from "./ThreadPicker";
+
+// Client-only because MathInputPopover statically imports `mathlive`,
+// which calls customElements.define at module load — that crashes
+// during SSR. next/dynamic with ssr:false also pins a stable chunk
+// boundary so HMR doesn't shuffle the chunk hash out from under the
+// browser (the source of the recurring ChunkLoadError on this file).
+const MathInputPopover = dynamic(
+  () => import("./MathInputPopover").then((m) => m.MathInputPopover),
+  { ssr: false },
+);
 
 /* Presentational chat pane — header (title + memory link + status dot),
  * scrollable message list, input row. No state of its own; the desktop

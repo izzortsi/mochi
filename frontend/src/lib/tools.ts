@@ -14,6 +14,13 @@ export const appendGeneratedTaskSchema = z.object({
   text: z.string(),
   detail: z.string(),
 });
+export const rewardPetSchema = z.object({
+  kind: z.enum(["correct", "partial", "insight"]),
+  // Short note explaining what the user just did right. Stored only in
+  // the tool result for audit / debug; the pet stats themselves are
+  // updated by the backend.
+  note: z.string().optional().default(""),
+});
 export const appendChatSchema = z.object({
   courseId: z.number(),
   // The engine injects this so the LLM doesn't need to know about
@@ -94,6 +101,7 @@ export type ToolName =
   | "query-concept-cards" | "concept-mastery" | "next-up"
   | "fetch-card" | "mark-task-complete" | "grade-attempt"
   | "append-generated-task" | "append-chat" | "get-chat" | "get-progress"
+  | "reward-pet"
   | "record-tutor-note" | "get-tutor-notes"
   | "add-note" | "list-notes" | "fetch-note" | "update-note" | "delete-note";
 
@@ -117,6 +125,7 @@ export const toolSchemas: Record<ToolName, z.ZodTypeAny> = {
   "mark-task-complete": markTaskCompleteSchema,
   "grade-attempt": gradeAttemptSchema,
   "append-generated-task": appendGeneratedTaskSchema,
+  "reward-pet": rewardPetSchema,
   "append-chat": appendChatSchema,
   "get-chat": getChatSchema,
   "get-progress": getProgressSchema,
