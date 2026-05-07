@@ -40,8 +40,8 @@ export function Settings({ onClose }: Props) {
             onChange={e => onProviderChange(e.target.value as LlmProvider)}
             className="mt-1 w-full bg-[#000000] border border-[#2a2a2a] rounded px-3 py-2"
           >
-            <option value="zai">z.ai (API key)</option>
             <option value="anthropic-oauth">Anthropic (Claude Pro/Max OAuth)</option>
+            <option value="zai">z.ai (API key)</option>
           </select>
         </label>
         {config.provider === "zai" && (

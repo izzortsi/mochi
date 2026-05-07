@@ -112,6 +112,7 @@ export const api = {
           "tool-name": m.toolName,
           timestamp: m.timestamp,
           images: m.images ?? [],
+          pdfs: m.pdfs ?? [],
         },
       ),
     createChannel: (courseId: number, name?: string) =>
@@ -187,6 +188,17 @@ export const api = {
       throw new Error(text.slice(0, 200));
     }
     return camelizeKeys<{ name: string; url: string }>(await res.json());
+  },
+  uploadChatPdf: async (file: File): Promise<{ name: string; url: string; label: string }> => {
+    const fd = new FormData();
+    fd.append("file", file);
+    fd.append("label", file.name);
+    const res = await fetch("/api/chat-pdf", { method: "POST", body: fd });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text.slice(0, 200));
+    }
+    return camelizeKeys<{ name: string; url: string; label: string }>(await res.json());
   },
   petPet: () =>
     fetch("/api/pet/pet", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" })

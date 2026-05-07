@@ -119,6 +119,10 @@ class ChatMessage(BaseModel):
     # Stored on the message, not in `content`, so chat.json stays small
     # and replay reattaches images from disk into the LLM context.
     images: list[str] = []
+    # Same idea for PDFs — Anthropic-only, forwarded as `document`
+    # content blocks. Each entry is a {url, label} pair so the UI can
+    # show the original filename instead of the uuid on disk.
+    pdfs: list[dict] = []
 
 
 class ChatChannel(BaseModel):
