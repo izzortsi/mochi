@@ -21266,5 +21266,1206 @@
         "conditional-probability"
       ]
     ]
+  },
+  {
+    "id": 12,
+    "title": "Fundamentos da Matemática - P1",
+    "slug": "fundamentos-matematica-p1",
+    "phases": [
+      {
+        "num": 1,
+        "title": "Lógica e Demonstração"
+      },
+      {
+        "num": 2,
+        "title": "Conjuntos e Funções"
+      },
+      {
+        "num": 3,
+        "title": "Relações e Indução"
+      }
+    ],
+    "days": [
+      {
+        "id": 1,
+        "phase": 1,
+        "title": "Proposições e Conectivos",
+        "icon": "*",
+        "summary": "Identificar proposições, calcular valores-verdade e usar tabelas-verdade.",
+        "key_insight": "Uma proposição é uma sentença declarativa que admite exatamente um valor: V ou F.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Classifique como proposição (V/F) ou não-proposição: $3+4 \\neq 2+6$.",
+            "detail": "Uma proposição é sentença com valor V ou F bem definido. Expressões como $5\\cdot 2+10$ não são proposições (não afirmam nada). A negação inverte o valor de verdade.",
+            "concepts": [
+              "proposicao",
+              "conectivo-logico"
+            ],
+            "notes": [
+              "proposicao",
+              "conectivo-logico"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Reconhecer proposições e calcular suas negações.",
+                "prior_knowledge": "Sentenças declarativas em matemática."
+              },
+              "core": {
+                "exposition": "Uma proposição é sentença com valor V ou F bem definido. Expressões como $5\\cdot 2+10$ não são proposições (não afirmam nada). A negação inverte o valor de verdade.",
+                "worked_example": "Ex 1b: $5\\cdot 2 - 9 = 1$ é proposição V. Ex 1a: $5\\cdot 2 + 10$ não é proposição (é expressão).",
+                "problem": "Classifique como proposição (V/F) ou não-proposição: $3+4 \\neq 2+6$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "O que distingue uma proposição de uma expressão?",
+                    "answer": "Proposição afirma algo com valor V ou F; expressão apenas denota um objeto.",
+                    "concept": "proposicao"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Qual a negação de $\\sqrt{2}<1$?",
+                    "answer": "$\\sqrt{2}\\geq 1$, que é verdadeira.",
+                    "concept": "proposicao"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que $x^2-1=0$ sem quantificador não é proposição?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Negue $(-3)^5 \\geq (-3)^3$ e diga o valor de verdade da negação.",
+                "rubric": "Negação: $(-3)^5<(-3)^3$; verdadeira pois $-243<-27$."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Calcule $p\\to(q\\lor r)$ e $\\neg p \\leftrightarrow r$ com $p,q$ V e $r$ F.",
+            "detail": "$p\\to q$ é F somente quando $p$ é V e $q$ é F. $p\\leftrightarrow q$ é V quando $p$ e $q$ têm o mesmo valor. Negação de $p\\land q$ é $\\neg p \\lor \\neg q$ (De Morgan).",
+            "concepts": [
+              "conectivo-logico",
+              "tabela-verdade",
+              "condicional"
+            ],
+            "notes": [
+              "tabela-verdade",
+              "condicional"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Calcular valores de proposições compostas usando tabelas-verdade.",
+                "prior_knowledge": "Conectivos $\\land,\\lor,\\to,\\leftrightarrow$."
+              },
+              "core": {
+                "exposition": "$p\\to q$ é F somente quando $p$ é V e $q$ é F. $p\\leftrightarrow q$ é V quando $p$ e $q$ têm o mesmo valor. Negação de $p\\land q$ é $\\neg p \\lor \\neg q$ (De Morgan).",
+                "worked_example": "Ex 4: $p,q$ V e $r$ F. $p\\to r$: V→F = F. $p\\leftrightarrow q$: V↔V = V. $r\\to q$: F→V = V (vacuamente).",
+                "problem": "Calcule $p\\to(q\\lor r)$ e $\\neg p \\leftrightarrow r$ com $p,q$ V e $r$ F."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Quando $p\\to q$ é falsa?",
+                    "answer": "Apenas quando $p$ é V e $q$ é F.",
+                    "concept": "condicional"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Enuncie De Morgan para $\\neg(p\\lor q)$.",
+                    "answer": "$\\neg(p\\lor q) \\iff \\neg p \\land \\neg q$.",
+                    "concept": "conectivo-logico"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que F→qualquer-coisa é V? Justifique semanticamente."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Em Ex 5, deduza $p,q,r,s$ a partir das duas condições.",
+                "rubric": "$p\\to(r\\lor s)$ F implica $p$ V e $r,s$ F; $(q\\land\\neg s)\\leftrightarrow p$ V com $p$ V força $q$ V."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Negue e classifique: $\\forall a,b\\in\\mathbb{R}: a\\neq 0 \\to \\exists x: ax=b$.",
+            "detail": "Negação: $\\neg(\\forall x\\, P(x)) \\equiv \\exists x\\, \\neg P(x)$ e $\\neg(\\exists x\\, P(x))\\equiv \\forall x\\, \\neg P(x)$. Para implicações: $\\neg(P\\to Q)\\equiv P\\land \\neg Q$.",
+            "concepts": [
+              "quantificador",
+              "proposicao"
+            ],
+            "notes": [
+              "quantificador"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Usar e negar quantificadores $\\forall, \\exists$.",
+                "prior_knowledge": "Predicados e variáveis livres."
+              },
+              "core": {
+                "exposition": "Negação: $\\neg(\\forall x\\, P(x)) \\equiv \\exists x\\, \\neg P(x)$ e $\\neg(\\exists x\\, P(x))\\equiv \\forall x\\, \\neg P(x)$. Para implicações: $\\neg(P\\to Q)\\equiv P\\land \\neg Q$.",
+                "worked_example": "Ex 8g: $\\forall x,y\\in\\mathbb{R}: (x>y)\\to(x^2>y^2)$. Negação: $\\exists x,y: x>y \\land x^2\\leq y^2$. Tomando $x=1,y=-2$: V. Logo original é F.",
+                "problem": "Negue e classifique: $\\forall a,b\\in\\mathbb{R}: a\\neq 0 \\to \\exists x: ax=b$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Negue 'todo retângulo é quadrado'.",
+                    "answer": "Existe um retângulo que não é quadrado (V).",
+                    "concept": "quantificador"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Negue $\\forall n\\in\\mathbb{N}: 3\\mid n(n+1)(n+2)$.",
+                    "answer": "$\\exists n: 3\\nmid n(n+1)(n+2)$; falsa (original é V).",
+                    "concept": "quantificador"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Explique por que a ordem de $\\forall\\exists$ vs $\\exists\\forall$ muda o significado."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Quantifique $x^2-2x+1=0$ para virar V e negue.",
+                "rubric": "$\\exists x\\in\\mathbb{R}: x^2-2x+1=0$ (V, $x=1$); negação: $\\forall x: x^2-2x+1\\neq 0$ (F)."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "phase": 1,
+        "title": "Métodos de Demonstração",
+        "icon": "*",
+        "summary": "Praticar demonstração direta, por contraposição e por absurdo.",
+        "key_insight": "$P\\to Q$, $\\neg Q\\to\\neg P$ e $P\\land\\neg Q\\to\\bot$ são logicamente equivalentes.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Prove: se $n\\cdot m$ é ímpar, então $n$ e $m$ são ímpares.",
+            "detail": "Direta: assuma $P$, derive $Q$. Contraposição: prove $\\neg Q\\to\\neg P$. Absurdo: assuma $P\\land\\neg Q$ e derive contradição.",
+            "concepts": [
+              "proof-by-contradiction",
+              "demonstracao-direta",
+              "contraposicao"
+            ],
+            "notes": [
+              "metodos-demonstracao"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Escolher o método adequado para uma implicação.",
+                "prior_knowledge": "Paridade e divisibilidade em $\\mathbb{Z}$."
+              },
+              "core": {
+                "exposition": "Direta: assuma $P$, derive $Q$. Contraposição: prove $\\neg Q\\to\\neg P$. Absurdo: assuma $P\\land\\neg Q$ e derive contradição.",
+                "worked_example": "Ex 9b: 'se $n^2$ é ímpar, $n$ é ímpar'. Contraposição: se $n$ é par, $n=2k$, $n^2=4k^2$ par.",
+                "problem": "Prove: se $n\\cdot m$ é ímpar, então $n$ e $m$ são ímpares."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Qual a contraposição de $P\\to Q$?",
+                    "answer": "$\\neg Q \\to \\neg P$.",
+                    "concept": "contraposicao"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Como provar 'se $4\\mid n$ então $n$ é par' diretamente?",
+                    "answer": "$n=4k=2(2k)$, logo par.",
+                    "concept": "demonstracao-direta"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Quando contraposição é estritamente melhor que prova direta?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove por contraposição: se $3\\mid n^2$, então $3\\mid n$.",
+                "rubric": "Assumir $3\\nmid n$ ($n=3k\\pm 1$), mostrar $n^2\\equiv 1\\pmod 3$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Prove que existem infinitos primos (Euclides).",
+            "detail": "Para $\\sqrt{2}\\notin\\mathbb{Q}$: suponha $\\sqrt{2}=p/q$ irredutível. Então $p^2=2q^2$, $p$ par, $p=2k$, daí $q^2=2k^2$ e $q$ par. Contradiz irredutibilidade.",
+            "concepts": [
+              "proof-by-contradiction",
+              "rational-numbers"
+            ],
+            "notes": [
+              "irracionalidade-sqrt2"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Provar irracionalidade por absurdo.",
+                "prior_knowledge": "Fração irredutível, paridade."
+              },
+              "core": {
+                "exposition": "Para $\\sqrt{2}\\notin\\mathbb{Q}$: suponha $\\sqrt{2}=p/q$ irredutível. Então $p^2=2q^2$, $p$ par, $p=2k$, daí $q^2=2k^2$ e $q$ par. Contradiz irredutibilidade.",
+                "worked_example": "Mesma ideia para Ex 9q: $\\sqrt[k]{n}$ racional irredutível $a/b$ ⇒ $a^k=nb^k$; primo $p\\mid b$ ⇒ $p\\mid a$, contradição. Logo $b=1$.",
+                "problem": "Prove que existem infinitos primos (Euclides)."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Por que $p^2$ par implica $p$ par?",
+                    "answer": "Contraposição: se $p$ é ímpar, $p^2$ é ímpar.",
+                    "concept": "proof-by-contradiction"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Esboce a contradição em Euclides.",
+                    "answer": "Se $p_1,\\dots,p_k$ são todos primos, $N=p_1\\cdots p_k+1$ não é divisível por nenhum, mas tem divisor primo.",
+                    "concept": "proof-by-contradiction"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Compare a estrutura lógica das provas de $\\sqrt{2}\\notin\\mathbb{Q}$ e infinitude dos primos."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove: se $x$ é irracional e $y$ racional, então $x+y$ é irracional.",
+                "rubric": "Absurdo: se $x+y=p/q$ racional, $x=(x+y)-y$ seria racional."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "phase": 2,
+        "title": "Conjuntos e Operações",
+        "icon": "*",
+        "summary": "Pertinência, inclusão, união, interseção, complementar e produto cartesiano.",
+        "key_insight": "$A\\subseteq B \\iff \\forall x: x\\in A\\to x\\in B$. De Morgan: $(A\\cap B)^c = A^c\\cup B^c$.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Em Ex 11 ache $X$ com $X\\cup B=A\\cup C$, $X\\cap B=\\emptyset$.",
+            "detail": "$\\in$ relaciona elemento e conjunto; $\\subseteq$ relaciona conjuntos. $A\\cap B$ exige ambos; $A\\cup B$ admite qualquer um.",
+            "concepts": [
+              "set",
+              "subset",
+              "pertinencia"
+            ],
+            "notes": [
+              "set",
+              "operacoes-conjuntos"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Decidir pertinência e inclusão.",
+                "prior_knowledge": "Notação de conjuntos por extensão e compreensão."
+              },
+              "core": {
+                "exposition": "$\\in$ relaciona elemento e conjunto; $\\subseteq$ relaciona conjuntos. $A\\cap B$ exige ambos; $A\\cup B$ admite qualquer um.",
+                "worked_example": "Ex 10: com $A=\\{0,1,2,3,4\\}$, $B=\\{0,2,4\\}$: $B\\subset A$ V, $A\\cap D=\\{3,4\\}$ V.",
+                "problem": "Em Ex 11 ache $X$ com $X\\cup B=A\\cup C$, $X\\cap B=\\emptyset$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Diferença entre $\\in$ e $\\subseteq$?",
+                    "answer": "$\\in$ é entre elemento e conjunto; $\\subseteq$ entre conjuntos.",
+                    "concept": "pertinencia"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Descreva $\\{n\\in\\mathbb{Z}: 2\\leq n^2\\leq 10\\}$.",
+                    "answer": "$\\{-3,-2,2,3\\}$.",
+                    "concept": "set"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que $\\emptyset\\subseteq A$ para todo $A$?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Resolva Ex 11.",
+                "rubric": "$A\\cup C=\\{1,2,3,4\\}$; $X$ disjunto de $B=\\{3,4\\}$ e $X\\cup B$ = esse total ⇒ $X=\\{1,2\\}$."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Calcule $\\bigcup$ e $\\bigcap$ para $A_n=[1-1/n, 1+1/n)$.",
+            "detail": "$x\\in\\bigcup A_n \\iff \\exists n: x\\in A_n$; $x\\in\\bigcap A_n \\iff \\forall n: x\\in A_n$. Famílias decrescentes têm $\\bigcap$ pequeno; crescentes têm $\\bigcup$ grande.",
+            "concepts": [
+              "uniao-intersecao-infinita",
+              "set"
+            ],
+            "notes": [
+              "uniao-intersecao-infinita"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Calcular união e interseção de famílias infinitas de intervalos.",
+                "prior_knowledge": "Intervalos reais e ínfimo/supremo."
+              },
+              "core": {
+                "exposition": "$x\\in\\bigcup A_n \\iff \\exists n: x\\in A_n$; $x\\in\\bigcap A_n \\iff \\forall n: x\\in A_n$. Famílias decrescentes têm $\\bigcap$ pequeno; crescentes têm $\\bigcup$ grande.",
+                "worked_example": "$A_n=(0,1/n)$ decrescente: $\\bigcup=(0,1)$, $\\bigcap=\\emptyset$ (nenhum $x>0$ está em todos).",
+                "problem": "Calcule $\\bigcup$ e $\\bigcap$ para $A_n=[1-1/n, 1+1/n)$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "$\\bigcap_n (-1/n, 1+1/n)$?",
+                    "answer": "$[0,1]$.",
+                    "concept": "uniao-intersecao-infinita"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "$\\bigcup_n [n,\\infty)$?",
+                    "answer": "$[1,\\infty)$; e $\\bigcap = \\emptyset$.",
+                    "concept": "uniao-intersecao-infinita"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que $\\bigcap (0,1/n) = \\emptyset$ apesar de cada $A_n$ ser não-vazio?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Resolva $A_n=[1/n,1)$.",
+                "rubric": "$\\bigcup=(0,1)$, $\\bigcap=[1/1,1)=\\emptyset$? Não: $\\bigcap=\\{x: \\forall n, 1/n\\leq x<1\\}=\\emptyset$ pois $1/1=1\\not<1$; correção: $\\bigcap=\\emptyset$, $\\bigcup=(0,1)$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Prove $\\left(\\bigcap A_n\\right)^c = \\bigcup A_n^c$.",
+            "detail": "Provar igualdade $X=Y$ por dupla inclusão. Use $x\\in A^c \\iff x\\notin A$.",
+            "concepts": [
+              "complementar",
+              "de-morgan"
+            ],
+            "notes": [
+              "de-morgan-conjuntos"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Demonstrar leis de De Morgan e propriedades do complementar.",
+                "prior_knowledge": "Quantificadores e negação."
+              },
+              "core": {
+                "exposition": "Provar igualdade $X=Y$ por dupla inclusão. Use $x\\in A^c \\iff x\\notin A$.",
+                "worked_example": "Ex 19d: $x\\in(A\\cap B)^c \\iff \\neg(x\\in A\\land x\\in B)\\iff x\\notin A \\lor x\\notin B \\iff x\\in A^c\\cup B^c$.",
+                "problem": "Prove $\\left(\\bigcap A_n\\right)^c = \\bigcup A_n^c$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Enuncie De Morgan infinito.",
+                    "answer": "$(\\bigcap A_n)^c=\\bigcup A_n^c$ e $(\\bigcup A_n)^c=\\bigcap A_n^c$.",
+                    "concept": "de-morgan"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Prove $A\\subseteq B \\Rightarrow B^c\\subseteq A^c$.",
+                    "answer": "Se $x\\in B^c$, $x\\notin B$; se estivesse em $A$ estaria em $B$, logo $x\\in A^c$.",
+                    "concept": "complementar"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Como a estrutura de prova reflete a equivalência entre $\\neg\\forall$ e $\\exists\\neg$?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove $A\\times(B\\cap C)=(A\\times B)\\cap(A\\times C)$.",
+                "rubric": "Dupla inclusão via $(x,y)\\in$ LHS $\\iff x\\in A\\land y\\in B\\land y\\in C$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "phase": 2,
+        "title": "Funções: Imagem e Inversa",
+        "icon": "*",
+        "summary": "Definir funções, imagem direta, imagem inversa e suas propriedades.",
+        "key_insight": "Imagem inversa comuta com todas as operações; imagem direta apenas com união.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Com $f(n)=n^2$, $f^{-1}(\\{\\dots,-3,-2,-1\\})=?$",
+            "detail": "$f(A)=\\{f(x):x\\in A\\}$; $f^{-1}(B)=\\{x: f(x)\\in B\\}$. Não precisa $f$ ser bijetora para $f^{-1}(B)$.",
+            "concepts": [
+              "funcao",
+              "imagem-direta",
+              "imagem-inversa"
+            ],
+            "notes": [
+              "funcao",
+              "imagem-direta-inversa"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Calcular $f(A)$ e $f^{-1}(B)$.",
+                "prior_knowledge": "Definição de função como relação funcional total."
+              },
+              "core": {
+                "exposition": "$f(A)=\\{f(x):x\\in A\\}$; $f^{-1}(B)=\\{x: f(x)\\in B\\}$. Não precisa $f$ ser bijetora para $f^{-1}(B)$.",
+                "worked_example": "$f(n)=n^2$. $f(\\{-2,-1,0,1,2\\})=\\{0,1,4\\}$. $f^{-1}(\\{1,4\\})=\\{-2,-1,1,2\\}$.",
+                "problem": "Com $f(n)=n^2$, $f^{-1}(\\{\\dots,-3,-2,-1\\})=?$"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "O que define uma função $f:A\\to B$?",
+                    "answer": "Para cada $x\\in A$, existe único $f(x)\\in B$.",
+                    "concept": "funcao"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "$f^{-1}(B)$ existe sem $f$ ser invertível?",
+                    "answer": "Sim, é apenas pré-imagem.",
+                    "concept": "imagem-inversa"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que Ex 23d $f(n)=\\pm n$ não define função?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "$f(n)=n^2$, $\\mathbb{Z}\\to\\mathbb{Z}$. Calcule $f(\\mathbb{Z})$.",
+                "rubric": "Conjunto dos quadrados perfeitos $\\{0,1,4,9,\\dots\\}$."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Classifique $f:\\mathbb{R}\\to[0,\\infty), f(x)=x^2$.",
+            "detail": "Injetora: $f(x)=f(y)\\Rightarrow x=y$. Sobrejetora: $\\forall y\\in B,\\exists x: f(x)=y$. Bijetora: ambas.",
+            "concepts": [
+              "injetora",
+              "sobrejetora",
+              "bijecao"
+            ],
+            "notes": [
+              "injetora-sobrejetora-bijetora"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Classificar funções como injetora/sobrejetora/bijetora.",
+                "prior_knowledge": "Imagem e contradomínio."
+              },
+              "core": {
+                "exposition": "Injetora: $f(x)=f(y)\\Rightarrow x=y$. Sobrejetora: $\\forall y\\in B,\\exists x: f(x)=y$. Bijetora: ambas.",
+                "worked_example": "$f:\\mathbb{Z}\\to\\mathbb{Z}, f(k)=2k$: injetora (mas não sobre ímpares). $f:\\mathbb{R}\\to\\mathbb{R}, f(x)=x^3$: bijetora.",
+                "problem": "Classifique $f:\\mathbb{R}\\to[0,\\infty), f(x)=x^2$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "$f:\\mathbb{N}\\to\\mathbb{N}, f(n)=n+5$ é o quê?",
+                    "answer": "Injetora, não sobrejetora (faltam 1..5).",
+                    "concept": "injetora"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "$f:[0,\\infty)\\to[0,\\infty), f(x)=x^2$?",
+                    "answer": "Bijetora.",
+                    "concept": "bijecao"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Mostre por que ajustar domínio/contradomínio pode mudar a classificação."
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove: $f,g$ injetoras ⇒ $g\\circ f$ injetora.",
+                "rubric": "$g(f(x))=g(f(y))\\Rightarrow f(x)=f(y)\\Rightarrow x=y$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Exiba bijeção $(0,1)\\to\\mathbb{R}$.",
+            "detail": "$A$ é infinito se há bijeção com subconjunto próprio. $\\mathbb{N},\\mathbb{Z},\\mathbb{Q}$ são enumeráveis; $\\mathbb{R}$ e $\\mathcal{P}(\\mathbb{N})$ não.",
+            "concepts": [
+              "countable-set",
+              "uncountable-set",
+              "cantor-diagonal"
+            ],
+            "notes": [
+              "cardinalidade",
+              "argumento-cantor"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Comparar cardinalidades via bijeções; provar não-equipotência via diagonal.",
+                "prior_knowledge": "Bijeções e infinitude."
+              },
+              "core": {
+                "exposition": "$A$ é infinito se há bijeção com subconjunto próprio. $\\mathbb{N},\\mathbb{Z},\\mathbb{Q}$ são enumeráveis; $\\mathbb{R}$ e $\\mathcal{P}(\\mathbb{N})$ não.",
+                "worked_example": "Cantor: dado $f:A\\to\\mathcal{P}(A)$, $D=\\{x:x\\notin f(x)\\}$ não tem pré-imagem.",
+                "problem": "Exiba bijeção $(0,1)\\to\\mathbb{R}$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Bijeção $\\mathbb{N}\\to\\mathbb{Z}$?",
+                    "answer": "$f(2k)=k, f(2k-1)=-k$ (ou variante).",
+                    "concept": "countable-set"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Por que $|\\mathcal{P}(A)|>|A|$?",
+                    "answer": "Argumento diagonal de Cantor: $D$ acima impede sobrejeção.",
+                    "concept": "cantor-diagonal"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Como a diagonal de Cantor para $\\mathbb{R}$ se conecta com $\\mathcal{P}(\\mathbb{N})$?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove que não há bijeção $A\\to\\mathcal{P}(A)$.",
+                "rubric": "Suponha $f$ bijetora; defina $D=\\{x:x\\notin f(x)\\}$; o $a$ com $f(a)=D$ leva a contradição."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "phase": 3,
+        "title": "Relações: Equivalência e Ordem",
+        "icon": "*",
+        "summary": "Relações de equivalência, classes, partições, ordens parciais e elementos extremos.",
+        "key_insight": "Equivalências particionam; ordens hierarquizam.",
+        "cards": [
+          {
+            "tier": "silver",
+            "task_index": 0,
+            "text": "Verifique se $a\\sim b\\iff a-b$ ímpar é equivalência.",
+            "detail": "$\\sim$ é equivalência se reflexiva, simétrica, transitiva. Classes $[a]=\\{x:x\\sim a\\}$ formam partição; quociente $A/\\sim$.",
+            "concepts": [
+              "equivalence-relation",
+              "classe-equivalencia",
+              "particao"
+            ],
+            "notes": [
+              "relacao-equivalencia"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Verificar reflexividade, simetria, transitividade.",
+                "prior_knowledge": "Relações como subconjuntos de $A\\times A$."
+              },
+              "core": {
+                "exposition": "$\\sim$ é equivalência se reflexiva, simétrica, transitiva. Classes $[a]=\\{x:x\\sim a\\}$ formam partição; quociente $A/\\sim$.",
+                "worked_example": "$a\\sim b \\iff a-b\\equiv 0\\pmod 3$ em $\\mathbb{Z}$: classes $[0],[1],[2]$; quociente $\\mathbb{Z}/3\\mathbb{Z}$.",
+                "problem": "Verifique se $a\\sim b\\iff a-b$ ímpar é equivalência."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Por que $a-b$ ímpar não é equivalência?",
+                    "answer": "Não é reflexiva: $a-a=0$ é par.",
+                    "concept": "equivalence-relation"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Classes de $a\\sim b\\iff a^2=b^2$ em $\\mathbb{Z}$?",
+                    "answer": "$[n]=\\{n,-n\\}$; quociente $\\cong\\mathbb{N}\\cup\\{0\\}$.",
+                    "concept": "classe-equivalencia"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que classes distintas são disjuntas?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Mostre que classes de equivalência formam partição.",
+                "rubric": "Não-vazias (reflexividade); cobrem $A$; duas classes se intersectam ⇒ iguais (transitividade)."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 1,
+            "text": "Em $(0,1]$ com $\\leq$: máximos, mínimos e cotas?",
+            "detail": "Ordem: reflexiva, antissimétrica, transitiva. Total se quaisquer dois comparáveis. Cota superior de $S$: $u$ com $s\\preceq u\\,\\forall s$. Máximo: cota superior em $S$.",
+            "concepts": [
+              "relacao-ordem",
+              "ordem-parcial",
+              "cota-superior",
+              "minimo-maximo"
+            ],
+            "notes": [
+              "relacao-ordem",
+              "cotas-extremos"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Distinguir ordem parcial/total e identificar máximos, mínimos, cotas.",
+                "prior_knowledge": "Antissimetria e transitividade."
+              },
+              "core": {
+                "exposition": "Ordem: reflexiva, antissimétrica, transitiva. Total se quaisquer dois comparáveis. Cota superior de $S$: $u$ com $s\\preceq u\\,\\forall s$. Máximo: cota superior em $S$.",
+                "worked_example": "Divisibilidade em $\\{1,2,3,4,6,12\\}$: parcial, não total (2 e 3 incomparáveis). 1 é mínimo, 12 máximo.",
+                "problem": "Em $(0,1]$ com $\\leq$: máximos, mínimos e cotas?"
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Diferença máximo vs maximal?",
+                    "answer": "Máximo é comparável a todos; maximal só não tem ninguém acima.",
+                    "concept": "minimo-maximo"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "$(0,1)$ em $\\mathbb{R}$ tem máximo?",
+                    "answer": "Não; supremo é 1, mas $1\\notin(0,1)$.",
+                    "concept": "cota-superior"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que divisibilidade dá ordem parcial mas não total?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "No conjunto $\\{n\\in\\mathbb{Q}: n^2\\leq 10\\}$, há máximo?",
+                "rubric": "Cotas existem (ex. $4$), mas supremo $\\sqrt{10}\\notin\\mathbb{Q}$; logo sem máximo em $\\mathbb{Q}$."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "phase": 3,
+        "title": "Indução e Boa Ordem",
+        "icon": "*",
+        "summary": "Princípios da Boa Ordem, Indução Finita e Indução Forte.",
+        "key_insight": "Boa Ordem ⇔ Indução Finita ⇔ Indução Forte em $\\mathbb{N}$.",
+        "cards": [
+          {
+            "tier": "bronze",
+            "task_index": 0,
+            "text": "Prove $1+3+\\cdots+(2n-1)=n^2$.",
+            "detail": "Indução: base $P(1)$; passo $P(n)\\Rightarrow P(n+1)$. Boa Ordem: todo subconjunto não-vazio de $\\mathbb{N}$ tem mínimo.",
+            "concepts": [
+              "principio-inducao",
+              "principio-boa-ordem"
+            ],
+            "notes": [
+              "principio-inducao",
+              "principio-boa-ordem"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Aplicar indução simples a somas e divisibilidade.",
+                "prior_knowledge": "Manipulação algébrica de somatórios."
+              },
+              "core": {
+                "exposition": "Indução: base $P(1)$; passo $P(n)\\Rightarrow P(n+1)$. Boa Ordem: todo subconjunto não-vazio de $\\mathbb{N}$ tem mínimo.",
+                "worked_example": "$\\sum_{k=1}^n k = n(n+1)/2$. Base $n=1$: 1=1. Passo: $\\sum^{n+1}=n(n+1)/2+(n+1)=(n+1)(n+2)/2$.",
+                "problem": "Prove $1+3+\\cdots+(2n-1)=n^2$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Estrutura da prova por indução?",
+                    "answer": "Base + hipótese de indução $P(n)$ + passo $P(n)\\to P(n+1)$.",
+                    "concept": "principio-inducao"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Enuncie a Boa Ordem em $\\mathbb{N}$.",
+                    "answer": "Todo subconjunto não-vazio de $\\mathbb{N}$ possui mínimo.",
+                    "concept": "principio-boa-ordem"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Por que Boa Ordem falha em $\\mathbb{Z}$ e $\\mathbb{Q}$?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove $7^n-1$ divisível por 6.",
+                "rubric": "Base $n=1$: 6. Passo: $7^{n+1}-1=7(7^n-1)+6$, ambos divisíveis por 6."
+              }
+            }
+          },
+          {
+            "tier": "silver",
+            "task_index": 1,
+            "text": "Prove $3^n>n^2$ para $n\\geq 1$.",
+            "detail": "Em desigualdades, a base pode ser $n_0>1$. Verifique que o passo preserve a desigualdade usando $n\\geq n_0$.",
+            "concepts": [
+              "principio-inducao",
+              "desigualdade"
+            ],
+            "notes": [
+              "inducao-desigualdades"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Provar desigualdades por indução, ajustando a base.",
+                "prior_knowledge": "Fatorial e exponenciais."
+              },
+              "core": {
+                "exposition": "Em desigualdades, a base pode ser $n_0>1$. Verifique que o passo preserve a desigualdade usando $n\\geq n_0$.",
+                "worked_example": "$n!>2^n$ para $n\\geq 4$. Base $n=4$: $24>16$. Passo: $(n+1)!=(n+1)\\cdot n!>(n+1)\\cdot 2^n\\geq 2\\cdot 2^n=2^{n+1}$ pois $n+1\\geq 5>2$.",
+                "problem": "Prove $3^n>n^2$ para $n\\geq 1$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Por que base $n=4$ em $n!>2^n$?",
+                    "answer": "Falha para $n=1,2,3$ ($1<2$, $2<4$, $6<8$).",
+                    "concept": "principio-inducao"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Como usar HI no passo de $2^n\\geq n+1$?",
+                    "answer": "$2^{n+1}=2\\cdot 2^n\\geq 2(n+1)=n+2+n\\geq n+2$.",
+                    "concept": "principio-inducao"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Onde no passo a hipótese $n\\geq n_0$ é usada essencialmente?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove $2^{2n}>3n$ para $n\\geq 1$.",
+                "rubric": "Base e passo $2^{2(n+1)}=4\\cdot 2^{2n}>4\\cdot 3n=12n\\geq 3n+3$ para $n\\geq 1$."
+              }
+            }
+          },
+          {
+            "tier": "gold",
+            "task_index": 2,
+            "text": "Prove $F_n<2^n$ para todo $n\\geq 1$.",
+            "detail": "Indução forte: para provar $P(n)$, assuma $P(k)$ para todo $k<n$. Útil quando o passo precisa de $n-2$ ou divisores.",
+            "concepts": [
+              "principio-inducao-forte",
+              "fibonacci"
+            ],
+            "notes": [
+              "inducao-forte"
+            ],
+            "phases": {
+              "prime": {
+                "goal": "Usar indução forte quando o passo depende de vários casos anteriores.",
+                "prior_knowledge": "Definições recursivas (Fibonacci, fatoração)."
+              },
+              "core": {
+                "exposition": "Indução forte: para provar $P(n)$, assuma $P(k)$ para todo $k<n$. Útil quando o passo precisa de $n-2$ ou divisores.",
+                "worked_example": "Todo $n\\geq 2$ é primo ou produto de primos: se composto $n=ab$ com $1<a,b<n$, HI dá fatoração de $a$ e $b$.",
+                "problem": "Prove $F_n<2^n$ para todo $n\\geq 1$."
+              },
+              "retrieval": {
+                "prompts": [
+                  {
+                    "id": "r1",
+                    "prompt": "Por que Fibonacci pede indução forte?",
+                    "answer": "$F_n=F_{n-1}+F_{n-2}$ usa dois passos anteriores.",
+                    "concept": "principio-inducao-forte"
+                  },
+                  {
+                    "id": "r2",
+                    "prompt": "Onde o paradoxo dos cavalos falha?",
+                    "answer": "No passo $n=1\\to 2$: os conjuntos $\\{C_1\\}$ e $\\{C_2\\}$ não têm interseção.",
+                    "concept": "principio-inducao-forte"
+                  }
+                ]
+              },
+              "elaborate": {
+                "prompts": [
+                  {
+                    "id": "e1",
+                    "prompt": "Como Boa Ordem, Indução e Indução Forte se equivalem?"
+                  }
+                ]
+              },
+              "check": {
+                "prompt": "Prove: $\\forall n\\geq 8, n=3a+5b$ com $a,b\\geq 0$.",
+                "rubric": "Bases $n=8,9,10$. Passo: $n=(n-3)+3$ usando HI em $n-3\\geq 8$."
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "concepts": [
+      {
+        "id": "proposicao",
+        "label": "Proposição"
+      },
+      {
+        "id": "conectivo-logico",
+        "label": "Conectivo Lógico"
+      },
+      {
+        "id": "tabela-verdade",
+        "label": "Tabela-Verdade"
+      },
+      {
+        "id": "condicional",
+        "label": "Condicional"
+      },
+      {
+        "id": "quantificador",
+        "label": "Quantificador"
+      },
+      {
+        "id": "proof-by-contradiction",
+        "label": "Demonstração por Absurdo"
+      },
+      {
+        "id": "demonstracao-direta",
+        "label": "Demonstração Direta"
+      },
+      {
+        "id": "contraposicao",
+        "label": "Contraposição"
+      },
+      {
+        "id": "rational-numbers",
+        "label": "Números Racionais"
+      },
+      {
+        "id": "set",
+        "label": "Conjunto"
+      },
+      {
+        "id": "subset",
+        "label": "Subconjunto"
+      },
+      {
+        "id": "pertinencia",
+        "label": "Pertinência"
+      },
+      {
+        "id": "uniao-intersecao-infinita",
+        "label": "União/Interseção Infinita"
+      },
+      {
+        "id": "complementar",
+        "label": "Complementar"
+      },
+      {
+        "id": "de-morgan",
+        "label": "Leis de De Morgan"
+      },
+      {
+        "id": "funcao",
+        "label": "Função"
+      },
+      {
+        "id": "imagem-direta",
+        "label": "Imagem Direta"
+      },
+      {
+        "id": "imagem-inversa",
+        "label": "Imagem Inversa"
+      },
+      {
+        "id": "injetora",
+        "label": "Função Injetora"
+      },
+      {
+        "id": "sobrejetora",
+        "label": "Função Sobrejetora"
+      },
+      {
+        "id": "bijecao",
+        "label": "Bijeção"
+      },
+      {
+        "id": "countable-set",
+        "label": "Conjunto Enumerável"
+      },
+      {
+        "id": "uncountable-set",
+        "label": "Conjunto Não-Enumerável"
+      },
+      {
+        "id": "cantor-diagonal",
+        "label": "Argumento de Cantor"
+      },
+      {
+        "id": "equivalence-relation",
+        "label": "Relação de Equivalência"
+      },
+      {
+        "id": "classe-equivalencia",
+        "label": "Classe de Equivalência"
+      },
+      {
+        "id": "particao",
+        "label": "Partição"
+      },
+      {
+        "id": "relacao-ordem",
+        "label": "Relação de Ordem"
+      },
+      {
+        "id": "ordem-parcial",
+        "label": "Ordem Parcial"
+      },
+      {
+        "id": "cota-superior",
+        "label": "Cota Superior"
+      },
+      {
+        "id": "minimo-maximo",
+        "label": "Mínimo e Máximo"
+      },
+      {
+        "id": "principio-inducao",
+        "label": "Princípio da Indução"
+      },
+      {
+        "id": "principio-boa-ordem",
+        "label": "Princípio da Boa Ordem"
+      },
+      {
+        "id": "principio-inducao-forte",
+        "label": "Indução Forte"
+      },
+      {
+        "id": "desigualdade",
+        "label": "Desigualdade"
+      },
+      {
+        "id": "fibonacci",
+        "label": "Sequência de Fibonacci"
+      }
+    ],
+    "prereqs": [
+      [
+        "conectivo-logico",
+        "proposicao"
+      ],
+      [
+        "tabela-verdade",
+        "conectivo-logico"
+      ],
+      [
+        "condicional",
+        "conectivo-logico"
+      ],
+      [
+        "quantificador",
+        "proposicao"
+      ],
+      [
+        "demonstracao-direta",
+        "condicional"
+      ],
+      [
+        "contraposicao",
+        "condicional"
+      ],
+      [
+        "proof-by-contradiction",
+        "condicional"
+      ],
+      [
+        "subset",
+        "set"
+      ],
+      [
+        "pertinencia",
+        "set"
+      ],
+      [
+        "complementar",
+        "set"
+      ],
+      [
+        "de-morgan",
+        "complementar"
+      ],
+      [
+        "uniao-intersecao-infinita",
+        "set"
+      ],
+      [
+        "funcao",
+        "set"
+      ],
+      [
+        "imagem-direta",
+        "funcao"
+      ],
+      [
+        "imagem-inversa",
+        "funcao"
+      ],
+      [
+        "injetora",
+        "funcao"
+      ],
+      [
+        "sobrejetora",
+        "funcao"
+      ],
+      [
+        "bijecao",
+        "injetora"
+      ],
+      [
+        "bijecao",
+        "sobrejetora"
+      ],
+      [
+        "countable-set",
+        "bijecao"
+      ],
+      [
+        "uncountable-set",
+        "countable-set"
+      ],
+      [
+        "cantor-diagonal",
+        "uncountable-set"
+      ],
+      [
+        "equivalence-relation",
+        "set"
+      ],
+      [
+        "classe-equivalencia",
+        "equivalence-relation"
+      ],
+      [
+        "particao",
+        "classe-equivalencia"
+      ],
+      [
+        "relacao-ordem",
+        "set"
+      ],
+      [
+        "ordem-parcial",
+        "relacao-ordem"
+      ],
+      [
+        "cota-superior",
+        "ordem-parcial"
+      ],
+      [
+        "minimo-maximo",
+        "cota-superior"
+      ],
+      [
+        "principio-inducao",
+        "principio-boa-ordem"
+      ],
+      [
+        "principio-inducao-forte",
+        "principio-inducao"
+      ]
+    ]
   }
 ]

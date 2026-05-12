@@ -4031,5 +4031,319 @@
     "content": "## Definição\n$P(A\\mid B)=\\dfrac{P(A\\cap B)}{P(B)}$, $P(B)>0$.\n\n## Regra do Produto\n$P(A_1\\cap\\cdots\\cap A_n)=P(A_1)P(A_2\\mid A_1)\\cdots P(A_n\\mid A_1\\cdots A_{n-1})$.\n\n## Lei do Total\nSe $\\{B_i\\}$ é partição: $P(A)=\\sum_i P(A\\mid B_i)P(B_i)$.\n\n## Bayes\n$$P(B_i\\mid A)=\\frac{P(A\\mid B_i)P(B_i)}{\\sum_j P(A\\mid B_j)P(B_j)}.$$\n\n## Independência\n$A\\perp B \\iff P(A\\cap B)=P(A)P(B)$. Equivalente a $P(A\\mid B)=P(A)$ quando $P(B)>0$.\n\n## Estratégia Geral\n1. Identifique a partição natural (causas/cenários).\n2. Escreva $P(\\text{causa})$ e $P(\\text{evidência}\\mid\\text{causa})$.\n3. Combine com lei do total ou Bayes.\n4. Em múltiplas evidências independentes, multiplique verossimilhanças.",
     "related": [],
     "source": ""
+  },
+  {
+    "id": "proposicao",
+    "title": "Proposição",
+    "domain": "lógica",
+    "tags": [
+      "lógica",
+      "fundamentos"
+    ],
+    "content": "Uma **proposição** é uma sentença declarativa que admite exatamente um valor de verdade: verdadeiro (V) ou falso (F).\n\nNão são proposições: expressões como $5\\cdot 2+10$ (apenas denota um número), perguntas, ordens ou sentenças com variáveis livres sem quantificador.\n\nA negação $\\neg p$ inverte o valor de verdade de $p$.",
+    "related": [
+      "conectivo-logico",
+      "quantificador"
+    ],
+    "source": ""
+  },
+  {
+    "id": "conectivo-logico",
+    "title": "Conectivos Lógicos",
+    "domain": "lógica",
+    "tags": [
+      "lógica"
+    ],
+    "content": "Os principais conectivos: $\\neg$ (negação), $\\land$ (e), $\\lor$ (ou), $\\to$ (condicional), $\\leftrightarrow$ (bicondicional).\n\nLeis de De Morgan: $\\neg(p\\land q)\\equiv \\neg p\\lor \\neg q$ e $\\neg(p\\lor q)\\equiv \\neg p\\land \\neg q$.",
+    "related": [
+      "proposicao",
+      "tabela-verdade",
+      "condicional"
+    ],
+    "source": ""
+  },
+  {
+    "id": "tabela-verdade",
+    "title": "Tabela-Verdade",
+    "domain": "lógica",
+    "tags": [
+      "lógica"
+    ],
+    "content": "Lista todas as combinações de valores de variáveis proposicionais e o valor resultante de uma composta. Útil para verificar tautologias e equivalências lógicas.",
+    "related": [
+      "conectivo-logico"
+    ],
+    "source": ""
+  },
+  {
+    "id": "condicional",
+    "title": "Condicional e Bicondicional",
+    "domain": "lógica",
+    "tags": [
+      "lógica"
+    ],
+    "content": "$p\\to q$ é falsa apenas quando $p$ é V e $q$ é F. Equivalências úteis:\n- $p\\to q \\equiv \\neg p\\lor q$\n- $p\\to q \\equiv \\neg q\\to \\neg p$ (contrapositiva)\n- $p\\leftrightarrow q \\equiv (p\\to q)\\land(q\\to p)$",
+    "related": [
+      "contraposicao",
+      "tabela-verdade"
+    ],
+    "source": ""
+  },
+  {
+    "id": "quantificador",
+    "title": "Quantificadores",
+    "domain": "lógica",
+    "tags": [
+      "lógica"
+    ],
+    "content": "$\\forall x\\,P(x)$: para todo $x$, $P(x)$. $\\exists x\\,P(x)$: existe $x$ com $P(x)$.\n\nNegação: $\\neg\\forall x\\,P(x)\\equiv \\exists x\\,\\neg P(x)$ e $\\neg\\exists x\\,P(x)\\equiv \\forall x\\,\\neg P(x)$.\n\nA ordem importa: $\\forall x\\exists y$ é diferente de $\\exists y\\forall x$.",
+    "related": [
+      "proposicao"
+    ],
+    "source": ""
+  },
+  {
+    "id": "metodos-demonstracao",
+    "title": "Métodos de Demonstração",
+    "domain": "lógica",
+    "tags": [
+      "demonstração"
+    ],
+    "content": "Três técnicas básicas para provar $P\\to Q$:\n- **Direta**: assumir $P$ e derivar $Q$.\n- **Contraposição**: provar $\\neg Q\\to \\neg P$.\n- **Absurdo**: assumir $P\\land\\neg Q$ e obter contradição.\n\nTodas são logicamente equivalentes.",
+    "related": [
+      "contraposicao",
+      "proof-by-contradiction",
+      "demonstracao-direta"
+    ],
+    "source": ""
+  },
+  {
+    "id": "irracionalidade-sqrt2",
+    "title": "Irracionalidade de $\\sqrt{2}$",
+    "domain": "teoria dos números",
+    "tags": [
+      "demonstração",
+      "absurdo"
+    ],
+    "content": "Por absurdo: suponha $\\sqrt{2}=p/q$ com $\\gcd(p,q)=1$. Então $p^2=2q^2$ ⇒ $p$ par ⇒ $p=2k$ ⇒ $4k^2=2q^2$ ⇒ $q^2=2k^2$ ⇒ $q$ par. Contradiz $\\gcd(p,q)=1$.\n\nGeneraliza para $\\sqrt[k]{n}$: ou é inteiro ou irracional.",
+    "related": [
+      "proof-by-contradiction"
+    ],
+    "source": ""
+  },
+  {
+    "id": "set",
+    "title": "Conjunto",
+    "domain": "teoria dos conjuntos",
+    "tags": [
+      "fundamentos"
+    ],
+    "content": "Coleção de objetos (elementos). Notação: por extensão $\\{a,b,c\\}$ ou compreensão $\\{x:P(x)\\}$. Vazio: $\\emptyset$.",
+    "related": [
+      "subset",
+      "operacoes-conjuntos"
+    ],
+    "source": ""
+  },
+  {
+    "id": "operacoes-conjuntos",
+    "title": "Operações com Conjuntos",
+    "domain": "teoria dos conjuntos",
+    "tags": [
+      "conjuntos"
+    ],
+    "content": "União $A\\cup B$, interseção $A\\cap B$, diferença $A\\setminus B$, complementar $A^c$ (relativo a universo $U$), produto cartesiano $A\\times B=\\{(a,b):a\\in A, b\\in B\\}$.",
+    "related": [
+      "set",
+      "de-morgan-conjuntos"
+    ],
+    "source": ""
+  },
+  {
+    "id": "uniao-intersecao-infinita",
+    "title": "União e Interseção Infinitas",
+    "domain": "teoria dos conjuntos",
+    "tags": [
+      "conjuntos"
+    ],
+    "content": "$x\\in\\bigcup_{n} A_n \\iff \\exists n: x\\in A_n$.\n\n$x\\in\\bigcap_n A_n \\iff \\forall n: x\\in A_n$.\n\nPara famílias decrescentes $A_1\\supseteq A_2\\supseteq\\cdots$, $\\bigcup=A_1$ e $\\bigcap$ pode encolher até $\\emptyset$.",
+    "related": [
+      "set"
+    ],
+    "source": ""
+  },
+  {
+    "id": "de-morgan-conjuntos",
+    "title": "De Morgan para Conjuntos",
+    "domain": "teoria dos conjuntos",
+    "tags": [
+      "conjuntos"
+    ],
+    "content": "$(A\\cap B)^c=A^c\\cup B^c$ e $(A\\cup B)^c=A^c\\cap B^c$.\n\nVersão infinita: $(\\bigcap A_n)^c=\\bigcup A_n^c$ e $(\\bigcup A_n)^c=\\bigcap A_n^c$.",
+    "related": [
+      "operacoes-conjuntos"
+    ],
+    "source": ""
+  },
+  {
+    "id": "funcao",
+    "title": "Função",
+    "domain": "fundamentos",
+    "tags": [
+      "função"
+    ],
+    "content": "Função $f:A\\to B$ associa a cada $x\\in A$ um único $f(x)\\in B$. Como relação: subconjunto de $A\\times B$ tal que cada $a\\in A$ aparece em exatamente um par.",
+    "related": [
+      "imagem-direta-inversa",
+      "injetora-sobrejetora-bijetora"
+    ],
+    "source": ""
+  },
+  {
+    "id": "imagem-direta-inversa",
+    "title": "Imagem Direta e Inversa",
+    "domain": "fundamentos",
+    "tags": [
+      "função"
+    ],
+    "content": "$f(A)=\\{f(x):x\\in A\\}$; $f^{-1}(B)=\\{x:f(x)\\in B\\}$.\n\nPropriedades chave:\n- $f^{-1}$ comuta com $\\cup,\\cap,\\setminus$.\n- $f(A\\cup B)=f(A)\\cup f(B)$ mas $f(A\\cap B)\\subseteq f(A)\\cap f(B)$ (igualdade falha em geral).",
+    "related": [
+      "funcao"
+    ],
+    "source": ""
+  },
+  {
+    "id": "injetora-sobrejetora-bijetora",
+    "title": "Injetora, Sobrejetora, Bijetora",
+    "domain": "fundamentos",
+    "tags": [
+      "função"
+    ],
+    "content": "- **Injetora**: $f(x)=f(y)\\Rightarrow x=y$.\n- **Sobrejetora**: $\\forall y\\in B,\\exists x: f(x)=y$.\n- **Bijetora**: ambas.\n\nComposição preserva cada propriedade.",
+    "related": [
+      "funcao",
+      "cardinalidade"
+    ],
+    "source": ""
+  },
+  {
+    "id": "cardinalidade",
+    "title": "Cardinalidade",
+    "domain": "fundamentos",
+    "tags": [
+      "função",
+      "infinitos"
+    ],
+    "content": "Dois conjuntos têm a mesma cardinalidade se há bijeção entre eles. $A$ é infinito se há bijeção com subconjunto próprio.\n\n$\\mathbb{N},\\mathbb{Z},\\mathbb{Q}$ são enumeráveis. $\\mathbb{R}$ e $\\mathcal{P}(\\mathbb{N})$ não.",
+    "related": [
+      "injetora-sobrejetora-bijetora",
+      "argumento-cantor"
+    ],
+    "source": ""
+  },
+  {
+    "id": "argumento-cantor",
+    "title": "Argumento Diagonal de Cantor",
+    "domain": "fundamentos",
+    "tags": [
+      "infinitos"
+    ],
+    "content": "Para mostrar $|A|<|\\mathcal{P}(A)|$: dada $f:A\\to\\mathcal{P}(A)$, $D=\\{x\\in A: x\\notin f(x)\\}$ não está na imagem (se $f(a)=D$, $a\\in D\\iff a\\notin D$).\n\nVariante: $\\mathbb{R}$ não é enumerável.",
+    "related": [
+      "cardinalidade"
+    ],
+    "source": ""
+  },
+  {
+    "id": "relacao-equivalencia",
+    "title": "Relação de Equivalência",
+    "domain": "fundamentos",
+    "tags": [
+      "relação"
+    ],
+    "content": "Relação $\\sim$ em $A$ é equivalência se:\n- Reflexiva: $a\\sim a$.\n- Simétrica: $a\\sim b\\Rightarrow b\\sim a$.\n- Transitiva: $a\\sim b\\land b\\sim c\\Rightarrow a\\sim c$.\n\nClasses $[a]=\\{x:x\\sim a\\}$ formam partição de $A$; o quociente $A/\\sim$ é o conjunto das classes.",
+    "related": [
+      "particao"
+    ],
+    "source": ""
+  },
+  {
+    "id": "relacao-ordem",
+    "title": "Relação de Ordem",
+    "domain": "fundamentos",
+    "tags": [
+      "relação"
+    ],
+    "content": "$\\preceq$ é ordem (parcial) se reflexiva, antissimétrica ($a\\preceq b\\land b\\preceq a\\Rightarrow a=b$) e transitiva. **Total** se quaisquer dois elementos são comparáveis.\n\nDiagramas de Hasse representam graficamente.",
+    "related": [
+      "cotas-extremos"
+    ],
+    "source": ""
+  },
+  {
+    "id": "cotas-extremos",
+    "title": "Cotas, Mínimo e Máximo",
+    "domain": "fundamentos",
+    "tags": [
+      "ordem"
+    ],
+    "content": "$u$ é **cota superior** de $S$ se $s\\preceq u$ para todo $s\\in S$.\n\n**Máximo** de $S$: cota superior em $S$. **Maximal**: não há $s'\\succ s$ em $S$ (pode haver vários em ordens parciais).\n\nAnálogo para inferiores, mínimo e minimal.",
+    "related": [
+      "relacao-ordem"
+    ],
+    "source": ""
+  },
+  {
+    "id": "principio-boa-ordem",
+    "title": "Princípio da Boa Ordem",
+    "domain": "teoria dos números",
+    "tags": [
+      "fundamentos"
+    ],
+    "content": "Todo subconjunto não-vazio de $\\mathbb{N}$ possui mínimo. Equivalente à indução em $\\mathbb{N}$.\n\nFalha em $\\mathbb{Z}$ (ex: pares negativos) e em $\\mathbb{Q}$ (ex: $\\{1/n\\}$).",
+    "related": [
+      "principio-inducao"
+    ],
+    "source": ""
+  },
+  {
+    "id": "principio-inducao",
+    "title": "Princípio da Indução Finita",
+    "domain": "teoria dos números",
+    "tags": [
+      "demonstração"
+    ],
+    "content": "Para provar $P(n)\\,\\forall n\\geq n_0$:\n1. Base: prove $P(n_0)$.\n2. Passo: assumindo $P(n)$, prove $P(n+1)$.\n\nEquivalente à Boa Ordem.",
+    "related": [
+      "principio-boa-ordem",
+      "inducao-forte"
+    ],
+    "source": ""
+  },
+  {
+    "id": "inducao-desigualdades",
+    "title": "Indução em Desigualdades",
+    "domain": "análise",
+    "tags": [
+      "indução"
+    ],
+    "content": "Na base, escolha $n_0$ onde a desigualdade já vale. No passo, use a hipótese e propriedades algébricas (frequentemente $n\\geq n_0$ é necessário).\n\nExemplo típico: $n!>2^n$ para $n\\geq 4$.",
+    "related": [
+      "principio-inducao"
+    ],
+    "source": ""
+  },
+  {
+    "id": "inducao-forte",
+    "title": "Indução Forte",
+    "domain": "teoria dos números",
+    "tags": [
+      "demonstração"
+    ],
+    "content": "Para provar $P(n)$, assuma $P(k)$ para todos $k<n$ (e prove $P(n)$). Útil quando o passo precisa de várias instâncias anteriores (Fibonacci, fatoração em primos, Torre de Hanói, etc.).\n\nEquivalente à indução simples e à boa ordem.",
+    "related": [
+      "principio-inducao"
+    ],
+    "source": ""
   }
 ]
