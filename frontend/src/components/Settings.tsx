@@ -7,9 +7,11 @@ import {
   saveConfig,
   modelsForProvider,
   defaultModelForProvider,
+  ocrModelsForProvider,
+  defaultOcrModelForProvider,
 } from "@/lib/settings";
 import { api } from "@/lib/api";
-import type { LlmConfig, LlmProvider } from "@/lib/types";
+import type { LlmConfig, LlmProvider, OcrProvider } from "@/lib/types";
 
 interface Props { onClose: () => void; }
 
@@ -35,6 +37,14 @@ export function Settings({ onClose }: Props) {
       ? config.model
       : defaultModelForProvider(provider);
     setConfig({ ...config, provider, model });
+  };
+
+  const onOcrProviderChange = (ocrProvider: OcrProvider) => {
+    const models = ocrModelsForProvider(ocrProvider);
+    const ocrModel = models.some(m => m.id === config.ocrModel)
+      ? config.ocrModel
+      : defaultOcrModelForProvider(ocrProvider);
+    setConfig({ ...config, ocrProvider, ocrModel });
   };
 
   // Reseed tokens.json from the SP_OAUTH_TOKENS_JSON env var. Kept as
@@ -80,6 +90,7 @@ export function Settings({ onClose }: Props) {
   };
 
   const models = modelsForProvider(config.provider);
+  const ocrModels = ocrModelsForProvider(config.ocrProvider);
 
   if (!mounted) return null;
 
@@ -101,12 +112,13 @@ export function Settings({ onClose }: Props) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center px-6 py-4 border-b border-[#1a1a1a] flex-shrink-0">
-          <h2 className="font-display text-xl">LLM Settings</h2>
+          <h2 className="font-display text-xl">Settings</h2>
           <button onClick={onClose} aria-label="Close settings">
             <X className="w-5 h-5" />
           </button>
         </div>
         <div className="flex-1 min-h-0 overflow-y-auto px-6 py-4">
+          <h3 className="text-sm font-semibold opacity-80 mb-2">LLM</h3>
           <label className="block mb-3">
             <span className="text-sm opacity-70">Provider</span>
             <select
@@ -173,7 +185,7 @@ export function Settings({ onClose }: Props) {
               )}
             </div>
           )}
-          <label className="block">
+          <label className="block mb-5">
             <span className="text-sm opacity-70">Model</span>
             <select
               value={config.model}
@@ -181,6 +193,40 @@ export function Settings({ onClose }: Props) {
               className="mt-1 w-full bg-[#000000] border border-[#2a2a2a] rounded px-3 py-2"
             >
               {models.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <h3 className="text-sm font-semibold opacity-80 mb-2">OCR (PDF import)</h3>
+          <label className="block mb-3">
+            <span className="text-sm opacity-70">Provider</span>
+            <select
+              value={config.ocrProvider}
+              onChange={(e) => onOcrProviderChange(e.target.value as OcrProvider)}
+              className="mt-1 w-full bg-[#000000] border border-[#2a2a2a] rounded px-3 py-2"
+            >
+              <option value="anthropic-oauth">Anthropic Claude vision (OAuth)</option>
+              <option value="ollama">Ollama (local vision model)</option>
+            </select>
+          </label>
+          {config.ocrProvider === "ollama" && (
+            <p className="mb-3 text-xs opacity-60 leading-relaxed">
+              Requires a local Ollama server at{" "}
+              <code className="font-mono text-[#f5f0e8]">SP_OLLAMA_URL</code> with the
+              chosen vision model pulled.
+            </p>
+          )}
+          <label className="block">
+            <span className="text-sm opacity-70">OCR model</span>
+            <select
+              value={config.ocrModel}
+              onChange={(e) => setConfig({ ...config, ocrModel: e.target.value })}
+              className="mt-1 w-full bg-[#000000] border border-[#2a2a2a] rounded px-3 py-2"
+            >
+              {ocrModels.map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.label}
                 </option>

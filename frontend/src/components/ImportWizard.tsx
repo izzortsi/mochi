@@ -66,6 +66,8 @@ export function ImportWizard() {
         provider: config.provider,
         apiKey: config.apiKey,
         model: config.model,
+        ocrProvider: config.ocrProvider,
+        ocrModel: config.ocrModel,
         mode,
         title: mode === "new" ? title : undefined,
         targetCourseId: mode === "extend" ? targetCourseId ?? undefined : undefined,

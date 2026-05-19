@@ -5,7 +5,7 @@ from fastapi.responses import Response
 from app import store, gamification
 from app.models import CourseDef, Phase, Day, Card, ConceptDef
 from app.config import settings
-from app.services import ollama_ocr, llm
+from app.services import ocr, llm
 from app.routers.courses import resolve_concept_id
 
 router = APIRouter()
@@ -52,6 +52,12 @@ async def auto_import(body: dict):
     title = body.get("title", "")
     max_pages = body.get("max-pages") or body.get("maxPages") or 30
     target_raw = body.get("target-course-id") or body.get("targetCourseId")
+    ocr_provider = body.get("ocr-provider") or body.get("ocrProvider") or "ollama"
+    ocr_model = (
+        body.get("ocr-model")
+        or body.get("ocrModel")
+        or (settings.ollama_model if ocr_provider == "ollama" else "")
+    )
 
     if not filename:
         raise HTTPException(400, "missing filename")
@@ -69,6 +75,12 @@ async def auto_import(body: dict):
     else:
         raise HTTPException(400, f"unknown provider: {provider}")
 
+    if ocr_provider not in ("ollama", "anthropic-oauth"):
+        raise HTTPException(400, f"unknown ocr provider: {ocr_provider}")
+    if ocr_provider == "anthropic-oauth" and not ocr_model:
+        raise HTTPException(400, "ocr-model required for anthropic-oauth OCR")
+    print(f"[import] ocr-provider={ocr_provider} ocr-model={ocr_model}")
+
     target_id = int(target_raw) if target_raw else None
     if mode == "extend" and target_id is None:
         raise HTTPException(400, "extend mode requires target-course-id")
@@ -78,7 +90,12 @@ async def auto_import(body: dict):
         raise HTTPException(404, f"file not found: {filename}")
 
     try:
-        text = await ollama_ocr.extract_text(pdf_path, max_pages=int(max_pages))
+        text = await ocr.extract_text(
+            ocr_provider, ocr_model, pdf_path, max_pages=int(max_pages)
+        )
+    except RuntimeError as e:
+        # E.g. missing anthropic-oauth tokens
+        raise HTTPException(503, f"OCR failed: {e}")
     except Exception as e:
         raise HTTPException(502, f"OCR failed: {e}")
 

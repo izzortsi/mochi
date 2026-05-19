@@ -73,8 +73,9 @@ backend/
     config.py            SP_* env-driven settings
     store.py             single-locked JSON persistence
     routers/             progress, courses, pet, llm, srs, ws, ...
-    services/            llm, llm_anthropic, ollama_ocr, pet_art,
-                         pet_stats, note_normalize
+    services/            llm, llm_anthropic, ocr, ocr_ollama,
+                         ocr_anthropic, pet_art, pet_stats,
+                         note_normalize
   data/                  *.json — git-tracked snapshots
   scripts/               one-off migrations
 frontend/

@@ -2,7 +2,7 @@ import { getJson, camelizeKeys } from "./api";
 import type {
   CourseSummary, Course, ConceptMapData, NextUpItem,
   ConceptPageData, ConceptId, NoteSummary, NoteDetail,
-  NotesGraphData, LlmProvider,
+  NotesGraphData, LlmProvider, OcrProvider,
 } from "./types";
 
 export const ontology = {
@@ -35,6 +35,8 @@ export const ontology = {
     provider: LlmProvider;
     apiKey: string;
     model: string;
+    ocrProvider: OcrProvider;
+    ocrModel: string;
     mode: "new" | "extend";
     title?: string;
     targetCourseId?: number;
@@ -45,6 +47,8 @@ export const ontology = {
       filename: params.filename,
       model: params.model,
       mode: params.mode,
+      "ocr-provider": params.ocrProvider,
+      "ocr-model": params.ocrModel,
     };
     if (params.provider === "zai") body["api-key"] = params.apiKey;
     if (params.title) body.title = params.title;

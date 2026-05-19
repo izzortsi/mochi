@@ -234,10 +234,13 @@ export interface ArtifactRecord {
 }
 
 export type LlmProvider = "zai" | "anthropic-oauth";
+export type OcrProvider = "ollama" | "anthropic-oauth";
 
 export interface LlmConfig {
   provider: LlmProvider;
   apiKey: string;
   model: string;
   baseUrl: string;
+  ocrProvider: OcrProvider;
+  ocrModel: string;
 }
