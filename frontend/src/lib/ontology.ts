@@ -2,7 +2,7 @@ import { getJson, camelizeKeys } from "./api";
 import type {
   CourseSummary, Course, ConceptMapData, NextUpItem,
   ConceptPageData, ConceptId, NoteSummary, NoteDetail,
-  NotesGraphData, LlmProvider,
+  NotesGraphData, LlmProvider, OcrProvider,
 } from "./types";
 
 export const ontology = {
@@ -39,6 +39,10 @@ export const ontology = {
     title?: string;
     targetCourseId?: number;
     maxPages?: number;
+    // Defaults to "ollama" on the backend when omitted, matching the
+    // pre-Anthropic-OCR behavior. Callers that want Anthropic OCR
+    // must pass it explicitly.
+    ocrProvider?: OcrProvider;
   }): Promise<{ ok: boolean; courseId: number }> => {
     const body: Record<string, unknown> = {
       provider: params.provider,
@@ -49,6 +53,7 @@ export const ontology = {
     if (params.provider === "zai") body["api-key"] = params.apiKey;
     if (params.title) body.title = params.title;
     if (params.maxPages) body["max-pages"] = params.maxPages;
+    if (params.ocrProvider) body["ocr-provider"] = params.ocrProvider;
     if (params.targetCourseId != null)
       body["target-course-id"] = params.targetCourseId;
     const res = await fetch("/api/import/auto", {

@@ -5,7 +5,7 @@ from fastapi.responses import Response
 from app import store, gamification
 from app.models import CourseDef, Phase, Day, Card, ConceptDef
 from app.config import settings
-from app.services import ollama_ocr, llm
+from app.services import ollama_ocr, anthropic_ocr, llm
 from app.routers.courses import resolve_concept_id
 
 router = APIRouter()
@@ -52,6 +52,11 @@ async def auto_import(body: dict):
     title = body.get("title", "")
     max_pages = body.get("max-pages") or body.get("maxPages") or 30
     target_raw = body.get("target-course-id") or body.get("targetCourseId")
+    ocr_provider = (
+        body.get("ocr-provider") or body.get("ocrProvider") or "ollama"
+    ).lower()
+    if ocr_provider not in ("ollama", "anthropic"):
+        raise HTTPException(400, f"unknown ocr-provider: {ocr_provider}")
 
     if not filename:
         raise HTTPException(400, "missing filename")
@@ -77,8 +82,20 @@ async def auto_import(body: dict):
     if not pdf_path.exists():
         raise HTTPException(404, f"file not found: {filename}")
 
+    print(f"[import] ocr-provider={ocr_provider} max-pages={max_pages}")
     try:
-        text = await ollama_ocr.extract_text(pdf_path, max_pages=int(max_pages))
+        if ocr_provider == "anthropic":
+            # Anthropic ignores max-pages — the document block is sent
+            # whole and Anthropic OCRs every page up to its 100-page cap.
+            text = await anthropic_ocr.extract_text(pdf_path)
+        else:
+            text = await ollama_ocr.extract_text(pdf_path, max_pages=int(max_pages))
+    except RuntimeError as e:
+        # Anthropic raises for missing OAuth tokens or PDFs that exceed
+        # the 32 MB / 100 page hard limits. Ollama raises when every
+        # page fails OCR. Both are "engine unavailable" — distinguish
+        # from transient backend errors via 503 vs 502.
+        raise HTTPException(503, f"OCR unavailable: {e}")
     except Exception as e:
         raise HTTPException(502, f"OCR failed: {e}")
 

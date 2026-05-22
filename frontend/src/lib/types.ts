@@ -235,6 +235,12 @@ export interface ArtifactRecord {
 
 export type LlmProvider = "zai" | "anthropic-oauth";
 
+// OCR provider for PDF imports. Independent of LlmProvider — the user
+// can pick Anthropic OCR even when their LLM is zai (the backend reads
+// OAuth tokens off disk regardless of which LLM provider the request
+// targets).
+export type OcrProvider = "ollama" | "anthropic";
+
 export interface LlmConfig {
   provider: LlmProvider;
   apiKey: string;

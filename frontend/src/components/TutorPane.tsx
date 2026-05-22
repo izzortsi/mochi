@@ -2,7 +2,7 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import {
-  Send, Database, X, Maximize2, Minimize2, Sigma, Paperclip, FileText,
+  Send, Database, X, Maximize2, Minimize2, Sigma, Paperclip, FileText, Pencil,
 } from "lucide-react";
 import type { ChatMessage, ConnectionStatus, PdfAttachment } from "@/lib/types";
 import { api } from "@/lib/api";
@@ -12,12 +12,16 @@ import { MarkdownContent } from "./MarkdownContent";
 import { ArtifactBlock } from "./ArtifactBlock";
 import dynamic from "next/dynamic";
 import { ThreadPicker } from "./ThreadPicker";
+import { SketchInputPopover } from "./SketchInputPopover";
 
 // Client-only because MathInputPopover statically imports `mathlive`,
 // which calls customElements.define at module load — that crashes
 // during SSR. next/dynamic with ssr:false also pins a stable chunk
 // boundary so HMR doesn't shuffle the chunk hash out from under the
 // browser (the source of the recurring ChunkLoadError on this file).
+// SketchInputPopover is imported statically — it uses only React and
+// the 2D canvas API with no module-load DOM side effects, so SSR is
+// fine and we avoid the dynamic-chunk dance.
 const MathInputPopover = dynamic(
   () => import("./MathInputPopover").then((m) => m.MathInputPopover),
   { ssr: false },
@@ -92,6 +96,7 @@ export function TutorPane({
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [mathOpen, setMathOpen] = useState(false);
+  const [sketchOpen, setSketchOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -176,6 +181,29 @@ export function TutorPane({
       if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
+
+  // SketchInputPopover hands us a finished PNG blob; we wrap it in a
+  // File so the existing upload endpoint's content-type validation
+  // accepts it, then route the resulting URL through the same
+  // pendingImages flow as paste/paperclip uploads. The sketch is
+  // indistinguishable from any other attached image once queued. The
+  // modal closes immediately on commit — matching paste behavior, so
+  // the user sees the thumbnail appear before upload finishes.
+  const handleSketchCommit = async (blob: Blob) => {
+    setSketchOpen(false);
+    setUploadError(null);
+    setUploading(true);
+    try {
+      const file = new File([blob], `sketch-${Date.now()}.png`, { type: "image/png" });
+      const { url } = await api.uploadChatImage(file);
+      onAddImage(url);
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const statusDot =
     status === "connected" ? "bg-emerald-500" :
     status === "connecting" ? "bg-amber-500" :
@@ -389,6 +417,14 @@ export function TutorPane({
           <Paperclip className="w-4 h-4" />
         </button>
         <button
+          onClick={() => setSketchOpen(true)}
+          className="px-2 text-neutral-400 hover:text-amber-300"
+          title="Sketch (handwrite or draw to send as image)"
+          aria-label="Open sketch pad"
+        >
+          <Pencil className="w-4 h-4" />
+        </button>
+        <button
           onClick={() => setMathOpen(true)}
           className="px-2 text-neutral-400 hover:text-amber-300"
           title="Insert math (⌘M)"
@@ -412,6 +448,12 @@ export function TutorPane({
             setMathOpen(false);
           }}
           onCancel={() => setMathOpen(false)}
+        />
+      )}
+      {sketchOpen && (
+        <SketchInputPopover
+          onCommit={handleSketchCommit}
+          onCancel={() => setSketchOpen(false)}
         />
       )}
     </div>

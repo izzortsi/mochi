@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ontology } from "@/lib/ontology";
 import { loadConfig, isConfigured } from "@/lib/settings";
-import type { CourseSummary } from "@/lib/types";
+import type { CourseSummary, OcrProvider } from "@/lib/types";
 
 type Step = "pick" | "importing" | "done";
 type Mode = "new" | "extend";
@@ -18,6 +18,10 @@ export function ImportWizard() {
   const [courses, setCourses] = useState<CourseSummary[]>([]);
   const [targetCourseId, setTargetCourseId] = useState<number | null>(null);
   const [maxPages, setMaxPages] = useState(30);
+  // OCR provider is per-import (in contrast to the LLM provider, which
+  // is global in Settings). Default to the existing Ollama path so the
+  // new option is opt-in.
+  const [ocrProvider, setOcrProvider] = useState<OcrProvider>("ollama");
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [elapsed, setElapsed] = useState(0);
@@ -70,6 +74,7 @@ export function ImportWizard() {
         title: mode === "new" ? title : undefined,
         targetCourseId: mode === "extend" ? targetCourseId ?? undefined : undefined,
         maxPages,
+        ocrProvider,
       });
       setStep("done");
       setTimeout(() => router.push(`/course/${result.courseId}`), 800);
@@ -113,16 +118,38 @@ export function ImportWizard() {
           </label>
 
           <label className="block">
+            <span className="text-sm opacity-70">OCR provider</span>
+            <select
+              className="mt-1 w-full bg-[#000000] border border-[#2a2a2a] rounded px-3 py-2"
+              value={ocrProvider}
+              onChange={e => setOcrProvider(e.target.value as OcrProvider)}
+            >
+              <option value="ollama">Local (Ollama vision model — ~30s/page, free)</option>
+              <option value="anthropic">Anthropic (cloud, fast, costs API tokens)</option>
+            </select>
+            {ocrProvider === "anthropic" && (
+              <span className="block mt-1 text-xs opacity-50">
+                Requires anthropic-oauth tokens on disk. Limited to 32 MB / 100 pages per PDF.
+              </span>
+            )}
+          </label>
+
+          <label className="block">
             <span className="text-sm opacity-70">Max pages to OCR</span>
             <input
               type="number"
               min={1}
               max={100}
-              className="mt-1 w-24 bg-[#000000] border border-[#2a2a2a] rounded px-3 py-2"
+              disabled={ocrProvider === "anthropic"}
+              className="mt-1 w-24 bg-[#000000] border border-[#2a2a2a] rounded px-3 py-2 disabled:opacity-40"
               value={maxPages}
               onChange={e => setMaxPages(Math.max(1, parseInt(e.target.value, 10) || 10))}
             />
-            <span className="ml-2 text-xs opacity-40">lower = faster (~30s/page)</span>
+            <span className="ml-2 text-xs opacity-40">
+              {ocrProvider === "anthropic"
+                ? "Anthropic processes the full PDF (max 100 pages)"
+                : "lower = faster (~30s/page)"}
+            </span>
           </label>
 
           <div>

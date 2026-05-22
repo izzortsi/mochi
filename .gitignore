@@ -17,3 +17,6 @@ out/
 .vscode/
 .idea/
 *.swp
+
+# Pathwarden
+.pathwarden/

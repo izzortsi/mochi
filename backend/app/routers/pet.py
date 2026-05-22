@@ -179,14 +179,22 @@ def _decay_pet(pet: dict) -> dict:
     pet = _migrate_pet(pet)
     if pet.get("died") or pet.get("stage") == "coal":
         return pet
-    last_fed = pet.get("lastFed", pet.get("born", _now()))
+    # Decay anchor is separate from lastFed: every call applies decay for
+    # the elapsed window since the previous decay and then advances the
+    # anchor. Old behaviour subtracted (now - lastFed) from already-decayed
+    # health on every poll, which made decay compound quadratically with
+    # poll frequency and could kill an emberling inside a single study
+    # session.
+    anchor = pet.get("lastDecayedAt") or pet.get("lastFed") or pet.get("born") or _now()
     try:
-        dt = datetime.fromisoformat(last_fed)
+        dt = datetime.fromisoformat(anchor)
     except (ValueError, TypeError):
         dt = datetime.now(timezone.utc)
-    hours = (datetime.now(timezone.utc) - dt).total_seconds() / 3600
+    now_dt = datetime.now(timezone.utc)
+    hours = max(0.0, (now_dt - dt).total_seconds() / 3600)
     pet["health"] = max(0.0, pet.get("health", 100) - (hours / HEALTH_DECAY_HOURS) * 100)
     pet["happiness"] = max(0.0, pet.get("happiness", 100) - (hours / HAPPINESS_DECAY_HOURS) * 100)
+    pet["lastDecayedAt"] = now_dt.isoformat()
     if pet["health"] <= 0 and not pet.get("died"):
         pet["died"] = _now()
         # Dead art is rendered inline by the frame builders (smoke)
